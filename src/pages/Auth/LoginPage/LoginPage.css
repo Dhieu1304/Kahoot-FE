@@ -1,0 +1,5 @@
+.span-role {
+    min-width: 85px;
+    white-space: nowrap;
+    display: inline-block;
+}
