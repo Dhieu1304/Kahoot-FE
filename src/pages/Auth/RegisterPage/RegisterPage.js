@@ -1,11 +1,11 @@
-import './register.css';
+import './RegisterPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import axiosClient from "../config/axiosClient";
+import axiosClient from "../../../config/axiosClient";
 
-function RegisterForm() {
+function RegisterPage() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     const onSubmit = async (formData) => {
@@ -93,4 +93,4 @@ function RegisterForm() {
     return render();
 }
 
-export default RegisterForm;
+export default RegisterPage;

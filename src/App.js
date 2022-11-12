@@ -6,11 +6,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
-import AuthForm from "./components/authForm";
-import RegisterForm from "./components/registerForm";
+import RegisterPage from "./pages/Auth/RegisterPage";
+import LoginPage from "./pages/Auth/LoginPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
 import Home from "./components/home";
+import AuthLayout from './layouts/AuthLayout';
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -23,25 +23,25 @@ function App() {
                     <Route
                         path={"/auth/register"}
                         element={
-                            <AuthForm>
-                                <RegisterForm />
-                            </AuthForm>
+                            <AuthLayout>
+                                <RegisterPage />
+                            </AuthLayout>
                         }
                     />
                     <Route
                         path={"/auth/login"}
                         element={
-                            <AuthForm>
-                                <LoginForm />
-                            </AuthForm>
+                            <AuthLayout>
+                                <LoginPage />
+                            </AuthLayout>
                         }
                     />
                     <Route
                         path={"/"}
                         element={
-                            <AuthForm>
+                            <AuthLayout>
                                 <Home />
-                            </AuthForm>
+                            </AuthLayout>
                         }
                     />
                 </Routes>
