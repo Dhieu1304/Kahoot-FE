@@ -1,0 +1,14 @@
+.wrapper {
+    // flex: 1;
+    // align-self: stretch;
+
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+
+    .container {
+        .logo-wrapper {
+            width: 100px;
+        }
+    }
+}

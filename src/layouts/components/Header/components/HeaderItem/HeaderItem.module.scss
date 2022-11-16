@@ -1,0 +1,28 @@
+.container {
+    color: var(--text-color);
+    font-weight: var(--font-weight-big);
+    font-size: 1.4rem;
+
+    padding: 15px 10px;
+
+    border-top: 5px solid var(--white-color);
+    border-bottom: 5px solid var(--white-color);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .left-icon-wrapper {
+        margin-right: 10px;
+    }
+
+    &:hover {
+        color: var(--primary-color);
+        border-bottom: 5px solid var(--primary-color);
+    }
+
+    &.active {
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--primary-color);
+    }
+}
