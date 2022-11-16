@@ -11,6 +11,8 @@ import LoginPage from "./pages/Auth/LoginPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/home";
 import AuthLayout from "./layouts/AuthLayout";
+import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
+import HomePage from "./pages/HomePage";
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -20,6 +22,16 @@ function App() {
             <Router>
                 <div className="App">
                     <Routes>
+                        <Route
+                            path={"/"}
+                            element={
+                                <DefaultLayout>
+                                    <HomePage />
+                                </DefaultLayout>
+                            }
+                        />
+                    </Routes>
+                    {/* <Routes>
                         <Route
                             path={"/auth/register"}
                             element={
@@ -44,7 +56,7 @@ function App() {
                                 </AuthLayout>
                             }
                         />
-                    </Routes>
+                    </Routes> */}
                 </div>
             </Router>
 
