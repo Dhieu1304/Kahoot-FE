@@ -1,27 +1,27 @@
 .container {
-    padding: 0;
+   padding: 0;
 
-    .search-input-wrapper {
-        align-self: stretch;
-        margin-right: auto;
-        display: block;
-        border: 1px solid rgb(204, 204, 204);
-        padding: 0 15px;
-        min-height: 2.5rem;
-        border-radius: 5px;
+   .search-input-wrapper {
+      align-self: stretch;
+      margin-right: auto;
+      display: block;
+      border: 1px solid rgb(204, 204, 204);
+      padding: 0 15px;
+      min-height: 2.5rem;
+      border-radius: 5px;
 
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--text-color);
-    }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-color);
+   }
 
-    .search-icon {
-        color: var(--text-color);
-    }
+   .search-icon {
+      color: var(--text-color);
+   }
 
-    .search-input {
-        margin-left: 10px;
-        height: 100%;
-    }
+   .search-input {
+      margin-left: 10px;
+      height: 100%;
+   }
 }

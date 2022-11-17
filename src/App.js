@@ -18,46 +18,46 @@ import GroupPage from "./pages/GroupPage";
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
 function App() {
-    return (
-        <div className="App">
-            <Router>
-                <div className="App">
-                    <Routes>
-                        <Route
-                            path={"/"}
-                            element={
-                                <DefaultLayout>
-                                    <HomePage />
-                                </DefaultLayout>
-                            }
-                        />
-                        <Route
-                            path={"/group"}
-                            element={
-                                <DefaultLayout>
-                                    <GroupPage />
-                                </DefaultLayout>
-                            }
-                        />
-                    </Routes>
-                     <Routes>
-                        <Route
-                            path={"/auth/register"}
-                            element={
-                                <AuthLayout>
-                                    <RegisterPage />
-                                </AuthLayout>
-                            }
-                        />
-                        <Route
-                            path={"/auth/login"}
-                            element={
-                                <AuthLayout>
-                                    <LoginPage />
-                                </AuthLayout>
-                            }
-                        />
-                        {/*<Route
+   return (
+      <div className="App">
+         <Router>
+            <div className="App">
+               <Routes>
+                  <Route
+                     path={"/"}
+                     element={
+                        <DefaultLayout>
+                           <HomePage />
+                        </DefaultLayout>
+                     }
+                  />
+                  <Route
+                     path={"/group"}
+                     element={
+                        <DefaultLayout>
+                           <GroupPage />
+                        </DefaultLayout>
+                     }
+                  />
+               </Routes>
+               <Routes>
+                  <Route
+                     path={"/auth/register"}
+                     element={
+                        <AuthLayout>
+                           <RegisterPage />
+                        </AuthLayout>
+                     }
+                  />
+                  <Route
+                     path={"/auth/login"}
+                     element={
+                        <AuthLayout>
+                           <LoginPage />
+                        </AuthLayout>
+                     }
+                  />
+                  {/*<Route
                             path={"/"}
                             element={
                                 <AuthLayout>
@@ -65,25 +65,25 @@ function App() {
                                 </AuthLayout>
                             }
                         />*/}
-                    </Routes>
-                </div>
-            </Router>
+               </Routes>
+            </div>
+         </Router>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <ToastContainer />
-    </div>
-  );
+         <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+         />
+         <ToastContainer />
+      </div>
+   );
 }
 
 export default App;

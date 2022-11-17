@@ -11,89 +11,89 @@ import Input from "../../../components/Input/Input";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 
 function LoginPage() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm({
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: ""
-    },
-    criteriaMode: "all"
-  });
+   const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors }
+   } = useForm({
+      mode: "onChange",
+      defaultValues: {
+         email: "",
+         password: ""
+      },
+      criteriaMode: "all"
+   });
 
-  const navigate = useNavigate();
+   const navigate = useNavigate();
 
-  const userContext = useContext(UserContext);
+   const userContext = useContext(UserContext);
 
-  const onSubmit = async (formData) => {
-    console.log("formData: ", formData);
-    // try {
-    //     await toast.promise(axiosClient.post("/auth/login", formData), {
-    //         pending: "Promise is pending",
-    //         success: {
-    //             render({ data }) {
-    //                 localStorage.setItem(
-    //                     "ACCESS_TOKEN",
-    //                     data.data.data.token
-    //                 );
-    //                 navigate("/");
-    //                 return "Login successful";
-    //             },
-    //         },
-    //         error: {
-    //             render({ data }) {
-    //                 return data.response.data.message;
-    //             },
-    //         },
-    //     });
-    // } catch (e) {
-    //     // console.log(e.message);
-    // }
-  };
+   const onSubmit = async (formData) => {
+      console.log("formData: ", formData);
+      // try {
+      //     await toast.promise(axiosClient.post("/auth/login", formData), {
+      //         pending: "Promise is pending",
+      //         success: {
+      //             render({ data }) {
+      //                 localStorage.setItem(
+      //                     "ACCESS_TOKEN",
+      //                     data.data.data.token
+      //                 );
+      //                 navigate("/");
+      //                 return "Login successful";
+      //             },
+      //         },
+      //         error: {
+      //             render({ data }) {
+      //                 return data.response.data.message;
+      //             },
+      //         },
+      //     });
+      // } catch (e) {
+      //     // console.log(e.message);
+      // }
+   };
 
-  const requireErrorMessage = "field can not empty";
+   const requireErrorMessage = "field can not empty";
 
-  console.log("errors: ", errors);
+   console.log("errors: ", errors);
 
-  return (
-    <AuthForm
-      title="Sign in"
-      btnTitle="Login"
-      redirectMessage={"You don't have an account?"}
-      redirectTitle="Register"
-      redirectLink="/auth/register"
-      onAuthSubmit={handleSubmit(onSubmit)}
-    >
-      <Input
-        placeholder="Your email"
-        label="Email"
-        type="email"
-        {...register("email", {
-          required: requireErrorMessage,
-          pattern: {
-            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-            message: "is wrong format"
-          }
-        })}
-        error={errors.email}
-      />
+   return (
+      <AuthForm
+         title="Sign in"
+         btnTitle="Login"
+         redirectMessage={"You don't have an account?"}
+         redirectTitle="Register"
+         redirectLink="/auth/register"
+         onAuthSubmit={handleSubmit(onSubmit)}
+      >
+         <Input
+            placeholder="Your email"
+            label="Email"
+            type="email"
+            {...register("email", {
+               required: requireErrorMessage,
+               pattern: {
+                  value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                  message: "is wrong format"
+               }
+            })}
+            error={errors.email}
+         />
 
-      <Input
-        placeholder="Password"
-        label="Password"
-        showLabel
-        type="password"
-        {...register("password", {
-          required: requireErrorMessage
-        })}
-        error={errors.password}
-      />
-    </AuthForm>
-  );
+         <Input
+            placeholder="Password"
+            label="Password"
+            showLabel
+            type="password"
+            {...register("password", {
+               required: requireErrorMessage
+            })}
+            error={errors.password}
+         />
+      </AuthForm>
+   );
 }
 
 export default LoginPage;

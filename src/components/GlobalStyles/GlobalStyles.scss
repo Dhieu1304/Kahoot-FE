@@ -2,57 +2,56 @@
 @import "@fontsource/montserrat";
 
 :root {
-    --primary-color: rgb(70, 23, 143);
-    --black-color: #000;
-    --white-color: #fff;
-    --text-color: rgb(51, 51, 51);
-    --header-height: 80px;
+   --primary-color: rgb(70, 23, 143);
+   --black-color: #000;
+   --white-color: #fff;
+   --text-color: rgb(51, 51, 51);
+   --header-height: 80px;
 
-    --basic-blue-color: rgb(19, 104, 206);
-    --basic-blue-color-hover: rgb(18, 96, 190);
-    --basic-blue-color-after: rgb(16, 86, 171);
+   --basic-blue-color: rgb(19, 104, 206);
+   --basic-blue-color-hover: rgb(18, 96, 190);
+   --basic-blue-color-after: rgb(16, 86, 171);
 
-    --basic-teal-color: rgb(2, 130, 130);
-    --basic-yellow-color: rgb(183, 141, 0);
-    --basic-red-color: rgb(226, 27, 60);
-    --basic-red-color-hover: rgb(208, 25, 55);
+   --basic-teal-color: rgb(2, 130, 130);
+   --basic-yellow-color: rgb(183, 141, 0);
+   --basic-red-color: rgb(226, 27, 60);
+   --basic-red-color-hover: rgb(208, 25, 55);
 
-    --font-family: Montserrat, "Noto Sans Arabic", "Helvetica Neue", Helvetica,
-        Arial, sans-serif;
+   --font-family: Montserrat, "Noto Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-    --font-weight-big: 700;
-    --font-weight-normal: 400;
+   --font-weight-big: 700;
+   --font-weight-normal: 400;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
 }
 
 html {
-    font-size: 62.5%;
+   font-size: 62.5%;
 }
 
 body {
-    font-family: var(--font-family);
-    font-size: 1.6rem;
-    line-height: 1.5;
-    text-rendering: optimizespeed;
-    color: var(--text-color);
-    overflow-y: overlay;
+   font-family: var(--font-family);
+   font-size: 1.6rem;
+   line-height: 1.5;
+   text-rendering: optimizespeed;
+   color: var(--text-color);
+   overflow-y: overlay;
 }
 
 button,
 input,
 [tabindex] {
-    outline: none;
-    border: none;
+   outline: none;
+   border: none;
 }
 
 a {
-    color: var(--text-color);
-    text-decoration: none;
+   color: var(--text-color);
+   text-decoration: none;
 }
 
 body {

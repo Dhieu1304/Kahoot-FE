@@ -8,14 +8,14 @@ import ManageGroupList from "./components/ManageGroupList";
 const cx = classNames.bind(styles);
 
 function GroupPage({ children }) {
-    return (
-        <div className={cx("wrapper")}>
-            <SideBar />
-            <div className={cx("container")}>
-                <ManageGroupList />
-            </div>
-        </div>
-    );
+   return (
+      <div className={cx("wrapper")}>
+         <SideBar />
+         <div className={cx("container")}>
+            <ManageGroupList />
+         </div>
+      </div>
+   );
 }
 
 export default GroupPage;

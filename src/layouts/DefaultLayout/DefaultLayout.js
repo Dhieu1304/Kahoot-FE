@@ -8,16 +8,16 @@ import { Container } from "react-bootstrap";
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
-    return (
-        <div className={cx("wrapper")}>
-            <Header />
-            <Container className={cx("container")}>{children}</Container>
-        </div>
-    );
+   return (
+      <div className={cx("wrapper")}>
+         <Header />
+         <Container className={cx("container")}>{children}</Container>
+      </div>
+   );
 }
 
 DefaultLayout.propTypes = {
-    children: PropTypes.node.isRequired,
+   children: PropTypes.node.isRequired
 };
 
 export default DefaultLayout;
