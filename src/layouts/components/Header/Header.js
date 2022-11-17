@@ -20,114 +20,108 @@ function Header() {
         <header className={cx("wrapper")}>
             <div className={cx("container")}>
                 <Navbar bg="light" expand="lg">
-                    <Container>
-                        <Navbar.Brand href="#home">
-                            <div className={cx("logo-wrapper")}>
-                                <img src={images.logo} alt="Kahoot" />
-                            </div>
-                        </Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="me-auto">
-                                <Nav.Item>
-                                    <Nav.Link as={Link} to="/">
-                                        <HeaderItem
-                                            title={"Home"}
-                                            active
-                                            leftIcon={
-                                                <FontAwesomeIcon icon="fa-solid fa-house" />
-                                            }
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link as={Link} to="/">
-                                        <HeaderItem
-                                            title={"Discover"}
-                                            leftIcon={
-                                                <FontAwesomeIcon icon="fa-solid fa-compass" />
-                                            }
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link as={Link} to="/">
-                                        <HeaderItem
-                                            title={"Library"}
-                                            leftIcon={
-                                                <FontAwesomeIcon icon="fa-solid fa-list" />
-                                            }
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link as={Link} to="/group">
-                                        <HeaderItem
-                                            title={"Group"}
-                                            leftIcon={
-                                                <FontAwesomeIcon icon="fa-solid fa-users" />
-                                            }
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link>
-                                        <HeaderItem
-                                            title={"Market"}
-                                            leftIcon={
-                                                <FontAwesomeIcon icon="fa-solid fa-shop" />
-                                            }
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                            </Nav>
-                            <Nav>
-                                <Nav.Item>
-                                    <Nav.Link href="">
-                                        <Button
-                                            title={"Share"}
-                                            outline
-                                            outlineBlack
-                                            rounded
-                                            big
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href="">
-                                        <Button
-                                            title={"Create"}
-                                            basic
-                                            basicBlue
-                                            rounded
-                                            big
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href="">
-                                        <Avatar
-                                            title={"Avatar"}
-                                            placeholder={"Avatar"}
-                                            size={25}
-                                            rounded
-                                        />
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href="">
-                                        <div
-                                            className={cx(
-                                                "notify-icon-wrapper"
-                                            )}
-                                        >
-                                            <FontAwesomeIcon icon="fa-solid fa-bell" />
-                                        </div>
-                                    </Nav.Link>
-                                </Nav.Item>
-                            </Nav>
-                        </Navbar.Collapse>
-                    </Container>
+                    <Navbar.Brand href="#home">
+                        <div className={cx("logo-wrapper")}>
+                            <img src={images.logo} alt="Kahoot" />
+                        </div>
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="headerNavbar" />
+                    <Navbar.Collapse id="headerNavbar">
+                        <Nav className="me-auto">
+                            <Nav.Item>
+                                <Nav.Link as={Link} to="/">
+                                    <HeaderItem
+                                        title={"Home"}
+                                        active
+                                        leftIcon={
+                                            <FontAwesomeIcon icon="fa-solid fa-house" />
+                                        }
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link as={Link} to="/">
+                                    <HeaderItem
+                                        title={"Discover"}
+                                        leftIcon={
+                                            <FontAwesomeIcon icon="fa-solid fa-compass" />
+                                        }
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link as={Link} to="/">
+                                    <HeaderItem
+                                        title={"Library"}
+                                        leftIcon={
+                                            <FontAwesomeIcon icon="fa-solid fa-list" />
+                                        }
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link as={Link} to="/group">
+                                    <HeaderItem
+                                        title={"Group"}
+                                        leftIcon={
+                                            <FontAwesomeIcon icon="fa-solid fa-users" />
+                                        }
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link>
+                                    <HeaderItem
+                                        title={"Market"}
+                                        leftIcon={
+                                            <FontAwesomeIcon icon="fa-solid fa-shop" />
+                                        }
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                        </Nav>
+                        <Nav>
+                            <Nav.Item>
+                                <Nav.Link href="">
+                                    <Button
+                                        title={"Share"}
+                                        outline
+                                        outlineBlack
+                                        rounded
+                                        big
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href="">
+                                    <Button
+                                        title={"Create"}
+                                        basic
+                                        basicBlue
+                                        rounded
+                                        big
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href="">
+                                    <Avatar
+                                        title={"Avatar"}
+                                        placeholder={"Avatar"}
+                                        size={25}
+                                        rounded
+                                    />
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href="">
+                                    <div className={cx("notify-icon-wrapper")}>
+                                        <FontAwesomeIcon icon="fa-solid fa-bell" />
+                                    </div>
+                                </Nav.Link>
+                            </Nav.Item>
+                        </Nav>
+                    </Navbar.Collapse>
                 </Navbar>
             </div>
         </header>
