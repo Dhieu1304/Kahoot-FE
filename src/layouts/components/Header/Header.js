@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import images from "../../../assets/images";
 import HeaderItem from "./components/HeaderItem";
 import styles from "./Header.module.scss";
+import Button from "../../../components/Button/Button";
+import Avatar from "../../../components/Avatar/Avatar";
 
 const cx = classNames.bind(styles);
 
@@ -66,6 +68,39 @@ function Header() {
                                             <FontAwesomeIcon icon="fa-solid fa-shop" />
                                         }
                                     />
+                                </Nav.Link>
+                            </Nav>
+                            <Nav>
+                                <Nav.Link href="">
+                                    <Button
+                                        title={"Share"}
+                                        outline
+                                        outlineBlack
+                                        rounded
+                                        big
+                                    />
+                                </Nav.Link>
+                                <Nav.Link href="">
+                                    <Button
+                                        title={"Create"}
+                                        basic
+                                        basicBlue
+                                        rounded
+                                        big
+                                    />
+                                </Nav.Link>
+                                <Nav.Link href="">
+                                    <Avatar
+                                        title={"Avatar"}
+                                        placeholder={"Avatar"}
+                                        size={25}
+                                        rounded
+                                    />
+                                </Nav.Link>
+                                <Nav.Link href="">
+                                    <div className={cx("notify-icon-wrapper")}>
+                                        <FontAwesomeIcon icon="fa-solid fa-bell" />
+                                    </div>
                                 </Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
