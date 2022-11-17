@@ -5,10 +5,10 @@ module.exports = {
     es2021: true
   },
   extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "airbnb",
-    "plugin:prettier/recommended"
+    // "eslint:recommended",
+    // "plugin:react/recommended",
+    // "airbnb",
+    // "plugin:prettier/recommended"
   ],
   overrides: [],
   parserOptions: {
