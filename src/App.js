@@ -13,6 +13,7 @@ import Home from "./components/home";
 import AuthLayout from "./layouts/AuthLayout";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 import HomePage from "./pages/HomePage";
+import GroupPage from "./pages/GroupPage";
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -27,6 +28,14 @@ function App() {
                             element={
                                 <DefaultLayout>
                                     <HomePage />
+                                </DefaultLayout>
+                            }
+                        />
+                        <Route
+                            path={"/group"}
+                            element={
+                                <DefaultLayout>
+                                    <GroupPage />
                                 </DefaultLayout>
                             }
                         />

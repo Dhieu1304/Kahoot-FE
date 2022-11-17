@@ -3,8 +3,9 @@ import classNames from "classnames/bind";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 import images from "../../../assets/images";
 import HeaderItem from "./components/HeaderItem";
@@ -28,80 +29,102 @@ function Header() {
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
-                                <Nav.Link href="#home">
-                                    <HeaderItem
-                                        title={"Home"}
-                                        active
-                                        leftIcon={
-                                            <FontAwesomeIcon icon="fa-solid fa-house" />
-                                        }
-                                    />
-                                </Nav.Link>
-                                <Nav.Link>
-                                    <HeaderItem
-                                        title={"Discover"}
-                                        leftIcon={
-                                            <FontAwesomeIcon icon="fa-solid fa-compass" />
-                                        }
-                                    />
-                                </Nav.Link>
-                                <Nav.Link>
-                                    <HeaderItem
-                                        title={"Library"}
-                                        leftIcon={
-                                            <FontAwesomeIcon icon="fa-solid fa-list" />
-                                        }
-                                    />
-                                </Nav.Link>
-                                <Nav.Link>
-                                    <HeaderItem
-                                        title={"Group"}
-                                        leftIcon={
-                                            <FontAwesomeIcon icon="fa-solid fa-people-group" />
-                                        }
-                                    />
-                                </Nav.Link>
-                                <Nav.Link>
-                                    <HeaderItem
-                                        title={"Market"}
-                                        leftIcon={
-                                            <FontAwesomeIcon icon="fa-solid fa-shop" />
-                                        }
-                                    />
-                                </Nav.Link>
+                                <Nav.Item>
+                                    <Nav.Link as={Link} to="/">
+                                        <HeaderItem
+                                            title={"Home"}
+                                            active
+                                            leftIcon={
+                                                <FontAwesomeIcon icon="fa-solid fa-house" />
+                                            }
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link as={Link} to="/">
+                                        <HeaderItem
+                                            title={"Discover"}
+                                            leftIcon={
+                                                <FontAwesomeIcon icon="fa-solid fa-compass" />
+                                            }
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link as={Link} to="/">
+                                        <HeaderItem
+                                            title={"Library"}
+                                            leftIcon={
+                                                <FontAwesomeIcon icon="fa-solid fa-list" />
+                                            }
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link as={Link} to="/group">
+                                        <HeaderItem
+                                            title={"Group"}
+                                            leftIcon={
+                                                <FontAwesomeIcon icon="fa-solid fa-users" />
+                                            }
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link>
+                                        <HeaderItem
+                                            title={"Market"}
+                                            leftIcon={
+                                                <FontAwesomeIcon icon="fa-solid fa-shop" />
+                                            }
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
                             </Nav>
                             <Nav>
-                                <Nav.Link href="">
-                                    <Button
-                                        title={"Share"}
-                                        outline
-                                        outlineBlack
-                                        rounded
-                                        big
-                                    />
-                                </Nav.Link>
-                                <Nav.Link href="">
-                                    <Button
-                                        title={"Create"}
-                                        basic
-                                        basicBlue
-                                        rounded
-                                        big
-                                    />
-                                </Nav.Link>
-                                <Nav.Link href="">
-                                    <Avatar
-                                        title={"Avatar"}
-                                        placeholder={"Avatar"}
-                                        size={25}
-                                        rounded
-                                    />
-                                </Nav.Link>
-                                <Nav.Link href="">
-                                    <div className={cx("notify-icon-wrapper")}>
-                                        <FontAwesomeIcon icon="fa-solid fa-bell" />
-                                    </div>
-                                </Nav.Link>
+                                <Nav.Item>
+                                    <Nav.Link href="">
+                                        <Button
+                                            title={"Share"}
+                                            outline
+                                            outlineBlack
+                                            rounded
+                                            big
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link href="">
+                                        <Button
+                                            title={"Create"}
+                                            basic
+                                            basicBlue
+                                            rounded
+                                            big
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link href="">
+                                        <Avatar
+                                            title={"Avatar"}
+                                            placeholder={"Avatar"}
+                                            size={25}
+                                            rounded
+                                        />
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link href="">
+                                        <div
+                                            className={cx(
+                                                "notify-icon-wrapper"
+                                            )}
+                                        >
+                                            <FontAwesomeIcon icon="fa-solid fa-bell" />
+                                        </div>
+                                    </Nav.Link>
+                                </Nav.Item>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
