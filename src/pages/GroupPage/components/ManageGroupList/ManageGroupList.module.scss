@@ -1,0 +1,10 @@
+.container {
+   padding: 0 50px;
+
+   .group-list {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+   }
+}
