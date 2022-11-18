@@ -26,10 +26,17 @@
 .top {
    display: flex;
    align-items: center;
-   justify-content: space-between;
+   justify-content: flex-end;
+
+   position: relative;
 
    .user-list {
+      position: absolute;
+      top: 0;
+      left: 0;
+
       .user-item {
+         position: absolute;
       }
    }
    .setting {
