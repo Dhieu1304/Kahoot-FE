@@ -10,22 +10,46 @@ import styles from "./TopBar.module.scss";
 const cx = classNames.bind(styles);
 
 function TopBar() {
+   console.log("styles: ", styles);
+   console.log("cx: ", cx);
+   console.log('cx("container"): ', cx("container"));
+   console.log("cx({container: true}): ", cx({ container: true }));
    return (
       <div className={cx("container")}>
          <Navbar bg="light" expand="lg">
             <Container fluid>
                <Navbar.Toggle aria-controls="groupTopBarScroll" />
                <Navbar.Collapse id="groupTopBarScroll">
-                  <div className={cx("search-input-wrapper")}>
-                     <FontAwesomeIcon
-                        className={cx("search-icon")}
-                        icon="fa-solid fa-magnifying-glass"
-                     />
-                     <input type={"text"} placeholder="search" className={cx("search-input")} />
-                  </div>
+                  <Nav className={cx("tabs")}>
+                     <Nav.Item className={cx("tab-item")}>
+                        <Nav.Link className={cx("tab-item-link")}>
+                           <span className={cx("tab-item-label")}>Activity</span>
+                        </Nav.Link>
+                     </Nav.Item>
+                     <Nav.Item className={cx("tab-item", { active: true })}>
+                        <Nav.Link className={cx("tab-item-link")}>
+                           <span className={cx("tab-item-label")}>Users</span>
+                        </Nav.Link>
+                     </Nav.Item>
+                     <Nav.Item className={cx("tab-item")}>
+                        <Nav.Link className={cx("tab-item-link")}>
+                           <span className={cx("tab-item-label")}>Shared</span>
+                        </Nav.Link>
+                     </Nav.Item>
+                     <Nav.Item className={cx("tab-item")}>
+                        <Nav.Link className={cx("tab-item-link")}>
+                           <span className={cx("tab-item-label")}>Assignments</span>
+                        </Nav.Link>
+                     </Nav.Item>
+                     <Nav.Item className={cx("tab-item")}>
+                        <Nav.Link className={cx("tab-item-link")}>
+                           <span className={cx("tab-item-label")}>Activity</span>
+                        </Nav.Link>
+                     </Nav.Item>
+                  </Nav>
                   <Nav style={{ maxHeight: "100px" }} navbarScroll>
                      <Nav.Item>
-                        <Button title={"Create Group"} basic basicBlue rounded big />
+                        <Button title={"Share"} basic basicBlue rounded big />
                      </Nav.Item>
                   </Nav>
                </Navbar.Collapse>

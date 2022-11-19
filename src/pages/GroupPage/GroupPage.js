@@ -4,6 +4,7 @@ import TopBar from "./components/ManageGroupList/TopBar";
 
 import styles from "./GroupPage.module.scss";
 import ManageGroupList from "./components/ManageGroupList";
+import ManageGroup from "./components/ManageGroup/ManageGroup";
 
 const cx = classNames.bind(styles);
 
@@ -12,7 +13,8 @@ function GroupPage({ children }) {
       <div className={cx("wrapper")}>
          <SideBar />
          <div className={cx("container")}>
-            <ManageGroupList />
+            {/* <ManageGroupList /> */}
+            <ManageGroup />
          </div>
       </div>
    );
