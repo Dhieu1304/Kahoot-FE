@@ -1,0 +1,15 @@
+.container {
+   .content {
+      padding: 40px 40px;
+   }
+}
+
+.user-infor {
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+
+   .user-infor-name {
+      margin-left: 10px;
+   }
+}

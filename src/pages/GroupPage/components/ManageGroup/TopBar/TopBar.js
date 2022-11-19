@@ -10,10 +10,6 @@ import styles from "./TopBar.module.scss";
 const cx = classNames.bind(styles);
 
 function TopBar() {
-   console.log("styles: ", styles);
-   console.log("cx: ", cx);
-   console.log('cx("container"): ', cx("container"));
-   console.log("cx({container: true}): ", cx({ container: true }));
    return (
       <div className={cx("container")}>
          <Navbar bg="light" expand="lg">
