@@ -8,12 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import LoginPage from "./pages/Auth/LoginPage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/home";
 import AuthLayout from "./layouts/AuthLayout";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 import HomePage from "./pages/HomePage";
 import GroupPage from "./pages/GroupPage";
+import ManageGroupList from "./pages/GroupPage/components/ManageGroupList";
+import ManageGroup from "./pages/GroupPage/components/ManageGroup/ManageGroup";
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -32,13 +34,13 @@ function App() {
                      }
                   />
                   <Route
-                     path={"/group"}
+                     path={"/group/*"}
                      element={
                         <DefaultLayout>
                            <GroupPage />
                         </DefaultLayout>
                      }
-                  />
+                  ></Route>
                </Routes>
                <Routes>
                   <Route

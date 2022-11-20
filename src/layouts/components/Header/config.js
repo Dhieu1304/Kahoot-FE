@@ -19,7 +19,7 @@ export const headerItemsData = [
    {
       title: "Group",
       leftIcon: <FontAwesomeIcon icon="fa-solid fa-users" />,
-      link: "/group"
+      link: "/group/manageGroupList"
    },
    {
       title: "Market",
