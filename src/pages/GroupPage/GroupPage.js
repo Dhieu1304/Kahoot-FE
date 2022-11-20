@@ -13,8 +13,8 @@ function GroupPage({ children }) {
       <div className={cx("wrapper")}>
          <SideBar />
          <div className={cx("container")}>
-            {/* <ManageGroupList /> */}
-            <ManageGroup />
+            <ManageGroupList />
+            {/* <ManageGroup /> */}
          </div>
       </div>
    );

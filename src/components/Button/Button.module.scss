@@ -43,6 +43,16 @@
    }
 }
 
+.cancel {
+   background-color: var(--white-color);
+   box-shadow: rgb(0 0 0 / 25%) 0px -4px inset;
+   &:hover {
+      opacity: 70%;
+      background-color: rgb(223, 223, 223);
+      box-shadow: rgb(0 0 0 / 25%) 0px -2px inset;
+   }
+}
+
 .rounded {
    border-radius: 4px;
 }

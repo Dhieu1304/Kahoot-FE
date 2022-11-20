@@ -1,0 +1,21 @@
+.wrapper {
+   .container {
+      //    background: var(--white-color);
+
+      .header {
+         .title {
+            font-weight: var(--font-weight-big);
+            font-size: 2.4rem;
+            font-weight: 900;
+         }
+      }
+      .body {
+      }
+
+      .footer {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+      }
+   }
+}

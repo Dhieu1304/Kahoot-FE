@@ -13,6 +13,7 @@ function Button({
    // basicTeal,
    // basicYellow,
    // basicRed,
+   cancel,
    outline,
    rounded,
    big
@@ -24,13 +25,14 @@ function Button({
       // basicTeal,
       // basicYellow,
       // basicRed,
+      cancel,
       outline,
       rounded,
       big
    });
 
    return (
-      <button className={classes}>
+      <button className={classes} onClick={onClick}>
          <span className={cx("title")}>{title}</span>
       </button>
    );

@@ -13,12 +13,17 @@ import styles from "./Header.module.scss";
 import Button from "../../../components/Button/Button";
 import Avatar from "../../../components/Avatar/Avatar";
 
+import { headerItemsData } from "./config";
+import { useState } from "react";
+
 const cx = classNames.bind(styles);
 
 function Header() {
+   const [headerItemActiveIndex, setHeaderItemActiveIndex] = useState(0);
+
    return (
       <header className={cx("wrapper")}>
-         <div className={cx("container")}>
+         <Container className={cx("container")}>
             <Navbar bg="light" expand="lg">
                <Navbar.Brand href="#home">
                   <div className={cx("logo-wrapper")}>
@@ -28,47 +33,18 @@ function Header() {
                <Navbar.Toggle aria-controls="headerNavbar" />
                <Navbar.Collapse id="headerNavbar">
                   <Nav className="me-auto">
-                     <Nav.Item>
-                        <Nav.Link as={Link} to="/">
-                           <HeaderItem
-                              title={"Home"}
-                              active
-                              leftIcon={<FontAwesomeIcon icon="fa-solid fa-house" />}
-                           />
-                        </Nav.Link>
-                     </Nav.Item>
-                     <Nav.Item>
-                        <Nav.Link as={Link} to="/">
-                           <HeaderItem
-                              title={"Discover"}
-                              leftIcon={<FontAwesomeIcon icon="fa-solid fa-compass" />}
-                           />
-                        </Nav.Link>
-                     </Nav.Item>
-                     <Nav.Item>
-                        <Nav.Link as={Link} to="/">
-                           <HeaderItem
-                              title={"Library"}
-                              leftIcon={<FontAwesomeIcon icon="fa-solid fa-list" />}
-                           />
-                        </Nav.Link>
-                     </Nav.Item>
-                     <Nav.Item>
-                        <Nav.Link as={Link} to="/group">
-                           <HeaderItem
-                              title={"Group"}
-                              leftIcon={<FontAwesomeIcon icon="fa-solid fa-users" />}
-                           />
-                        </Nav.Link>
-                     </Nav.Item>
-                     <Nav.Item>
-                        <Nav.Link>
-                           <HeaderItem
-                              title={"Market"}
-                              leftIcon={<FontAwesomeIcon icon="fa-solid fa-shop" />}
-                           />
-                        </Nav.Link>
-                     </Nav.Item>
+                     {headerItemsData.map((headerItem, index) => (
+                        <Nav.Item key={index}>
+                           <Nav.Link as={Link} to={headerItem.link}>
+                              <HeaderItem
+                                 title={headerItem.title}
+                                 active={headerItemActiveIndex === index}
+                                 leftIcon={headerItem.leftIcon}
+                                 onClick={() => setHeaderItemActiveIndex(index)}
+                              />
+                           </Nav.Link>
+                        </Nav.Item>
+                     ))}
                   </Nav>
                   <Nav>
                      <Nav.Item>
@@ -81,13 +57,13 @@ function Header() {
                            <Button title={"Create"} basic basicBlue rounded big />
                         </Nav.Link>
                      </Nav.Item>
-                     <Nav.Item>
-                        <Nav.Link href="">
+                     <Nav.Item className="d-flex align-items-center">
+                        <Nav.Link href="" className="d-flex align-items-center">
                            <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
                         </Nav.Link>
                      </Nav.Item>
-                     <Nav.Item>
-                        <Nav.Link href="">
+                     <Nav.Item className="d-flex align-items-center">
+                        <Nav.Link href="" className="d-flex align-items-center">
                            <div className={cx("notify-icon-wrapper")}>
                               <FontAwesomeIcon icon="fa-solid fa-bell" />
                            </div>
@@ -96,15 +72,9 @@ function Header() {
                   </Nav>
                </Navbar.Collapse>
             </Navbar>
-         </div>
+         </Container>
       </header>
    );
-   // return (
-   //     <div>
-   //         <img src={images.logo} alt="Kahoot" />
-   //         <h1>Header</h1>;
-   //     </div>
-   // );
 }
 
 export default Header;
