@@ -1,6 +1,8 @@
 import "./LoginPage.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -72,6 +74,8 @@ function LoginPage() {
             placeholder="Your email"
             label="Email"
             type="email"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faEnvelope}
             {...register("email", {
                required: requireErrorMessage,
                pattern: {
@@ -85,8 +89,9 @@ function LoginPage() {
          <Input
             placeholder="Password"
             label="Password"
-            showLabel
             type="password"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faLock}
             {...register("password", {
                required: requireErrorMessage
             })}

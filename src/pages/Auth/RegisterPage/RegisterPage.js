@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import axiosClient from "../../../config/axiosClient";
 import Input from "../../../components/Input/Input";
 import AuthForm from "../../../components/AuthForm/AuthForm";
+import { faEnvelope, faKey, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 
 function RegisterPage() {
    const {
@@ -66,6 +67,8 @@ function RegisterPage() {
             placeholder="Your email"
             label="Email"
             type="email"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faEnvelope}
             {...register("email", {
                required: requireErrorMessage,
                pattern: {
@@ -75,11 +78,12 @@ function RegisterPage() {
             })}
             error={errors.email}
          />
-
          <Input
             placeholder="Your name"
             label="Name"
             type="text"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faUser}
             {...register("name", {
                required: requireErrorMessage
             })}
@@ -88,8 +92,9 @@ function RegisterPage() {
          <Input
             placeholder="Password"
             label="Password"
-            showLabel
             type="password"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faLock}
             {...register("password", {
                required: requireErrorMessage
             })}
@@ -100,29 +105,13 @@ function RegisterPage() {
             label="Repeat password"
             showLabel
             type="password"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faKey}
             {...register("repeatPassword", {
                validate: (value) => value === watch("password", "") || "do not match"
             })}
             error={errors.repeatPassword}
          />
-
-         <div className="d-flex flex-row align-items-center mb-4">
-            <div style={{ margin: "0 auto" }}>
-               <span className="me-2 span-role">
-                  <input
-                     {...register("role")}
-                     type="radio"
-                     value="STUDENT"
-                     name="role"
-                     defaultChecked
-                  />{" "}
-                  STUDENT
-               </span>
-               <span className="me-2 span-role">
-                  <input {...register("role")} type="radio" value="TEACHER" name="role" /> TEACHER
-               </span>
-            </div>
-         </div>
       </AuthForm>
    );
 }
