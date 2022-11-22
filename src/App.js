@@ -34,13 +34,17 @@ function App() {
                      }
                   />
                   <Route
-                     path={"/group/*"}
+                     path={"/group"}
                      element={
                         <DefaultLayout>
                            <GroupPage />
                         </DefaultLayout>
                      }
-                  ></Route>
+                  >
+                     <Route path={"owned"} element={<ManageGroupList />}></Route>
+                     <Route path={"joined"} element={<ManageGroupList />}></Route>
+                     <Route path={":id"} element={<ManageGroup />}></Route>
+                  </Route>
                </Routes>
                <Routes>
                   <Route
