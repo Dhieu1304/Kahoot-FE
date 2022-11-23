@@ -1,5 +1,6 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import { googleSignInBE } from "../services/authService";
 
 const firebaseConfig = {
    apiKey: "AIzaSyAJLKKAm4a5ptq2Gx2jM5f9DqmwFACl8k4",
@@ -19,8 +20,11 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 export const signInWithGoogle = async () => {
    const googleSignIn = await auth.signInWithPopup(provider);
-   console.log(googleSignIn);
-   console.log(googleSignIn.credential.idToken);
-   /*    const data = await auth.currentUser.getIdToken(/!* forceRefresh *!/ true);
-    console.log('data:', data);*/
+   const data = {
+      email: googleSignIn?.user?._delegate?.email,
+      name: googleSignIn?.user?._delegate?.displayName,
+      avatar: googleSignIn?.user?._delegate?.photoURL
+   };
+   console.log("data: ", data);
+   return await googleSignInBE(data);
 };

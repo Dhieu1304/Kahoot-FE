@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./AuthForm.scss";
 import { signInWithGoogle } from "../../config/firebase";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/auth/provider";
 
 function AuthForm({
    title,
@@ -11,6 +13,8 @@ function AuthForm({
    onAuthSubmit,
    children
 }) {
+   const navigate = useNavigate();
+   const authContext = useContext(AuthContext);
    return (
       <div className="auth-form-wrapper">
          <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">{title}</p>
@@ -26,8 +30,12 @@ function AuthForm({
                <span className={"sign-in-btn"}>Sign in with?</span>
                <span
                   className="google-btn"
-                  onClick={() => {
-                     signInWithGoogle();
+                  onClick={async () => {
+                     const isLogin = await signInWithGoogle();
+                     if (isLogin) {
+                        authContext.login();
+                        navigate("/");
+                     }
                   }}
                >
                   <svg

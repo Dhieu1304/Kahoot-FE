@@ -11,7 +11,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
    const customHeaders = {};
-   await isTokenExpired();
+   // await isTokenExpired();
    const accessToken = getItem(LOCAL_STORAGE.ACCESS_TOKEN);
    if (accessToken) {
       customHeaders.Authorization = `Bearer ${accessToken}`;
