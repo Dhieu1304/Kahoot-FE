@@ -1,16 +1,11 @@
 import "./LoginPage.css";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useContext } from "react";
-import axiosClient from "../../../config/axiosClient";
-import { UserContext } from "../../../context/userContext";
 import Input from "../../../components/Input/Input";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 import { AuthContext } from "../../../providers/auth/provider";
-import { getItem, LOCAL_STORAGE } from "../../../utils/localStorage";
+import { getUserInfo, login } from "../../../services/authService";
 
 function LoginPage() {
    const {
@@ -28,14 +23,14 @@ function LoginPage() {
    });
 
    const navigate = useNavigate();
-
    const authContext = useContext(AuthContext);
-
    const onSubmit = async (formData) => {
-      console.log("formData: ", formData);
       try {
-         await authContext.login(formData);
-         if (getItem(LOCAL_STORAGE.ACCESS_TOKEN)) {
+         const userLogin = await login(formData);
+         if (userLogin) {
+            authContext.login();
+            const user = await getUserInfo();
+            if (user) authContext.setUser(user);
             navigate("/");
          }
       } catch (e) {

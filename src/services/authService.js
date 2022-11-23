@@ -1,0 +1,56 @@
+import axiosClient from "../config/axiosClient";
+import { LOCAL_STORAGE, setItem } from "../utils/localStorage";
+import { toast } from "react-toastify";
+
+const login = async (data) => {
+   try {
+      const user = await axiosClient.post("/auth/login", data);
+      if (user.status) {
+         setItem(LOCAL_STORAGE.ACCESS_TOKEN, user?.data?.accessToken);
+         setItem(LOCAL_STORAGE.REFRESH_TOKEN, user?.data?.refreshToken);
+         return user;
+      } else {
+         toast.error(user?.message);
+         return false;
+      }
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const registerUser = async (data) => {
+   try {
+      const register = await axiosClient.post("/auth/register", data);
+      console.log(">>>> register", register);
+      if (register.status) {
+         toast.success(register?.message);
+         return register;
+      } else {
+         toast.error(register?.message);
+         return false;
+      }
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getUserInfo = async () => {
+   try {
+      const userInfo = await axiosClient.get("/user/info");
+      console.log(">>> userInfo", userInfo);
+      if (userInfo.status) {
+         toast.success(userInfo?.message);
+         return userInfo.data;
+      } else {
+         toast.error(userInfo?.message);
+         return false;
+      }
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+export { login, registerUser, getUserInfo };

@@ -1,11 +1,8 @@
 import "./RegisterPage.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import axiosClient from "../../../config/axiosClient";
 import Input from "../../../components/Input/Input";
 import AuthForm from "../../../components/AuthForm/AuthForm";
+import { registerUser } from "../../../services/authService";
 
 function RegisterPage() {
    const {
@@ -23,9 +20,21 @@ function RegisterPage() {
       },
       criteriaMode: "all"
    });
+
    const onSubmit = async (formData) => {
-      // if (formData.password !== formData.rePassword) return;
       console.log("formData: ", formData);
+      const bodyData = {
+         name: formData.name,
+         email: formData.email,
+         password: formData.password
+      };
+
+      try {
+         await registerUser(bodyData);
+      } catch (e) {
+         console.error(e.message);
+      }
+
       // const bodyData = {
       //     name: formData.name,
       //     email: formData.email,
@@ -105,24 +114,6 @@ function RegisterPage() {
             })}
             error={errors.repeatPassword}
          />
-
-         <div className="d-flex flex-row align-items-center mb-4">
-            <div style={{ margin: "0 auto" }}>
-               <span className="me-2 span-role">
-                  <input
-                     {...register("role")}
-                     type="radio"
-                     value="STUDENT"
-                     name="role"
-                     defaultChecked
-                  />{" "}
-                  STUDENT
-               </span>
-               <span className="me-2 span-role">
-                  <input {...register("role")} type="radio" value="TEACHER" name="role" /> TEACHER
-               </span>
-            </div>
-         </div>
       </AuthForm>
    );
 }

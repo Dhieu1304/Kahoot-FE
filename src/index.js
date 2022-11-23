@@ -9,16 +9,16 @@ import { AuthProvider } from "./providers/auth/provider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-   <React.StrictMode>
-      <GlobalStyles>
-         {/*<UserProvider>
+   // <React.StrictMode>
+   <GlobalStyles>
+      {/*<UserProvider>
             <App />
          </UserProvider>*/}
-         <AuthProvider>
-            <App />
-         </AuthProvider>
-      </GlobalStyles>
-   </React.StrictMode>
+      <AuthProvider>
+         <App />
+      </AuthProvider>
+   </GlobalStyles>
+   // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

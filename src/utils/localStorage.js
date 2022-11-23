@@ -11,4 +11,8 @@ const getItem = (name) => {
    return localStorage.getItem(name);
 };
 
-export { LOCAL_STORAGE, setItem, getItem };
+const removeItem = (name) => {
+   localStorage.removeItem(name);
+};
+
+export { LOCAL_STORAGE, setItem, getItem, removeItem };

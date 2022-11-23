@@ -1,28 +1,29 @@
 import { USER_ACTION } from "./action";
-import axiosClient from "../../config/axiosClient";
-import { toast } from "react-toastify";
-import { LOCAL_STORAGE, setItem } from "../../utils/localStorage";
+import { LOCAL_STORAGE, removeItem } from "../../utils/localStorage";
 
-export const reducer = async (state, action) => {
+export const reducer = (state, action) => {
    let newState;
 
    switch (action.type) {
       case USER_ACTION.LOGIN:
-         const user = await axiosClient.post("/auth/login", action.payload);
-         console.log(">>>> user: ", user);
-
-         if (user.status) {
-            setItem(LOCAL_STORAGE.ACCESS_TOKEN, user?.data?.accessToken);
-            setItem(LOCAL_STORAGE.REFRESH_TOKEN, user?.data?.refreshToken);
-         } else {
-            toast.error(user?.message);
-         }
+         newState = {
+            ...state,
+            isLogin: true
+         };
          break;
-      case USER_ACTION.REGISTER:
+      case USER_ACTION.INFO:
+         newState = {
+            ...state,
+            user: action.payload
+         };
+         break;
+      case USER_ACTION.LOGOUT:
+         removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
+         removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
          break;
       default:
          throw new Error("invalid action");
    }
-
+   console.log(">>>> newState: ", newState);
    return newState;
 };

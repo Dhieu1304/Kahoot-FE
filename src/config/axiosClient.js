@@ -1,4 +1,6 @@
 import axios from "axios";
+import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
+import { isTokenExpired } from "../services/tokenService";
 
 const axiosClient = axios.create({
    baseURL: "http://localhost:3043",
@@ -9,7 +11,8 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config) => {
    const customHeaders = {};
-   const accessToken = localStorage.getItem("ACCESS_TOKEN");
+   await isTokenExpired();
+   const accessToken = getItem(LOCAL_STORAGE.ACCESS_TOKEN);
    if (accessToken) {
       customHeaders.Authorization = `Bearer ${accessToken}`;
    }
