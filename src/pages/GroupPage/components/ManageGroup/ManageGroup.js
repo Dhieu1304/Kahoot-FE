@@ -1,7 +1,5 @@
 import classNames from "classnames/bind";
 
-import { useReactTable } from "@tanstack/react-table";
-
 import TopBar from "./TopBar";
 import Avatar from "../../../../components/Avatar";
 

@@ -50,10 +50,6 @@ function GroupPage() {
 
    const location = useLocation();
 
-   console.log("location: ", location);
-
-   console.log("group page re-render");
-   console.log("currentSideBarMenuItem: ", currentSideBarMenuItem);
    useEffect(() => {
       if (location.pathname === "/group") {
          setCurrentSideBarMenuItem({
