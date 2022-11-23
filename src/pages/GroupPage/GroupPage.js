@@ -5,68 +5,70 @@ import SideBar from "./components/SideBar";
 import styles from "./GroupPage.module.scss";
 import ManageGroupList from "./components/ManageGroupList";
 import ManageGroup from "./components/ManageGroup/ManageGroup";
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 const menuTopItems = [
    {
       name: "Groups I manage",
-      leftIcon: <FontAwesomeIcon className={cx("icon")} icon="fa-solid fa-users" />
+      leftIcon: <FontAwesomeIcon className={cx("icon")} icon="fa-solid fa-users" />,
+      to: "owned"
    },
 
    {
       name: "Groups I've joined",
-      leftIcon: <FontAwesomeIcon className={cx("icon")} icon="fa-solid fa-user" />
+      leftIcon: <FontAwesomeIcon className={cx("icon")} icon="fa-solid fa-user" />,
+      to: "joined"
    }
 ];
 
 const recentGroupsList = [
    {
+      id: 1,
       name: "Group 1"
    },
    {
+      id: 2,
       name: "Group 2"
    },
    {
+      id: 3,
       name: "Group 3"
    }
 ];
 
 function GroupPage() {
-   const [menuTopItemActiveIndex, setMenuTopItemActiveIndex] = useState(
-      menuTopItems.length >= 0 ? 0 : -1
-   );
-   const [recentGroupItemActiveIndex, setRecentGroupItemActiveIndex] = useState(-1);
+   const [currentSideBarMenuItem, setCurrentSideBarMenuItem] = useState({
+      type: "groups",
+      index: 0
+   });
 
-   const handleMenuTopItemClick = (index) => {
-      setMenuTopItemActiveIndex(index);
-      setRecentGroupItemActiveIndex(-1);
-   };
+   const navigate = useNavigate();
 
-   const handleGroupItemClick = (index) => {
-      setMenuTopItemActiveIndex(-1);
-      setRecentGroupItemActiveIndex(index);
-   };
+   const location = useLocation();
 
-   console.log("GroupPage re-render");
+   useEffect(() => {
+      if (location.pathname === "/group") {
+         setCurrentSideBarMenuItem({
+            type: "groups",
+            index: 0
+         });
+         navigate("/group/owned", { replace: true });
+      }
+   });
 
    return (
       <div className={cx("wrapper")}>
          <SideBar
             menuTopItems={menuTopItems}
             recentGroupsList={recentGroupsList}
-            menuTopItemActiveIndex={menuTopItemActiveIndex}
-            recentGroupItemActiveIndex={recentGroupItemActiveIndex}
-            handleMenuTopItemClick={handleMenuTopItemClick}
-            handleGroupItemClick={handleGroupItemClick}
+            currentSideBarMenuItem={currentSideBarMenuItem}
+            setCurrentSideBarMenuItem={setCurrentSideBarMenuItem}
          />
 
          <div className={cx("container")}>
-            <Routes>
-               <Route path={"manageGroupList/*"} element={<ManageGroupList />} />
-               <Route path={"manageGroup/*"} element={<ManageGroup />} />
-            </Routes>
+            <Outlet />
          </div>
       </div>
    );

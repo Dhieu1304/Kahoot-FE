@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Input from "../../../components/Input/Input";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 import { registerUser } from "../../../services/authService";
+import { faEnvelope, faKey, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 
 function RegisterPage() {
    const {
@@ -34,30 +35,6 @@ function RegisterPage() {
       } catch (e) {
          console.error(e.message);
       }
-
-      // const bodyData = {
-      //     name: formData.name,
-      //     email: formData.email,
-      //     password: formData.password,
-      //     role: formData.role,
-      // };
-      // try {
-      //     await toast.promise(axiosClient.post("/auth/register", bodyData), {
-      //         pending: "Promise is pending",
-      //         success: {
-      //             render({ data }) {
-      //                 return data.data.message;
-      //             },
-      //         },
-      //         error: {
-      //             render({ data }) {
-      //                 return data.response.data.message;
-      //             },
-      //         },
-      //     });
-      // } catch (e) {
-      //     // console.log(e.message);
-      // }
    };
 
    const requireErrorMessage = "field can not empty";
@@ -75,6 +52,8 @@ function RegisterPage() {
             placeholder="Your email"
             label="Email"
             type="email"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faEnvelope}
             {...register("email", {
                required: requireErrorMessage,
                pattern: {
@@ -84,11 +63,12 @@ function RegisterPage() {
             })}
             error={errors.email}
          />
-
          <Input
             placeholder="Your name"
             label="Name"
             type="text"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faUser}
             {...register("name", {
                required: requireErrorMessage
             })}
@@ -97,8 +77,9 @@ function RegisterPage() {
          <Input
             placeholder="Password"
             label="Password"
-            showLabel
             type="password"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faLock}
             {...register("password", {
                required: requireErrorMessage
             })}
@@ -109,6 +90,8 @@ function RegisterPage() {
             label="Repeat password"
             showLabel
             type="password"
+            LeftIconComponent={FontAwesomeIcon}
+            leftIcon={faKey}
             {...register("repeatPassword", {
                validate: (value) => value === watch("password", "") || "do not match"
             })}

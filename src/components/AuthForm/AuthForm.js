@@ -68,7 +68,7 @@ function AuthForm({
             </div>
             <p style={{ fontStyle: "italic" }}>
                {redirectMessage}
-               <Link to={redirectLink} style={{ textDecoration: "none" }}>
+               <Link to={redirectLink} style={{ textDecoration: "none", color: "blue" }}>
                   {redirectTitle}
                </Link>
             </p>
