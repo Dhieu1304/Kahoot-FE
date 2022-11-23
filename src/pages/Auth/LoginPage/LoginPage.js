@@ -9,6 +9,8 @@ import axiosClient from "../../../config/axiosClient";
 import { UserContext } from "../../../context/userContext";
 import Input from "../../../components/Input/Input";
 import AuthForm from "../../../components/AuthForm/AuthForm";
+import { AuthContext } from "../../../providers/auth/provider";
+import { getItem, LOCAL_STORAGE } from "../../../utils/localStorage";
 
 function LoginPage() {
    const {
@@ -27,32 +29,18 @@ function LoginPage() {
 
    const navigate = useNavigate();
 
-   const userContext = useContext(UserContext);
+   const authContext = useContext(AuthContext);
 
    const onSubmit = async (formData) => {
       console.log("formData: ", formData);
-      // try {
-      //     await toast.promise(axiosClient.post("/auth/login", formData), {
-      //         pending: "Promise is pending",
-      //         success: {
-      //             render({ data }) {
-      //                 localStorage.setItem(
-      //                     "ACCESS_TOKEN",
-      //                     data.data.data.token
-      //                 );
-      //                 navigate("/");
-      //                 return "Login successful";
-      //             },
-      //         },
-      //         error: {
-      //             render({ data }) {
-      //                 return data.response.data.message;
-      //             },
-      //         },
-      //     });
-      // } catch (e) {
-      //     // console.log(e.message);
-      // }
+      try {
+         await authContext.login(formData);
+         if (getItem(LOCAL_STORAGE.ACCESS_TOKEN)) {
+            navigate("/");
+         }
+      } catch (e) {
+         console.error(e.message);
+      }
    };
 
    const requireErrorMessage = "field can not empty";

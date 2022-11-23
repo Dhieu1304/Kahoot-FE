@@ -5,14 +5,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./context/userContext";
 import GlobalStyles from "./components/GlobalStyles/GlobalStyles";
+import { AuthProvider } from "./providers/auth/provider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
    <React.StrictMode>
       <GlobalStyles>
-         <UserProvider>
+         {/*<UserProvider>
             <App />
-         </UserProvider>
+         </UserProvider>*/}
+         <AuthProvider>
+            <App />
+         </AuthProvider>
       </GlobalStyles>
    </React.StrictMode>
 );

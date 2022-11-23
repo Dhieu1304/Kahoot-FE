@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-   baseURL: process.env.REACT_APP_BE_URL,
+   baseURL: "http://localhost:3043",
    headers: {
       "content-type": "application/json"
    }
@@ -17,10 +17,26 @@ axiosClient.interceptors.request.use(async (config) => {
    return {
       ...config,
       headers: {
-         ...customHeaders, // auto attach token
-         ...config.headers // but you can override for some requests
+         ...customHeaders,
+         ...config.headers
       }
    };
 });
+
+axiosClient.interceptors.response.use(
+   (response) => {
+      if (response && response.data) {
+         return response.data;
+      }
+      return response;
+   },
+   (error) => {
+      console.error(error);
+      if (error && error.response && error.response.data) {
+         return error.response.data;
+      }
+      return error;
+   }
+);
 
 export default axiosClient;

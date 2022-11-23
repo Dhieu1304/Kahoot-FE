@@ -1,7 +1,5 @@
 import classNames from "classnames/bind";
 
-import { useReactTable } from "@tanstack/react-table";
-
 import TopBar from "./TopBar";
 import Avatar from "../../../../components/Avatar";
 
@@ -71,7 +69,7 @@ function ManageGroup() {
       <div className={cx("container")}>
          <TopBar />
          <div className={cx("content")}>
-            <UserTable data={data} columns={columns} selection></UserTable>;
+            <UserTable data={data} columns={columns} selection></UserTable>
          </div>
       </div>
    );

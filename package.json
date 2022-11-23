@@ -17,6 +17,7 @@
       "bootstrap": "^5.2.2",
       "classnames": "^2.3.2",
       "dotenv": "^16.0.3",
+      "firebase": "^9.14.0",
       "font-awesome": "^4.7.0",
       "normalize.css": "^8.0.1",
       "prettier": "^2.7.1",
