@@ -30,4 +30,20 @@ const getGroupsByJoinedUserId = async (userId) => {
    }
 };
 
-export { getGroupsByOwnUserId, getGroupsByJoinedUserId };
+const createGroup = async (name, user_id) => {
+   console.log("createGroup: ", { name, user_id });
+
+   try {
+      const res = await axiosClient.post(`/group/create`, {
+         name,
+         user_id
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+export { getGroupsByOwnUserId, getGroupsByJoinedUserId, createGroup };
