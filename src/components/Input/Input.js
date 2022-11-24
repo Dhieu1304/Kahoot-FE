@@ -17,26 +17,31 @@ const Input = forwardRef(
          type,
          styleType,
          error,
+         disable,
          onChange,
-         LeftIconComponent,
-         leftIcon,
+         rightBtn,
          ...props
       },
       ref
    ) => {
+      console.log("disable: ", disable);
       return (
          <div className={cx("wrapper")}>
             {showLabel && <span className={cx("label")}>{label}</span>}
-            <input
-               className={cx("container")}
-               placeholder={placeholder}
-               type={type}
-               value={value}
-               onChange={onChange}
-               required
-               {...props}
-               ref={ref}
-            />
+            <div className={cx("container")}>
+               <input
+                  className={cx("input-field")}
+                  placeholder={placeholder}
+                  type={type}
+                  value={value}
+                  onChange={onChange}
+                  required
+                  {...props}
+                  ref={ref}
+                  readOnly={disable}
+               />
+               {rightBtn && <div className={cx("rightBtn-container")}>{rightBtn}</div>}
+            </div>
             {error && (
                <span className={cx("error")}>
                   {label} {error.message}

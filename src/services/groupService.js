@@ -46,4 +46,59 @@ const createGroup = async (name, user_id) => {
    }
 };
 
-export { getGroupsByOwnUserId, getGroupsByJoinedUserId, createGroup };
+const inviteToGroupByEmail = async (groupId, email) => {
+   console.log("Invite: ", { groupId, email });
+
+   try {
+      const res = await axiosClient.post(`/group/invite/email`, {
+         id: groupId,
+         email
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getInviteLink = async (groupId) => {
+   console.log("Invite link: ", { groupId });
+
+   try {
+      // const res = await axiosClient.post(`/group/invite/email`, {
+      //    id: groupId,
+      //    email
+      // });
+      // console.log("res: ", res);
+      // return camelcaseKeys(res.data, { deep: true });
+      return "sdfdsfsdfdsfdsfsdfdsfsfasfasfd;l";
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const checkOwnedUser = async (groupId, userId) => {
+   console.log("check own user: ", { groupId, userId });
+
+   try {
+      const res = await axiosClient.get(`/group/checkOwnedUser`, {
+         params: { group_id: groupId, user_id: userId }
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+export {
+   getGroupsByOwnUserId,
+   getGroupsByJoinedUserId,
+   createGroup,
+   inviteToGroupByEmail,
+   getInviteLink,
+   checkOwnedUser
+};

@@ -6,10 +6,15 @@ import classNames from "classnames/bind";
 import Button from "../../../../../components/Button/Button";
 
 import styles from "./TopBar.module.scss";
+import InviteToGroupModal from "../InviteToGroupModal";
+import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
-function TopBar() {
+function TopBar({ groupId }) {
+   const [showInviteToGroupModal, setShowInviteToGroupModal] = useState(false);
+
+   console.log("groupId in Topbar: ", groupId);
    return (
       <div className={cx("container")}>
          <Navbar bg="light" expand="lg">
@@ -45,12 +50,27 @@ function TopBar() {
                   </Nav>
                   <Nav style={{ maxHeight: "100px" }} navbarScroll>
                      <Nav.Item>
-                        <Button title={"Share"} basic basicBlue rounded big />
+                        <Button
+                           title={"Intive"}
+                           basic
+                           basicBlue
+                           rounded
+                           big
+                           onClick={() => {
+                              console.log("Invite to Group");
+                              return setShowInviteToGroupModal(true);
+                           }}
+                        />
                      </Nav.Item>
                   </Nav>
                </Navbar.Collapse>
             </Container>
          </Navbar>
+         <InviteToGroupModal
+            show={showInviteToGroupModal}
+            setShow={setShowInviteToGroupModal}
+            groupId={groupId}
+         ></InviteToGroupModal>
       </div>
    );
 }

@@ -13,25 +13,36 @@
       color: rgba(33, 33, 33, 0.8);
    }
    .container {
-      width: 100%;
-      min-height: 2.75rem;
-      height: 40px;
-      line-height: 40px;
-      font-family: Montserrat, "Noto Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
       border: 1px solid var(--border-color);
       border-radius: 5px;
       background-color: rgb(255, 245, 247);
       color: rgb(51, 51, 51);
-      font-size: 1.6rem;
-      line-height: 1.25rem;
-      letter-spacing: 0.2px;
-      transition: all 0.2s ease 0s;
-      appearance: none;
-      text-overflow: ellipsis;
-      resize: none;
-      overflow: auto;
-      padding: 0px 5rem 0px 1rem;
-      white-space: nowrap;
+      width: 100%;
+      display: flex;
+      justify-content: stretch;
+      align-items: center;
+
+      .input-field {
+         flex: 1;
+         min-height: 2.75rem;
+         height: 40px;
+         line-height: 40px;
+         font-family: Montserrat, "Noto Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
+         font-size: 1.6rem;
+         line-height: 1.25rem;
+         letter-spacing: 0.2px;
+         transition: all 0.2s ease 0s;
+         appearance: none;
+         text-overflow: ellipsis;
+         resize: none;
+         overflow: auto;
+         white-space: nowrap;
+         padding: 16px;
+      }
+
+      .rightBtn-container {
+         padding: 4px;
+      }
    }
    .error {
       margin-top: 10px;

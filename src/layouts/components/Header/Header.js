@@ -5,7 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import images from "../../../assets/images";
 import HeaderItem from "./components/HeaderItem";
@@ -15,11 +15,17 @@ import Avatar from "../../../components/Avatar/Avatar";
 
 import { headerItemsData } from "./config";
 import { useState } from "react";
+import { Dropdown } from "react-bootstrap";
+import CustomToggleDropdownBtn from "../../../components/CustomToggleDropdownBtn";
+
+import * as localStorageApp from "../../../utils/localStorage";
 
 const cx = classNames.bind(styles);
 
 function Header() {
    const [headerItemActiveIndex, setHeaderItemActiveIndex] = useState(0);
+
+   const navigate = useNavigate();
 
    return (
       <header className={cx("wrapper")}>
@@ -58,9 +64,30 @@ function Header() {
                         </Nav.Link>
                      </Nav.Item>
                      <Nav.Item className="d-flex align-items-center">
-                        <Nav.Link href="" className="d-flex align-items-center">
-                           <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
-                        </Nav.Link>
+                        <Dropdown>
+                           <Dropdown.Toggle as={CustomToggleDropdownBtn} id="avatar-dropdown">
+                              <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
+                           </Dropdown.Toggle>
+
+                           <Dropdown.Menu>
+                              <Dropdown.Item>
+                                 <Link to={"/"}>Profile</Link>
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                 onClick={() => {
+                                    localStorageApp.removeItem(
+                                       localStorageApp.LOCAL_STORAGE.ACCESS_TOKEN
+                                    );
+                                    localStorageApp.removeItem(
+                                       localStorageApp.LOCAL_STORAGE.REFRESH_TOKEN
+                                    );
+                                    window.location.reload(false);
+                                 }}
+                              >
+                                 Log out
+                              </Dropdown.Item>
+                           </Dropdown.Menu>
+                        </Dropdown>
                      </Nav.Item>
                      <Nav.Item className="d-flex align-items-center">
                         <Nav.Link href="" className="d-flex align-items-center">

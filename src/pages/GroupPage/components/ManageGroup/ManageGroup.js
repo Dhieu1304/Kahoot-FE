@@ -4,13 +4,15 @@ import TopBar from "./TopBar";
 import Avatar from "../../../../components/Avatar";
 
 import styles from "./ManageGroup.module.scss";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 const cx = classNames.bind(styles);
 
 import UserTable from "./UserTable";
 import { useParams } from "react-router-dom";
 
 import { getUsersByGroupId } from "../../../../services/userService";
+import { checkOwnedUser } from "../../../../services/groupService";
+import { AuthContext } from "../../../../providers/auth";
 
 const COLUMNS = [
    {
@@ -42,29 +44,46 @@ const COLUMNS = [
       Cell: ({ row }) => {
          return <span>{row.original.status.name}</span>;
       }
-   },
-   {
-      Header: "Action",
-      accessor: "action"
    }
+   // isOwnedUser
+   // {
+   //    Header: "Action",
+   //    Cell: ({ row }) => {
+   //       return <span>{row.original.status.name}</span>;
+   //    }
+   // }
 ];
 
 function ManageGroup() {
-   const params = useParams();
+   const authContext = useContext(AuthContext);
+   const [users, setUsers] = useState([]);
+   const [isOwnedUser, setIsOwnedUser] = useState(false);
 
-   const [group, setGroup] = useState([]);
+   const params = useParams();
    const { id } = params;
 
    useEffect(() => {
-      const loadGroups = async () => {
-         const groupData = await getUsersByGroupId(id);
-         setGroup(groupData);
+      const loadUsers = async () => {
+         const usersData = await getUsersByGroupId(id);
+         setUsers(usersData);
       };
 
-      loadGroups();
+      loadUsers();
    }, [id]);
 
-   console.log("group: ", group);
+   useEffect(() => {
+      const checkIsOwnedUser = async () => {
+         if (authContext.user.id) {
+            const result = await checkOwnedUser(id, authContext.user.id);
+            setIsOwnedUser(result);
+         }
+      };
+
+      checkIsOwnedUser();
+   }, [authContext.user.id]);
+
+   console.log("users: ", users);
+   console.log("isOwnedser: ", isOwnedUser);
 
    const columns = useMemo(() => COLUMNS, []);
 
@@ -72,9 +91,9 @@ function ManageGroup() {
 
    return (
       <div className={cx("container")}>
-         <TopBar />
+         <TopBar groupId={id} />
          <div className={cx("content")}>
-            <UserTable data={group} columns={columns} selection></UserTable>
+            <UserTable data={users} columns={columns} selection isOwnedUser></UserTable>
          </div>
       </div>
    );
