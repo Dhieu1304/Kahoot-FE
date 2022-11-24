@@ -47,9 +47,10 @@ function TopBar() {
             </Container>
          </Navbar>
 
-         <CreateGroupModal show={showCreateGroupModal} setShow={setShowCreateGroupModal}>
-            asdfsdfsdf
-         </CreateGroupModal>
+         <CreateGroupModal
+            show={showCreateGroupModal}
+            setShow={setShowCreateGroupModal}
+         ></CreateGroupModal>
       </div>
    );
 }

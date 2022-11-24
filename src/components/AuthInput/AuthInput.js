@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { forwardRef } from "react";
 
-import "./Input.css";
+import "./AuthInput.css";
 
-const Input = forwardRef(
+const AuthInput = forwardRef(
    (
       {
          value,
@@ -57,4 +57,4 @@ const Input = forwardRef(
    }
 );
 
-export default Input;
+export default AuthInput;
