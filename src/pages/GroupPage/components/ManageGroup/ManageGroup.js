@@ -4,30 +4,44 @@ import TopBar from "./TopBar";
 import Avatar from "../../../../components/Avatar";
 
 import styles from "./ManageGroup.module.scss";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 const cx = classNames.bind(styles);
 
 import UserTable from "./UserTable";
+import { useParams } from "react-router-dom";
+
+import { getUsersByGroupId } from "../../../../services/userService";
 
 const COLUMNS = [
    {
       Header: "Name",
-      Cell: ({ row }) => {
+      Cell: ({ cell, row }) => {
+         // console.log("row.original: ", row.original);
+         // console.log("cell: ", cell);
          return (
             <div className={cx("user-infor")}>
                <Avatar src={row.original.avatar} title="avatar" size={30} rounded />
-               <span className={cx("user-infor-name")}>{row.original.name}</span>
+               <span className={cx("user-infor-name")}>{row.original.fullName}</span>
             </div>
          );
       }
    },
+
    {
       Header: "Role",
-      accessor: "role"
+      Cell: ({ row }) => {
+         // console.log(
+         //    "row.original.groupUsers[0].groupUserRole.name",
+         //    row.original.groupUsers[0].groupUserRole.name
+         // );
+         return <span>{row.original.groupUsers[0].groupUserRole.name}</span>;
+      }
    },
    {
       Header: "Status",
-      accessor: "status"
+      Cell: ({ row }) => {
+         return <span>{row.original.status.name}</span>;
+      }
    },
    {
       Header: "Action",
@@ -35,32 +49,23 @@ const COLUMNS = [
    }
 ];
 
-const data = [
-   {
-      avatar:
-         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lU_Z3d6va3xVuzGdngT4mBWdhuEFrgNk6hngAsnw&s",
-      name: "sang1",
-      role: "owned",
-      status: "active"
-   },
-   {
-      name: "sang1",
-
-      avatar:
-         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lU_Z3d6va3xVuzGdngT4mBWdhuEFrgNk6hngAsnw&s",
-      role: "owned",
-      status: "active"
-   },
-   {
-      name: "sang1",
-      avatar:
-         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lU_Z3d6va3xVuzGdngT4mBWdhuEFrgNk6hngAsnw&s",
-      role: "owned",
-      status: "active"
-   }
-];
-
 function ManageGroup() {
+   const params = useParams();
+
+   const [group, setGroup] = useState([]);
+   const { id } = params;
+
+   useEffect(() => {
+      const loadGroups = async () => {
+         const groupData = await getUsersByGroupId(id);
+         setGroup(groupData);
+      };
+
+      loadGroups();
+   }, [id]);
+
+   console.log("group: ", group);
+
    const columns = useMemo(() => COLUMNS, []);
 
    console.log("columns: ", columns);
@@ -69,7 +74,7 @@ function ManageGroup() {
       <div className={cx("container")}>
          <TopBar />
          <div className={cx("content")}>
-            <UserTable data={data} columns={columns} selection></UserTable>
+            <UserTable data={group} columns={columns} selection></UserTable>
          </div>
       </div>
    );

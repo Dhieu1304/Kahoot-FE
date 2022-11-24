@@ -1,11 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import SideBar from "./components/SideBar";
 import styles from "./GroupPage.module.scss";
 import ManageGroupList from "./components/ManageGroupList";
 import ManageGroup from "./components/ManageGroup/ManageGroup";
 import { Outlet, Route, Routes, useNavigate, useLocation } from "react-router-dom";
+
+import * as localStorageApp from "../../utils/localStorage";
+import { AuthContext } from "../../providers/auth/provider";
 
 const cx = classNames.bind(styles);
 
@@ -23,22 +26,24 @@ const menuTopItems = [
    }
 ];
 
-const recentGroupsList = [
-   {
-      id: 1,
-      name: "Group 1"
-   },
-   {
-      id: 2,
-      name: "Group 2"
-   },
-   {
-      id: 3,
-      name: "Group 3"
-   }
-];
+// const recentGroupsList = [
+//    {
+//       id: 1,
+//       name: "Group 1"
+//    },
+//    {
+//       id: 2,
+//       name: "Group 2"
+//    },
+//    {
+//       id: 3,
+//       name: "Group 3"
+//    }
+// ];
 
 function GroupPage() {
+   const authContext = useContext(AuthContext);
+
    const [currentSideBarMenuItem, setCurrentSideBarMenuItem] = useState({
       type: "groups",
       index: 0
@@ -47,6 +52,27 @@ function GroupPage() {
    const navigate = useNavigate();
 
    const location = useLocation();
+
+   const [recentGroupsList, setRecentGroupsList] = useState([]);
+
+   useEffect(() => {
+      const recentGroupsListObject = localStorageApp.getItem(
+         localStorageApp.LOCAL_STORAGE.RECENT_GROUPS
+      );
+
+      if (authContext.user.id) {
+         if (recentGroupsListObject && recentGroupsListObject[authContext.user.id]) {
+            const recentGroupsListFromLocal = recentGroupsListObject[authContext.user.id];
+            setRecentGroupsList(recentGroupsListFromLocal);
+         } else {
+            localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.RECENT_GROUPS, {
+               [authContext.user.id]: recentGroupsList
+            });
+         }
+      }
+   }, [currentSideBarMenuItem]);
+
+   console.log("recentGroupsList: ", recentGroupsList);
 
    useEffect(() => {
       if (location.pathname === "/group") {
@@ -58,6 +84,19 @@ function GroupPage() {
       }
    });
 
+   const updateRecentGroupsList = (newRecentGroupsList) => {
+      localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.RECENT_GROUPS, {
+         [authContext.user.id]: newRecentGroupsList
+      });
+
+      setRecentGroupsList(newRecentGroupsList);
+
+      setCurrentSideBarMenuItem({
+         type: "group",
+         index: 0
+      });
+   };
+
    return (
       <div className={cx("wrapper")}>
          <SideBar
@@ -68,7 +107,9 @@ function GroupPage() {
          />
 
          <div className={cx("container")}>
-            <Outlet />
+            <Outlet
+               context={{ recentGroupsList, updateRecentGroupsList, setCurrentSideBarMenuItem }}
+            />
          </div>
       </div>
    );
