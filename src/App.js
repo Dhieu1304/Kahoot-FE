@@ -59,7 +59,14 @@ function App() {
                            </DefaultLayout>
                         }
                      >
-                        <Route path={"owned"} element={<ManageGroupList />}></Route>
+                        <Route
+                           path={"owned"}
+                           element={<ManageGroupList />}
+                           loader={async () => {
+                              const groupsData = await getGroupsByOwnUserId(authContext.user.id);
+                              return groupsData;
+                           }}
+                        ></Route>
                         <Route path={"joined"} element={<ManageGroupList />}></Route>
                         <Route path={":id"} element={<ManageGroup />}></Route>
                      </Route>

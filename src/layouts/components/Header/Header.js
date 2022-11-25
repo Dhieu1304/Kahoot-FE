@@ -42,7 +42,7 @@ function Header() {
                   className={cx("header-navbar-toggle-btn")}
                />
                <Navbar.Offcanvas id="headerNavbar" className={cx("header-navbar-off-canvas")}>
-                  <Nav className={cx("my-2 my-lg-0")} navbarScroll>
+                  <Nav className={cx("my-2 my-lg-0")}>
                      {headerItemsData.map((headerItem, index) => (
                         <Nav.Link
                            as={Link}
