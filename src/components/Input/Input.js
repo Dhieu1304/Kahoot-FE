@@ -18,23 +18,26 @@ const Input = forwardRef(
          styleType,
          error,
          disable,
-         onChange,
+
          rightBtn,
+         hidden,
+         hiddenInputField,
          ...props
       },
       ref
    ) => {
-      console.log("disable: ", disable);
+      // console.log("ref: ", ref);
+      // console.log("type: ", type);
+
       return (
-         <div className={cx("wrapper")}>
+         <div className={cx("wrapper", { hidden })}>
             {showLabel && <span className={cx("label")}>{label}</span>}
             <div className={cx("container")}>
                <input
-                  className={cx("input-field")}
+                  className={cx("input-field", { hiddenInputField })}
                   placeholder={placeholder}
                   type={type}
                   value={value}
-                  onChange={onChange}
                   required
                   {...props}
                   ref={ref}

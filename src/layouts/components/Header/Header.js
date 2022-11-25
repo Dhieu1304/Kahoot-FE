@@ -63,32 +63,34 @@ function Header() {
                            <Button title={"Create"} basic basicBlue rounded big />
                         </Nav.Link>
                      </Nav.Item>
-                     <Nav.Item className="d-flex align-items-center">
-                        <Dropdown>
-                           <Dropdown.Toggle as={CustomToggleDropdownBtn} id="avatar-dropdown">
-                              <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
-                           </Dropdown.Toggle>
+                     <Dropdown>
+                        <Dropdown.Toggle as={CustomToggleDropdownBtn} id="avatar-dropdown">
+                           <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
+                        </Dropdown.Toggle>
 
-                           <Dropdown.Menu>
-                              <Dropdown.Item>
-                                 <Link to={"/"}>Profile</Link>
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                 onClick={() => {
-                                    localStorageApp.removeItem(
-                                       localStorageApp.LOCAL_STORAGE.ACCESS_TOKEN
-                                    );
-                                    localStorageApp.removeItem(
-                                       localStorageApp.LOCAL_STORAGE.REFRESH_TOKEN
-                                    );
-                                    window.location.reload(false);
-                                 }}
-                              >
-                                 Log out
-                              </Dropdown.Item>
-                           </Dropdown.Menu>
-                        </Dropdown>
-                     </Nav.Item>
+                        <Dropdown.Menu>
+                           <Dropdown.Item
+                              onClick={() => {
+                                 navigate("/profile");
+                              }}
+                           >
+                              Profile
+                           </Dropdown.Item>
+                           <Dropdown.Item
+                              onClick={() => {
+                                 localStorageApp.removeItem(
+                                    localStorageApp.LOCAL_STORAGE.ACCESS_TOKEN
+                                 );
+                                 localStorageApp.removeItem(
+                                    localStorageApp.LOCAL_STORAGE.REFRESH_TOKEN
+                                 );
+                                 window.location.reload(false);
+                              }}
+                           >
+                              Log out
+                           </Dropdown.Item>
+                        </Dropdown.Menu>
+                     </Dropdown>
                      <Nav.Item className="d-flex align-items-center">
                         <Nav.Link href="" className="d-flex align-items-center">
                            <div className={cx("notify-icon-wrapper")}>

@@ -20,6 +20,7 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "./providers/auth/provider";
 import { getUserInfo } from "./services/authService";
 import DefaultAuthPage from "./pages/Auth/DefaultAuthPage";
+import ProfilePage from "./pages/ProfilePage";
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -62,6 +63,14 @@ function App() {
                         <Route path={"joined"} element={<ManageGroupList />}></Route>
                         <Route path={":id"} element={<ManageGroup />}></Route>
                      </Route>
+                     <Route
+                        path={"/profile"}
+                        element={
+                           <DefaultLayout>
+                              <ProfilePage />
+                           </DefaultLayout>
+                        }
+                     ></Route>
                   </Routes>
                ) : (
                   <Routes>

@@ -40,6 +40,10 @@
          padding: 16px;
       }
 
+      .input-field.hiddenInputField {
+         display: none;
+      }
+
       .rightBtn-container {
          padding: 4px;
       }
@@ -51,4 +55,8 @@
       text-decoration: none;
       text-align: left;
    }
+}
+
+.wrapper.hidden {
+   display: none;
 }
