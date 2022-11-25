@@ -17,14 +17,17 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 
 const provider = new firebase.auth.GoogleAuthProvider();
+provider.setCustomParameters({
+   prompt: "select_account"
+});
 
 export const signInWithGoogle = async () => {
-   const googleSignIn = await auth.signInWithPopup(provider);
-   const data = {
-      email: googleSignIn?.user?._delegate?.email,
-      name: googleSignIn?.user?._delegate?.displayName,
-      avatar: googleSignIn?.user?._delegate?.photoURL
-   };
-   console.log("data: ", data);
-   return await googleSignInBE(data);
+   try {
+      await auth.signInWithPopup(provider);
+      const idToken = await auth.currentUser.getIdToken();
+      return await googleSignInBE(idToken);
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
 };

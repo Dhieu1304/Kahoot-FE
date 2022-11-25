@@ -53,10 +53,9 @@ const getUserInfo = async () => {
    }
 };
 
-const googleSignInBE = async (data) => {
+const googleSignInBE = async (idToken) => {
    try {
-      const googleLogin = await axiosClient.post("/auth/google-sign-in", data);
-      console.log(">>>> googleLogin: ", googleLogin);
+      const googleLogin = await axiosClient.post("/auth/google-sign-in", { idToken });
       if (googleLogin.status) {
          setItem(LOCAL_STORAGE.ACCESS_TOKEN, googleLogin.data.accessToken);
          setItem(LOCAL_STORAGE.REFRESH_TOKEN, googleLogin.data.refreshToken);

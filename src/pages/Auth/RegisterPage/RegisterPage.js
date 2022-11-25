@@ -4,6 +4,7 @@ import Input from "../../../components/Input/Input";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 import { registerUser } from "../../../services/authService";
 import { faEnvelope, faKey, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function RegisterPage() {
    const {
