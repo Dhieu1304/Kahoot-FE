@@ -1,4 +1,4 @@
-import { Nav, Navbar, NavDropdown, Container, Form } from "react-bootstrap";
+import { div, Navbar, NavDropdown, Container, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
@@ -17,39 +17,30 @@ function TopBar() {
 
    return (
       <div className={cx("container")}>
-         <Navbar bg="light" expand="lg">
-            <Container fluid>
-               <Navbar.Toggle aria-controls="groupTopBarScroll" />
-               <Navbar.Collapse id="groupTopBarScroll">
-                  <div className={cx("search-input-wrapper")}>
-                     <FontAwesomeIcon
-                        className={cx("search-icon")}
-                        icon="fa-solid fa-magnifying-glass"
-                     />
-                     <input type={"text"} placeholder="search" className={cx("search-input")} />
-                  </div>
-                  <Nav style={{ maxHeight: "100px" }} navbarScroll>
-                     <Nav.Item>
-                        <Button
-                           title={"Create Group"}
-                           basic
-                           basicBlue
-                           rounded
-                           big
-                           onClick={() => {
-                              console.log("Create Group");
-                              return setShowCreateGroupModal(true);
-                           }}
-                        />
-                     </Nav.Item>
-                  </Nav>
-               </Navbar.Collapse>
-            </Container>
-         </Navbar>
+         <div className={cx("search-input-wrapper")}>
+            <FontAwesomeIcon className={cx("search-icon")} icon="fa-solid fa-magnifying-glass" />
+            <input type={"text"} placeholder="search" className={cx("search-input")} />
+         </div>
+         <div style={{ maxHeight: "100px" }}>
+            <div>
+               <Button
+                  title={"Create Group"}
+                  basic
+                  basicBlue
+                  rounded
+                  big
+                  onClick={() => {
+                     console.log("Create Group");
+                     return setShowCreateGroupModal(true);
+                  }}
+               />
+            </div>
+         </div>
 
-         <CreateGroupModal show={showCreateGroupModal} setShow={setShowCreateGroupModal}>
-            asdfsdfsdf
-         </CreateGroupModal>
+         <CreateGroupModal
+            show={showCreateGroupModal}
+            setShow={setShowCreateGroupModal}
+         ></CreateGroupModal>
       </div>
    );
 }

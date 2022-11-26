@@ -1,6 +1,6 @@
 import "./RegisterPage.css";
 import { useForm } from "react-hook-form";
-import Input from "../../../components/Input/Input";
+import AuthInput from "../../../components/AuthInput";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 import { registerUser } from "../../../services/authService";
 import { faEnvelope, faKey, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -49,7 +49,7 @@ function RegisterPage() {
          redirectLink="/auth/login"
          onAuthSubmit={handleSubmit(onSubmit)}
       >
-         <Input
+         <AuthInput
             placeholder="Your email"
             label="Email"
             type="email"
@@ -64,7 +64,7 @@ function RegisterPage() {
             })}
             error={errors.email}
          />
-         <Input
+         <AuthInput
             placeholder="Your name"
             label="Name"
             type="text"
@@ -75,7 +75,7 @@ function RegisterPage() {
             })}
             error={errors.name}
          />
-         <Input
+         <AuthInput
             placeholder="Password"
             label="Password"
             type="password"
@@ -86,7 +86,7 @@ function RegisterPage() {
             })}
             error={errors.password}
          />
-         <Input
+         <AuthInput
             placeholder="Confirm password"
             label="Repeat password"
             showLabel

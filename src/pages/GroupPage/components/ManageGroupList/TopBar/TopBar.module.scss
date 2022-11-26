@@ -1,5 +1,7 @@
 .container {
-   padding: 0;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
 
    .search-input-wrapper {
       align-self: stretch;

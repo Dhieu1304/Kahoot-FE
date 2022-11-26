@@ -1,0 +1,31 @@
+.wrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   .container {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      .manage-avatar {
+         padding: 12px;
+      }
+
+      .manage-conainter {
+         display: flex;
+         flex: 1;
+         flex-wrap: wrap;
+         .manage-infor {
+            flex: 1;
+            padding: 12px;
+         }
+         .manage-password {
+            flex: 1;
+            padding: 12px;
+         }
+      }
+   }
+}

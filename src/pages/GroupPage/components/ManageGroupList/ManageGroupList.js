@@ -4,46 +4,86 @@ import GroupItem from "./GroupItem";
 import TopBar from "./TopBar";
 
 import styles from "./ManageGroupList.module.scss";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getGroupsByOwnUserId } from "../../../../services/groupService";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { getGroupsByOwnUserId, getGroupsByJoinedUserId } from "../../../../services/groupService";
+import { AuthContext } from "../../../../providers/auth/provider";
 const cx = classNames.bind(styles);
 
 function ManageGroupList() {
-   const [groups, setGroups] = useState([]);
+   const authContext = useContext(AuthContext);
 
-   const navigate = useNavigate();
+   const { recentGroupsList, updateRecentGroupsList, setCurrentSideBarMenuItem } =
+      useOutletContext();
+   const [groups, setGroups] = useState([]);
 
    const location = useLocation();
 
+   console.log("recentGroupsList in ManageGroupList: ", recentGroupsList);
+
+   // if location change, loadGroups in useEffect will check location.pathname and set GroupData
    useEffect(() => {
-      console.log("useEffect: ");
       const loadGroups = async () => {
-         console.log("loadGroups: ");
-         console.log("location: ", location);
-         if (location.pathname === "/group/owned") {
-            console.log("Onwed");
-            const groupsData = await getGroupsByOwnUserId(1);
-            setGroups(groupsData);
-         }
-         if (location.pathname === "/group/joined") {
-            console.log("Joined");
-            const groupsData = await getGroupsByOwnUserId(1);
-            setGroups(groupsData);
+         switch (location.pathname) {
+            case "/group/owned": {
+               const groupsData = await getGroupsByOwnUserId(authContext.user.id);
+               setGroups(groupsData);
+               break;
+            }
+            case "/group/joined": {
+               const groupsData = await getGroupsByJoinedUserId(authContext.user.id);
+               setGroups(groupsData);
+               break;
+            }
+            default:
+               break;
          }
       };
       loadGroups();
-   }, []);
+   }, [location]);
 
    console.log("groups: ", groups);
+
+   const handleUpdateRecentGroupsList = (group) => {
+      console.log("handleUpdateRecentGroupsList: ");
+      console.log("group: ", group);
+      console.log("recentGroupsList: ", recentGroupsList);
+
+      let menuIndex = -1;
+
+      if (
+         recentGroupsList.some((recentGroup, index) => {
+            if (recentGroup.id === group.id) menuIndex = index;
+            return recentGroup.id === group.id;
+         })
+      ) {
+         console.log("TRUNG: ", menuIndex);
+         setCurrentSideBarMenuItem({
+            type: "group",
+            index: menuIndex
+         });
+      } else {
+         console.log("KO TRUNG");
+         const newRecentGroupsList = [group, ...recentGroupsList];
+         if (newRecentGroupsList.length > 5) {
+            newRecentGroupsList.pop();
+         }
+         updateRecentGroupsList(newRecentGroupsList);
+      }
+   };
 
    return (
       <div className={cx("container")}>
          <TopBar />
          <div className={cx("group-list")}>
-            {groups.map((group, index) => (
-               <GroupItem key={index} data={group} />
-            ))}
+            {groups &&
+               groups.map((group, index) => (
+                  <GroupItem
+                     key={index}
+                     data={group}
+                     onClick={() => handleUpdateRecentGroupsList(group)}
+                  />
+               ))}
          </div>
       </div>
    );

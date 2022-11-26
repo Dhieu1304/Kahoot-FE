@@ -14,6 +14,7 @@ function Button({
    // basicYellow,
    // basicRed,
    cancel,
+   submitModal,
    outline,
    rounded,
    big
@@ -26,6 +27,7 @@ function Button({
       // basicYellow,
       // basicRed,
       cancel,
+      submitModal,
       outline,
       rounded,
       big

@@ -1,7 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { forwardRef } from "react";
 
-import "./Input.css";
+import classNames from "classnames/bind";
+
+import styles from "./Input.module.scss";
+
+const cx = classNames.bind(styles);
 
 const Input = forwardRef(
    (
@@ -13,42 +17,36 @@ const Input = forwardRef(
          type,
          styleType,
          error,
-         onChange,
-         LeftIconComponent,
-         leftIcon,
+         disable,
+
+         rightBtn,
+         hidden,
+         hiddenInputField,
          ...props
       },
       ref
    ) => {
-      // console.log("error in input ", error);
-      console.log("value in input ", value);
+      // console.log("ref: ", ref);
+      // console.log("type: ", type);
 
       return (
-         <div className="input-wrapper">
-            <div className="d-flex flex-row align-items-center input-container">
-               {LeftIconComponent && leftIcon && (
-                  <LeftIconComponent
-                     icon={leftIcon}
-                     style={{ scale: "1.2" }}
-                     className="me-3 fa-lg me-3 fa-fw"
-                  />
-               )}
-
-               <div className="input-field-wrapper">
-                  <input
-                     className="py-3 form-control input-field"
-                     placeholder={placeholder}
-                     type={type}
-                     value={value}
-                     onChange={onChange}
-                     {...props}
-                     ref={ref}
-                  />
-               </div>
+         <div className={cx("wrapper", { hidden })}>
+            {showLabel && <span className={cx("label")}>{label}</span>}
+            <div className={cx("container")}>
+               <input
+                  className={cx("input-field", { hiddenInputField })}
+                  placeholder={placeholder}
+                  type={type}
+                  value={value}
+                  required
+                  {...props}
+                  ref={ref}
+                  readOnly={disable}
+               />
+               {rightBtn && <div className={cx("rightBtn-container")}>{rightBtn}</div>}
             </div>
-
             {error && (
-               <span className="input-error">
+               <span className={cx("error")}>
                   {label} {error.message}
                </span>
             )}

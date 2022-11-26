@@ -53,6 +53,16 @@
    }
 }
 
+.submitModal {
+   background-color: rgb(204, 204, 204);
+   color: var(--white-color);
+
+   &:hover {
+      opacity: 70%;
+      background-color: rgb(158, 158, 158);
+   }
+}
+
 .rounded {
    border-radius: 4px;
 }

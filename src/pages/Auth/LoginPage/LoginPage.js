@@ -4,7 +4,7 @@ import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import Input from "../../../components/Input/Input";
+import AuthInput from "../../../components/AuthInput";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 import { AuthContext } from "../../../providers/auth/provider";
 import { getUserInfo, login } from "../../../services/authService";
@@ -53,7 +53,7 @@ function LoginPage() {
          redirectLink="/auth/register"
          onAuthSubmit={handleSubmit(onSubmit)}
       >
-         <Input
+         <AuthInput
             placeholder="Your email"
             label="Email"
             type="email"
@@ -69,7 +69,7 @@ function LoginPage() {
             error={errors.email}
          />
 
-         <Input
+         <AuthInput
             placeholder="Password"
             label="Password"
             type="password"
