@@ -2,6 +2,11 @@
    background-color: var(--white-color);
    width: 225px;
 
+   &.mobile {
+      width: 100%;
+      padding: 20px;
+   }
+
    .top {
       padding-bottom: 20px;
    }

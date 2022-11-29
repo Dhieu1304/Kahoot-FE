@@ -2,8 +2,18 @@
    display: flex;
    justify-content: space-between;
    align-items: center;
+   flex-wrap: wrap;
+
+   .group-btns {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+   }
 
    .search-input-wrapper {
+      margin-top: 10px;
       align-self: stretch;
       margin-right: auto;
       display: block;
@@ -17,7 +27,6 @@
       align-items: center;
       color: var(--text-color);
    }
-
    .search-icon {
       color: var(--text-color);
    }
@@ -25,5 +34,10 @@
    .search-input {
       margin-left: 10px;
       height: 100%;
+   }
+
+   .group-sidebar-toggle-btn {
+      background-color: red;
+      order: 5;
    }
 }

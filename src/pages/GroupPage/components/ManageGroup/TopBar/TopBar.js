@@ -1,5 +1,6 @@
 import { div, Navbar, NavDropdown, Container, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMediaQuery } from "react-responsive";
 
 import classNames from "classnames/bind";
 
@@ -11,8 +12,10 @@ import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
-function TopBar({ groupId }) {
+function TopBar({ groupId, showSideBar, setShowSideBar }) {
    const [showInviteToGroupModal, setShowInviteToGroupModal] = useState(false);
+
+   const mobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
    console.log("groupId in Topbar: ", groupId);
    return (
@@ -58,6 +61,14 @@ function TopBar({ groupId }) {
                   }}
                />
             </div>
+            {mobile && (
+               <FontAwesomeIcon
+                  icon="fa-solid fa-bars"
+                  onClick={() => {
+                     setShowSideBar(!showSideBar);
+                  }}
+               />
+            )}
          </div>
 
          <InviteToGroupModal

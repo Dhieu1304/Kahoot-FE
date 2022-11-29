@@ -3,15 +3,18 @@
    display: flex;
    justify-content: space-between;
    align-items: center;
+   flex-wrap: wrap;
 
    .tabs {
       align-self: stretch;
       margin-right: auto;
-      display: block;
 
       display: flex;
       justify-content: space-between;
       align-items: center;
+
+      // flex-wrap: wrap;
+
       color: var(--text-color);
 
       .tab-item {

@@ -5,10 +5,12 @@ import Avatar from "../../../../components/Avatar";
 
 import styles from "./ManageGroup.module.scss";
 import { useContext, useEffect, useMemo, useState } from "react";
+import { useMediaQuery } from "react-responsive";
+
 const cx = classNames.bind(styles);
 
 import UserTable from "./UserTable";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 
 import { getUsersByGroupId } from "../../../../services/userService";
 import { checkOwnedUser } from "../../../../services/groupService";
@@ -60,9 +62,12 @@ function ManageGroup() {
 
    const groupItemContext = useGroupItemContext();
    const [isOwnedUser, setIsOwnedUser] = useState(false);
+   const { showSideBar, setShowSideBar } = useOutletContext();
 
    const params = useParams();
    const { id } = params;
+
+   const mobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
    useEffect(() => {
       const loadUsers = async () => {
@@ -90,8 +95,8 @@ function ManageGroup() {
 
    return (
       <div className={cx("container")}>
-         <TopBar groupId={id} />
-         <div className={cx("content")}>
+         <TopBar groupId={id} showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
+         <div className={cx("content")} style={{ overflowX: mobile ? "scroll" : "auto" }}>
             <UserTable
                groupId={id}
                data={groupItemContext?.state.users}

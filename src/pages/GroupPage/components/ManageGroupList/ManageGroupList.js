@@ -16,8 +16,13 @@ function ManageGroupList() {
 
    const groupListContext = useGroupListContext();
 
-   const { recentGroupsList, updateRecentGroupsList, setCurrentSideBarMenuItem } =
-      useOutletContext();
+   const {
+      recentGroupsList,
+      updateRecentGroupsList,
+      setCurrentSideBarMenuItem,
+      showSideBar,
+      setShowSideBar
+   } = useOutletContext();
    // const [groups, setGroups] = useState([]);
 
    const location = useLocation();
@@ -67,7 +72,7 @@ function ManageGroupList() {
 
    return (
       <div className={cx("container")}>
-         <TopBar />
+         <TopBar showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
          <div className={cx("group-list")}>
             {groupListContext?.state?.groups &&
                groupListContext?.state?.groups.map((group, index) => (

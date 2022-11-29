@@ -1,6 +1,7 @@
 import { div, Navbar, NavDropdown, Container, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
 
 import classNames from "classnames/bind";
 
@@ -13,9 +14,10 @@ import JointGroupByLinkModal from "../JointGroupByLinkModal";
 
 const cx = classNames.bind(styles);
 
-function TopBar() {
+function TopBar({ showSideBar, setShowSideBar }) {
    const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
    const [showJointGroupByLinkModalModal, setShowJointGroupByLinkModalModal] = useState(false);
+   const mobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
    return (
       <div className={cx("container")}>
@@ -23,33 +25,44 @@ function TopBar() {
             <FontAwesomeIcon className={cx("search-icon")} icon="fa-solid fa-magnifying-glass" />
             <input type={"text"} placeholder="search" className={cx("search-input")} />
          </div>
-         <div style={{ maxHeight: "100px", marginLeft: 10 }}>
+         <div className={cx("group-btns")}>
             <div>
-               <Button
-                  title={"Joint"}
-                  basic
-                  basicTeal
-                  rounded
-                  big
+               <div>
+                  <Button
+                     title={"Joint"}
+                     basic
+                     basicTeal
+                     rounded
+                     big
+                     onClick={() => {
+                        return setShowJointGroupByLinkModalModal(true);
+                     }}
+                  />
+               </div>
+            </div>
+            <div>
+               <div>
+                  <Button
+                     title={"Create Group"}
+                     basic
+                     basicBlue
+                     rounded
+                     big
+                     onClick={() => {
+                        return setShowCreateGroupModal(true);
+                     }}
+                  />
+               </div>
+            </div>
+
+            {mobile && (
+               <FontAwesomeIcon
+                  icon="fa-solid fa-bars"
                   onClick={() => {
-                     return setShowJointGroupByLinkModalModal(true);
+                     setShowSideBar(!showSideBar);
                   }}
                />
-            </div>
-         </div>
-         <div style={{ maxHeight: "100px", marginLeft: 10 }}>
-            <div>
-               <Button
-                  title={"Create Group"}
-                  basic
-                  basicBlue
-                  rounded
-                  big
-                  onClick={() => {
-                     return setShowCreateGroupModal(true);
-                  }}
-               />
-            </div>
+            )}
          </div>
 
          <CreateGroupModal

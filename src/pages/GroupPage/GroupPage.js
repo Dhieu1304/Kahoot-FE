@@ -1,11 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect, useState } from "react";
+import { Outlet, Route, Routes, useNavigate, useLocation } from "react-router-dom";
+
 import classNames from "classnames/bind";
 import SideBar from "./components/SideBar";
 import styles from "./GroupPage.module.scss";
-import ManageGroupList from "./components/ManageGroupList";
-import ManageGroup from "./components/ManageGroup/ManageGroup";
-import { Outlet, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 
 import * as localStorageApp from "../../utils/localStorage";
 import { AuthContext } from "../../providers/auth/provider";
@@ -34,6 +33,8 @@ function GroupPage() {
    const location = useLocation();
 
    const [recentGroupsList, setRecentGroupsList] = useState([]);
+
+   const [showSideBar, setShowSideBar] = useState(false);
 
    useEffect(() => {
       const recentGroupsListObject = localStorageApp.getItem(
@@ -68,10 +69,17 @@ function GroupPage() {
 
    return (
       <div className={cx("wrapper")}>
-         <SideBar menuTopItems={menuTopItems} recentGroupsList={recentGroupsList} />
+         <SideBar
+            menuTopItems={menuTopItems}
+            recentGroupsList={recentGroupsList}
+            showSideBar={showSideBar}
+            setShowSideBar={setShowSideBar}
+         />
 
          <div className={cx("container")}>
-            <Outlet context={{ recentGroupsList, updateRecentGroupsList }} />
+            <Outlet
+               context={{ recentGroupsList, updateRecentGroupsList, showSideBar, setShowSideBar }}
+            />
          </div>
       </div>
    );
