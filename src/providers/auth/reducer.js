@@ -18,6 +18,10 @@ export const reducer = (state, action) => {
          };
          break;
       case USER_ACTION.LOGOUT:
+         newState = {
+            ...state,
+            isLogin: false
+         };
          removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
          removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
          break;

@@ -12,11 +12,15 @@ import CustomToggleDropdownBtn from "../../../components/CustomToggleDropdownBtn
 
 import { headerItemsData } from "./config";
 import * as localStorageApp from "../../../utils/localStorage";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../providers/auth";
 
 const cx = classNames.bind(styles);
 
 function Header() {
    const navigate = useNavigate();
+
+   const authContext = useContext(AuthContext);
 
    return (
       <header className={cx("wrapper")}>
@@ -70,7 +74,13 @@ function Header() {
                <div className={cx("header-navbar-group-icons")}>
                   <Dropdown className={cx("avatar-icon-container")}>
                      <Dropdown.Toggle as={CustomToggleDropdownBtn} id="avatar-dropdown">
-                        <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
+                        <Avatar
+                           title={"Avatar"}
+                           placeholder={"Avatar"}
+                           size={25}
+                           rounded
+                           src={authContext?.user?.avatar}
+                        />
                      </Dropdown.Toggle>
 
                      <Dropdown.Menu className={cx("header-navbar-drop-menu")}>
@@ -85,6 +95,7 @@ function Header() {
                         <Dropdown.Item
                            className={cx("menu-item")}
                            onClick={() => {
+                              authContext.logout();
                               localStorageApp.removeItem(
                                  localStorageApp.LOCAL_STORAGE.ACCESS_TOKEN
                               );

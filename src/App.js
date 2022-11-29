@@ -31,6 +31,7 @@ function App() {
       const createCurrentAccount = async () => {
          const currentUser = await getUserInfo();
          authContext.setUser(currentUser);
+         authContext.login();
       };
       createCurrentAccount();
    }, []);
