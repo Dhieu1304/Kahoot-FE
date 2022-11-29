@@ -56,13 +56,13 @@ const getInviteLink = async (groupId) => {
    console.log("Invite link: ", { groupId });
 
    try {
-      // const res = await axiosClient.post(`/group/invite/email`, {
-      //    id: groupId,
-      //    email
-      // });
-      // console.log("res: ", res);
-      // return camelcaseKeys(res.data, { deep: true });
-      return "sdfdsfsdfdsfdsfsdfdsfsfasfasfd;l";
+      const res = await axiosClient.get("/group/create-invite-link", {
+         params: {
+            groupId
+         }
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res.data.link, { deep: true });
    } catch (e) {
       console.error(e.message);
       return false;

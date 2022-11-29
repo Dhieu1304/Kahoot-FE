@@ -35,7 +35,7 @@ function InviteToGroupModal({ show, setShow, groupId }) {
 
    useEffect(() => {
       const loadInviteLink = async () => {
-         const inviteLink = await getInviteLink();
+         const inviteLink = await getInviteLink(groupId);
          setValue("inviteLink", inviteLink);
       };
       loadInviteLink();

@@ -8,10 +8,13 @@ import { getGroupsByOwnUserId, getGroupsByJoinedUserId } from "../../../../servi
 import { AuthContext } from "../../../../providers/auth/provider";
 
 import styles from "./ManageGroupList.module.scss";
+import { useGroupListContext } from "../../../../providers/groupList";
 const cx = classNames.bind(styles);
 
 function ManageGroupList() {
    const authContext = useContext(AuthContext);
+
+   const groupListContext = useGroupListContext();
 
    const { recentGroupsList, updateRecentGroupsList, setCurrentSideBarMenuItem } =
       useOutletContext();
@@ -61,6 +64,8 @@ function ManageGroupList() {
          updateRecentGroupsList(newRecentGroupsList);
       }
    };
+
+   console.log("groupListContext: ", groupListContext);
 
    return (
       <div className={cx("container")}>

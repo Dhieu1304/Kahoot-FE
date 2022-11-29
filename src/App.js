@@ -21,6 +21,7 @@ import { getUserInfo } from "./services/authService";
 import DefaultAuthPage from "./pages/Auth/DefaultAuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import DefaultPage from "./pages/DefaultPage/DefaultPage";
+import { GroupListProvider } from "./providers/groupList";
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -94,7 +95,14 @@ function App() {
                            </DefaultLayout>
                         }
                      >
-                        <Route path={"owned"} element={<ManageGroupList />}></Route>
+                        <Route
+                           path={"owned"}
+                           element={
+                              <GroupListProvider>
+                                 <ManageGroupList />
+                              </GroupListProvider>
+                           }
+                        ></Route>
                         <Route path={"joined"} element={<ManageGroupList />}></Route>
                         <Route path={"list"}>
                            <Route path={":id"} element={<ManageGroup />}></Route>

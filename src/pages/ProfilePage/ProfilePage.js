@@ -6,6 +6,7 @@ import Avatar from "../../components/Avatar";
 import Input from "../../components/Input";
 
 import styles from "./ProfilePage.module.scss";
+import Button from "../../components/Button/Button";
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
@@ -21,9 +22,7 @@ function ProfilePage() {
       mode: "onChange",
       defaultValues: {
          avatar: "",
-         email: "",
-         password: "",
-         repeatePassword: ""
+         name: ""
       },
       criteriaMode: "all"
    });
@@ -53,8 +52,13 @@ function ProfilePage() {
       })
    };
 
-   console.log("watch('avatar'): ", watch("avatar"));
-   console.log("avatarInputRef.current: ", avatarInputRef.current);
+   // console.log("watch('avatar'): ", watch("avatar"));
+   // console.log("avatarInputRef.current: ", avatarInputRef.current);
+
+   const changeProfile = (data) => {
+      console.log("changeProfile");
+      console.log("data: ", data);
+   };
 
    return (
       <div className={cx("wrapper")}>
@@ -85,43 +89,21 @@ function ProfilePage() {
             <div className={cx("manage-conainter")}>
                <div className={cx("manage-infor")}>
                   <Input
-                     placeholder="Email"
-                     label={"Email"}
-                     showLabel
-                     type={"txt"}
-                     {...register("email", {
-                        required: "email is required"
-                     })}
-                     error={errors.Email}
-                  />
-                  <Input
                      placeholder="Name"
                      label={"Name"}
                      showLabel
-                     {...register("name", {
-                        required: "Name is required"
-                     })}
+                     {...register("name", {})}
                      error={errors.name}
                   />
-               </div>
-               <div className={cx("manage-password")}>
-                  <Input
-                     placeholder="Password"
-                     label={"Password"}
-                     showLabel
-                     type={"password"}
-                     {...register("password")}
-                     error={errors.password}
-                  />
-                  <Input
-                     placeholder="Repeat Password"
-                     label={"Repeat Password"}
-                     showLabel
-                     {...register("repeatPassword", {
-                        validate: (value) => value === watch("password", "") || "do not match"
-                     })}
-                     error={errors.name}
-                  />
+                  <div>
+                     <Button
+                        title="Change"
+                        onClick={handleSubmit(changeProfile)}
+                        big
+                        rounded
+                        basicBlue
+                     />
+                  </div>
                </div>
             </div>
          </div>
