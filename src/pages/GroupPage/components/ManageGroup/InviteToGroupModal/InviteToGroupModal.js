@@ -12,6 +12,7 @@ import {
 } from "../../../../../services/groupService";
 import styles from "./InviteToGroupModal.module.scss";
 import Button from "../../../../../components/Button/Button";
+import { toast } from "react-toastify";
 const cx = classNames.bind(styles);
 
 function InviteToGroupModal({ show, setShow, groupId }) {
@@ -48,20 +49,31 @@ function InviteToGroupModal({ show, setShow, groupId }) {
    const handleInviteByEmail = async () => {
       const email = watch("email");
       const result = await inviteToGroupByEmail(groupId, email);
+      console.log("result: ", result);
+      if (result) {
+         toast("Invited");
+         resetField("email");
+      }
    };
    const handleCopyInviteLink = () => {
       const inviteLink = watch("inviteLink");
       navigator.clipboard.writeText(inviteLink);
+      toast("Copied");
    };
 
    return (
-      <Modal title={"Create group"} show={show} setShow={setShow}>
+      <Modal title={"Invite"} show={show} setShow={setShow}>
          <div className={cx("search-container")}>
             <Input
                placeholder="Email"
                label={"Email"}
                type={"txt"}
-               {...register("email", {})}
+               {...register("email", {
+                  pattern: {
+                     value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                     message: "is wrong format"
+                  }
+               })}
                error={errors.email}
                rightBtn={
                   <Button title={"Invite"} basicBlue rounded big onClick={handleInviteByEmail} />

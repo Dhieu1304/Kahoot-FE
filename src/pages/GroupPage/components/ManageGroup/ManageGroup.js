@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { getUsersByGroupId } from "../../../../services/userService";
 import { checkOwnedUser } from "../../../../services/groupService";
 import { AuthContext } from "../../../../providers/auth";
+import { useGroupItemContext } from "../../../../providers/groupItem/hooks";
 
 const COLUMNS = [
    {
@@ -56,7 +57,8 @@ const COLUMNS = [
 
 function ManageGroup() {
    const authContext = useContext(AuthContext);
-   const [users, setUsers] = useState([]);
+
+   const groupItemContext = useGroupItemContext();
    const [isOwnedUser, setIsOwnedUser] = useState(false);
 
    const params = useParams();
@@ -65,7 +67,7 @@ function ManageGroup() {
    useEffect(() => {
       const loadUsers = async () => {
          const usersData = await getUsersByGroupId(id);
-         setUsers(usersData);
+         groupItemContext.method.setUsers(usersData);
       };
 
       loadUsers();
@@ -84,11 +86,19 @@ function ManageGroup() {
 
    const columns = useMemo(() => COLUMNS, []);
 
+   console.log("groupItemContext: ", groupItemContext);
+
    return (
       <div className={cx("container")}>
          <TopBar groupId={id} />
          <div className={cx("content")}>
-            <UserTable data={users} columns={columns} selection isOwnedUser></UserTable>
+            <UserTable
+               groupId={id}
+               data={groupItemContext?.state.users}
+               columns={columns}
+               selection
+               isOwnedUser={isOwnedUser}
+            ></UserTable>
          </div>
       </div>
    );

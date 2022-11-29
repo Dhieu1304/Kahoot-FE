@@ -18,7 +18,7 @@ function ManageGroupList() {
 
    const { recentGroupsList, updateRecentGroupsList, setCurrentSideBarMenuItem } =
       useOutletContext();
-   const [groups, setGroups] = useState([]);
+   // const [groups, setGroups] = useState([]);
 
    const location = useLocation();
 
@@ -28,12 +28,12 @@ function ManageGroupList() {
          switch (location.pathname) {
             case "/group/owned": {
                const groupsData = await getGroupsByOwnUserId(authContext.user.id);
-               setGroups(groupsData);
+               groupListContext?.method?.setGroups(groupsData);
                break;
             }
             case "/group/joined": {
                const groupsData = await getGroupsByJoinedUserId(authContext.user.id);
-               setGroups(groupsData);
+               groupListContext?.method?.setGroups(groupsData);
                break;
             }
             default:
@@ -65,14 +65,12 @@ function ManageGroupList() {
       }
    };
 
-   console.log("groupListContext: ", groupListContext);
-
    return (
       <div className={cx("container")}>
          <TopBar />
          <div className={cx("group-list")}>
-            {groups &&
-               groups.map((group, index) => (
+            {groupListContext?.state?.groups &&
+               groupListContext?.state?.groups.map((group, index) => (
                   <GroupItem
                      key={index}
                      data={group}

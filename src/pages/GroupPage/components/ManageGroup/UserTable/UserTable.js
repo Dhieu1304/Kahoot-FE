@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
-function UserTable({ data, columns, isOwnedUser }) {
+function UserTable({ groupId, data, columns, isOwnedUser }) {
    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
       columns,
       data
@@ -17,16 +17,18 @@ function UserTable({ data, columns, isOwnedUser }) {
 
    const [showEditModalData, setShowEditModalData] = useState(false);
    const [editModalData, setEditModalData] = useState();
+   const [editId, setEditId] = useState(-1);
 
    const handleEditClick = (data) => {
       console.log("handleEditClick: data: ", data);
+      setEditId(data.id);
       setEditModalData(data);
       setShowEditModalData(true);
    };
    const handleRemoveClick = (data) => {
       console.log("handleRemoveClick: data: ", data);
    };
-   console.log("getTableProps(): ", getTableProps());
+   console.log("isOwnedUser: ", isOwnedUser);
    return (
       <>
          <table {...getTableProps()} className={cx("table")}>
@@ -82,6 +84,8 @@ function UserTable({ data, columns, isOwnedUser }) {
          <EditUserModal
             show={showEditModalData}
             setShow={setShowEditModalData}
+            groupId={groupId}
+            userId={editId}
             editModalData
             setEditModalData
          ></EditUserModal>

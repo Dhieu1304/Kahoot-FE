@@ -34,6 +34,23 @@
    }
 }
 
+.basicTeal {
+   color: var(--white-color);
+   background-color: var(--basic-teal-color);
+   overflow: hidden;
+
+   &::after {
+      background-color: var(--basic-teal-color-after);
+   }
+
+   &:hover {
+      background-color: var(--basic-teal-color-hover);
+      &::after {
+         transform: translateY(50%);
+      }
+   }
+}
+
 .outline {
    background-color: var(--white-color);
    border: solid 1px var(--black-color);

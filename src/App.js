@@ -22,6 +22,7 @@ import DefaultAuthPage from "./pages/Auth/DefaultAuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import DefaultPage from "./pages/DefaultPage/DefaultPage";
 import { GroupListProvider } from "./providers/groupList";
+import { GroupItemProvider } from "./providers/groupItem";
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -103,9 +104,23 @@ function App() {
                               </GroupListProvider>
                            }
                         ></Route>
-                        <Route path={"joined"} element={<ManageGroupList />}></Route>
+                        <Route
+                           path={"joined"}
+                           element={
+                              <GroupListProvider>
+                                 <ManageGroupList />
+                              </GroupListProvider>
+                           }
+                        ></Route>
                         <Route path={"list"}>
-                           <Route path={":id"} element={<ManageGroup />}></Route>
+                           <Route
+                              path={":id"}
+                              element={
+                                 <GroupItemProvider>
+                                    <ManageGroup />
+                                 </GroupItemProvider>
+                              }
+                           ></Route>
                         </Route>
                      </Route>
                      <Route
@@ -143,7 +158,7 @@ function App() {
 
          <ToastContainer
             position="top-right"
-            autoClose={5000}
+            autoClose={50}
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick

@@ -9,11 +9,13 @@ import Button from "../../../../../components/Button/Button";
 import styles from "./TopBar.module.scss";
 import Modal from "../../../../../components/Modal";
 import CreateGroupModal from "../CreateGroupModal";
+import JointGroupByLinkModal from "../JointGroupByLinkModal";
 
 const cx = classNames.bind(styles);
 
 function TopBar() {
    const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+   const [showJointGroupByLinkModalModal, setShowJointGroupByLinkModalModal] = useState(false);
 
    return (
       <div className={cx("container")}>
@@ -21,7 +23,21 @@ function TopBar() {
             <FontAwesomeIcon className={cx("search-icon")} icon="fa-solid fa-magnifying-glass" />
             <input type={"text"} placeholder="search" className={cx("search-input")} />
          </div>
-         <div style={{ maxHeight: "100px" }}>
+         <div style={{ maxHeight: "100px", marginLeft: 10 }}>
+            <div>
+               <Button
+                  title={"Joint"}
+                  basic
+                  basicTeal
+                  rounded
+                  big
+                  onClick={() => {
+                     return setShowJointGroupByLinkModalModal(true);
+                  }}
+               />
+            </div>
+         </div>
+         <div style={{ maxHeight: "100px", marginLeft: 10 }}>
             <div>
                <Button
                   title={"Create Group"}
@@ -30,7 +46,6 @@ function TopBar() {
                   rounded
                   big
                   onClick={() => {
-                     console.log("Create Group");
                      return setShowCreateGroupModal(true);
                   }}
                />
@@ -41,6 +56,10 @@ function TopBar() {
             show={showCreateGroupModal}
             setShow={setShowCreateGroupModal}
          ></CreateGroupModal>
+         <JointGroupByLinkModal
+            show={showJointGroupByLinkModalModal}
+            setShow={setShowJointGroupByLinkModalModal}
+         ></JointGroupByLinkModal>
       </div>
    );
 }

@@ -20,19 +20,24 @@ function GroupItem({ data, onClick }) {
       >
          <div className={cx("top")}>
             <div className={cx("user-list")}>
-               {data.groupUsers.map((groupUser, index) => (
-                  <div
-                     key={index}
-                     className={cx("user-item")}
-                     style={{
-                        zIndex: data.groupUsers.length + 2 - index,
-                        left: index * 10 + 10
-                     }}
-                  >
-                     <Avatar src={groupUser.user.avatar} rounded size={25} />
-                  </div>
-               ))}
+               {data.groupUsers.map((groupUser, index) => {
+                  return (
+                     index < 5 && (
+                        <div
+                           key={index}
+                           className={cx("user-item")}
+                           style={{
+                              zIndex: data.groupUsers.length + 2 - index,
+                              left: index * 10 + 10
+                           }}
+                        >
+                           <Avatar src={groupUser.user.avatar} rounded size={25} />
+                        </div>
+                     )
+                  );
+               })}
             </div>
+
             <div className={cx("setting")}>
                <FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" />
             </div>

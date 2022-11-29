@@ -1,20 +1,17 @@
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Input from "../../../../../components/Input";
 import Modal from "../../../../../components/Modal";
 import classNames from "classnames/bind";
 
 import { AuthContext } from "../../../../../providers/auth";
-import {
-   createGroup,
-   getInviteLink,
-   inviteToGroupByEmail
-} from "../../../../../services/groupService";
+
 import styles from "./EditUserModal.module.scss";
-import Button from "../../../../../components/Button/Button";
+import { changeRole } from "../../../../../services/groupService";
+import { useGroupItemContext } from "../../../../../providers/groupItem/hooks";
+import { toast } from "react-toastify";
 const cx = classNames.bind(styles);
 
-function EditUserModal({ show, setShow, groupId }) {
+function EditUserModal({ show, setShow, groupId, userId }) {
    const {
       register,
       handleSubmit,
@@ -31,9 +28,22 @@ function EditUserModal({ show, setShow, groupId }) {
    });
 
    const authContext = useContext(AuthContext);
+   const groupItemContext = useGroupItemContext();
 
-   const handleSubmitModal = (data) => {
+   const handleSubmitModal = async (data) => {
       console.log("handleSubmitModal: data: ", data);
+      console.log("groupId", groupId);
+      console.log("userId", userId);
+      console.log("roleId", data.role);
+
+      const result = await changeRole(groupId, userId, data.role);
+      if (result) {
+         const usersData = await getUsersByGroupId(id);
+         groupItemContext.method.setUsers(usersData);
+         toast("Change success");
+      } else {
+         toast("Change Fail");
+      }
    };
 
    return (
@@ -43,6 +53,7 @@ function EditUserModal({ show, setShow, groupId }) {
          setShow={setShow}
          haveSubmitBtn
          onSubmitModal={handleSubmit(handleSubmitModal)}
+         submitBtnTitle={"Save changes"}
       >
          <div className={cx("input-group")}>
             <div className={cx("input-item")}>

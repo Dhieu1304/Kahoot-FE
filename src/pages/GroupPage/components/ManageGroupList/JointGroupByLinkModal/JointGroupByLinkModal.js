@@ -1,28 +1,24 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Button from "../../../../../components/Button/Button";
 import Input from "../../../../../components/Input";
 import Modal from "../../../../../components/Modal";
 
 import { AuthContext } from "../../../../../providers/auth";
 import { useGroupListContext } from "../../../../../providers/groupList";
-import {
-   createGroup,
-   getGroupsByJoinedUserId,
-   getGroupsByOwnUserId
-} from "../../../../../services/groupService";
+import { getGroupsByOwnUserId, joinGroupByLink } from "../../../../../services/groupService";
 
-function CreateGroupModal({ show, setShow }) {
+function JointGroupByLinkModal({ show, setShow }) {
    const {
       register,
-      handleSubmit,
-      watch,
       resetField,
       formState: { errors }
    } = useForm({
       mode: "onChange",
       defaultValues: {
-         name: ""
+         link: ""
       },
       criteriaMode: "all"
    });
@@ -33,10 +29,10 @@ function CreateGroupModal({ show, setShow }) {
    const location = useLocation();
    const navigate = useNavigate();
 
-   const handleSubmitCreateModal = async (data) => {
-      const group = await createGroup(data.name, authContext.user.id);
-
-      if (group) {
+   const handleJoinByLink = async (data) => {
+      const link = data.link;
+      const result = await joinGroupByLink(authContext.user.id, link);
+      if (result) {
          if (location.pathname === "/group/owned") {
             const groupsData = await getGroupsByOwnUserId(authContext.user.id);
             console.log("groupsData: ", groupsData);
@@ -44,35 +40,26 @@ function CreateGroupModal({ show, setShow }) {
          } else {
             navigate("/group/owned");
          }
+         toast("Join success");
+         resetField("link");
+         setShow(false);
+      } else {
+         toast("Join Fail");
       }
-
-      resetField("name");
-      setShow(false);
-
-      toast("Create group success");
    };
 
    return (
-      <Modal
-         title={"Create group"}
-         show={show}
-         setShow={setShow}
-         haveSubmitBtn
-         onSubmitModal={handleSubmit(handleSubmitCreateModal)}
-         submitBtnTitle={"Create"}
-      >
+      <Modal title={"Create group"} show={show} setShow={setShow} haveSubmitBtn={false}>
          <Input
-            placeholder="Name"
-            label={"Name"}
+            placeholder="Link"
+            label={"Link"}
             showLabel
             type={"txt"}
-            {...register("name", {
-               required: "Name is required"
-            })}
-            error={errors.name}
+            {...register("link")}
+            rightBtn={<Button title={"Joint"} basicBlue rounded big onClick={handleJoinByLink} />}
          />
       </Modal>
    );
 }
 
-export default CreateGroupModal;
+export default JointGroupByLinkModal;
