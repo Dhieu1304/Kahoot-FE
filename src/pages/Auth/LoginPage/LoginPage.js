@@ -1,13 +1,15 @@
-import "./LoginPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
+
 import AuthInput from "../../../components/AuthInput";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 import { AuthContext } from "../../../providers/auth/provider";
 import { getUserInfo, login } from "../../../services/authService";
+
+import "./LoginPage.css";
 
 function LoginPage() {
    const {

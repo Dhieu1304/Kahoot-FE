@@ -20,6 +20,7 @@ import { AuthContext } from "./providers/auth/provider";
 import { getUserInfo } from "./services/authService";
 import DefaultAuthPage from "./pages/Auth/DefaultAuthPage";
 import ProfilePage from "./pages/ProfilePage";
+import DefaultPage from "./pages/DefaultPage/DefaultPage";
 
 library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
@@ -34,6 +35,7 @@ function App() {
       createCurrentAccount();
    }, []);
 
+   console.log("App re-render");
    console.log("authContext.user: ", authContext.user);
 
    return (
@@ -46,10 +48,43 @@ function App() {
                         path={"/"}
                         element={
                            <DefaultLayout>
+                              <DefaultPage />
+                           </DefaultLayout>
+                        }
+                     />
+                     <Route
+                        path={"/home"}
+                        element={
+                           <DefaultLayout>
                               <HomePage />
                            </DefaultLayout>
                         }
                      />
+                     <Route
+                        path={"/discover"}
+                        element={
+                           <DefaultLayout>
+                              <HomePage />
+                           </DefaultLayout>
+                        }
+                     />
+                     <Route
+                        path={"/library"}
+                        element={
+                           <DefaultLayout>
+                              <HomePage />
+                           </DefaultLayout>
+                        }
+                     />
+                     <Route
+                        path={"/market"}
+                        element={
+                           <DefaultLayout>
+                              <HomePage />
+                           </DefaultLayout>
+                        }
+                     />
+
                      <Route
                         path={"/group"}
                         element={
@@ -58,14 +93,7 @@ function App() {
                            </DefaultLayout>
                         }
                      >
-                        <Route
-                           path={"owned"}
-                           element={<ManageGroupList />}
-                           loader={async () => {
-                              const groupsData = await getGroupsByOwnUserId(authContext.user.id);
-                              return groupsData;
-                           }}
-                        ></Route>
+                        <Route path={"owned"} element={<ManageGroupList />}></Route>
                         <Route path={"joined"} element={<ManageGroupList />}></Route>
                         <Route path={":id"} element={<ManageGroup />}></Route>
                      </Route>

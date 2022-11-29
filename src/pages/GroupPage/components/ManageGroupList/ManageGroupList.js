@@ -19,8 +19,6 @@ function ManageGroupList() {
 
    const location = useLocation();
 
-   console.log("recentGroupsList in ManageGroupList: ", recentGroupsList);
-
    // if location change, loadGroups in useEffect will check location.pathname and set GroupData
    useEffect(() => {
       const loadGroups = async () => {
@@ -40,15 +38,9 @@ function ManageGroupList() {
          }
       };
       loadGroups();
-   }, [location]);
-
-   console.log("groups: ", groups);
+   }, [location, authContext.user.id]);
 
    const handleUpdateRecentGroupsList = (group) => {
-      console.log("handleUpdateRecentGroupsList: ");
-      console.log("group: ", group);
-      console.log("recentGroupsList: ", recentGroupsList);
-
       let menuIndex = -1;
 
       if (
@@ -57,13 +49,11 @@ function ManageGroupList() {
             return recentGroup.id === group.id;
          })
       ) {
-         console.log("TRUNG: ", menuIndex);
          setCurrentSideBarMenuItem({
             type: "group",
             index: menuIndex
          });
       } else {
-         console.log("KO TRUNG");
          const newRecentGroupsList = [group, ...recentGroupsList];
          if (newRecentGroupsList.length > 5) {
             newRecentGroupsList.pop();

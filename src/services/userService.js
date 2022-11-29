@@ -2,8 +2,6 @@ import axiosClient from "../config/axiosClient";
 import camelcaseKeys from "camelcase-keys";
 
 const getUsersByGroupId = async (groupId) => {
-   console.log("getUsersByGroupId:  groupId = ", groupId);
-
    try {
       const res = await axiosClient.get(`/user/group_all/${groupId}`);
       return camelcaseKeys(res.data, { deep: true });

@@ -26,27 +26,14 @@ const menuTopItems = [
    }
 ];
 
-// const recentGroupsList = [
-//    {
-//       id: 1,
-//       name: "Group 1"
-//    },
-//    {
-//       id: 2,
-//       name: "Group 2"
-//    },
-//    {
-//       id: 3,
-//       name: "Group 3"
-//    }
-// ];
-
 function SideBar({
    currentSideBarMenuItem,
    setCurrentSideBarMenuItem,
    recentGroupsList,
    setRecentGroupsList
 }) {
+   console.log("Sidebar re-render");
+
    const authContext = useContext(AuthContext);
 
    const handleUpdateRecentGroupsList = (group, index) => {

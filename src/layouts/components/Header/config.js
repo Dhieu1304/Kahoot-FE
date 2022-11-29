@@ -4,17 +4,17 @@ export const headerItemsData = [
    {
       title: "Home",
       leftIcon: <FontAwesomeIcon icon="fa-solid fa-house" />,
-      link: "/"
+      link: "/home"
    },
    {
       title: "Discover",
       leftIcon: <FontAwesomeIcon icon="fa-solid fa-compass" />,
-      link: "/"
+      link: "/discover"
    },
    {
       title: "Library",
       leftIcon: <FontAwesomeIcon icon="fa-solid fa-list" />,
-      link: "/"
+      link: "/library"
    },
    {
       title: "Group",
@@ -24,6 +24,6 @@ export const headerItemsData = [
    {
       title: "Market",
       leftIcon: <FontAwesomeIcon icon="fa-solid fa-shop" />,
-      link: "/"
+      link: "/market"
    }
 ];

@@ -70,9 +70,7 @@ function GroupPage() {
             });
          }
       }
-   }, [currentSideBarMenuItem]);
-
-   console.log("recentGroupsList: ", recentGroupsList);
+   }, [currentSideBarMenuItem, authContext.user.id]);
 
    useEffect(() => {
       if (location.pathname === "/group") {

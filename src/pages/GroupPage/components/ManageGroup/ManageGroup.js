@@ -18,8 +18,8 @@ const COLUMNS = [
    {
       Header: "Name",
       Cell: ({ cell, row }) => {
-         // console.log("row.original: ", row.original);
-         // console.log("cell: ", cell);
+         //
+         //
          return (
             <div className={cx("user-infor")}>
                <Avatar src={row.original.avatar} title="avatar" size={30} rounded />
@@ -32,7 +32,7 @@ const COLUMNS = [
    {
       Header: "Role",
       Cell: ({ row }) => {
-         // console.log(
+         //
          //    "row.original.groupUsers[0].groupUserRole.name",
          //    row.original.groupUsers[0].groupUserRole.name
          // );
@@ -82,12 +82,7 @@ function ManageGroup() {
       checkIsOwnedUser();
    }, [authContext.user.id]);
 
-   console.log("users: ", users);
-   console.log("isOwnedser: ", isOwnedUser);
-
    const columns = useMemo(() => COLUMNS, []);
-
-   console.log("columns: ", columns);
 
    return (
       <div className={cx("container")}>

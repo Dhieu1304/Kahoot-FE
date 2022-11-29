@@ -1,8 +1,7 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import classNames from "classnames/bind";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+
+import classNames from "classnames/bind";
 import Avatar from "../../components/Avatar";
 import Input from "../../components/Input";
 

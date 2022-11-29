@@ -1,30 +1,21 @@
-import classNames from "classnames/bind";
-
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
+import { Dropdown, Container, Nav, Navbar } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import classNames from "classnames/bind";
 
 import images from "../../../assets/images";
 import HeaderItem from "./components/HeaderItem";
 import styles from "./Header.module.scss";
 import Button from "../../../components/Button/Button";
 import Avatar from "../../../components/Avatar/Avatar";
-
-import { headerItemsData } from "./config";
-import { useState } from "react";
-import { Dropdown, NavDropdown } from "react-bootstrap";
 import CustomToggleDropdownBtn from "../../../components/CustomToggleDropdownBtn";
 
+import { headerItemsData } from "./config";
 import * as localStorageApp from "../../../utils/localStorage";
 
 const cx = classNames.bind(styles);
 
 function Header() {
-   const [headerItemActiveIndex, setHeaderItemActiveIndex] = useState(0);
-
    const navigate = useNavigate();
 
    return (
@@ -44,19 +35,13 @@ function Header() {
                <Navbar.Offcanvas id="headerNavbar" className={cx("header-navbar-off-canvas")}>
                   <Nav className={cx("my-2 my-lg-0")}>
                      {headerItemsData.map((headerItem, index) => (
-                        <Nav.Link
-                           as={Link}
-                           to={headerItem.link}
-                           key={index}
-                           className={cx("navbar-left-link")}
-                        >
+                        <div key={index} className={cx("navbar-left-link")}>
                            <HeaderItem
+                              to={headerItem.link}
                               title={headerItem.title}
-                              active={headerItemActiveIndex === index}
                               leftIcon={headerItem.leftIcon}
-                              onClick={() => setHeaderItemActiveIndex(index)}
                            />
-                        </Nav.Link>
+                        </div>
                      ))}
 
                      <div className={cx("header-navbar-off-canvas-right")}>
@@ -88,7 +73,7 @@ function Header() {
                         <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
                      </Dropdown.Toggle>
 
-                     <Dropdown.Menu>
+                     <Dropdown.Menu className={cx("header-navbar-drop-menu")}>
                         <Dropdown.Item
                            className={cx("menu-item")}
                            onClick={() => {

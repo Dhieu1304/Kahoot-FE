@@ -1,10 +1,12 @@
-import "./RegisterPage.css";
 import { useForm } from "react-hook-form";
+import { faEnvelope, faKey, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import AuthInput from "../../../components/AuthInput";
 import AuthForm from "../../../components/AuthForm/AuthForm";
 import { registerUser } from "../../../services/authService";
-import { faEnvelope, faKey, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import "./RegisterPage.css";
 
 function RegisterPage() {
    const {
