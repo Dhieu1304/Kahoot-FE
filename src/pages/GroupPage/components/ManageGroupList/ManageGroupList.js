@@ -1,13 +1,13 @@
+import { useLocation, useOutletContext } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import classNames from "classnames/bind";
 
 import GroupItem from "./GroupItem";
 import TopBar from "./TopBar";
-
-import styles from "./ManageGroupList.module.scss";
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
 import { getGroupsByOwnUserId, getGroupsByJoinedUserId } from "../../../../services/groupService";
 import { AuthContext } from "../../../../providers/auth/provider";
+
+import styles from "./ManageGroupList.module.scss";
 const cx = classNames.bind(styles);
 
 function ManageGroupList() {

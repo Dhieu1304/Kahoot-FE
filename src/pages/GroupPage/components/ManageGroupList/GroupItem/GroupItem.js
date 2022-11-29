@@ -1,21 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import Avatar from "../../../../../components/Avatar/Avatar";
 import styles from "./GroupItem.module.scss";
 
 const cx = classNames.bind(styles);
 
 function GroupItem({ data, onClick }) {
-   // console.log("data in GroupItem: ", data);
-
    const navigate = useNavigate();
    return (
       <div
          // to={`/group/${data.id.toString()}`}
          className={cx("container")}
          onClick={() => {
-            navigate(`/group/${data.id.toString()}`);
+            navigate(`/group/list/${data.id.toString()}`);
             onClick && onClick();
          }}
       >

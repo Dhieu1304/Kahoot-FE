@@ -1,9 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { useContext, useState } from "react";
 
-import { Link } from "react-router-dom";
-import { AuthContext } from "../../../../providers/auth/provider";
 import MenuItem from "./MenuItem";
 
 import styles from "./SideBar.module.scss";
@@ -26,26 +23,11 @@ const menuTopItems = [
    }
 ];
 
-function SideBar({
-   currentSideBarMenuItem,
-   setCurrentSideBarMenuItem,
-   recentGroupsList,
-   setRecentGroupsList
-}) {
-   console.log("Sidebar re-render");
-
-   const authContext = useContext(AuthContext);
-
+function SideBar({ recentGroupsList, setRecentGroupsList }) {
    const handleUpdateRecentGroupsList = (group, index) => {
-      console.log("handleUpdateRecentGroupsList");
       if (recentGroupsList.includes(group)) {
-         console.log("old group");
-         setCurrentSideBarMenuItem({
-            type: "group",
-            index: index
-         });
+         // do nothing
       } else {
-         console.log("new group");
          const newRecentGroupsList = [group, ...recentGroupsList];
          newRecentGroupsList.pop();
          setRecentGroupsList(newRecentGroupsList);
@@ -58,22 +40,12 @@ function SideBar({
          <div className={cx("top")}>
             <ul className={cx("menu")}>
                {menuTopItems.map((menuItem, index) => (
-                  <Link to={menuItem.to} key={index}>
-                     <MenuItem
-                        label={menuItem.name}
-                        leftIcon={menuItem.leftIcon}
-                        active={
-                           currentSideBarMenuItem.type === "groups" &&
-                           currentSideBarMenuItem.index === index
-                        }
-                        onClick={() => {
-                           setCurrentSideBarMenuItem({
-                              type: "groups",
-                              index: index
-                           });
-                        }}
-                     />
-                  </Link>
+                  <MenuItem
+                     to={menuItem.to}
+                     key={index}
+                     label={menuItem.name}
+                     leftIcon={menuItem.leftIcon}
+                  />
                ))}
             </ul>
          </div>
@@ -82,16 +54,12 @@ function SideBar({
             <ul className={cx("menu")}>
                {recentGroupsList &&
                   recentGroupsList.map((group, index) => (
-                     <Link to={group.id.toString()} key={index}>
-                        <MenuItem
-                           label={group.name}
-                           active={
-                              currentSideBarMenuItem.type === "group" &&
-                              currentSideBarMenuItem.index === index
-                           }
-                           onClick={() => handleUpdateRecentGroupsList(group, index)}
-                        />
-                     </Link>
+                     <MenuItem
+                        key={index}
+                        to={"list/" + group.id.toString()}
+                        label={group.name}
+                        onClick={() => handleUpdateRecentGroupsList(group, index)}
+                     />
                   ))}
             </ul>
          </div>

@@ -95,7 +95,9 @@ function App() {
                      >
                         <Route path={"owned"} element={<ManageGroupList />}></Route>
                         <Route path={"joined"} element={<ManageGroupList />}></Route>
-                        <Route path={":id"} element={<ManageGroup />}></Route>
+                        <Route path={"list"}>
+                           <Route path={":id"} element={<ManageGroup />}></Route>
+                        </Route>
                      </Route>
                      <Route
                         path={"/profile"}

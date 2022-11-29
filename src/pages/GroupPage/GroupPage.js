@@ -26,28 +26,8 @@ const menuTopItems = [
    }
 ];
 
-// const recentGroupsList = [
-//    {
-//       id: 1,
-//       name: "Group 1"
-//    },
-//    {
-//       id: 2,
-//       name: "Group 2"
-//    },
-//    {
-//       id: 3,
-//       name: "Group 3"
-//    }
-// ];
-
 function GroupPage() {
    const authContext = useContext(AuthContext);
-
-   const [currentSideBarMenuItem, setCurrentSideBarMenuItem] = useState({
-      type: "groups",
-      index: 0
-   });
 
    const navigate = useNavigate();
 
@@ -70,14 +50,10 @@ function GroupPage() {
             });
          }
       }
-   }, [currentSideBarMenuItem, authContext.user.id]);
+   }, [authContext.user.id]);
 
    useEffect(() => {
       if (location.pathname === "/group") {
-         setCurrentSideBarMenuItem({
-            type: "groups",
-            index: 0
-         });
          navigate("/group/owned", { replace: true });
       }
    });
@@ -88,26 +64,14 @@ function GroupPage() {
       });
 
       setRecentGroupsList(newRecentGroupsList);
-
-      setCurrentSideBarMenuItem({
-         type: "group",
-         index: 0
-      });
    };
 
    return (
       <div className={cx("wrapper")}>
-         <SideBar
-            menuTopItems={menuTopItems}
-            recentGroupsList={recentGroupsList}
-            currentSideBarMenuItem={currentSideBarMenuItem}
-            setCurrentSideBarMenuItem={setCurrentSideBarMenuItem}
-         />
+         <SideBar menuTopItems={menuTopItems} recentGroupsList={recentGroupsList} />
 
          <div className={cx("container")}>
-            <Outlet
-               context={{ recentGroupsList, updateRecentGroupsList, setCurrentSideBarMenuItem }}
-            />
+            <Outlet context={{ recentGroupsList, updateRecentGroupsList }} />
          </div>
       </div>
    );
