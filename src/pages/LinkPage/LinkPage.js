@@ -1,24 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { joinGroupByEmail, joinGroupByLink } from "../../services/groupService";
+import { joinGroupByEmailToken } from "../../services/groupService";
 
 function LinkPage() {
-   const { search } = useLocation();
-
-   console.log("search: ", search);
-
-   const xxx = search.toString().split("?queryToken=")[1];
-
-   console.log("xxx: ", xxx);
-
-   // console.log("search2: ", decodeURIComponent(xxx));
-   // console.log("queryToken: ", queryToken);
+   const [searchParams] = useSearchParams();
 
    const navigate = useNavigate();
    useEffect(() => {
       const loadJointGroupByLink = async () => {
-         //  const result = await joinGroupByEmail(path);
+         const result = await joinGroupByEmailToken(token);
 
          if (result) {
             navigate("/group/joined");
@@ -29,10 +20,9 @@ function LinkPage() {
          }
       };
 
-      if (path) {
-         loadJointGroupByLink();
-      }
-   }, [searchParams]);
+      const token = searchParams.get("token");
+      loadJointGroupByLink(token);
+   }, []);
 
    //    useEffect(() => {}, [success]);
 
