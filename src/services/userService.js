@@ -15,15 +15,13 @@ const updateProfile = async (full_name, avatar) => {
    console.log("serivce updateProfile: ", { full_name, avatar });
    try {
       const uploadAvatar = await uploadFile(avatar);
-
       if (uploadAvatar && uploadAvatar.status) {
          const res = await axiosClient.put("/user/update-info", {
             full_name,
             avatar: uploadAvatar.data
          });
+         return camelcaseKeys(res.status, { deep: true });
       }
-
-      return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
       return false;
@@ -40,7 +38,7 @@ const uploadFile = async (file) => {
          headers: { "Content-Type": "multipart/form-data" }
       });
       console.log(">>>>>>> res:", res);
-      return camelcaseKeys(res.status, { deep: true });
+      return camelcaseKeys(res, { deep: true });
    } catch (e) {
       console.error(e.message);
       return false;
