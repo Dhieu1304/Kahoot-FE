@@ -67,9 +67,6 @@ function ProfilePage() {
    };
 
    const changeProfile = async (data) => {
-      console.log("changeProfile");
-      console.log("data: ", data);
-
       const result = await updateProfile(data.fullName, data?.avatar && data?.avatar[0]);
       if (result) {
          toast("Change infor success");
