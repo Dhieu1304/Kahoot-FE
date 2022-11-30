@@ -26,7 +26,7 @@ function TopBar({ showSideBar, setShowSideBar }) {
             <input type={"text"} placeholder="search" className={cx("search-input")} />
          </div>
          <div className={cx("group-btns")}>
-            <div>
+            <div className={cx("btn-wrapper")}>
                <div>
                   <Button
                      title={"Joint"}
@@ -40,7 +40,7 @@ function TopBar({ showSideBar, setShowSideBar }) {
                   />
                </div>
             </div>
-            <div>
+            <div className={cx("btn-wrapper")}>
                <div>
                   <Button
                      title={"Create Group"}
@@ -57,6 +57,7 @@ function TopBar({ showSideBar, setShowSideBar }) {
 
             {mobile && (
                <FontAwesomeIcon
+                  className={cx("btn-toggle-icon")}
                   icon="fa-solid fa-bars"
                   onClick={() => {
                      setShowSideBar(!showSideBar);

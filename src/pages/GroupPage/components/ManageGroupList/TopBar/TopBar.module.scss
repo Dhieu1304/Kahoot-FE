@@ -10,6 +10,15 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+
+      .btn-wrapper {
+         margin-left: 10px;
+      }
+
+      .btn-toggle-icon {
+         margin-left: 10px;
+         order: 5;
+      }
    }
 
    .search-input-wrapper {

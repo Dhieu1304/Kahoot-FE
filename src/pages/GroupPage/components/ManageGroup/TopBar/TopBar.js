@@ -20,7 +20,7 @@ function TopBar({ groupId, showSideBar, setShowSideBar }) {
    console.log("groupId in Topbar: ", groupId);
    return (
       <div className={cx("container")}>
-         <div className={cx("tabs")}>
+         <div className={cx("tabs")} style={{ overflowX: "scroll" }}>
             <div className={cx("tab-item")}>
                <div className={cx("tab-item-link")}>
                   <span className={cx("tab-item-label")}>Activity</span>
@@ -47,8 +47,8 @@ function TopBar({ groupId, showSideBar, setShowSideBar }) {
                </div>
             </div>
          </div>
-         <div style={{ maxHeight: "100px" }}>
-            <div>
+         <div className={cx("group-btns")}>
+            <div className={cx("btn-wrapper")}>
                <Button
                   title={"Intive"}
                   basic
@@ -63,6 +63,7 @@ function TopBar({ groupId, showSideBar, setShowSideBar }) {
             </div>
             {mobile && (
                <FontAwesomeIcon
+                  className={cx("btn-toggle-icon")}
                   icon="fa-solid fa-bars"
                   onClick={() => {
                      setShowSideBar(!showSideBar);
