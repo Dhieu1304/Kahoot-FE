@@ -10,6 +10,7 @@ import Button from "../../components/Button/Button";
 import { AuthContext } from "../../providers/auth";
 import { toast } from "react-toastify";
 import { updateProfile } from "../../services/userService";
+import { getUserInfo } from "../../services/authService";
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
@@ -69,10 +70,15 @@ function ProfilePage() {
    const changeProfile = async (data) => {
       console.log("changeProfile");
       console.log("data: ", data);
+      console.log("data?.avatar: ", data?.avatar);
+      console.log("data?.avatar[0]: ", data?.avatar[0]);
 
       const result = await updateProfile(data.fullName, data?.avatar && data?.avatar[0]);
       if (result) {
          toast("Change infor success");
+
+         const user = await getUserInfo();
+         authContext.setUser(user);
       } else toast("Change infor fail");
    };
 

@@ -14,20 +14,20 @@ const getUsersByGroupId = async (groupId) => {
 const updateProfile = async (full_name, avatar) => {
    console.log("serivce updateProfile: ", { full_name, avatar });
    try {
-      const uploadAvatar = await uploadFile(avatar);
+      const uploadAvatarLink = await uploadFile(avatar);
 
-      console.log("uploadAvatar: ", uploadAvatar);
+      console.log("uploadAvatarLink: ", uploadAvatarLink);
 
-      // if (uploadAvatar.data) {
-      //    const res = await axiosClient.put("/user/update-info", {
-      //       full_name,
-      //       avatar
-      //    });
-      // }
+      if (uploadAvatarLink) {
+         const res = await axiosClient.put("/user/update-info", {
+            full_name,
+            avatar: uploadAvatarLink
+         });
+
+         return camelcaseKeys(res.status, { deep: true });
+      }
 
       return false;
-
-      return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
       return false;
@@ -41,8 +41,14 @@ const uploadFile = async (file) => {
    formData.append("file", file);
 
    try {
-      const res = await axiosClient.post("/upload/picture", { data: formData });
-      return camelcaseKeys(res.status, { deep: true });
+      const res = await axiosClient.post("/upload/picture", formData, {
+         headers: {
+            "Content-Type": "multipart/form-data"
+         }
+      });
+      if (res.data) {
+         return camelcaseKeys(res.data, { deep: true });
+      } else return false;
    } catch (e) {
       console.error(e.message);
       return false;
