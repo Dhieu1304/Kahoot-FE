@@ -1,7 +1,3 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { faTwitter, faFontAwesome } from "@fortawesome/free-brands-svg-icons";
-import { faHatChef } from "@fortawesome/sharp-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -23,8 +19,6 @@ import ProfilePage from "./pages/ProfilePage";
 import DefaultPage from "./pages/DefaultPage/DefaultPage";
 import { GroupListProvider } from "./providers/groupList";
 import { GroupItemProvider } from "./providers/groupItem";
-
-library.add(fas, faTwitter, faFontAwesome, faHatChef);
 
 function App() {
    const authContext = useContext(AuthContext);
