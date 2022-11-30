@@ -1,7 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown, Container, Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames/bind";
+import { useContext } from "react";
 
 import images from "../../../assets/images";
 import HeaderItem from "./components/HeaderItem";
@@ -12,7 +14,6 @@ import CustomToggleDropdownBtn from "../../../components/CustomToggleDropdownBtn
 
 import { headerItemsData } from "./config";
 import * as localStorageApp from "../../../utils/localStorage";
-import { useContext, useState } from "react";
 import { AuthContext } from "../../../providers/auth";
 
 const cx = classNames.bind(styles);
@@ -110,7 +111,7 @@ function Header() {
                      </Dropdown.Menu>
                   </Dropdown>
                   <div className={cx("notify-icon-container")}>
-                     <FontAwesomeIcon icon="fa-solid fa-bell" className={cx("notify-icon")} />
+                     <FontAwesomeIcon icon={faBell} className={cx("notify-icon")} />
                   </div>
                </div>
             </Navbar>

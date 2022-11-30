@@ -1,5 +1,6 @@
 import axiosClient from "../config/axiosClient";
 import camelcaseKeys from "camelcase-keys";
+import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
 
 const getGroupsByOwnUserId = async (userId) => {
    try {
@@ -23,7 +24,7 @@ const getGroupsByJoinedUserId = async (userId) => {
 };
 
 const createGroup = async (name, user_id) => {
-   console.log("createGroup: ", { name, user_id });
+   console.log("Sevice: createGroup: ", { name, user_id });
 
    try {
       const res = await axiosClient.post(`/group/create`, {
@@ -38,7 +39,7 @@ const createGroup = async (name, user_id) => {
 };
 
 const inviteToGroupByEmail = async (groupId, email) => {
-   console.log("Invite: ", { groupId, email });
+   console.log("Sevice: Invite: ", { groupId, email });
 
    try {
       const res = await axiosClient.get(`/group/invite-mail`, {
@@ -47,7 +48,7 @@ const inviteToGroupByEmail = async (groupId, email) => {
             email
          }
       });
-      console.log("res: ", res);
+
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -56,7 +57,7 @@ const inviteToGroupByEmail = async (groupId, email) => {
 };
 
 const getInviteLink = async (groupId) => {
-   console.log("Invite link: ", { groupId });
+   console.log("Sevice: Invite link: ", { groupId });
 
    try {
       const res = await axiosClient.get("/group/create-invite-link", {
@@ -64,7 +65,7 @@ const getInviteLink = async (groupId) => {
             groupId
          }
       });
-      console.log("res: ", res);
+
       return camelcaseKeys(res.data.link, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -73,13 +74,13 @@ const getInviteLink = async (groupId) => {
 };
 
 const checkOwnedUser = async (groupId, userId) => {
-   console.log("check own user: ", { groupId, userId });
+   console.log("Sevice: check own user: ", { groupId, userId });
 
    try {
       const res = await axiosClient.get(`/group/checkOwnedUser`, {
          params: { group_id: groupId, user_id: userId }
       });
-      console.log("res: ", res);
+
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -87,17 +88,12 @@ const checkOwnedUser = async (groupId, userId) => {
    }
 };
 
-const joinGroupByLink = async (userId, link) => {
-   console.log("joinGroupByLink: ", { userId, link });
+const joinGroupByLink = async (link) => {
+   console.log("Sevice: joinGroupByLink: ", { link });
 
    try {
-      const res = await axiosClient.get("/group/join-by-link", {
-         params: {
-            userId,
-            link
-         }
-      });
-      console.log("res: ", res);
+      const res = await axiosClient.get(link);
+
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -106,18 +102,16 @@ const joinGroupByLink = async (userId, link) => {
 };
 
 const changeRole = async (groupId, userId, roleId) => {
-   console.log("changeRole: ", { userId, groupId, roleId });
+   console.log("Sevice: changeRole: ", { userId, groupId, roleId });
 
    try {
-      // const res = await axiosClient.put("/group/change-role", {
-      //    params: {
-      //       userId,
-      //       groupId,
-      //       roleId
-      //    }
-      // });
-      // console.log("res: ", res);
-      return true;
+      const res = await axiosClient.post("/group-user/change-role-user", {
+         userId: userId.toString(),
+         groupId,
+         roleId
+      });
+
+      // return true;
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);

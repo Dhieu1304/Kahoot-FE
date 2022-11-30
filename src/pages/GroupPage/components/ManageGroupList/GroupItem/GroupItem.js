@@ -1,3 +1,4 @@
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useNavigate } from "react-router-dom";
@@ -39,7 +40,7 @@ function GroupItem({ data, onClick }) {
             </div>
 
             <div className={cx("setting")}>
-               <FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" />
+               <FontAwesomeIcon icon={faEllipsisVertical} />
             </div>
          </div>
 

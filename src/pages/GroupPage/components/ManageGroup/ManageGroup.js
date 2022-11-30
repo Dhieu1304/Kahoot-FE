@@ -91,8 +91,6 @@ function ManageGroup() {
 
    const columns = useMemo(() => COLUMNS, []);
 
-   console.log("groupItemContext: ", groupItemContext);
-
    return (
       <div className={cx("container")}>
          <TopBar groupId={id} showSideBar={showSideBar} setShowSideBar={setShowSideBar} />

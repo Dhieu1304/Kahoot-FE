@@ -11,4 +11,42 @@ const getUsersByGroupId = async (groupId) => {
    }
 };
 
-export { getUsersByGroupId };
+const updateProfile = async (full_name, avatar) => {
+   console.log("serivce updateProfile: ", { full_name, avatar });
+   try {
+      const uploadAvatar = await uploadFile(avatar);
+
+      console.log("uploadAvatar: ", uploadAvatar);
+
+      // if (uploadAvatar.data) {
+      //    const res = await axiosClient.put("/user/update-info", {
+      //       full_name,
+      //       avatar
+      //    });
+      // }
+
+      return false;
+
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const uploadFile = async (file) => {
+   console.log("serivce uploadFile: ", file);
+
+   const formData = new FormData();
+   formData.append("file", file);
+
+   try {
+      const res = await axiosClient.post("/upload/picture", { data: formData });
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+export { getUsersByGroupId, updateProfile };

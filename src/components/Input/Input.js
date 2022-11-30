@@ -26,9 +26,6 @@ const Input = forwardRef(
       },
       ref
    ) => {
-      // console.log("ref: ", ref);
-      // console.log("type: ", type);
-
       return (
          <div className={cx("wrapper", { hidden })}>
             {showLabel && <span className={cx("label")}>{label}</span>}

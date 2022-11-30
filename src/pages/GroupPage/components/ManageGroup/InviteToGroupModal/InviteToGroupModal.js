@@ -42,14 +42,9 @@ function InviteToGroupModal({ show, setShow, groupId }) {
       loadInviteLink();
    }, []);
 
-   console.log("authContext.user in InviteToGroupModal: ", authContext.user);
-
-   console.log("groupId in invite modal: ", groupId);
-
    const handleInviteByEmail = async () => {
       const email = watch("email");
       const result = await inviteToGroupByEmail(groupId, email);
-      console.log("result: ", result);
       if (result) {
          toast("Invited");
          resetField("email");

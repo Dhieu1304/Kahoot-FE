@@ -6,6 +6,7 @@ import styles from "./UserTable.module.scss";
 import Button from "../../../../../components/Button/Button";
 import EditUserModal from "../EditUserModal";
 import { useState } from "react";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +21,6 @@ function UserTable({ groupId, data, columns, isOwnedUser }) {
    const [editId, setEditId] = useState(-1);
 
    const handleEditClick = (data) => {
-      console.log("handleEditClick: data: ", data);
       setEditId(data.id);
       setEditModalData(data);
       setShowEditModalData(true);
@@ -28,7 +28,7 @@ function UserTable({ groupId, data, columns, isOwnedUser }) {
    const handleRemoveClick = (data) => {
       console.log("handleRemoveClick: data: ", data);
    };
-   console.log("isOwnedUser: ", isOwnedUser);
+
    return (
       <>
          <table {...getTableProps()} className={cx("table")}>
@@ -64,12 +64,12 @@ function UserTable({ groupId, data, columns, isOwnedUser }) {
                            <td className={cx("td")}>
                               <div className={cx("action-group")}>
                                  <FontAwesomeIcon
-                                    icon="fa-solid fa-pen-to-square"
+                                    icon={faPenToSquare}
                                     className={cx("action-icon", "action-edit-icon")}
                                     onClick={() => handleEditClick(row.original)}
                                  />
                                  <FontAwesomeIcon
-                                    icon="fa-solid fa-trash"
+                                    icon={faTrash}
                                     className={cx("action-icon", "action-remove-icon")}
                                     onClick={() => handleRemoveClick(row.original)}
                                  />

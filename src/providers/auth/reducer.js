@@ -28,6 +28,6 @@ export const reducer = (state, action) => {
       default:
          throw new Error("invalid action");
    }
-   console.log(">>>> newState: ", newState);
+
    return newState;
 };

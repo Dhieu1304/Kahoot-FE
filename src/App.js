@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import LoginPage from "./pages/Auth/LoginPage";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 import HomePage from "./pages/HomePage";
@@ -31,9 +31,6 @@ function App() {
       };
       createCurrentAccount();
    }, []);
-
-   console.log("App re-render");
-   console.log("authContext.user: ", authContext.user);
 
    return (
       <div className="App">
@@ -115,6 +112,9 @@ function App() {
                                  </GroupItemProvider>
                               }
                            ></Route>
+                        </Route>
+                        <Route path={"link"}>
+                           <Route path={":path"} element={<Link />}></Route>
                         </Route>
                      </Route>
                      <Route

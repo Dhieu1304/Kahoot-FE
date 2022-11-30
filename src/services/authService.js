@@ -1,6 +1,7 @@
 import axiosClient from "../config/axiosClient";
 import { LOCAL_STORAGE, setItem } from "../utils/localStorage";
 import { toast } from "react-toastify";
+import camelcaseKeys from "camelcase-keys";
 
 const login = async (data) => {
    try {
@@ -42,7 +43,9 @@ const getUserInfo = async () => {
       console.log(">>> userInfo", userInfo);
       if (userInfo.status) {
          toast.success(userInfo?.message);
-         return userInfo.data;
+
+         return camelcaseKeys(userInfo.data, { deep: true });
+         // return userInfo.data;
       } else {
          toast.error(userInfo?.message);
          return false;

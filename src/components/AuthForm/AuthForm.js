@@ -36,9 +36,7 @@ function AuthForm({
                      const isLogin = await signInWithGoogle();
                      if (isLogin) {
                         const currentUser = await getUserInfo();
-                        console.log("ACCESS_TOKEN: ", getItem(LOCAL_STORAGE.ACCESS_TOKEN));
-                        console.log("REFRESH_TOKEN: ", getItem(LOCAL_STORAGE.REFRESH_TOKEN));
-                        console.log("currentUser: ", currentUser);
+
                         authContext.setUser(currentUser);
                         authContext.login();
                         navigate("/home");

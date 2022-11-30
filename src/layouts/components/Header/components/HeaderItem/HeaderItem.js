@@ -16,8 +16,6 @@ function HeaderItem({ title, leftIcon, className, onClick, to }) {
       active
    });
 
-   console.log("classes: ", classes);
-
    return (
       <Link to={to} className={classes} onClick={onClick}>
          <div className={cx("left-icon-wrapper")}>{leftIcon}</div>

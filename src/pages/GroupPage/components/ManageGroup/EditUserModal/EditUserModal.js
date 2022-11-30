@@ -9,6 +9,7 @@ import styles from "./EditUserModal.module.scss";
 import { changeRole } from "../../../../../services/groupService";
 import { useGroupItemContext } from "../../../../../providers/groupItem/hooks";
 import { toast } from "react-toastify";
+import { getUsersByGroupId } from "../../../../../services/userService";
 const cx = classNames.bind(styles);
 
 function EditUserModal({ show, setShow, groupId, userId }) {
@@ -37,8 +38,11 @@ function EditUserModal({ show, setShow, groupId, userId }) {
       console.log("roleId", data.role);
 
       const result = await changeRole(groupId, userId, data.role);
+
+      console.log("result");
+
       if (result) {
-         const usersData = await getUsersByGroupId(id);
+         const usersData = await getUsersByGroupId(groupId);
          groupItemContext.method.setUsers(usersData);
          toast("Change success");
       } else {

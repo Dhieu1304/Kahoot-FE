@@ -14,6 +14,7 @@ function JointGroupByLinkModal({ show, setShow }) {
    const {
       register,
       resetField,
+      watch,
       formState: { errors }
    } = useForm({
       mode: "onChange",
@@ -30,12 +31,12 @@ function JointGroupByLinkModal({ show, setShow }) {
    const navigate = useNavigate();
 
    const handleJoinByLink = async (data) => {
-      const link = data.link;
-      const result = await joinGroupByLink(authContext.user.id, link);
+      const link = watch("link");
+      console.log("link: ", link);
+      const result = await joinGroupByLink(link);
       if (result) {
          if (location.pathname === "/group/owned") {
             const groupsData = await getGroupsByOwnUserId(authContext.user.id);
-            console.log("groupsData: ", groupsData);
             groupListContext?.method?.setGroups(groupsData);
          } else {
             navigate("/group/owned");

@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { forwardRef } from "react";
 
 import "./AuthInput.css";
@@ -20,9 +19,6 @@ const AuthInput = forwardRef(
       },
       ref
    ) => {
-      // console.log("error in input ", error);
-      console.log("value in input ", value);
-
       return (
          <div className="input-wrapper">
             <div className="d-flex flex-row align-items-center input-container">

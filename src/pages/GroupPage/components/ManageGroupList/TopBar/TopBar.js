@@ -11,6 +11,7 @@ import styles from "./TopBar.module.scss";
 import Modal from "../../../../../components/Modal";
 import CreateGroupModal from "../CreateGroupModal";
 import JointGroupByLinkModal from "../JointGroupByLinkModal";
+import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +23,7 @@ function TopBar({ showSideBar, setShowSideBar }) {
    return (
       <div className={cx("container")}>
          <div className={cx("search-input-wrapper")}>
-            <FontAwesomeIcon className={cx("search-icon")} icon="fa-solid fa-magnifying-glass" />
+            <FontAwesomeIcon className={cx("search-icon")} icon={faMagnifyingGlass} />
             <input type={"text"} placeholder="search" className={cx("search-input")} />
          </div>
          <div className={cx("group-btns")}>
@@ -58,7 +59,7 @@ function TopBar({ showSideBar, setShowSideBar }) {
             {mobile && (
                <FontAwesomeIcon
                   className={cx("btn-toggle-icon")}
-                  icon="fa-solid fa-bars"
+                  icon={faBars}
                   onClick={() => {
                      setShowSideBar(!showSideBar);
                   }}

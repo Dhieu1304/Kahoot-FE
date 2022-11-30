@@ -9,6 +9,7 @@ import Button from "../../../../../components/Button/Button";
 import styles from "./TopBar.module.scss";
 import InviteToGroupModal from "../InviteToGroupModal";
 import { useState } from "react";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
@@ -17,7 +18,6 @@ function TopBar({ groupId, showSideBar, setShowSideBar }) {
 
    const mobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
-   console.log("groupId in Topbar: ", groupId);
    return (
       <div className={cx("container")}>
          <div className={cx("tabs")} style={{ overflowX: "scroll" }}>
@@ -56,7 +56,6 @@ function TopBar({ groupId, showSideBar, setShowSideBar }) {
                   rounded
                   big
                   onClick={() => {
-                     console.log("Invite to Group");
                      return setShowInviteToGroupModal(true);
                   }}
                />
@@ -64,7 +63,7 @@ function TopBar({ groupId, showSideBar, setShowSideBar }) {
             {mobile && (
                <FontAwesomeIcon
                   className={cx("btn-toggle-icon")}
-                  icon="fa-solid fa-bars"
+                  icon={faBars}
                   onClick={() => {
                      setShowSideBar(!showSideBar);
                   }}

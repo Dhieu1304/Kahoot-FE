@@ -44,8 +44,6 @@ function LoginPage() {
 
    const requireErrorMessage = "field can not empty";
 
-   console.log("errors: ", errors);
-
    return (
       <AuthForm
          title="Sign in"

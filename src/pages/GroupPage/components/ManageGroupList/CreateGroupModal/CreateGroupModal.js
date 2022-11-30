@@ -39,7 +39,6 @@ function CreateGroupModal({ show, setShow }) {
       if (group) {
          if (location.pathname === "/group/owned") {
             const groupsData = await getGroupsByOwnUserId(authContext.user.id);
-            console.log("groupsData: ", groupsData);
             groupListContext?.method?.setGroups(groupsData);
          } else {
             navigate("/group/owned");

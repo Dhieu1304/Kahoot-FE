@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import classNames from "classnames/bind";
@@ -7,22 +7,28 @@ import Input from "../../components/Input";
 
 import styles from "./ProfilePage.module.scss";
 import Button from "../../components/Button/Button";
+import { AuthContext } from "../../providers/auth";
+import { toast } from "react-toastify";
+import { updateProfile } from "../../services/userService";
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
+   const authContext = useContext(AuthContext);
+
    const {
       register,
       handleSubmit,
       watch,
       resetField,
       control,
+      setValue,
 
       formState: { errors }
    } = useForm({
       mode: "onChange",
       defaultValues: {
          avatar: "",
-         name: ""
+         fullName: ""
       },
       criteriaMode: "all"
    });
@@ -31,6 +37,14 @@ function ProfilePage() {
    // when the Button component is clicked
 
    const [currentAvatar, setCurrentAvatar] = useState();
+
+   console.log("authContext: ", authContext);
+
+   useEffect(() => {
+      setValue("fullName", authContext?.user?.fullName);
+      setValue("avatar", authContext?.user?.avatar);
+      setCurrentAvatar(authContext?.user?.avatar);
+   }, [authContext.user.id]);
 
    useEffect(() => {
       return () => {
@@ -52,12 +66,14 @@ function ProfilePage() {
       })
    };
 
-   // console.log("watch('avatar'): ", watch("avatar"));
-   // console.log("avatarInputRef.current: ", avatarInputRef.current);
-
-   const changeProfile = (data) => {
+   const changeProfile = async (data) => {
       console.log("changeProfile");
       console.log("data: ", data);
+
+      const result = await updateProfile(data.fullName, data?.avatar && data?.avatar[0]);
+      if (result) {
+         toast("Change infor success");
+      } else toast("Change infor fail");
    };
 
    return (
@@ -66,7 +82,7 @@ function ProfilePage() {
             <div className={cx("manage-avatar")}>
                <Avatar
                   src={currentAvatar}
-                  size={200}
+                  size={300}
                   onClick={() => {
                      console.log(
                         "avatarInputRef.current in Avatar Click: ",
@@ -92,8 +108,8 @@ function ProfilePage() {
                      placeholder="Name"
                      label={"Name"}
                      showLabel
-                     {...register("name", {})}
-                     error={errors.name}
+                     {...register("fullName", {})}
+                     error={errors.fullName}
                   />
                   <div>
                      <Button

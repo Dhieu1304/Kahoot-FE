@@ -8,19 +8,20 @@ import styles from "./SideBar.module.scss";
 
 import * as localStorageApp from "../../../../utils/localStorage";
 import { Navbar, Offcanvas } from "react-bootstrap";
+import { faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
 const menuTopItems = [
    {
       name: "Groups I manage",
-      leftIcon: <FontAwesomeIcon className={cx("icon")} icon="fa-solid fa-users" />,
+      leftIcon: <FontAwesomeIcon className={cx("icon")} icon={faUsers} />,
       to: "owned"
    },
 
    {
       name: "Groups I've joined",
-      leftIcon: <FontAwesomeIcon className={cx("icon")} icon="fa-solid fa-user" />,
+      leftIcon: <FontAwesomeIcon className={cx("icon")} icon={faUser} />,
       to: "joined"
    }
 ];

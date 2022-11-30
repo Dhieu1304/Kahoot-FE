@@ -26,7 +26,6 @@ function RegisterPage() {
    });
 
    const onSubmit = async (formData) => {
-      console.log("formData: ", formData);
       const bodyData = {
          name: formData.name,
          email: formData.email,
