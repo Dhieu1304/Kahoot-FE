@@ -1,15 +1,14 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import classNames from "classnames/bind";
 import Avatar from "../../components/Avatar";
 import Input from "../../components/Input";
-
 import styles from "./ProfilePage.module.scss";
 import Button from "../../components/Button/Button";
 import { AuthContext } from "../../providers/auth";
 import { toast } from "react-toastify";
 import { updateProfile } from "../../services/userService";
+import { getUserInfo } from "../../services/authService";
 const cx = classNames.bind(styles);
 
 function ProfilePage() {
@@ -33,13 +32,7 @@ function ProfilePage() {
       criteriaMode: "all"
    });
 
-   // Programatically click the hidden file input element
-   // when the Button component is clicked
-
    const [currentAvatar, setCurrentAvatar] = useState();
-
-   console.log("authContext: ", authContext);
-
    useEffect(() => {
       setValue("fullName", authContext?.user?.fullName);
       setValue("avatar", authContext?.user?.avatar);
@@ -57,8 +50,6 @@ function ProfilePage() {
    const { ref, ...registerAvatarRest } = {
       ...register("avatar", {
          onChange: (e) => {
-            console.log("e: ", e);
-            // setCurrentAvatar();
             const fileUploaded = e.target.files[0];
             fileUploaded.preview = URL.createObjectURL(fileUploaded);
             setCurrentAvatar(fileUploaded.preview);
@@ -70,6 +61,8 @@ function ProfilePage() {
       const result = await updateProfile(data.fullName, data?.avatar && data?.avatar[0]);
       if (result) {
          toast("Change infor success");
+         const user = await getUserInfo();
+         authContext.setUser(user);
       } else toast("Change infor fail");
    };
 

@@ -1,6 +1,7 @@
 import axiosClient from "../config/axiosClient";
 import camelcaseKeys from "camelcase-keys";
 import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const getGroupsByOwnUserId = async (userId) => {
    try {
@@ -101,6 +102,28 @@ const joinGroupByLink = async (link) => {
    }
 };
 
+const joinGroupByEmailToken = async (token) => {
+   const link = process.env.REACT_APP_BE_URL + "group/join-by-email";
+   console.log("Sevice: joinGroupByEmail: ", link);
+   console.log("Sevice: joinGroupByEmail token: ", token);
+
+   // return false;
+   try {
+      const res = await axiosClient.get(link, {
+         params: {
+            token
+         }
+      });
+
+      console.log("res: ", res);
+
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const changeRole = async (groupId, userId, roleId) => {
    console.log("Sevice: changeRole: ", { userId, groupId, roleId });
 
@@ -127,5 +150,6 @@ export {
    getInviteLink,
    checkOwnedUser,
    joinGroupByLink,
-   changeRole
+   changeRole,
+   joinGroupByEmailToken
 };

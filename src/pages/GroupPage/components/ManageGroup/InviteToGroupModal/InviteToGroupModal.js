@@ -48,6 +48,8 @@ function InviteToGroupModal({ show, setShow, groupId }) {
       if (result) {
          toast("Invited");
          resetField("email");
+      } else {
+         toast("Invite Fail");
       }
    };
    const handleCopyInviteLink = () => {
