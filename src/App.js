@@ -19,6 +19,7 @@ import ProfilePage from "./pages/ProfilePage";
 import DefaultPage from "./pages/DefaultPage/DefaultPage";
 import { GroupListProvider } from "./providers/groupList";
 import { GroupItemProvider } from "./providers/groupItem";
+import LinkPage from "./pages/LinkPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -113,9 +114,9 @@ function App() {
                               }
                            ></Route>
                         </Route>
-                        <Route path={"link"}>
-                           <Route path={":path"} element={<Link />}></Route>
-                        </Route>
+                     </Route>
+                     <Route path={"link"}>
+                        <Route path={":path"} element={<LinkPage />}></Route>
                      </Route>
                      <Route
                         path={"/profile"}

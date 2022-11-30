@@ -101,6 +101,19 @@ const joinGroupByLink = async (link) => {
    }
 };
 
+const joinGroupByEmail = async (link) => {
+   console.log("Sevice: joinGroupByEmail: ", { link });
+
+   try {
+      const res = await axiosClient.get(link);
+
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const changeRole = async (groupId, userId, roleId) => {
    console.log("Sevice: changeRole: ", { userId, groupId, roleId });
 
@@ -127,5 +140,6 @@ export {
    getInviteLink,
    checkOwnedUser,
    joinGroupByLink,
-   changeRole
+   changeRole,
+   joinGroupByEmail
 };
