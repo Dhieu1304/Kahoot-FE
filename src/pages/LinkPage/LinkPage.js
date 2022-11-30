@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { joinGroupByEmail, joinGroupByLink } from "../../services/groupService";
 
 function LinkPage() {
-   const params = useParams();
+   const { search } = useLocation();
 
-   //    const { path } = params;
-   //    const [success, setSucess] = useState(false);
+   console.log("search: ", search);
 
-   const path =
-      "http://localhost:3043/group/join-by-email?token=U2FsdGVkX1988zgUAdbTI3od0JHY+4MQfMNkeU4O4/Lu5kmqnD9+HpvaUv/ydJLa2Vd38WK34ueIBtTNqhz7zkVFB/M/FI85VCmgSra/g8n9zGGOCDxeG9uPb845jylk";
+   const xxx = search.toString().split("?queryToken=")[1];
 
-   console.log("path: ", path);
+   console.log("xxx: ", xxx);
+
+   // console.log("search2: ", decodeURIComponent(xxx));
+   // console.log("queryToken: ", queryToken);
 
    const navigate = useNavigate();
    useEffect(() => {
       const loadJointGroupByLink = async () => {
-         const result = await joinGroupByEmail(path);
+         //  const result = await joinGroupByEmail(path);
 
          if (result) {
             navigate("/group/joined");
@@ -31,7 +32,7 @@ function LinkPage() {
       if (path) {
          loadJointGroupByLink();
       }
-   }, [path]);
+   }, [searchParams]);
 
    //    useEffect(() => {}, [success]);
 

@@ -115,9 +115,7 @@ function App() {
                            ></Route>
                         </Route>
                      </Route>
-                     <Route path={"link"}>
-                        <Route path={":path"} element={<LinkPage />}></Route>
-                     </Route>
+                     <Route path={"link"} element={<LinkPage />}></Route>
                      <Route
                         path={"/profile"}
                         element={
