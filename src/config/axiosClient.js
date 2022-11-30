@@ -3,7 +3,7 @@ import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
 import { isTokenExpired } from "../services/tokenService";
 
 const axiosClient = axios.create({
-   baseURL: "http://localhost:3043",
+   baseURL: process.env.REACT_APP_BE_URL,
    headers: {
       "content-type": "application/json"
    }
