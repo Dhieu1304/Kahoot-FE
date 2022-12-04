@@ -115,7 +115,7 @@ function App() {
                            ></Route>
                         </Route>
                      </Route>
-                     <Route path={"link"} element={<LinkPage />}></Route>
+                     <Route path={"group/join-by-email"} element={<LinkPage />}></Route>
                      <Route
                         path={"/profile"}
                         element={

@@ -1,12 +1,9 @@
 import axiosClient from "../config/axiosClient";
 import camelcaseKeys from "camelcase-keys";
-import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const getGroupsByOwnUserId = async (userId) => {
    try {
       const res = await axiosClient.get(`/group/user_owned/${userId}`);
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -25,8 +22,6 @@ const getGroupsByJoinedUserId = async (userId) => {
 };
 
 const createGroup = async (name, user_id) => {
-   console.log("Sevice: createGroup: ", { name, user_id });
-
    try {
       const res = await axiosClient.post(`/group/create`, {
          name,
@@ -40,8 +35,6 @@ const createGroup = async (name, user_id) => {
 };
 
 const inviteToGroupByEmail = async (groupId, email) => {
-   console.log("Sevice: Invite: ", { groupId, email });
-
    try {
       const res = await axiosClient.get(`/group/invite-mail`, {
          params: {
@@ -49,7 +42,6 @@ const inviteToGroupByEmail = async (groupId, email) => {
             email
          }
       });
-
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -58,15 +50,12 @@ const inviteToGroupByEmail = async (groupId, email) => {
 };
 
 const getInviteLink = async (groupId) => {
-   console.log("Sevice: Invite link: ", { groupId });
-
    try {
       const res = await axiosClient.get("/group/create-invite-link", {
          params: {
             groupId
          }
       });
-
       return camelcaseKeys(res.data.link, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -75,13 +64,10 @@ const getInviteLink = async (groupId) => {
 };
 
 const checkOwnedUser = async (groupId, userId) => {
-   console.log("Sevice: check own user: ", { groupId, userId });
-
    try {
       const res = await axiosClient.get(`/group/checkOwnedUser`, {
          params: { group_id: groupId, user_id: userId }
       });
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -90,11 +76,8 @@ const checkOwnedUser = async (groupId, userId) => {
 };
 
 const joinGroupByLink = async (link) => {
-   console.log("Sevice: joinGroupByLink: ", { link });
-
    try {
       const res = await axiosClient.get(link);
-
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -103,20 +86,13 @@ const joinGroupByLink = async (link) => {
 };
 
 const joinGroupByEmailToken = async (token) => {
-   const link = process.env.REACT_APP_BE_URL + "group/join-by-email";
-   console.log("Sevice: joinGroupByEmail: ", link);
-   console.log("Sevice: joinGroupByEmail token: ", token);
-
-   // return false;
+   const link = process.env.REACT_APP_BE_URL + "/group/join-by-email";
    try {
       const res = await axiosClient.get(link, {
          params: {
             token
          }
       });
-
-      console.log("res: ", res);
-
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -125,16 +101,12 @@ const joinGroupByEmailToken = async (token) => {
 };
 
 const changeRole = async (groupId, userId, roleId) => {
-   console.log("Sevice: changeRole: ", { userId, groupId, roleId });
-
    try {
       const res = await axiosClient.post("/group-user/change-role-user", {
          userId: userId.toString(),
          groupId,
          roleId
       });
-
-      // return true;
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);

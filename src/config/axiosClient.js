@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
-import { isTokenExpired } from "../services/tokenService";
 
 const axiosClient = axios.create({
    baseURL: process.env.REACT_APP_BE_URL,
