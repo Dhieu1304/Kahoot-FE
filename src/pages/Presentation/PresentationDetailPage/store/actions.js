@@ -1,7 +1,12 @@
-import { SET_SLIDES, FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED } from "./contants";
+import {
+   SET_PRESENTATION,
+   FETCHING_API,
+   FETCHING_API_SUCCESS,
+   FETCHING_API_FAILED
+} from "./contants";
 
-export const setSlides = (payload) => ({
-   type: SET_SLIDES,
+export const setPresentation = (payload) => ({
+   type: SET_PRESENTATION,
    payload
 });
 
@@ -21,7 +26,7 @@ export const fetchApiFailed = (payload) => ({
 });
 
 export default {
-   setSlides,
+   setPresentation,
    fetchApi,
    fetchApiSuccess,
    fetchApiFailed

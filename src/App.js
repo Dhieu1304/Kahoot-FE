@@ -22,6 +22,7 @@ import { GroupItemProvider } from "./providers/groupItem";
 import LinkPage from "./pages/LinkPage";
 import PresentationPage from "./pages/Presentation/PresentationPage";
 import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
+import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -120,9 +121,9 @@ function App() {
                               <Route
                                  path="edit"
                                  element={
-                                    <DefaultLayout>
+                                    <PresentationDetailProvider>
                                        <PresentationDetailPage />
-                                    </DefaultLayout>
+                                    </PresentationDetailProvider>
                                  }
                               />
                               <Route

@@ -9,6 +9,8 @@ function LinkPage() {
    const navigate = useNavigate();
    useEffect(() => {
       const loadJointGroupByLink = async () => {
+         console.log("loadJointGroupByLink");
+
          const result = await joinGroupByEmailToken(token);
 
          if (result) {
