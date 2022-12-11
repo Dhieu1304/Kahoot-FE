@@ -1,0 +1,21 @@
+.container {
+   display: flex;
+   justify-content: space-between;
+
+   .btn {
+      margin-top: 5px;
+      margin-bottom: 5px;
+   }
+
+   .left {
+      .btn {
+         margin-right: 10px;
+      }
+   }
+
+   .right {
+      .btn {
+         margin-left: 10px;
+      }
+   }
+}

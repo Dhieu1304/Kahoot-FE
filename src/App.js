@@ -20,6 +20,8 @@ import DefaultPage from "./pages/DefaultPage/DefaultPage";
 import { GroupListProvider } from "./providers/groupList";
 import { GroupItemProvider } from "./providers/groupItem";
 import LinkPage from "./pages/LinkPage";
+import PresentationPage from "./pages/Presentation/PresentationPage";
+import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -49,30 +51,6 @@ function App() {
                      />
                      <Route
                         path={"/home"}
-                        element={
-                           <DefaultLayout>
-                              <HomePage />
-                           </DefaultLayout>
-                        }
-                     />
-                     <Route
-                        path={"/discover"}
-                        element={
-                           <DefaultLayout>
-                              <HomePage />
-                           </DefaultLayout>
-                        }
-                     />
-                     <Route
-                        path={"/library"}
-                        element={
-                           <DefaultLayout>
-                              <HomePage />
-                           </DefaultLayout>
-                        }
-                     />
-                     <Route
-                        path={"/market"}
                         element={
                            <DefaultLayout>
                               <HomePage />
@@ -124,6 +102,40 @@ function App() {
                            </DefaultLayout>
                         }
                      ></Route>
+
+                     <Route path={"/presentation"}>
+                        {/* Presentation list */}
+                        <Route
+                           path=""
+                           element={
+                              <DefaultLayout>
+                                 <PresentationPage />
+                              </DefaultLayout>
+                           }
+                        />
+                        {/* Presentation detail */}
+                        <Route path=":id">
+                           {/* Presentation slide */}
+                           <Route path=":id">
+                              <Route
+                                 path="edit"
+                                 element={
+                                    <DefaultLayout>
+                                       <PresentationDetailPage />
+                                    </DefaultLayout>
+                                 }
+                              />
+                              <Route
+                                 path="show"
+                                 element={
+                                    <DefaultLayout>
+                                       <PresentationDetailPage />
+                                    </DefaultLayout>
+                                 }
+                              />
+                           </Route>
+                        </Route>
+                     </Route>
                   </Routes>
                ) : (
                   <Routes>

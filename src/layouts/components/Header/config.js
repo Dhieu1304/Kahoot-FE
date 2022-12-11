@@ -8,23 +8,13 @@ export const headerItemsData = [
       link: "/home"
    },
    {
-      title: "Discover",
-      leftIcon: <FontAwesomeIcon icon={faCompass} />,
-      link: "/discover"
-   },
-   {
-      title: "Library",
-      leftIcon: <FontAwesomeIcon icon={faList} />,
-      link: "/library"
-   },
-   {
       title: "Group",
       leftIcon: <FontAwesomeIcon icon={faUsers} />,
       link: "/group"
    },
    {
-      title: "Market",
+      title: "Presentation",
       leftIcon: <FontAwesomeIcon icon={faShop} />,
-      link: "/market"
+      link: "/presentation"
    }
 ];

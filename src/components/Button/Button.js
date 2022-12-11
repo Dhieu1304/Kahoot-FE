@@ -17,7 +17,9 @@ function Button({
    submitModal,
    outline,
    rounded,
-   big
+   big,
+   leftIcon,
+   rightIcon
 }) {
    const classes = cx("container", {
       [className]: className,
@@ -35,7 +37,9 @@ function Button({
 
    return (
       <button className={classes} onClick={onClick}>
+         {leftIcon && <span className={cx("left-icon")}>{leftIcon}</span>}
          <span className={cx("title")}>{title}</span>
+         {rightIcon && <span className={cx("right-icon")}>{rightIcon}</span>}
       </button>
    );
 }
