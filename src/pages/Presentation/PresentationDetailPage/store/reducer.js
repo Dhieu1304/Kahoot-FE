@@ -12,6 +12,8 @@ const initState = {
 
    currentSlideIndex: 0,
    currentSlide: {},
+
+   isInit: false,
    isLoading: false,
    isFetchApiError: false,
    fetchApiError: ""
@@ -22,6 +24,7 @@ function reducer(state, action) {
       case SET_PRESENTATION:
          return {
             ...state,
+            isInit: true,
             isLoading: false,
             isFetchApiError: false,
             fetchApiError: "",

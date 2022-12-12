@@ -4,8 +4,8 @@ import Input from "../../../../../components/Input";
 import { usePresentationDetailStore } from "../../store";
 import Button from "../../../../../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
-import { useForm } from "react-hook-form";
+import { faAdd, faX } from "@fortawesome/free-solid-svg-icons";
+import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 const cx = classNames.bind(styles);
 
 function SlideConfig() {
@@ -15,35 +15,58 @@ function SlideConfig() {
       register,
       handleSubmit,
       watch,
+      control,
       resetField,
       formState: { errors }
-   } = useForm({
-      mode: "onChange",
-      defaultValues: {
-         name: ""
-      },
-      criteriaMode: "all"
+   } = useFormContext();
+
+   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
+      control,
+      name: "options"
    });
 
+   console.log('watch("options"): ', watch("options"));
+
    return (
-      <div className={cx("container")}>
+      <div className={cx("config-container")}>
          <div>
-            <div className={cx("config-container")}>
+            <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Your question?</span>
-               <Input value={presentationDetailStore.state.currentSlide.title} />
+               <Input
+                  {...register("title", {
+                     required: "Name is required"
+                  })}
+               />
             </div>
 
-            <div className={cx("config-container")}>
+            <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Options</span>
                <div className={cx("option-list")}>
-                  {/* {...register("name", {
-               required: "Name is required"
-            })} */}
-                  <Input placeholder={"Option 1"} value={"Option 1"} />
-                  <Input placeholder={"Option 2"} value={"Option 2"} />
-                  <Input placeholder={"Option 3"} value={"Option 3"} />
-                  <Input placeholder={"Option 4"} value={"Option 4"} />
-                  <Input placeholder={"Option 5"} value={"Option 5"} />
+                  {fields.map((field, index) => {
+                     // console.log("field: ", field);
+                     console.log("field.name: ", field.name);
+                     const xxx = field.name;
+                     return (
+                        <div key={field.id} className={cx("option-item")}>
+                           <Input
+                              // defaultValue={field.join("")}
+                              defaultValue={xxx}
+                              placeholder={`option ${index + 1}`}
+                              {...register(`${field.id}`, {
+                                 required: "Name is required"
+                              })}
+                           />
+                           <FontAwesomeIcon
+                              icon={faX}
+                              className={cx("remove-icon")}
+                              size={"1x"}
+                              onClick={() => {
+                                 remove(index);
+                              }}
+                           />
+                        </div>
+                     );
+                  })}
                </div>
                <div className={cx("option-add-wrapper")}>
                   <Button
@@ -52,6 +75,13 @@ function SlideConfig() {
                      big
                      rounded
                      leftIcon={<FontAwesomeIcon icon={faAdd} />}
+                     onClick={() => {
+                        const currentCountOptions = watch("options").length;
+                        append({
+                           name: `Option ${currentCountOptions + 1}`,
+                           count: 0
+                        });
+                     }}
                   />
                </div>
             </div>

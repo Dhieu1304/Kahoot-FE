@@ -4,24 +4,27 @@ const mockSlide = {
    title: "Slide 1",
    active: true,
    question: "Muti choice của Sang",
-   choices: [
+   options: [
       {
          id: 282612524,
          label: "Option 1",
          position: 0,
-         correct_answer: false
+         correct_answer: false,
+         count: 4000
       },
       {
          id: 282612525,
          label: "Option 2",
          position: 1,
-         correct_answer: false
+         correct_answer: false,
+         count: 3000
       },
       {
          id: 282612526,
          label: "Option 3",
          position: 2,
-         correct_answer: false
+         correct_answer: false,
+         count: 2000
       }
    ],
 

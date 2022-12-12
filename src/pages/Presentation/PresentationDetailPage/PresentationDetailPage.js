@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Header from "./components/Header";
 import SlideList from "./components/SlideList";
@@ -8,6 +8,8 @@ import classNames from "classnames/bind";
 import styles from "./PresentationDetailPage.module.scss";
 import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import CurrentSlide from "./components/CurrentSlide";
 const cx = classNames.bind(styles);
 
 function PresentationDetailPage() {
@@ -24,18 +26,19 @@ function PresentationDetailPage() {
    // console.log("presentationDetailStore.state: ", presentationDetailStore.state);
 
    return (
-      <div className={cx("wrapper")}>
-         <Header />
+      presentationDetailStore.state?.isInit && (
+         <div className={cx("wrapper")}>
+            <Header />
 
-         <div className={cx("container")}>
-            <SlideList />
+            <div className={cx("container")}>
+               <SlideList />
 
-            <div className={cx("slide-current")}>
-               <SlideArea />
-               <SlideConfig />
+               <div className={cx("slide-current")}>
+                  <CurrentSlide />
+               </div>
             </div>
          </div>
-      </div>
+      )
    );
 }
 

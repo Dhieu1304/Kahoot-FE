@@ -41,7 +41,7 @@ const mockPresentation = {
          title: "Slide 1",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -92,7 +92,31 @@ const mockPresentation = {
          hide_voting_instructions: false,
 
          speaker_notes: null,
-         override_theme: false
+         override_theme: false,
+         result: {
+            results: [
+               {
+                  id: 282612524,
+                  label: "Option 1",
+                  score: []
+               },
+               {
+                  id: 282612525,
+                  label: "Option 2",
+                  score: []
+               },
+               {
+                  id: 282612526,
+                  label: "Option 3",
+                  score: []
+               }
+            ],
+            respondents: 0,
+            segments: [{}],
+            type: "choices",
+            timestamp: 1670742221866,
+            votes: {}
+         }
       },
       {
          id: "2",
@@ -100,7 +124,7 @@ const mockPresentation = {
          title: "Slide 2",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -159,7 +183,7 @@ const mockPresentation = {
          title: "Slide 3",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -218,7 +242,7 @@ const mockPresentation = {
          title: "Slide 4",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -277,7 +301,7 @@ const mockPresentation = {
          title: "Slide 5",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -336,7 +360,7 @@ const mockPresentation = {
          title: "Slide 6",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -395,7 +419,7 @@ const mockPresentation = {
          title: "Slide 7",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -454,7 +478,7 @@ const mockPresentation = {
          title: "Slide 8",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -513,7 +537,7 @@ const mockPresentation = {
          title: "Slide 9",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -572,7 +596,7 @@ const mockPresentation = {
          title: "Slide 10",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -631,7 +655,7 @@ const mockPresentation = {
          title: "Slide 11",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -690,7 +714,7 @@ const mockPresentation = {
          title: "Slide 12",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -749,7 +773,7 @@ const mockPresentation = {
          title: "Slide 13",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -808,7 +832,7 @@ const mockPresentation = {
          title: "Slide 14",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
@@ -867,7 +891,7 @@ const mockPresentation = {
          title: "Slide 15",
          active: true,
          question: "Muti choice của Sang",
-         choices: [
+         options: [
             {
                id: 282612524,
                label: "Option 1",
