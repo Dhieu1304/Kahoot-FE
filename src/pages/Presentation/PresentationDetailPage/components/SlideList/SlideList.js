@@ -9,10 +9,10 @@ const cx = classNames.bind(styles);
 const SlideList = ({}) => {
    const presentationDetailStore = usePresentationDetailStore();
 
-   console.log(
-      "presentationDetailStore.state.presentation?.questions: ",
-      presentationDetailStore.state.presentation?.questions
-   );
+   // console.log(
+   //    "presentationDetailStore.state.presentation?.questions: ",
+   //    presentationDetailStore.state.presentation?.questions
+   // );
 
    return (
       <div className={cx("wrapper")}>

@@ -7,7 +7,7 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 const SlideItem = ({ slide, index, presentationId }) => {
-   // const presentationDetailStore = usePresentationDetailStore();
+   const presentationDetailStore = usePresentationDetailStore();
 
    const to = `/presentation/${presentationId}/${slide.id}/edit`;
 
@@ -15,7 +15,11 @@ const SlideItem = ({ slide, index, presentationId }) => {
    const active = useMatch({ path: resolved.pathname, end: false });
 
    return (
-      <Link to={to} className={cx("wrapper", { active })}>
+      <Link
+         to={to}
+         className={cx("wrapper", { active })}
+         onClick={() => presentationDetailStore.method.setCurrentSlide(index)}
+      >
          <span className={cx("index")}>{index}</span>
          <div className={cx("container")}>
             <h1 className={cx("title")}>{slide?.title}</h1>;

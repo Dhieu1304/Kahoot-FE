@@ -9,6 +9,26 @@ const getPresentationById = async (id) => {
    return presentation;
 };
 
+const getSlideById = async (id) => {
+   console.log("[SERVICE][PRESENTATION] getSlideById: ", { id });
+   const slide = await mockApi.mockSlide;
+
+   //    console.log("presentation", presentation);
+
+   return slide;
+};
+
+const getResultBySlideId = async (slideId) => {
+   console.log("[SERVICE][PRESENTATION] getResultBySlideId: ", { slideId });
+   const slide = await mockApi.mockResult;
+
+   //    console.log("presentation", presentation);
+
+   return slide;
+};
+
 export default {
-   getPresentationById
+   getPresentationById,
+   getSlideById,
+   getResultBySlideId
 };

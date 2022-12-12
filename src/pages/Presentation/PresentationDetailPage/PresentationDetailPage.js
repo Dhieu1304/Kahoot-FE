@@ -1,11 +1,13 @@
-import classNames from "classnames/bind";
 import { useEffect } from "react";
 
 import Header from "./components/Header";
 import SlideList from "./components/SlideList";
-
-import styles from "./PresentationDetailPage.module.scss";
 import { usePresentationDetailStore } from "./store";
+
+import classNames from "classnames/bind";
+import styles from "./PresentationDetailPage.module.scss";
+import SlideArea from "./components/SlideArea";
+import SlideConfig from "./components/SlideConfig";
 const cx = classNames.bind(styles);
 
 function PresentationDetailPage() {
@@ -19,7 +21,7 @@ function PresentationDetailPage() {
       loadData();
    }, []);
 
-   console.log("presentationDetailStore.state: ", presentationDetailStore.state);
+   // console.log("presentationDetailStore.state: ", presentationDetailStore.state);
 
    return (
       <div className={cx("wrapper")}>
@@ -27,6 +29,11 @@ function PresentationDetailPage() {
 
          <div className={cx("container")}>
             <SlideList />
+
+            <div className={cx("slide-current")}>
+               <SlideArea />
+               <SlideConfig />
+            </div>
          </div>
       </div>
    );

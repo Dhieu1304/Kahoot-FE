@@ -2,12 +2,16 @@ import {
    SET_PRESENTATION,
    FETCHING_API,
    FETCHING_API_SUCCESS,
-   FETCHING_API_FAILED
+   FETCHING_API_FAILED,
+   SET_CURRENT_SLIDE,
+   SET_CURRENT_SLIDE_INDEX
 } from "./contants";
 
 const initState = {
    presentation: {},
 
+   currentSlideIndex: 0,
+   currentSlide: {},
    isLoading: false,
    isFetchApiError: false,
    fetchApiError: ""
@@ -22,6 +26,23 @@ function reducer(state, action) {
             isFetchApiError: false,
             fetchApiError: "",
             presentation: action.payload
+         };
+      case SET_CURRENT_SLIDE:
+         return {
+            ...state,
+            isLoading: false,
+            isFetchApiError: false,
+            fetchApiError: "",
+            currentSlide: action.payload
+         };
+
+      case SET_CURRENT_SLIDE_INDEX:
+         return {
+            ...state,
+            isLoading: false,
+            isFetchApiError: false,
+            fetchApiError: "",
+            currentSlideIndex: action.payload
          };
 
       case FETCHING_API:
