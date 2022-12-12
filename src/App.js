@@ -23,6 +23,7 @@ import LinkPage from "./pages/LinkPage";
 import PresentationPage from "./pages/Presentation/PresentationPage";
 import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
 import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store";
+import PresentationPlayPlay from "./pages/Presentation/PresentationPlayPlay/PresentationPlayPlay";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -126,12 +127,13 @@ function App() {
                                     </PresentationDetailProvider>
                                  }
                               />
+                              {/* show */}
                               <Route
-                                 path="show"
+                                 path=""
                                  element={
-                                    <DefaultLayout>
-                                       <PresentationDetailPage />
-                                    </DefaultLayout>
+                                    <PresentationDetailProvider>
+                                       <PresentationPlayPlay />
+                                    </PresentationDetailProvider>
                                  }
                               />
                            </Route>

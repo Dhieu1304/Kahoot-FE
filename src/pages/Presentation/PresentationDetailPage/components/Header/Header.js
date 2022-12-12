@@ -3,7 +3,16 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDroplet, faGear, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
+
+import {
+   faDroplet,
+   faGear,
+   faPlus,
+   faUpload,
+   faArrowLeft,
+   faPresentationScreen,
+   faPlay
+} from "@fortawesome/free-solid-svg-icons";
 
 import classNames from "classnames/bind";
 
@@ -12,15 +21,35 @@ import Button from "../../../../../components/Button";
 import { useState } from "react";
 import CreateSlideModal from "../CreateSlideModal";
 import ChangeThemeModal from "../ChangeThemeModal";
+import { useNavigate } from "react-router-dom";
+import { usePresentationDetailStore } from "../../store";
 
 const cx = classNames.bind(styles);
 
 function Header() {
+   const presentationDetailStore = usePresentationDetailStore();
+
+   console.log("presentationDetailStore.state header: ", presentationDetailStore.state);
+
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemModal, setShowChangeThemModal] = useState(false);
+
+   const navigate = useNavigate();
+
    return (
       <div className={cx("container")}>
          <div className={cx("left")}>
+            <Button
+               title={"Back"}
+               outline
+               big
+               rounded
+               className={cx("btn")}
+               leftIcon={<FontAwesomeIcon icon={faArrowLeft} />}
+               onClick={() => {
+                  navigate("/presentation");
+               }}
+            />
             <Button
                title={"New slide"}
                basicBlue
@@ -32,16 +61,21 @@ function Header() {
                   setShowCreateSlideModal(true);
                }}
             />
+         </div>
+         <div className={cx("right")}>
             <Button
-               title={"Import"}
+               title={"Play"}
                basicTeal
                big
                rounded
                className={cx("btn")}
-               leftIcon={<FontAwesomeIcon icon={faUpload} />}
+               leftIcon={<FontAwesomeIcon icon={faPlay} />}
+               onClick={() => {
+                  const presentationId = presentationDetailStore.state.presentation?.id;
+                  const slideId = presentationDetailStore.state.currentSlide?.id;
+                  navigate(`/presentation/${presentationId}/${slideId}`);
+               }}
             />
-         </div>
-         <div className={cx("right")}>
             <Button
                title={"Themes"}
                basicTeal
