@@ -23,7 +23,9 @@ import LinkPage from "./pages/LinkPage";
 import PresentationPage from "./pages/Presentation/PresentationPage";
 import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
 import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store";
-import PresentationPlayPlay from "./pages/Presentation/PresentationPlayPlay/PresentationPlayPlay";
+import PresentationPlay from "./pages/Presentation/PresentationPlay";
+import PresentationClientPage from "./pages/PresentationClient/PresentationClientPage";
+import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -132,16 +134,36 @@ function App() {
                                  path=""
                                  element={
                                     <PresentationDetailProvider>
-                                       <PresentationPlayPlay />
+                                       <PresentationPlay />
                                     </PresentationDetailProvider>
                                  }
                               />
                            </Route>
                         </Route>
                      </Route>
+                     <Route path={"/presentation-client"}>
+                        <Route path={""} element={<PresentationClientPage />} />
+                        <Route path={":presetationId"}>
+                           <Route path={":slideId"} element={<PresentationClientDetailPage />} />
+                        </Route>
+                     </Route>
                   </Routes>
                ) : (
                   <Routes>
+                     <Route
+                        path={"/home"}
+                        element={
+                           <DefaultLayout>
+                              <HomePage />
+                           </DefaultLayout>
+                        }
+                     />
+                     <Route path={"/presentation-client"}>
+                        <Route path={""} element={<PresentationClientPage />} />
+                        <Route path={":presetationId"}>
+                           <Route path={":slideId"} element={<PresentationClientDetailPage />} />
+                        </Route>
+                     </Route>
                      <Route
                         path={"/auth/register"}
                         element={

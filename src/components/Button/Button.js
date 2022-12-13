@@ -19,7 +19,8 @@ function Button({
    rounded,
    big,
    leftIcon,
-   rightIcon
+   rightIcon,
+   w100
 }) {
    const classes = cx("container", {
       [className]: className,
@@ -32,7 +33,8 @@ function Button({
       submitModal,
       outline,
       rounded,
-      big
+      big,
+      w100
    });
 
    return (

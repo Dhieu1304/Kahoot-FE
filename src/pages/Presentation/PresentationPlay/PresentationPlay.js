@@ -4,7 +4,7 @@ import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from "rec
 import presentationServices from "../../../services/presentationServices";
 
 import classNames from "classnames/bind";
-import styles from "./PresentationPlayPlay.module.scss";
+import styles from "./PresentationPlay.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { usePresentationDetailStore } from "../PresentationDetailPage/store";

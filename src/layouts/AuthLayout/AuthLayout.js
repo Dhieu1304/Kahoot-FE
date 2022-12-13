@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function AuthLayout({ children }) {
+   const navigate = useNavigate();
+
    return (
       <div className="vh-100" style={{ backgroundColor: "#eee" }}>
          <div className="container h-100">
@@ -15,6 +19,9 @@ function AuthLayout({ children }) {
                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
                                  className="img-fluid"
                                  alt="Sample image"
+                                 onClick={() => {
+                                    navigate("/home");
+                                 }}
                               />
                            </div>
                         </div>

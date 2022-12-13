@@ -12,7 +12,7 @@ import Button from "../../../components/Button/Button";
 import Avatar from "../../../components/Avatar/Avatar";
 import CustomToggleDropdownBtn from "../../../components/CustomToggleDropdownBtn";
 
-import { headerItemsData } from "./config";
+import { privateHeaderItemsData, publicHeaderItemsData } from "./config";
 import * as localStorageApp from "../../../utils/localStorage";
 import { AuthContext } from "../../../providers/auth";
 
@@ -38,82 +38,125 @@ function Header() {
                   className={cx("header-navbar-toggle-btn")}
                />
                <Navbar.Offcanvas id="headerNavbar" className={cx("header-navbar-off-canvas")}>
-                  <Nav className={cx("my-2 my-lg-0")}>
-                     {headerItemsData.map((headerItem, index) => (
-                        <div key={index} className={cx("navbar-left-link")}>
-                           <HeaderItem
-                              to={headerItem.link}
-                              title={headerItem.title}
-                              leftIcon={headerItem.leftIcon}
-                           />
-                        </div>
-                     ))}
+                  {authContext.user ? (
+                     <Nav className={cx("my-2 my-lg-0")}>
+                        {privateHeaderItemsData.map((headerItem, index) => (
+                           <div key={index} className={cx("navbar-left-link")}>
+                              <HeaderItem
+                                 to={headerItem.link}
+                                 title={headerItem.title}
+                                 leftIcon={headerItem.leftIcon}
+                              />
+                           </div>
+                        ))}
 
-                     <div className={cx("header-navbar-off-canvas-right")}>
-                        <div className={cx("btn-group")}>
-                           <Button
-                              title={"Share"}
-                              outline
-                              outlineBlack
-                              rounded
-                              big
-                              className={cx("header-btn")}
-                           />
-                           <Button
-                              title={"Create"}
-                              basic
-                              basicBlue
-                              rounded
-                              big
-                              className={cx("header-btn")}
-                           />
+                        <div className={cx("header-navbar-off-canvas-right")}>
+                           <div className={cx("btn-group")}>
+                              <Button
+                                 title={"Share"}
+                                 outline
+                                 outlineBlack
+                                 rounded
+                                 big
+                                 className={cx("header-btn")}
+                              />
+                              <Button
+                                 title={"Create"}
+                                 basic
+                                 basicBlue
+                                 rounded
+                                 big
+                                 className={cx("header-btn")}
+                              />
+                           </div>
                         </div>
-                     </div>
-                  </Nav>
+                     </Nav>
+                  ) : (
+                     <Nav className={cx("my-2 my-lg-0")}>
+                        {publicHeaderItemsData.map((headerItem, index) => (
+                           <div key={index} className={cx("navbar-left-link")}>
+                              <HeaderItem
+                                 to={headerItem.link}
+                                 title={headerItem.title}
+                                 leftIcon={headerItem.leftIcon}
+                              />
+                           </div>
+                        ))}
+
+                        <div className={cx("header-navbar-off-canvas-right")}>
+                           <div className={cx("btn-group")}>
+                              <Button
+                                 title={"Login"}
+                                 outline
+                                 outlineBlack
+                                 rounded
+                                 big
+                                 className={cx("header-btn")}
+                                 onClick={() => {
+                                    navigate("/auth/login");
+                                 }}
+                              />
+                              <Button
+                                 title={"Register"}
+                                 basic
+                                 basicBlue
+                                 rounded
+                                 big
+                                 className={cx("header-btn")}
+                                 onClick={() => {
+                                    navigate("/auth/register");
+                                 }}
+                              />
+                           </div>
+                        </div>
+                     </Nav>
+                  )}
                </Navbar.Offcanvas>
 
-               <div className={cx("header-navbar-group-icons")}>
-                  <Dropdown className={cx("avatar-icon-container")}>
-                     <Dropdown.Toggle as={CustomToggleDropdownBtn} id="avatar-dropdown">
-                        <Avatar
-                           title={"Avatar"}
-                           placeholder={"Avatar"}
-                           size={25}
-                           rounded
-                           src={authContext?.user?.avatar}
-                        />
-                     </Dropdown.Toggle>
+               {authContext.user && (
+                  <div className={cx("header-navbar-group-icons")}>
+                     <Dropdown className={cx("avatar-icon-container")}>
+                        <Dropdown.Toggle as={CustomToggleDropdownBtn} id="avatar-dropdown">
+                           <Avatar
+                              title={"Avatar"}
+                              placeholder={"Avatar"}
+                              size={25}
+                              rounded
+                              src={authContext?.user?.avatar}
+                           />
+                        </Dropdown.Toggle>
 
-                     <Dropdown.Menu className={cx("header-navbar-drop-menu")}>
-                        <Dropdown.Item
-                           className={cx("menu-item")}
-                           onClick={() => {
-                              navigate("/profile");
-                           }}
-                        >
-                           Profile
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                           className={cx("menu-item")}
-                           onClick={() => {
-                              authContext.logout();
-                              localStorageApp.removeItem(
-                                 localStorageApp.LOCAL_STORAGE.ACCESS_TOKEN
-                              );
-                              localStorageApp.removeItem(
-                                 localStorageApp.LOCAL_STORAGE.REFRESH_TOKEN
-                              );
-                              window.location.reload(false);
-                           }}
-                        >
-                           Log out
-                        </Dropdown.Item>
-                     </Dropdown.Menu>
-                  </Dropdown>
-                  <div className={cx("notify-icon-container")}>
-                     <FontAwesomeIcon icon={faBell} className={cx("notify-icon")} />
+                        <Dropdown.Menu className={cx("header-navbar-drop-menu")}>
+                           <Dropdown.Item
+                              className={cx("menu-item")}
+                              onClick={() => {
+                                 navigate("/profile");
+                              }}
+                           >
+                              Profile
+                           </Dropdown.Item>
+                           <Dropdown.Item
+                              className={cx("menu-item")}
+                              onClick={() => {
+                                 authContext.logout();
+                                 localStorageApp.removeItem(
+                                    localStorageApp.LOCAL_STORAGE.ACCESS_TOKEN
+                                 );
+                                 localStorageApp.removeItem(
+                                    localStorageApp.LOCAL_STORAGE.REFRESH_TOKEN
+                                 );
+                                 window.location.reload(false);
+                              }}
+                           >
+                              Log out
+                           </Dropdown.Item>
+                        </Dropdown.Menu>
+                     </Dropdown>
+                     <div className={cx("notify-icon-container")}>
+                        <FontAwesomeIcon icon={faBell} className={cx("notify-icon")} />
+                     </div>
                   </div>
-               </div>
+               )}
             </Navbar>
          </Container>
       </header>
