@@ -75,8 +75,8 @@ function Header() {
                className={cx("btn")}
                leftIcon={<FontAwesomeIcon icon={faPlay} />}
                onClick={() => {
-                  const presentationId = presentationDetailStore.state.presentation?.id;
-                  const slideId = presentationDetailStore.state.currentSlide?.id;
+                  const presentationId = 1; //presentationDetailStore.state.presentation?.id;
+                  const slideId = 1; // presentationDetailStore.state.currentSlide?.id;
                   navigate(`/presentation/${presentationId}/${slideId}`);
                }}
             />
@@ -112,6 +112,7 @@ function Header() {
             haveSubmitBtn
             onSubmitModal={async () => {
                await presentationDetailStore.method.save();
+               setShowSaveModal(false);
             }}
             submitBtnTitle={"Save"}
          ></Modal>

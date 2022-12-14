@@ -1,4 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
+import snakecaseKeys from "snakecase-keys";
 import axiosClient from "../config/axiosClient";
 import mockApi from "../mockApi";
 
@@ -100,22 +101,24 @@ const getResultBySlideId = async (slideId) => {
    return slide;
 };
 
-const updateSlides = async (presentation_id, data) => {
+const updateSlides = async (presentation_id, slides) => {
+   const data = snakecaseKeys(slides, { deep: true });
    console.log("[SERVICE][PRESENTATION] updateSlides: ", { presentation_id, data });
-   try {
-      const res = await axiosClient.put(`/slide/update`, {
-         presentation_id,
-         data
-      });
+   console.log("data: ", data);
+   // try {
+   //    const res = await axiosClient.put(`/slide/update`, {
+   //       presentation_id,
+   //       data
+   //    });
 
-      console.log("res: ", res);
+   //    console.log("res: ", res);
 
-      return camelcaseKeys(res.data, { deep: true });
-   } catch (e) {
-      console.error(e.message);
+   //    return camelcaseKeys(res.data, { deep: true });
+   // } catch (e) {
+   //    console.error(e.message);
 
-      return false;
-   }
+   //    return false;
+   // }
 };
 
 export default {

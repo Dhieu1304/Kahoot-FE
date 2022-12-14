@@ -50,9 +50,12 @@ function PresentationPlayPlay() {
          console.log("PRESENTATION_EVENT.NEW_DATA", data);
       });
       const loadData = async () => {
-         // const id = 1;
+         const id = 1;
          await presentationDetailStore.method.loadPresentationDetail(id);
-         const resultData = await presentationServices.getResultBySlideId(id);
+
+         const resultData = presentationDetailStore.state.slides(
+            presentationDetailStore.state.currentSlideIndex
+         );
          setResult(resultData);
       };
       loadData();
@@ -99,13 +102,15 @@ function PresentationPlayPlay() {
          <Button
             title={"<-"}
             onClick={() => {
-               navigate("/presentation/1/5");
+               const prevId = parseInt(id) - 1;
+               navigate(`/presentation/1/${prevId}`);
             }}
          />
          <Button
             title={"->"}
             onClick={() => {
-               navigate("/presentation/1/6");
+               const nextId = parseInt(id) + 1;
+               navigate(`/presentation/1/${nextId}`);
             }}
          />
       </div>
