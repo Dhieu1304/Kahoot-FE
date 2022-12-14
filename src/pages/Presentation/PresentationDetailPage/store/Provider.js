@@ -131,6 +131,14 @@ function PresentationDetailProvider({ children }) {
             dispatch(actions.fetchApiFailed(message));
             return false;
          }
+      },
+
+      delete: () => {
+         const newSlides = [...state.slides];
+
+         newSlides.splice(state.currentSlideIndex, 1);
+
+         dispatch(actions.setSlides(newSlides));
       }
    };
 

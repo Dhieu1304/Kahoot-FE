@@ -134,13 +134,9 @@ const savePresentation = async (presentation) => {
 };
 
 const updateSlides = async (presentation_id, slides) => {
-   const data = slides.map((slide) => {
-      const {
-         ordinalSlideNumber: ordinal_slide_number,
-         slideTypeId: slide_type_id,
-         title,
-         body
-      } = slide;
+   const data = slides.map((slide, index) => {
+      const ordinal_slide_number = index;
+      const { slideTypeId: slide_type_id, title, body } = slide;
 
       return {
          ordinal_slide_number,

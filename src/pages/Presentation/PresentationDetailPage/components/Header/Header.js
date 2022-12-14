@@ -12,7 +12,8 @@ import {
    faArrowLeft,
    faPresentationScreen,
    faPlay,
-   faSave
+   faSave,
+   faRemove
 } from "@fortawesome/free-solid-svg-icons";
 
 import classNames from "classnames/bind";
@@ -35,6 +36,7 @@ function Header() {
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemModal, setShowChangeThemModal] = useState(false);
    const [showSaveModal, setShowSaveModal] = useState(false);
+   const [showDeleteSlideModal, setShowDeleteSlideModal] = useState(false);
 
    const navigate = useNavigate();
 
@@ -113,6 +115,17 @@ function Header() {
                   setShowSaveModal(true);
                }}
             />
+            <Button
+               title={"Remove"}
+               basicRed
+               big
+               rounded
+               className={cx("btn")}
+               leftIcon={<FontAwesomeIcon icon={faRemove} />}
+               onClick={() => {
+                  setShowDeleteSlideModal(true);
+               }}
+            />
          </div>
          <CreateSlideModal show={showCreateSlideModal} setShow={setShowCreateSlideModal} />
          <ChangeThemeModal show={showChangeThemModal} setShow={setShowChangeThemModal} />
@@ -126,6 +139,17 @@ function Header() {
                await presentationDetailStore.method.save();
             }}
             submitBtnTitle={"Save"}
+         ></Modal>
+         <Modal
+            title={"Delete Slide"}
+            show={showDeleteSlideModal}
+            setShow={setShowDeleteSlideModal}
+            haveSubmitBtn
+            onSubmitModal={async () => {
+               setShowSaveModal(false);
+               await presentationDetailStore.method.delete();
+            }}
+            submitBtnTitle={"Delete"}
          ></Modal>
       </div>
    );
