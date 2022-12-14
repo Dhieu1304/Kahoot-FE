@@ -1,8 +1,6 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Bar, BarChart, LabelList, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import presentationServices from "../../../services/presentationServices";
-
 import classNames from "classnames/bind";
 import styles from "./PresentationPlay.module.scss";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -11,7 +9,6 @@ import { usePresentationDetailStore } from "../PresentationDetailPage/store";
 import Button from "../../../components/Button";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
-import { async } from "q";
 const cx = classNames.bind(styles);
 
 function PresentationPlayPlay() {
@@ -22,28 +19,15 @@ function PresentationPlayPlay() {
    const id = params.id;
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
-
    const presentationDetailStore = usePresentationDetailStore();
-
    const navigate = useNavigate();
-
-   console.log("RENDER PLAY");
 
    useEffect(() => {
       const loadData = async () => {
          const slides = await presentationDetailStore.method.loadPresentationDetailReturnSlides(
             presentationId
          );
-         console.log("slides: ", slides);
-
-         // const listIds = slides.map((slide) => slide.ordinalSlideNumber);
-
-         // console.log("listIds: ", listIds);
-
          const resultData = slides[id]?.body;
-
-         console.log("resultData: ", resultData);
-
          socket.emit(PRESENTATION_EVENT.PRESENT, {
             presentation_id: presentationId,
             ordinal_slide_number: id
@@ -65,20 +49,6 @@ function PresentationPlayPlay() {
             setCountOnl(countOnl);
          });
          socket.on(PRESENTATION_EVENT.NEW_DATA, (data) => {
-            // map data to show chart
-            // setResult((prev) => {
-            //    for (let i = 0; i < prev.length; i++) {
-            //       for (let j = 0; j < data.length; j++) {
-            //          if (prev[i].name === data[j].name) {
-            //             prev[i].value = data[j].count;
-            //          } else {
-            //             prev[i].value = 0;
-            //          }
-            //       }
-            //    }
-            //    return prev;
-            // });
-
             const newResultData = [...resultData];
 
             for (let i = 0; i < newResultData.length; i++) {
@@ -88,10 +58,6 @@ function PresentationPlayPlay() {
                   }
                }
             }
-            // return prev;
-
-            console.log("PRESENTATION_EVENT.NEW_DATA", data);
-
             setResult((prev) => {
                return newResultData;
             });
@@ -115,9 +81,6 @@ function PresentationPlayPlay() {
 
       loadData();
    }, [id]);
-
-   console.log("result: ", result);
-   console.log("countOnl: ", countOnl);
 
    return (
       <div className={cx("wrapper")}>
@@ -157,9 +120,7 @@ function PresentationPlayPlay() {
                big
                onClick={() => {
                   let prevId = parseInt(id) - 1;
-                  // console.log("prevId: ", prevId);
                   if (prevId < 0) prevId = 0;
-                  // console.log("prevId: ", prevId);
                   navigate(`/presentation/1/${prevId}`);
                }}
             />
@@ -171,10 +132,8 @@ function PresentationPlayPlay() {
                big
                onClick={() => {
                   let nextId = parseInt(id) + 1;
-                  // console.log("nextId: ", nextId);
                   if (nextId >= presentationDetailStore.state.slides?.length)
                      nextId = presentationDetailStore.state.slides?.length - 1;
-                  // console.log("nextId: ", nextId);
                   navigate(`/presentation/1/${nextId}`);
                }}
             />
