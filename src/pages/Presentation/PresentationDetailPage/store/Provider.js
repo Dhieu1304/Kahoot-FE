@@ -27,7 +27,7 @@ function PresentationDetailProvider({ children }) {
 
          const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-         console.log("slides: ", slides);
+         // console.log("slides: ", slides);
 
          if (slides) {
             if (slides.length === 0) {
@@ -56,22 +56,56 @@ function PresentationDetailProvider({ children }) {
             dispatch(actions.fetchApiFailed(message));
          }
 
-         // const slideId = presentation.questions[state.currentSlideIndex].id;
-
-         //
-
-         // const slide = await presentationServices.getSlideById(slideId);
-
-         //
-
-         // if (slide) {
-         //    dispatch(actions.setCurrentSlide(slide));
-         // } else {
-         //    const message = "Error API";
-         //    dispatch(actions.fetchApiFailed(message));
-         // }
-
          return presentation;
+      },
+
+      loadPresentationDetailReturnSlides: async (id) => {
+         dispatch(actions.fetchApi());
+         const presentation = await presentationServices.getPresentationById(id);
+
+         if (presentation) {
+            dispatch(actions.setPresentation(presentation));
+         } else {
+            const message = "Error API";
+            dispatch(actions.fetchApiFailed(message));
+            return presentation;
+         }
+
+         // presentation true
+         dispatch(actions.fetchApi());
+
+         const slides = await presentationServices.getAllSlidesByPresentationId(id);
+
+         // console.log("slides: ", slides);
+
+         if (slides) {
+            if (slides.length === 0) {
+               const slide = {
+                  presentation_id: id,
+                  ordinal_slide_number: 1,
+                  slide_type_id: 1,
+                  title: "Slide 1",
+                  body: [
+                     {
+                        id: 1,
+                        name: "option 1"
+                     },
+                     {
+                        id: 2,
+                        name: "option 1"
+                     }
+                  ]
+               };
+               slides.push(slide);
+            }
+
+            dispatch(actions.setSlides(slides));
+         } else {
+            const message = "Error API";
+            dispatch(actions.fetchApiFailed(message));
+         }
+
+         return slides;
       },
 
       setCurrentSlide: async (index) => {

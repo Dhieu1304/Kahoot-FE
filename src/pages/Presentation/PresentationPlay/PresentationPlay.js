@@ -11,6 +11,7 @@ import { usePresentationDetailStore } from "../PresentationDetailPage/store";
 import Button from "../../../components/Button";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
+import { async } from "q";
 const cx = classNames.bind(styles);
 
 function PresentationPlayPlay() {
@@ -29,46 +30,94 @@ function PresentationPlayPlay() {
    console.log("RENDER PLAY");
 
    useEffect(() => {
-      socket.emit(PRESENTATION_EVENT.PRESENT, {
-         presentation_id: presentationId,
-         ordinal_slide_number: id
-      });
-      socket.emit(PRESENTATION_EVENT.NEW_DATA, {
-         presentation_id: presentationId,
-         ordinal_slide_number: id
-      });
-      socket.on(SOCKET_EVENT.ERROR, (message) => {
-         console.error(message);
-      });
-      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
-         console.info(message);
-      });
-      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-         console.log(message);
-      });
-      socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
-         setCountOnl(countOnl);
-      });
-      socket.on(PRESENTATION_EVENT.NEW_DATA, (data) => {
-         // map data to show chart
-         console.log("PRESENTATION_EVENT.NEW_DATA", data);
-      });
-      socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
-         console.log(data);
-      });
-      document.body.requestFullscreen();
+      const loadData = async () => {
+         const slides = await presentationDetailStore.method.loadPresentationDetailReturnSlides(
+            presentationId
+         );
+         console.log("slides: ", slides);
 
-      return () => {
-         const arrSocketEvent = Object.values(SOCKET_EVENT);
-         for (let i = 0; i < arrSocketEvent.length; i++) {
-            socket.off(arrSocketEvent[i]);
-         }
-         socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
-         socket.off(PRESENTATION_EVENT.COUNT_ONL);
-         socket.off(PRESENTATION_EVENT.SLIDE);
-         socket.off(PRESENTATION_EVENT.NEW_DATA);
+         // const listIds = slides.map((slide) => slide.ordinalSlideNumber);
+
+         // console.log("listIds: ", listIds);
+
+         const resultData = slides[id]?.body;
+
+         console.log("resultData: ", resultData);
+
+         socket.emit(PRESENTATION_EVENT.PRESENT, {
+            presentation_id: presentationId,
+            ordinal_slide_number: id
+         });
+         socket.emit(PRESENTATION_EVENT.NEW_DATA, {
+            presentation_id: presentationId,
+            ordinal_slide_number: id
+         });
+         socket.on(SOCKET_EVENT.ERROR, (message) => {
+            console.error(message);
+         });
+         socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
+            console.info(message);
+         });
+         socket.on(SOCKET_EVENT.SUCCESS, (message) => {
+            console.log(message);
+         });
+         socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
+            setCountOnl(countOnl);
+         });
+         socket.on(PRESENTATION_EVENT.NEW_DATA, (data) => {
+            // map data to show chart
+            // setResult((prev) => {
+            //    for (let i = 0; i < prev.length; i++) {
+            //       for (let j = 0; j < data.length; j++) {
+            //          if (prev[i].name === data[j].name) {
+            //             prev[i].value = data[j].count;
+            //          } else {
+            //             prev[i].value = 0;
+            //          }
+            //       }
+            //    }
+            //    return prev;
+            // });
+
+            const newResultData = [...resultData];
+
+            for (let i = 0; i < newResultData.length; i++) {
+               for (let j = 0; j < data.length; j++) {
+                  if (newResultData[i].name === data[j].name) {
+                     newResultData[i].value = data[j].count;
+                  }
+               }
+            }
+            // return prev;
+
+            console.log("PRESENTATION_EVENT.NEW_DATA", data);
+
+            setResult((prev) => {
+               return newResultData;
+            });
+         });
+         socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
+            console.log(data);
+         });
+         document.body.requestFullscreen();
+
+         return () => {
+            const arrSocketEvent = Object.values(SOCKET_EVENT);
+            for (let i = 0; i < arrSocketEvent.length; i++) {
+               socket.off(arrSocketEvent[i]);
+            }
+            socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
+            socket.off(PRESENTATION_EVENT.COUNT_ONL);
+            socket.off(PRESENTATION_EVENT.SLIDE);
+            socket.off(PRESENTATION_EVENT.NEW_DATA);
+         };
       };
+
+      loadData();
    }, [id]);
+
+   console.log("result: ", result);
+   console.log("countOnl: ", countOnl);
 
    return (
       <div className={cx("wrapper")}>
@@ -77,41 +126,59 @@ function PresentationPlayPlay() {
                Go to
                <span className={cx("infor-label")}>{process.env.REACT_APP_BE_URL + "game"}</span>
                and use the code
-               <span className={cx("infor-label")}>11 22 44 {Math.floor(Math.random() * 100)}</span>
+               <span className={cx("infor-label")}>
+                  {presentationDetailStore.state.presentation?.code}
+               </span>
             </h1>
 
             <div className={cx("chart-area")}>
                <ResponsiveContainer>
                   <BarChart width={600} height={250} data={result}>
                      <XAxis dataKey="name" />
-                     <YAxis dataKey="count" domain={[0, "dataMax + 1000"]} />
-                     <Bar dataKey="count" fill="#8884d8">
-                        <LabelList dataKey="count" position="top" />
+                     <YAxis dataKey="value" domain={[0, "dataMax + 1"]} />
+                     <Bar dataKey="value" fill="#8884d8">
+                        <LabelList dataKey="value" position="top" />
                      </Bar>
                   </BarChart>
                </ResponsiveContainer>
             </div>
             <div className={cx("count-votes")}>
-               <span className={cx("count-votes-number")}>
-                  {result?.reduce((sum, cur) => sum + cur.count, 0) || 0}
-               </span>
+               <span className={cx("count-votes-number")}>{countOnl}</span>
                <FontAwesomeIcon icon={faUser} size={"1x"} className={cx("count-votes-icon")} />
             </div>
          </div>
-         <Button
-            title={"<-"}
-            onClick={() => {
-               const prevId = parseInt(id) - 1;
-               navigate(`/presentation/1/${prevId}`);
-            }}
-         />
-         <Button
-            title={"->"}
-            onClick={() => {
-               const nextId = parseInt(id) + 1;
-               navigate(`/presentation/1/${nextId}`);
-            }}
-         />
+
+         <div className={cx("btn-group")}>
+            <Button
+               className={cx("btn")}
+               title={"<-"}
+               basicBlue
+               rounded
+               big
+               onClick={() => {
+                  let prevId = parseInt(id) - 1;
+                  // console.log("prevId: ", prevId);
+                  if (prevId < 0) prevId = 0;
+                  // console.log("prevId: ", prevId);
+                  navigate(`/presentation/1/${prevId}`);
+               }}
+            />
+            <Button
+               className={cx("btn")}
+               title={"->"}
+               basicBlue
+               rounded
+               big
+               onClick={() => {
+                  let nextId = parseInt(id) + 1;
+                  // console.log("nextId: ", nextId);
+                  if (nextId >= presentationDetailStore.state.slides?.length)
+                     nextId = presentationDetailStore.state.slides?.length - 1;
+                  // console.log("nextId: ", nextId);
+                  navigate(`/presentation/1/${nextId}`);
+               }}
+            />
+         </div>
       </div>
    );
 }

@@ -35,7 +35,7 @@ const cx = classNames.bind(styles);
 function Header() {
    const presentationDetailStore = usePresentationDetailStore();
    const socket = useContext(SocketContext);
-   console.log("presentationDetailStore.state header: ", presentationDetailStore.state);
+   // console.log("presentationDetailStore.state header: ", presentationDetailStore.state);
 
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemModal, setShowChangeThemModal] = useState(false);

@@ -2,7 +2,7 @@
    height: 100vh;
    width: 100%;
    display: flex;
-   flex-direction: row;
+   flex-direction: column;
    justify-content: center;
    align-items: center;
    background-color: black;
@@ -67,8 +67,14 @@
          .count-votes-number {
             margin-right: 1rem;
          }
-         .count-votes-icon {
-         }
+         // .count-votes-icon {
+         // }
+      }
+   }
+
+   .btn-group {
+      .btn {
+         margin-right: 10px;
       }
    }
 }

@@ -42,7 +42,7 @@ const createPresentation = async (name, type = "PUBLIC") => {
 };
 
 const getPresentationById = async (id) => {
-   console.log("[SERVICE][PRESENTATION] getPresentationById: ", { id });
+   // console.log("[SERVICE][PRESENTATION] getPresentationById: ", { id });
    // const presentation = await mockApi.mockPresentation;
 
    // return presentation;
@@ -63,7 +63,7 @@ const getPresentationById = async (id) => {
 };
 
 const getAllSlidesByPresentationId = async (id) => {
-   console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
+   // console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
    // const slide = await mockApi.mockSlide;
 
    //    console.log("presentation", presentation);
@@ -71,12 +71,12 @@ const getAllSlidesByPresentationId = async (id) => {
    try {
       const res = await axiosClient.get(`/presentation/${id}/all-slide`);
 
-      console.log("res: ", res);
-      console.log("res.data: ", res.data);
-      console.log(
-         "camelcaseKeys(res.data, { deep: true }): ",
-         camelcaseKeys(res.data, { deep: true })
-      );
+      // console.log("res: ", res);
+      // console.log("res.data: ", res.data);
+      // console.log(
+      //    "camelcaseKeys(res.data, { deep: true }): ",
+      //    camelcaseKeys(res.data, { deep: true })
+      // );
 
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
@@ -89,7 +89,7 @@ const getAllSlidesByPresentationId = async (id) => {
 };
 
 const getSlideById = async (id) => {
-   console.log("[SERVICE][PRESENTATION] getSlideById: ", { id });
+   // console.log("[SERVICE][PRESENTATION] getSlideById: ", { id });
    const slide = await mockApi.mockSlide;
 
    //    console.log("presentation", presentation);
@@ -98,7 +98,7 @@ const getSlideById = async (id) => {
 };
 
 const getResultBySlideId = async (slideId) => {
-   console.log("[SERVICE][PRESENTATION] getResultBySlideId: ", { slideId });
+   // console.log("[SERVICE][PRESENTATION] getResultBySlideId: ", { slideId });
    const slide = await mockApi.mockResult;
 
    //    console.log("presentation", presentation);
@@ -112,12 +112,12 @@ const savePresentation = async (presentation) => {
    const type = presentationType.name || "PUBLIC";
    const themeId = presentationTheme.id;
 
-   console.log("[SERVICE][PRESENTATION] savePresentation: ", {
-      presentationId,
-      name,
-      type,
-      themeId
-   });
+   // console.log("[SERVICE][PRESENTATION] savePresentation: ", {
+   //    presentationId,
+   //    name,
+   //    type,
+   //    themeId
+   // });
 
    // console.log("presentation: ", presentation);
    try {
