@@ -32,8 +32,6 @@ const cx = classNames.bind(styles);
 function Header() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   console.log("presentationDetailStore.state header: ", presentationDetailStore.state);
-
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemModal, setShowChangeThemModal] = useState(false);
    const [showSaveModal, setShowSaveModal] = useState(false);
@@ -111,8 +109,8 @@ function Header() {
             setShow={setShowSaveModal}
             haveSubmitBtn
             onSubmitModal={async () => {
-               await presentationDetailStore.method.save();
                setShowSaveModal(false);
+               await presentationDetailStore.method.save();
             }}
             submitBtnTitle={"Save"}
          ></Modal>

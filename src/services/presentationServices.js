@@ -102,23 +102,41 @@ const getResultBySlideId = async (slideId) => {
 };
 
 const updateSlides = async (presentation_id, slides) => {
-   const data = snakecaseKeys(slides, { deep: true });
+   const data = slides.map((slide) => {
+      const {
+         ordinalSlideNumber: ordinal_slide_number,
+         slideTypeId: slide_type_id,
+         title,
+         body
+      } = slide;
+
+      return {
+         ordinal_slide_number,
+         slide_type_id,
+         title,
+         body
+      };
+   });
+
    console.log("[SERVICE][PRESENTATION] updateSlides: ", { presentation_id, data });
+
+   console.log("slides: ", slides);
    console.log("data: ", data);
-   // try {
-   //    const res = await axiosClient.put(`/slide/update`, {
-   //       presentation_id,
-   //       data
-   //    });
 
-   //    console.log("res: ", res);
+   try {
+      const res = await axiosClient.put(`/slide/update`, {
+         presentation_id,
+         data
+      });
 
-   //    return camelcaseKeys(res.data, { deep: true });
-   // } catch (e) {
-   //    console.error(e.message);
+      // console.log("res: ", res);
 
-   //    return false;
-   // }
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
 };
 
 export default {

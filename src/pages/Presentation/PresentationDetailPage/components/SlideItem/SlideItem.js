@@ -7,8 +7,6 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 const SlideItem = ({ slide, index, presentationId }) => {
-   console.log("slide: ", slide);
-
    const presentationDetailStore = usePresentationDetailStore();
 
    const to = `/presentation/${presentationId}/${slide?.ordinalSlideNumber}/edit`;
