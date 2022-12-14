@@ -4,11 +4,14 @@ import {
    FETCHING_API_SUCCESS,
    FETCHING_API_FAILED,
    SET_CURRENT_SLIDE,
-   SET_CURRENT_SLIDE_INDEX
+   SET_CURRENT_SLIDE_INDEX,
+   SET_SLIDES,
+   CHANGE_SLIDE
 } from "./contants";
 
 const initState = {
    presentation: {},
+   slides: [],
 
    currentSlideIndex: 0,
    currentSlide: {},
@@ -30,6 +33,29 @@ function reducer(state, action) {
             fetchApiError: "",
             presentation: action.payload
          };
+      case SET_SLIDES: {
+         return {
+            ...state,
+            isInit: true,
+            isLoading: false,
+            isFetchApiError: false,
+            fetchApiError: "",
+            slides: action.payload
+         };
+      }
+
+      // case CHANGE_SLIDE: {
+      //    const slide = action.payload;
+      //    const newSlides = [...slides];
+      //    newSlides[currentSlideIndex] === slide;
+
+      //    console.log("newSlides: ");
+
+      //    return {
+      //       ...state,
+      //       slides: newSlides
+      //    };
+      // }
       case SET_CURRENT_SLIDE:
          return {
             ...state,

@@ -42,23 +42,44 @@ const createPresentation = async (name, type = "PUBLIC") => {
 
 const getPresentationById = async (id) => {
    console.log("[SERVICE][PRESENTATION] getPresentationById: ", { id });
-   const presentation = await mockApi.mockPresentation;
+   // const presentation = await mockApi.mockPresentation;
 
-   return presentation;
+   // return presentation;
 
-   // try {
-   //    const res = await axiosClient.get(`/presentation/${id}`);
+   try {
+      const res = await axiosClient.get(`/presentation/${id}`);
 
-   //    console.log("res: ", res);
-   //    return presentation;
-   //    return camelcaseKeys(res.data, { deep: true });
-   // } catch (e) {
-   //    console.error(e.message);
-   //    return presentation;
-   //    return false;
-   // }
+      // console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
 
    //    console.log("presentation", presentation);
+};
+
+const getAllSlidesByPresentationId = async (id) => {
+   console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
+   // const slide = await mockApi.mockSlide;
+
+   //    console.log("presentation", presentation);
+
+   try {
+      const res = await axiosClient.get(`/presentation/${id}/all-slide`);
+
+      console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+
+   // return slide;
 };
 
 const getSlideById = async (id) => {
@@ -79,10 +100,30 @@ const getResultBySlideId = async (slideId) => {
    return slide;
 };
 
+const updateSlides = async (presentation_id, data) => {
+   console.log("[SERVICE][PRESENTATION] updateSlides: ", { presentation_id, data });
+   try {
+      const res = await axiosClient.put(`/slide/update`, {
+         presentation_id,
+         data
+      });
+
+      console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
+   getAllSlidesByPresentationId,
    getPresentationById,
    getSlideById,
    getResultBySlideId,
-   createPresentation
+   createPresentation,
+   updateSlides
 };
