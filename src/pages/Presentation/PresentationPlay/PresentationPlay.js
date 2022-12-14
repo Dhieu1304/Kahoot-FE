@@ -49,6 +49,9 @@ function PresentationPlayPlay() {
          // map data to show chart
          console.log("PRESENTATION_EVENT.NEW_DATA", data);
       });
+      socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
+         console.log(data);
+      });
       const loadData = async () => {
          // const id = 1;
          await presentationDetailStore.method.loadPresentationDetail(id);
@@ -66,7 +69,7 @@ function PresentationPlayPlay() {
          socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
       };
-   }, []);
+   }, [id]);
 
    return (
       <div className={cx("wrapper")}>
@@ -99,13 +102,13 @@ function PresentationPlayPlay() {
          <Button
             title={"<-"}
             onClick={() => {
-               navigate("/presentation/1/5");
+               navigate(`/presentation/1/${+id - 1}`);
             }}
          />
          <Button
             title={"->"}
             onClick={() => {
-               navigate("/presentation/1/6");
+               navigate(`/presentation/1/${+id + 1}`);
             }}
          />
       </div>

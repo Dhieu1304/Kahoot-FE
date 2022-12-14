@@ -18,23 +18,29 @@ import classNames from "classnames/bind";
 
 import styles from "./Header.module.scss";
 import Button from "../../../../../components/Button";
-import { useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import CreateSlideModal from "../CreateSlideModal";
 import ChangeThemeModal from "../ChangeThemeModal";
 import { useNavigate } from "react-router-dom";
 import { usePresentationDetailStore } from "../../store";
+import { SocketContext } from "../../../../../providers/socket";
+import { PRESENTATION_EVENT } from "../../../../../providers/socket/socket.constant";
 
 const cx = classNames.bind(styles);
 
 function Header() {
    const presentationDetailStore = usePresentationDetailStore();
-
+   const socket = useContext(SocketContext);
    console.log("presentationDetailStore.state header: ", presentationDetailStore.state);
 
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemModal, setShowChangeThemModal] = useState(false);
 
    const navigate = useNavigate();
+
+   const handlePresent = useCallback((presentation_id, ordinal_slide_number) => {
+      socket.emit(PRESENTATION_EVENT.PRESENT, { presentation_id, ordinal_slide_number });
+   }, []);
 
    return (
       <div className={cx("container")}>
@@ -72,7 +78,8 @@ function Header() {
                leftIcon={<FontAwesomeIcon icon={faPlay} />}
                onClick={() => {
                   const presentationId = presentationDetailStore.state.presentation?.id;
-                  const slideId = presentationDetailStore.state.currentSlide?.id;
+                  const slideId = 1;
+                  handlePresent(presentationId, slideId);
                   navigate(`/presentation/${presentationId}/${slideId}`);
                }}
             />
