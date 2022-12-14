@@ -45,14 +45,6 @@ function PresentationPage() {
                            setShowCreateModal(true);
                         }}
                      />
-                     <Button
-                        title="Remove all"
-                        basicRed
-                        big
-                        rounded
-                        className={cx("btn")}
-                        leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
-                     />
                   </div>
                </div>
             </div>
@@ -62,9 +54,6 @@ function PresentationPage() {
                      <th className={cx("th")}>Name</th>
                      <th className={cx("th")}>Owner</th>
                      <th className={cx("th")}>Code</th>
-                     <th className={cx("th")}>Created</th>
-                     <th className={cx("th")}>Members</th>
-                     <th className={cx("th")}>Actions</th>
                   </tr>
                </thead>
                <tbody>
@@ -83,11 +72,6 @@ function PresentationPage() {
                            </td>
                            <td className={cx("td")}>Me</td>
                            <td className={cx("td")}>{presentation?.code}</td>
-                           <td className={cx("td")}>{presentation?.created}</td>
-                           <td className={cx("td")}>
-                              {presentation?.presentation_members?.length}
-                           </td>
-                           <td className={cx("td")}></td>
                         </tr>
                      );
                   })}

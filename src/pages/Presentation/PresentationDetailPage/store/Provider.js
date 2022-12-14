@@ -4,17 +4,15 @@ import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
 import mockApi from "../../../../mockApi";
+import { async } from "q";
 
 function PresentationDetailProvider({ children }) {
    const [state, dispatch] = useReducer(reducer, initState);
 
    const method = {
       loadPresentationDetail: async (id) => {
-         console.log("loadPresentationDetail");
          dispatch(actions.fetchApi());
          const presentation = await presentationServices.getPresentationById(id);
-
-         console.log("presentation: ", presentation);
 
          if (presentation) {
             dispatch(actions.setPresentation(presentation));
@@ -28,8 +26,6 @@ function PresentationDetailProvider({ children }) {
          dispatch(actions.fetchApi());
 
          const slides = await presentationServices.getAllSlidesByPresentationId(id);
-
-         console.log("slides: ", slides);
 
          if (slides) {
             if (slides.length === 0) {
@@ -60,11 +56,11 @@ function PresentationDetailProvider({ children }) {
 
          // const slideId = presentation.questions[state.currentSlideIndex].id;
 
-         // console.log("slideId: ", slideId);
+         //
 
          // const slide = await presentationServices.getSlideById(slideId);
 
-         // console.log("slide: ", slide);
+         //
 
          // if (slide) {
          //    dispatch(actions.setCurrentSlide(slide));
@@ -77,7 +73,7 @@ function PresentationDetailProvider({ children }) {
       },
 
       setCurrentSlide: async (index) => {
-         // console.log("setCurrentSlide");
+         //
          // dispatch(actions.fetchApi());
 
          dispatch(actions.setCurrentSlideIndex(index));
@@ -85,7 +81,7 @@ function PresentationDetailProvider({ children }) {
          const slide = state.slides[index];
          dispatch(actions.setCurrentSlide(slide));
 
-         //    console.log("id: ", id);
+         //
 
          //    const slide = await presentationServices.getSlideById(id);
 
@@ -98,35 +94,31 @@ function PresentationDetailProvider({ children }) {
          //    return slide;
       },
       changeSlides: (newSlide) => {
-         console.log("changeSlide in provider");
-
-         console.log("newSlide: ", newSlide);
-         console.log("state.currentSlideIndex: ", state.currentSlideIndex);
-
          const newSlides = [...state.slides];
          // newSlides[state.currentSlideIndex] === newSlide;
 
          newSlides.splice(state.currentSlideIndex, 1, newSlide);
 
-         console.log("newSlides: ", newSlides);
-
          dispatch(actions.setSlides(newSlides));
       },
 
-      save: async (index) => {
-         console.log("loadPresentationDetail");
+      changePresentation: (presentation) => {
+         dispatch(actions.setPresentation(presentation));
+      },
+
+      save: async () => {
          dispatch(actions.fetchApi());
-         const result = await presentationServices.updateSlides(
+
+         const resultPresentation = await presentationServices.savePresentation(state.presentation);
+         const resultSlide = await presentationServices.updateSlides(
             state.presentation.id,
             state.slides
          );
 
-         console.log("result: ", result);
-
-         if (result) {
-            const presentation = await presentationServices.getPresentationById(id);
-
-            console.log("presentation: ", presentation);
+         if (resultPresentation && resultSlide) {
+            const presentation = await presentationServices.getPresentationById(
+               state.presentation?.id
+            );
 
             if (presentation) {
                dispatch(actions.setPresentation(presentation));
@@ -140,6 +132,39 @@ function PresentationDetailProvider({ children }) {
             dispatch(actions.fetchApiFailed(message));
             return false;
          }
+      },
+
+      deleteSlide: () => {
+         const newSlides = [...state.slides];
+
+         newSlides.splice(state.currentSlideIndex, 1);
+
+         dispatch(actions.setSlides(newSlides));
+      },
+
+      deletePresentation: async () => {
+         // const newSlides = [...state.slides];
+         // newSlides.splice(state.currentSlideIndex, 1);
+         // dispatch(actions.setSlides(newSlides));
+         const result = await presentationServices.deletePresentationById(state.presentation.id);
+      },
+
+      addSlide: () => {
+         const maxSlideId = -1;
+
+         const newSlide = {
+            title: "New Slide",
+            body: [],
+            ordinalSlideNumber: state.currentSlideIndex,
+            presentationId: state.presentation.id,
+            slideTypeId: 1
+         };
+
+         const newSlides = [...state.slides];
+
+         newSlides.splice(state.currentSlideIndex, 0, newSlide);
+
+         dispatch(actions.setSlides(newSlides));
       }
    };
 

@@ -36,7 +36,9 @@ function SlideArea() {
                Go to
                <span className={cx("infor-label")}>{process.env.REACT_APP_BE_URL + "game"}</span>
                and use the code
-               <span className={cx("infor-label")}>11 22 44</span>
+               <span className={cx("infor-label")}>
+                  {presentationDetailStore.state.presentation?.code}
+               </span>
             </h1>
             <h1 className={cx("title")}>
                {presentationDetailStore.state.slides[currentIndex]?.title}

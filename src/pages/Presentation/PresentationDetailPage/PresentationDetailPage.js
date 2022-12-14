@@ -26,6 +26,9 @@ function PresentationDetailPage() {
       loadData();
    }, []);
 
+   // console.log("PresentationDetailPage re-render: ", presentationDetailStore.state.presentation);
+   // console.log("PresentationDetailPage re-render: ", presentationDetailStore.state.slides);
+
    return (
       presentationDetailStore.state?.isInit && (
          <div className={cx("wrapper")}>

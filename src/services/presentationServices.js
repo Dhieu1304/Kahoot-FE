@@ -1,4 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
+import snakecaseKeys from "snakecase-keys";
 import axiosClient from "../config/axiosClient";
 import mockApi from "../mockApi";
 
@@ -100,12 +101,81 @@ const getResultBySlideId = async (slideId) => {
    return slide;
 };
 
-const updateSlides = async (presentation_id, data) => {
+const savePresentation = async (presentation) => {
+   const { id: presentationId, name, presentationTheme, presentationType } = presentation;
+
+   const type = presentationType.name || "PUBLIC";
+   const themeId = presentationTheme.id;
+
+   console.log("[SERVICE][PRESENTATION] savePresentation: ", {
+      presentationId,
+      name,
+      type,
+      themeId
+   });
+
+   // console.log("presentation: ", presentation);
+   try {
+      const res = await axiosClient.put(`/presentation/edit`, {
+         presentationId,
+         name,
+         type,
+         themeId
+      });
+
+      console.log("res: ", res);
+
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+};
+
+const updateSlides = async (presentation_id, slides) => {
+   const data = slides.map((slide, index) => {
+      const ordinal_slide_number = index;
+      const { slideTypeId: slide_type_id, title, body } = slide;
+
+      return {
+         ordinal_slide_number,
+         slide_type_id,
+         title,
+         body
+      };
+   });
+
    console.log("[SERVICE][PRESENTATION] updateSlides: ", { presentation_id, data });
+
+   console.log("slides: ", slides);
+   console.log("data: ", data);
+
    try {
       const res = await axiosClient.put(`/slide/update`, {
          presentation_id,
          data
+      });
+
+      // console.log("res: ", res);
+
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+};
+
+const deletePresentationById = async (presentation_id) => {
+   console.log("[SERVICE][PRESENTATION] deletePresentationById: ", { presentation_id });
+   // const slide = await mockApi.mockSlide;
+
+   //    console.log("presentation", presentation);
+
+   try {
+      const res = await axiosClient.delete(`/presentation/delete`, {
+         presentation_id
       });
 
       console.log("res: ", res);
@@ -116,6 +186,8 @@ const updateSlides = async (presentation_id, data) => {
 
       return false;
    }
+
+   // return slide;
 };
 
 export default {
@@ -125,5 +197,7 @@ export default {
    getSlideById,
    getResultBySlideId,
    createPresentation,
-   updateSlides
+   updateSlides,
+   savePresentation,
+   deletePresentationById
 };

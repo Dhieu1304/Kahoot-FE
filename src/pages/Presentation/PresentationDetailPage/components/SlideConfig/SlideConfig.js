@@ -44,7 +44,8 @@ function SlideConfig() {
                                     const slide = {
                                        ...presentationDetailStore.state?.slides[currentIndex]
                                     };
-                                    slide.body[index] = val;
+                                    slide.body[index].id = index;
+                                    slide.body[index].name = val;
                                     presentationDetailStore.method.changeSlides(slide);
                                  }}
                               />

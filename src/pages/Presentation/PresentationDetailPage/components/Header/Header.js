@@ -12,7 +12,8 @@ import {
    faArrowLeft,
    faPresentationScreen,
    faPlay,
-   faSave
+   faSave,
+   faRemove
 } from "@fortawesome/free-solid-svg-icons";
 
 import classNames from "classnames/bind";
@@ -39,6 +40,8 @@ function Header() {
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemModal, setShowChangeThemModal] = useState(false);
    const [showSaveModal, setShowSaveModal] = useState(false);
+   const [showDeleteSlideModal, setShowDeleteSlideModal] = useState(false);
+   const [showDeletePresentationModal, setShowDeletePresentationModal] = useState(false);
 
    const navigate = useNavigate();
 
@@ -71,42 +74,14 @@ function Header() {
                   setShowCreateSlideModal(true);
                }}
             />
-         </div>
-         <div className={cx("right")}>
-            <Button
-               title={"Play"}
-               basicTeal
-               big
-               rounded
-               className={cx("btn")}
-               leftIcon={<FontAwesomeIcon icon={faPlay} />}
-               onClick={() => {
-                  const presentationId = presentationDetailStore.state.presentation?.id;
-                  const slideId = 1;
-                  handlePresent(presentationId, slideId);
-                  navigate(`/presentation/${presentationId}/${slideId}`);
-               }}
-            />
-            <Button
-               title={"Themes"}
-               basicTeal
-               big
-               rounded
-               className={cx("btn")}
-               leftIcon={<FontAwesomeIcon icon={faDroplet} />}
-               onClick={() => {
-                  setShowChangeThemModal(true);
-               }}
-            />
-            <Button
-               title={"Save"}
-               basicYellow
-               big
-               rounded
-               className={cx("btn")}
-               leftIcon={<FontAwesomeIcon icon={faSave} />}
-               onClick={() => {
-                  setShowSaveModal(true);
+            <input
+               value={presentationDetailStore.state.presentation?.name}
+               onChange={(e) => {
+                  const val = e.target.value;
+
+                  const presentation = { ...presentationDetailStore.state?.presentation };
+                  presentation.name = val;
+                  presentationDetailStore.method.changePresentation(presentation);
                }}
             />
          </div>
@@ -118,10 +93,94 @@ function Header() {
             setShow={setShowSaveModal}
             haveSubmitBtn
             onSubmitModal={async () => {
+               setShowSaveModal(false);
                await presentationDetailStore.method.save();
             }}
             submitBtnTitle={"Save"}
          ></Modal>
+         <Modal
+            title={"Delete Slide"}
+            show={showDeleteSlideModal}
+            setShow={setShowDeleteSlideModal}
+            haveSubmitBtn
+            onSubmitModal={async () => {
+               setShowDeleteSlideModal(false);
+               await presentationDetailStore.method.deleteSlide();
+            }}
+            submitBtnTitle={"Delete"}
+         ></Modal>
+         <Modal
+            title={"Delete Presentation"}
+            show={showDeletePresentationModal}
+            setShow={setShowDeletePresentationModal}
+            haveSubmitBtn
+            onSubmitModal={async () => {
+               setShowDeletePresentationModal(false);
+               await presentationDetailStore.method.deletePresentation();
+               navigate("/presentation");
+            }}
+            submitBtnTitle={"Delete"}
+         ></Modal>
+         <div className={cx("right")}>
+            <Button
+               title={"Play"}
+               basicTeal
+               big
+               rounded
+               className={cx("btn")}
+               leftIcon={<FontAwesomeIcon icon={faPlay} />}
+               onClick={() => {
+                  const presentationId = 1; //presentationDetailStore.state.presentation?.id;
+                  const slideId = 1; // presentationDetailStore.state.currentSlide?.id;
+                  handlePresent(presentationId, slideId);
+                  navigate(`/presentation/${presentationId}/${slideId}`);
+               }}
+            />
+            {/* <Button
+               title={"Themes"}
+               basicTeal
+               big
+               rounded
+               className={cx("btn")}
+               leftIcon={<FontAwesomeIcon icon={faDroplet} />}
+               onClick={() => {
+                  setShowChangeThemModal(true);
+               }}
+            /> */}
+            <Button
+               title={"Save"}
+               basicYellow
+               big
+               rounded
+               className={cx("btn")}
+               leftIcon={<FontAwesomeIcon icon={faSave} />}
+               onClick={() => {
+                  setShowSaveModal(true);
+               }}
+            />
+            <Button
+               title={"Remove Slide"}
+               basicRed
+               big
+               rounded
+               className={cx("btn")}
+               leftIcon={<FontAwesomeIcon icon={faRemove} />}
+               onClick={() => {
+                  setShowDeleteSlideModal(true);
+               }}
+            />
+            <Button
+               title={"Remove Presentation"}
+               basicRed
+               big
+               rounded
+               className={cx("btn")}
+               leftIcon={<FontAwesomeIcon icon={faRemove} />}
+               onClick={() => {
+                  setShowDeletePresentationModal(true);
+               }}
+            />
+         </div>
       </div>
    );
 }
