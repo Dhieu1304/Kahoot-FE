@@ -11,62 +11,59 @@ const cx = classNames.bind(styles);
 function SlideConfig() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   const {
-      register,
-      handleSubmit,
-      watch,
-      control,
-      resetField,
-      formState: { errors }
-   } = useFormContext();
-
-   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
-      control,
-      name: "options"
-   });
-
-   console.log('watch("options"): ', watch("options"));
+   const currentIndex = presentationDetailStore.state.currentSlideIndex;
 
    return (
       <div className={cx("config-container")}>
          <div>
             <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Your question?</span>
-               <Input
-                  {...register("title", {
-                     required: "Name is required"
-                  })}
+               <input
+                  value={presentationDetailStore.state?.slides[currentIndex]?.title}
+                  onChange={(e) => {
+                     const val = e.target.value;
+                     const slide = { ...presentationDetailStore.state?.slides[currentIndex] };
+                     slide.title = val;
+                     presentationDetailStore.method.changeSlides(slide);
+                  }}
                />
             </div>
 
             <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Options</span>
                <div className={cx("option-list")}>
-                  {fields.map((field, index) => {
-                     // console.log("field: ", field);
-                     console.log("field.name: ", field.name);
-                     const xxx = field.name;
-                     return (
-                        <div key={field.id} className={cx("option-item")}>
-                           <Input
-                              // defaultValue={field.join("")}
-                              defaultValue={xxx}
-                              placeholder={`option ${index + 1}`}
-                              {...register(`${field.id}`, {
-                                 required: "Name is required"
-                              })}
-                           />
-                           <FontAwesomeIcon
-                              icon={faX}
-                              className={cx("remove-icon")}
-                              size={"1x"}
-                              onClick={() => {
-                                 remove(index);
-                              }}
-                           />
-                        </div>
-                     );
-                  })}
+                  {presentationDetailStore.state?.slides[currentIndex]?.body.map(
+                     (option, index) => {
+                        return (
+                           <div key={index} className={cx("option-item")}>
+                              <input
+                                 value={option.name}
+                                 placeholder={`option ${index + 1}`}
+                                 onChange={(e) => {
+                                    const val = e.target.value;
+                                    const slide = {
+                                       ...presentationDetailStore.state?.slides[currentIndex]
+                                    };
+                                    slide.body[index] = val;
+                                    presentationDetailStore.method.changeSlides(slide);
+                                 }}
+                              />
+                              <FontAwesomeIcon
+                                 icon={faX}
+                                 className={cx("remove-icon")}
+                                 size={"1x"}
+                                 onClick={() => {
+                                    const slide = {
+                                       ...presentationDetailStore.state?.slides[currentIndex]
+                                    };
+                                    slide.body.splice(index, 1);
+                                    presentationDetailStore.method.changeSlides(slide);
+                                 }}
+                              />
+                           </div>
+                        );
+                     }
+                  )}
                </div>
                <div className={cx("option-add-wrapper")}>
                   <Button
@@ -76,11 +73,14 @@ function SlideConfig() {
                      rounded
                      leftIcon={<FontAwesomeIcon icon={faAdd} />}
                      onClick={() => {
-                        const currentCountOptions = watch("options").length;
-                        append({
-                           name: `Option ${currentCountOptions + 1}`,
-                           count: 0
+                        const slide = {
+                           ...presentationDetailStore.state?.slides[currentIndex]
+                        };
+                        slide.body.push({
+                           id: "10",
+                           name: "New Option"
                         });
+                        presentationDetailStore.method.changeSlides(slide);
                      }}
                   />
                </div>

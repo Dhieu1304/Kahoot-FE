@@ -9,16 +9,16 @@ const cx = classNames.bind(styles);
 const SlideList = ({}) => {
    const presentationDetailStore = usePresentationDetailStore();
 
-   // console.log(
-   //    "presentationDetailStore.state.presentation?.questions: ",
-   //    presentationDetailStore.state.presentation?.questions
-   // );
+   console.log(
+      "SLIDE LIST: presentationDetailStore.state?.slides: ",
+      presentationDetailStore.state?.slides
+   );
 
    return (
       <div className={cx("wrapper")}>
          <div className={cx("container")}>
-            {presentationDetailStore.state.presentation?.questions?.length > 0 &&
-               presentationDetailStore.state.presentation?.questions.map((slide, index) => (
+            {presentationDetailStore.state.slides?.length > 0 &&
+               presentationDetailStore.state.slides?.map((slide, index) => (
                   <SlideItem
                      key={index}
                      index={index}

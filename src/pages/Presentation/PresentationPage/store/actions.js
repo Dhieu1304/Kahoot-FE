@@ -26,7 +26,7 @@ export const fetchApiFailed = (payload) => ({
 });
 
 export default {
-   SET_PRESENTATIONS,
+   setPresentations,
    fetchApi,
    fetchApiSuccess,
    fetchApiFailed

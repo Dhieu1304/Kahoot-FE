@@ -11,7 +11,8 @@ import {
    faUpload,
    faArrowLeft,
    faPresentationScreen,
-   faPlay
+   faPlay,
+   faSave
 } from "@fortawesome/free-solid-svg-icons";
 
 import classNames from "classnames/bind";
@@ -22,7 +23,9 @@ import { useState } from "react";
 import CreateSlideModal from "../CreateSlideModal";
 import ChangeThemeModal from "../ChangeThemeModal";
 import { useNavigate } from "react-router-dom";
+
 import { usePresentationDetailStore } from "../../store";
+import Modal from "../../../../../components/Modal";
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +36,7 @@ function Header() {
 
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemModal, setShowChangeThemModal] = useState(false);
+   const [showSaveModal, setShowSaveModal] = useState(false);
 
    const navigate = useNavigate();
 
@@ -88,16 +92,29 @@ function Header() {
                }}
             />
             <Button
-               title={"Setting"}
-               outline
+               title={"Save"}
+               basicYellow
                big
                rounded
                className={cx("btn")}
-               leftIcon={<FontAwesomeIcon icon={faGear} />}
+               leftIcon={<FontAwesomeIcon icon={faSave} />}
+               onClick={() => {
+                  setShowSaveModal(true);
+               }}
             />
          </div>
          <CreateSlideModal show={showCreateSlideModal} setShow={setShowCreateSlideModal} />
          <ChangeThemeModal show={showChangeThemModal} setShow={setShowChangeThemModal} />
+         <Modal
+            title={"Save Presentation"}
+            show={showSaveModal}
+            setShow={setShowSaveModal}
+            haveSubmitBtn
+            onSubmitModal={async () => {
+               await presentationDetailStore.method.save();
+            }}
+            submitBtnTitle={"Save"}
+         ></Modal>
       </div>
    );
 }
