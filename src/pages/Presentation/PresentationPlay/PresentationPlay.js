@@ -15,8 +15,8 @@ const cx = classNames.bind(styles);
 
 function PresentationPlayPlay() {
    const [result, setResult] = useState([]);
-   const params = useParams();
    const socket = useContext(SocketContext);
+   const params = useParams();
    const id = params.id;
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];

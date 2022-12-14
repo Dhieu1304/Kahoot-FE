@@ -120,9 +120,7 @@ function App() {
                               </DefaultLayout>
                            }
                         />
-                        {/* Presentation detail */}
                         <Route path=":id">
-                           {/* Presentation slide */}
                            <Route path=":id">
                               <Route
                                  path="edit"
@@ -144,10 +142,6 @@ function App() {
                            </Route>
                         </Route>
                      </Route>
-                     <Route path={"/presentation-client"}>
-                        <Route path={""} element={<PresentationClientPage />} />
-                        <Route path={":code"} element={<PresentationClientDetailPage />}></Route>
-                     </Route>
                   </Routes>
                ) : (
                   <Routes>
@@ -161,9 +155,7 @@ function App() {
                      />
                      <Route path={"/presentation-client"}>
                         <Route path={""} element={<PresentationClientPage />} />
-                        <Route path={":presetationId"}>
-                           <Route path={":slideId"} element={<PresentationClientDetailPage />} />
-                        </Route>
+                        <Route path={":code"} element={<PresentationClientDetailPage />}></Route>
                      </Route>
                      <Route
                         path={"/auth/register"}

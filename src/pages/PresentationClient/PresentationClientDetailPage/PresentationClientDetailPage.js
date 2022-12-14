@@ -1,44 +1,64 @@
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import styles from "./PresentationClientDetailPage.module.scss";
-
+import { SocketContext } from "../../../providers/socket";
+import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
+import { useParams } from "react-router-dom";
 const cx = classNames.bind(styles);
 
-const options = [
-   {
-      id: 1,
-      value: "Option 1"
-   },
-   {
-      id: 2,
-      value: "Option 2"
-   },
-   {
-      id: 3,
-      value: "Option 3"
-   },
-   {
-      id: 4,
-      value: "Option 4"
-   },
-   {
-      id: 5,
-      value: "Option 5"
-   }
-];
-
 function PresentationClientDetailPage() {
+   const defaultMessage = "Please waiting host change slide";
    const [optionIndex, setOptionIndex] = useState(-1);
+   const [options, setOptions] = useState([]);
    const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
+   const [message, setMessage] = useState(defaultMessage);
 
-   const handleSubmitAnswer = async (data) => {
-      console.log("handleSubmitAnswer: ", handleSubmitAnswer);
+   const socket = useContext(SocketContext);
+   const code = useParams().code;
+
+   useEffect(() => {
+      socket.emit(PRESENTATION_EVENT.JOIN, { code });
+      socket.on(SOCKET_EVENT.ERROR, (message) => {
+         console.error(message);
+      });
+      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
+         console.info(message);
+      });
+      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
+         console.log(message);
+      });
+      socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
+         console.log(data);
+         if (data?.body) {
+            setOptions(data.body);
+            setIsSubmitSuccess(false);
+         } else {
+            setMessage(data);
+            setIsSubmitSuccess(true);
+         }
+      });
+
+      return () => {
+         const arrSocketEvent = Object.values(SOCKET_EVENT);
+         for (let i = 0; i < arrSocketEvent.length; i++) {
+            socket.off(arrSocketEvent[i]);
+         }
+         socket.off(PRESENTATION_EVENT.SLIDE);
+      };
+   }, []);
+
+   const handleSubmit = useCallback((name) => {
+      socket.emit(PRESENTATION_EVENT.SUBMIT_ANSWER, { code, name });
+      setMessage(defaultMessage);
       setIsSubmitSuccess(true);
+   }, []);
+
+   const handleSubmitAnswer = () => {
+      const name = options[optionIndex]?.name;
+      handleSubmit(name);
    };
 
    return (
@@ -57,7 +77,7 @@ function PresentationClientDetailPage() {
                               }}
                               color={optionIndex === index ? "red" : "white"}
                            />
-                           <span className={cx("label")}>{option.value}</span>
+                           <span className={cx("label")}>{option.name}</span>
                         </div>
                      );
                   })}
@@ -65,7 +85,7 @@ function PresentationClientDetailPage() {
                <Button title={"Submit"} rounded basicBlue big w100 onClick={handleSubmitAnswer} />
             </div>
          ) : (
-            <h1 className={cx("success-message")}>Please wating host change slide</h1>
+            <h1 className={cx("success-message")}>{message}</h1>
          )}
       </div>
    );
