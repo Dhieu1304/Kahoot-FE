@@ -4,14 +4,17 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyles from "./components/GlobalStyles/GlobalStyles";
-import { AuthProvider } from "./providers/auth/provider";
+import { AuthProvider } from "./providers/auth";
+import { SocketContext, socket } from "./providers/socket";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
    // <React.StrictMode>
    <GlobalStyles>
       <AuthProvider>
-         <App />
+         <SocketContext.Provider value={socket}>
+            <App />
+         </SocketContext.Provider>
       </AuthProvider>
    </GlobalStyles>
    // </React.StrictMode>
