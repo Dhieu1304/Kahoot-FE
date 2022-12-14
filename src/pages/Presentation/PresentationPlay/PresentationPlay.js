@@ -22,6 +22,8 @@ function PresentationPlayPlay() {
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
 
+   console.log("presentationId: ", presentationId);
+
    const presentationDetailStore = usePresentationDetailStore();
 
    const navigate = useNavigate();
@@ -49,16 +51,7 @@ function PresentationPlayPlay() {
          // map data to show chart
          console.log("PRESENTATION_EVENT.NEW_DATA", data);
       });
-      const loadData = async () => {
-         const id = 1;
-         await presentationDetailStore.method.loadPresentationDetail(id);
 
-         const resultData = presentationDetailStore.state.slides(
-            presentationDetailStore.state.currentSlideIndex
-         );
-         setResult(resultData);
-      };
-      loadData();
       document.body.requestFullscreen();
 
       return () => {

@@ -125,7 +125,7 @@ function Header() {
                className={cx("btn")}
                leftIcon={<FontAwesomeIcon icon={faPlay} />}
                onClick={() => {
-                  const presentationId = 1; //presentationDetailStore.state.presentation?.id;
+                  const presentationId = presentationDetailStore.state.presentation?.id;
                   const slideId = 1; // presentationDetailStore.state.currentSlide?.id;
                   navigate(`/presentation/${presentationId}/${slideId}`);
                }}

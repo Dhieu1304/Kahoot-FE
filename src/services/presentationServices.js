@@ -72,6 +72,11 @@ const getAllSlidesByPresentationId = async (id) => {
       const res = await axiosClient.get(`/presentation/${id}/all-slide`);
 
       console.log("res: ", res);
+      console.log("res.data: ", res.data);
+      console.log(
+         "camelcaseKeys(res.data, { deep: true }): ",
+         camelcaseKeys(res.data, { deep: true })
+      );
 
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
