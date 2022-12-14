@@ -15,6 +15,7 @@ const cx = classNames.bind(styles);
 
 function PresentationPlayPlay() {
    const [result, setResult] = useState([]);
+   const [countOnl, setCountOnl] = useState(0);
    const socket = useContext(SocketContext);
    const params = useParams();
    const id = params.id;
@@ -41,6 +42,13 @@ function PresentationPlayPlay() {
       socket.on(SOCKET_EVENT.SUCCESS, (message) => {
          console.log(message);
       });
+      socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
+         setCountOnl(countOnl);
+      });
+      socket.on(PRESENTATION_EVENT.NEW_DATA, (data) => {
+         // map data to show chart
+         console.log("PRESENTATION_EVENT.NEW_DATA", data);
+      });
       const loadData = async () => {
          // const id = 1;
          await presentationDetailStore.method.loadPresentationDetail(id);
@@ -56,6 +64,7 @@ function PresentationPlayPlay() {
             socket.off(arrSocketEvent[i]);
          }
          socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
+         socket.off(PRESENTATION_EVENT.COUNT_ONL);
       };
    }, []);
 
