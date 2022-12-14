@@ -101,15 +101,23 @@ function PresentationDetailProvider({ children }) {
          dispatch(actions.setSlides(newSlides));
       },
 
-      save: async (index) => {
+      changePresentation: (presentation) => {
+         dispatch(actions.setPresentation(presentation));
+      },
+
+      save: async () => {
          dispatch(actions.fetchApi());
-         const result = await presentationServices.updateSlides(
+
+         const resultPresentation = await presentationServices.savePresentation(state.presentation);
+         const resultSlide = await presentationServices.updateSlides(
             state.presentation.id,
             state.slides
          );
 
-         if (result) {
-            const presentation = await presentationServices.getPresentationById(id);
+         if (resultPresentation && resultSlide) {
+            const presentation = await presentationServices.getPresentationById(
+               state.presentation?.id
+            );
 
             if (presentation) {
                dispatch(actions.setPresentation(presentation));

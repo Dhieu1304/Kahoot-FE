@@ -101,6 +101,38 @@ const getResultBySlideId = async (slideId) => {
    return slide;
 };
 
+const savePresentation = async (presentation) => {
+   const { id: presentationId, name, presentationTheme, presentationType } = presentation;
+
+   const type = presentationType.name || "PUBLIC";
+   const themeId = presentationTheme.id;
+
+   console.log("[SERVICE][PRESENTATION] savePresentation: ", {
+      presentationId,
+      name,
+      type,
+      themeId
+   });
+
+   // console.log("presentation: ", presentation);
+   try {
+      const res = await axiosClient.put(`/presentation/edit`, {
+         presentationId,
+         name,
+         type,
+         themeId
+      });
+
+      console.log("res: ", res);
+
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+};
+
 const updateSlides = async (presentation_id, slides) => {
    const data = slides.map((slide) => {
       const {
@@ -146,5 +178,6 @@ export default {
    getSlideById,
    getResultBySlideId,
    createPresentation,
-   updateSlides
+   updateSlides,
+   savePresentation
 };

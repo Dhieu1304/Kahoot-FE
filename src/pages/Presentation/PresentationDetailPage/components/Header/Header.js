@@ -38,6 +38,9 @@ function Header() {
 
    const navigate = useNavigate();
 
+   // console.log("PresentationDetailPage header: ", presentationDetailStore.state.presentation);
+   // console.log("PresentationDetailPage header: ", presentationDetailStore.state.presentation.name);
+
    return (
       <div className={cx("container")}>
          <div className={cx("left")}>
@@ -61,6 +64,16 @@ function Header() {
                leftIcon={<FontAwesomeIcon icon={faPlus} />}
                onClick={() => {
                   setShowCreateSlideModal(true);
+               }}
+            />
+            <input
+               value={presentationDetailStore.state.presentation?.name}
+               onChange={(e) => {
+                  const val = e.target.value;
+
+                  const presentation = { ...presentationDetailStore.state?.presentation };
+                  presentation.name = val;
+                  presentationDetailStore.method.changePresentation(presentation);
                }}
             />
          </div>
