@@ -1,16 +1,12 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import Input from "../../../../../components/Input";
 import Modal from "../../../../../components/Modal";
 
 import { AuthContext } from "../../../../../providers/auth";
-import { useGroupListContext } from "../../../../../providers/groupList";
-import {
-   createGroup,
-   getGroupsByJoinedUserId,
-   getGroupsByOwnUserId
-} from "../../../../../services/groupService";
+import presentationServices from "../../../../../services/presentationServices";
 
 function CreatePresentationModal({ show, setShow }) {
    const {
@@ -28,32 +24,21 @@ function CreatePresentationModal({ show, setShow }) {
    });
 
    const authContext = useContext(AuthContext);
-   const groupListContext = useGroupListContext();
 
-   const location = useLocation();
    const navigate = useNavigate();
 
-   const handleSubmitCreateModal = async (data) => {
-      const group = await createGroup(data.name, authContext.user.id);
+   const handleSubmitCreateModal = async ({ name }) => {
+      const presentation = await presentationServices.createPresentation(name);
 
-      if (group) {
-         if (location.pathname === "/group/owned") {
-            const groupsData = await getGroupsByOwnUserId(authContext.user.id);
-            groupListContext?.method?.setGroups(groupsData);
-         } else {
-            navigate("/group/owned");
-         }
-      }
+      if (presentation) navigate(`/presentation/${presentation.id}/1/edit`);
 
       resetField("name");
       setShow(false);
-
-      toast("Create group success");
    };
 
    return (
       <Modal
-         title={"Create group"}
+         title={"Create Presentation"}
          show={show}
          setShow={setShow}
          haveSubmitBtn

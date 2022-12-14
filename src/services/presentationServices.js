@@ -19,6 +19,27 @@ const getOwnedPresentations = async () => {
    }
 };
 
+const createPresentation = async (name, type = "PUBLIC") => {
+   console.log("[SERVICE][PRESENTATION] createPresentation: ", {
+      name,
+      type
+   });
+
+   try {
+      const res = await axiosClient.post(`/presentation/create`, {
+         name,
+         type
+      });
+      // console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      // return false;
+   }
+};
+
 const getPresentationById = async (id) => {
    console.log("[SERVICE][PRESENTATION] getPresentationById: ", { id });
    const presentation = await mockApi.mockPresentation;
@@ -62,5 +83,6 @@ export default {
    getOwnedPresentations,
    getPresentationById,
    getSlideById,
-   getResultBySlideId
+   getResultBySlideId,
+   createPresentation
 };

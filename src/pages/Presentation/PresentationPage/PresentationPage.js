@@ -1,17 +1,20 @@
 import { faAdd, faPlayCircle, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import Button from "../../../components/Button";
+import CreatePresentationModal from "./components/CreateGroupModal/CreatePresentationModal";
 import styles from "./PresentationPage.module.scss";
 import { usePresentationStore } from "./store";
 const cx = classNames.bind(styles);
 
 function PresentationPage() {
    const presentationStore = usePresentationStore();
+
+   const [showCreateModal, setShowCreateModal] = useState(false);
 
    useEffect(() => {
       const loadData = async () => {
@@ -22,6 +25,7 @@ function PresentationPage() {
    }, []);
 
    console.log("presentationStore.state.presentations: ", presentationStore.state.presentations);
+   console.log("showCreateModal: ", showCreateModal);
 
    return (
       <div className={cx("wrapper")}>
@@ -37,6 +41,9 @@ function PresentationPage() {
                         rounded
                         className={cx("btn")}
                         leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
+                        onClick={() => {
+                           setShowCreateModal(true);
+                        }}
                      />
                      <Button
                         title="Remove all"
@@ -87,6 +94,8 @@ function PresentationPage() {
                </tbody>
             </Table>
          </Container>
+
+         <CreatePresentationModal show={showCreateModal} setShow={setShowCreateModal} />
       </div>
    );
 }

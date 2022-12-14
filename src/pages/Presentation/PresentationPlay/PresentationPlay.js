@@ -11,7 +11,7 @@ import { usePresentationDetailStore } from "../PresentationDetailPage/store";
 import Button from "../../../components/Button";
 const cx = classNames.bind(styles);
 
-function PresentationPlay() {
+function PresentationPlayPlay() {
    const [result, setResult] = useState([]);
    const params = useParams();
 
@@ -80,4 +80,4 @@ function PresentationPlay() {
    );
 }
 
-export default PresentationPlay;
+export default PresentationPlayPlay;
