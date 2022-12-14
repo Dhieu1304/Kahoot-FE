@@ -2,7 +2,8 @@ import { useContext } from "react";
 import Context from "./Context";
 
 const usePresentationStore = () => {
-   return useContext(Context);
+   const { state, method } = useContext(Context);
+   return { state, method };
 };
 
 export { usePresentationStore };

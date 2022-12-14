@@ -26,6 +26,7 @@ import PresentationDetailProvider from "./pages/Presentation/PresentationDetailP
 import PresentationPlay from "./pages/Presentation/PresentationPlay";
 import PresentationClientPage from "./pages/PresentationClient/PresentationClientPage";
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
+import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -113,7 +114,9 @@ function App() {
                            path=""
                            element={
                               <DefaultLayout>
-                                 <PresentationPage />
+                                 <PresentationProvider>
+                                    <PresentationPage />
+                                 </PresentationProvider>
                               </DefaultLayout>
                            }
                         />

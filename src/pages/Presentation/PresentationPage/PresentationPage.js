@@ -1,10 +1,24 @@
 import classNames from "classnames/bind";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import styles from "./PresentationPage.module.scss";
+import { usePresentationStore } from "./store";
 const cx = classNames.bind(styles);
 
 function PresentationPage() {
+   const presentationStore = usePresentationStore();
+
+   useEffect(() => {
+      const loadData = async () => {
+         presentationStore.method.loadPresentations();
+      };
+
+      loadData();
+   }, []);
+
+   console.log("presentationStore.state.presentations: ", presentationStore.state.presentations);
+
    return (
       <div className={cx("wrapper")}>
          Hello

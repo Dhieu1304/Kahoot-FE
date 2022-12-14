@@ -39,6 +39,9 @@ function SlideArea() {
       // };
 
       // loadData();
+
+      const options = watch("options");
+
       setResult(watch("options"));
    }, [watch("options")]);
 

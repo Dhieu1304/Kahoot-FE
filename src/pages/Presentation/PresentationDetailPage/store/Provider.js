@@ -13,7 +13,9 @@ function PresentationDetailProvider({ children }) {
          console.log("loadPresentationDetail");
          dispatch(actions.fetchApi());
          const presentation = await presentationServices.getPresentationById(id);
-         // const presentation = { x: "sang" };
+
+         console.log("presentation: ", presentation);
+
          if (presentation) {
             dispatch(actions.setPresentation(presentation));
          } else {

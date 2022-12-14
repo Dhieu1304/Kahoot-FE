@@ -1,7 +1,13 @@
-import { SET_SLIDES, FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED } from "./contants";
+import {
+   SET_PRESENTATIONS,
+   FETCHING_API,
+   FETCHING_API_SUCCESS,
+   FETCHING_API_FAILED
+} from "./contants";
 
 const initState = {
-   slides: [],
+   presentations: [],
+   count: 0,
 
    isLoading: false,
    isFetchApiError: false,
@@ -10,21 +16,14 @@ const initState = {
 
 function reducer(state, action) {
    switch (action.type) {
-      case SET_SLIDES:
+      case SET_PRESENTATIONS:
          return {
             ...state,
             isLoading: false,
             isFetchApiError: false,
             fetchApiError: "",
-            slides: action.payload
-         };
-
-      case SET_USER_FAILED:
-         return {
-            ...state,
-            isLoading: false,
-            isFetchApiError: true,
-            fetchApiError: action.payload
+            presentations: action.payload.presentations,
+            count: action.payload.count
          };
 
       case FETCHING_API:
