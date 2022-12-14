@@ -5,19 +5,21 @@ import presentationServices from "../../../services/presentationServices";
 
 import classNames from "classnames/bind";
 import styles from "./PresentationPlay.module.scss";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { usePresentationDetailStore } from "../PresentationDetailPage/store";
 import Button from "../../../components/Button";
+import { SocketContext } from "../../../providers/socket";
+import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 const cx = classNames.bind(styles);
 
 function PresentationPlayPlay() {
    const [result, setResult] = useState([]);
    const params = useParams();
-
+   const socket = useContext(SocketContext);
    const id = params.id;
-
-   console.log("id: ", id);
+   const location = useLocation();
+   const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
 
    const presentationDetailStore = usePresentationDetailStore();
 
@@ -26,6 +28,19 @@ function PresentationPlayPlay() {
    console.log("RENDER PLAY");
 
    useEffect(() => {
+      socket.emit(PRESENTATION_EVENT.PRESENT, {
+         presentation_id: presentationId,
+         ordinal_slide_number: id
+      });
+      socket.on(SOCKET_EVENT.ERROR, (message) => {
+         console.error(message);
+      });
+      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
+         console.info(message);
+      });
+      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
+         console.log(message);
+      });
       const loadData = async () => {
          // const id = 1;
          await presentationDetailStore.method.loadPresentationDetail(id);
@@ -34,6 +49,14 @@ function PresentationPlayPlay() {
       };
       loadData();
       document.body.requestFullscreen();
+
+      return () => {
+         const arrSocketEvent = Object.values(SOCKET_EVENT);
+         for (let i = 0; i < arrSocketEvent.length; i++) {
+            socket.off(arrSocketEvent[i]);
+         }
+         socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
+      };
    }, []);
 
    return (
