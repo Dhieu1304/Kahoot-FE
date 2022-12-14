@@ -146,9 +146,7 @@ function App() {
                      </Route>
                      <Route path={"/presentation-client"}>
                         <Route path={""} element={<PresentationClientPage />} />
-                        <Route path={":presetationId"}>
-                           <Route path={":slideId"} element={<PresentationClientDetailPage />} />
-                        </Route>
+                        <Route path={":code"} element={<PresentationClientDetailPage />}></Route>
                      </Route>
                   </Routes>
                ) : (

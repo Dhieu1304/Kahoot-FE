@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import images from "../../../assets/images";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
@@ -26,10 +26,9 @@ function PresentationClientPage() {
 
    const navigate = useNavigate();
 
-   const handleSubmitCode = async (data) => {
-      const presentationId = 1;
-      const slideId = 1;
-      navigate(`/presentation-client/${presentationId}/${slideId}`);
+   const handleSubmitCode = async ({ code }) => {
+      console.log("code: ", code);
+      navigate(`/presentation-client/${code}`);
       // navigate(`/presentation-client/sang`);
    };
 
