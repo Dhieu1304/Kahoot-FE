@@ -27,6 +27,8 @@ function PresentationDetailProvider({ children }) {
 
          const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
+         console.log("slides: ", slides);
+
          if (slides) {
             if (slides.length === 0) {
                const slide = {
@@ -162,7 +164,7 @@ function PresentationDetailProvider({ children }) {
 
          const newSlides = [...state.slides];
 
-         newSlides.splice(state.currentSlideIndex, 0, newSlide);
+         newSlides.splice(state.slides.length, 0, newSlide);
 
          dispatch(actions.setSlides(newSlides));
       }

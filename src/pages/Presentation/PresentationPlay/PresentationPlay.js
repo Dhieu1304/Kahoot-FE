@@ -56,16 +56,6 @@ function PresentationPlayPlay() {
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
          console.log(data);
       });
-      const loadData = async () => {
-         const id = 1;
-         await presentationDetailStore.method.loadPresentationDetail(id);
-
-         const resultData = presentationDetailStore.state.slides(
-            presentationDetailStore.state.currentSlideIndex
-         );
-         setResult(resultData);
-      };
-      loadData();
       document.body.requestFullscreen();
 
       return () => {
@@ -75,6 +65,8 @@ function PresentationPlayPlay() {
          }
          socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
+         socket.off(PRESENTATION_EVENT.SLIDE);
+         socket.off(PRESENTATION_EVENT.NEW_DATA);
       };
    }, [id]);
 
