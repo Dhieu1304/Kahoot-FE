@@ -33,6 +33,10 @@ function PresentationPlayPlay() {
          presentation_id: presentationId,
          ordinal_slide_number: id
       });
+      socket.emit(PRESENTATION_EVENT.NEW_DATA, {
+         presentation_id: presentationId,
+         ordinal_slide_number: id
+      });
       socket.on(SOCKET_EVENT.ERROR, (message) => {
          console.error(message);
       });

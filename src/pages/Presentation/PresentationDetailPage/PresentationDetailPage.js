@@ -10,20 +10,21 @@ import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import CurrentSlide from "./components/CurrentSlide";
+import { useLocation } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
 
+   const location = useLocation();
+
    useEffect(() => {
       const loadData = async () => {
-         const id = 1;
-         await presentationDetailStore.method.loadPresentationDetail(id);
+         const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
+         await presentationDetailStore.method.loadPresentationDetail(presentationId);
       };
       loadData();
    }, []);
-
-   // console.log("presentationDetailStore.state: ", presentationDetailStore.state);
 
    return (
       presentationDetailStore.state?.isInit && (

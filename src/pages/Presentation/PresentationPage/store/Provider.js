@@ -18,7 +18,7 @@ function PresentationProvider({ children }) {
             const { presentations, count } = data;
 
             console.log("{ presentations, count }: ", { presentations, count });
-            dispatch(actions.SET_PRESENTATIONS({ presentations, count }));
+            dispatch(actions.setPresentations({ presentations, count }));
          } else {
             const message = "Error API";
             dispatch(actions.fetchApiFailed(message));

@@ -7,9 +7,11 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 const SlideItem = ({ slide, index, presentationId }) => {
+   console.log("slide: ", slide);
+
    const presentationDetailStore = usePresentationDetailStore();
 
-   const to = `/presentation/${presentationId}/${slide.id}/edit`;
+   const to = `/presentation/${presentationId}/${slide?.ordinalSlideNumber}/edit`;
 
    const resolved = useResolvedPath(to);
    const active = useMatch({ path: resolved.pathname, end: false });

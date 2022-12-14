@@ -25,25 +25,9 @@ const cx = classNames.bind(styles);
 function SlideArea() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   const { watch } = useFormContext();
-
    const [result, setResult] = useState([]);
 
-   useEffect(() => {
-      // const loadData = async () => {
-      //    const resultData = await presentationServices.getResultBySlideId(
-      //       presentationDetailStore.state.currentSlide?.id
-      //    );
-
-      //    setResult(resultData);
-      // };
-
-      // loadData();
-
-      const options = watch("options");
-
-      setResult(watch("options"));
-   }, [watch("options")]);
+   const currentIndex = presentationDetailStore.state.currentSlideIndex;
 
    return (
       <div className={cx("wrapper")}>
@@ -54,12 +38,14 @@ function SlideArea() {
                and use the code
                <span className={cx("infor-label")}>11 22 44</span>
             </h1>
-            <h1 className={cx("title")}>{watch("title")}</h1>
+            <h1 className={cx("title")}>
+               {presentationDetailStore.state.slides[currentIndex]?.title}
+            </h1>
             <div className={cx("chart-area")}>
                <ResponsiveContainer>
                   <BarChart width={600} height={250} data={result}>
                      <XAxis dataKey="name" />
-                     <YAxis dataKey="count" domain={[0, "dataMax + 1000"]} />
+                     <YAxis dataKey="count" domain={[0, "dataMax + 10"]} />
                      <Bar dataKey="count" fill="#8884d8">
                         <LabelList dataKey="count" position="top" />
                      </Bar>
