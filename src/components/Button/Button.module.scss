@@ -42,6 +42,23 @@
    }
 }
 
+.basicRed {
+   color: var(--white-color);
+   background-color: var(--basic-red-color);
+   overflow: hidden;
+
+   &::after {
+      background-color: var(--basic-red-color-after);
+   }
+
+   &:hover {
+      background-color: var(--basic-red-color-hover);
+      &::after {
+         transform: translateY(50%);
+      }
+   }
+}
+
 .basicTeal {
    color: var(--white-color);
    background-color: var(--basic-teal-color);

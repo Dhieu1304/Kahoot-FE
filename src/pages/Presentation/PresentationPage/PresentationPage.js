@@ -1,7 +1,11 @@
+import { faAdd, faPlayCircle, faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useEffect } from "react";
+import { Container, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+import Button from "../../../components/Button";
 import styles from "./PresentationPage.module.scss";
 import { usePresentationStore } from "./store";
 const cx = classNames.bind(styles);
@@ -21,37 +25,68 @@ function PresentationPage() {
 
    return (
       <div className={cx("wrapper")}>
-         Hello
-         <div className={cx("container")}>
-            <ul>
-               <li>
-                  <Link to={"1/1/edit"} title="1">
-                     1
-                  </Link>
-               </li>
-
-               <li>
-                  <Link to={"1/2/edit"} title="2">
-                     2
-                  </Link>
-               </li>
-               <li>
-                  <Link to={"1/3/edit"} title="3">
-                     3
-                  </Link>
-               </li>
-               <li>
-                  <Link to={"1/4/edit"} title="4">
-                     4
-                  </Link>
-               </li>
-               <li>
-                  <Link to={"1/5/edit"} title="5">
-                     5
-                  </Link>
-               </li>
-            </ul>
-         </div>
+         <Container>
+            <div className={cx("header")}>
+               <h1 className={cx("title")}>My Presentations</h1>
+               <div>
+                  <div className={cx("btn-group")}>
+                     <Button
+                        title="Create"
+                        basicBlue
+                        big
+                        rounded
+                        className={cx("btn")}
+                        leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
+                     />
+                     <Button
+                        title="Remove all"
+                        basicRed
+                        big
+                        rounded
+                        className={cx("btn")}
+                        leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
+                     />
+                  </div>
+               </div>
+            </div>
+            <Table responsive className={cx("table")}>
+               <thead>
+                  <tr className={cx("tr")}>
+                     <th className={cx("th")}>Name</th>
+                     <th className={cx("th")}>Owner</th>
+                     <th className={cx("th")}>Code</th>
+                     <th className={cx("th")}>Created</th>
+                     <th className={cx("th")}>Members</th>
+                     <th className={cx("th")}>Actions</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {presentationStore.state.presentations?.map((presentation, index) => {
+                     return (
+                        <tr className={cx("tr")} key={index}>
+                           <td className={cx("td", "presentation-infor-col")}>
+                              <Link to={`${presentation.id}/1`}>
+                                 <FontAwesomeIcon
+                                    icon={faPlayCircle}
+                                    size="1x"
+                                    className={cx("icon")}
+                                 />
+                              </Link>
+                              <Link to={`${presentation.id}/1/edit`}>{presentation?.name}</Link>
+                           </td>
+                           <td className={cx("td")}>Me</td>
+                           <td className={cx("td")}>{presentation?.code}</td>
+                           <td className={cx("td")}>{presentation?.created}</td>
+                           <td className={cx("td")}>
+                              {presentation?.presentation_members?.length}
+                           </td>
+                           <td className={cx("td")}></td>
+                        </tr>
+                     );
+                  })}
+               </tbody>
+            </Table>
+         </Container>
       </div>
    );
 }
