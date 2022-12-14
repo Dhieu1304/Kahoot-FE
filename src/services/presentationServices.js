@@ -167,6 +167,29 @@ const updateSlides = async (presentation_id, slides) => {
    }
 };
 
+const deletePresentationById = async (presentation_id) => {
+   console.log("[SERVICE][PRESENTATION] deletePresentationById: ", { presentation_id });
+   // const slide = await mockApi.mockSlide;
+
+   //    console.log("presentation", presentation);
+
+   try {
+      const res = await axiosClient.delete(`/presentation/delete`, {
+         presentation_id
+      });
+
+      console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+
+   // return slide;
+};
+
 export default {
    getOwnedPresentations,
    getAllSlidesByPresentationId,
@@ -175,5 +198,6 @@ export default {
    getResultBySlideId,
    createPresentation,
    updateSlides,
-   savePresentation
+   savePresentation,
+   deletePresentationById
 };

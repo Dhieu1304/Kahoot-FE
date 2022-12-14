@@ -4,6 +4,7 @@ import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
 import mockApi from "../../../../mockApi";
+import { async } from "q";
 
 function PresentationDetailProvider({ children }) {
    const [state, dispatch] = useReducer(reducer, initState);
@@ -133,10 +134,35 @@ function PresentationDetailProvider({ children }) {
          }
       },
 
-      delete: () => {
+      deleteSlide: () => {
          const newSlides = [...state.slides];
 
          newSlides.splice(state.currentSlideIndex, 1);
+
+         dispatch(actions.setSlides(newSlides));
+      },
+
+      deletePresentation: async () => {
+         // const newSlides = [...state.slides];
+         // newSlides.splice(state.currentSlideIndex, 1);
+         // dispatch(actions.setSlides(newSlides));
+         const result = await presentationServices.deletePresentationById(state.presentation.id);
+      },
+
+      addSlide: () => {
+         const maxSlideId = -1;
+
+         const newSlide = {
+            title: "New Slide",
+            body: [],
+            ordinalSlideNumber: state.currentSlideIndex,
+            presentationId: state.presentation.id,
+            slideTypeId: 1
+         };
+
+         const newSlides = [...state.slides];
+
+         newSlides.splice(state.currentSlideIndex, 0, newSlide);
 
          dispatch(actions.setSlides(newSlides));
       }
