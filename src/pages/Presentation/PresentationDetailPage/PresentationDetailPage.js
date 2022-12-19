@@ -40,7 +40,8 @@ function PresentationDetailPage() {
 
    useEffect(() => {
       const index = presentationDetailStore.state.currentSlideIndex;
-      const slide = presentationDetailStore.state.slides?.[index];
+      const slides = [...presentationDetailStore.state.slides];
+      const slide = slides?.[index];
 
       configSlideForm.setValue("title", slide?.title);
       configSlideForm.setValue("body", slide?.body);

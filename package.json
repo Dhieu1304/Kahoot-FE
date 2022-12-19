@@ -16,6 +16,7 @@
       "camelcase-keys": "^8.0.2",
       "classnames": "^2.3.2",
       "date-and-time": "^2.4.1",
+      "debounce": "^1.2.1",
       "dotenv": "^16.0.3",
       "firebase": "^9.14.0",
       "font-awesome": "^4.7.0",
@@ -36,6 +37,7 @@
       "sass": "^1.56.1",
       "snakecase-keys": "^5.4.4",
       "socket.io-client": "^4.5.4",
+      "use-deep-compare-effect": "^1.8.1",
       "web-vitals": "^2.1.4"
    },
    "scripts": {

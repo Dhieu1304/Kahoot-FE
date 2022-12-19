@@ -6,16 +6,20 @@ import { usePresentationDetailStore } from "../../store";
 import Button from "../../../../../components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faX } from "@fortawesome/free-solid-svg-icons";
-import { Controller, useFieldArray, useForm, useFormContext } from "react-hook-form";
+import { Controller, useFieldArray, useForm, useFormContext, useWatch } from "react-hook-form";
 import { slideTypes } from "../../config";
+import useDebounce from "../../../../../hooks/useDebounce";
+import { useCallback, useEffect, useState } from "react";
+import AutoSave from "../../../../../components/AutoSave";
+import { debounce } from "debounce";
+import useDeepCompareEffect from "use-deep-compare-effect";
 const cx = classNames.bind(styles);
 
 function SlideConfig() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   const currentIndex = presentationDetailStore.state.currentSlideIndex;
-
    const configSlideForm = useFormContext();
+   const [isFirstLoading, setIsFirstLoading] = useState(true);
 
    const {
       register,
@@ -23,13 +27,60 @@ function SlideConfig() {
       watch,
       control,
       resetField,
-      formState: { errors }
+      formState: { errors, isDirty }
    } = configSlideForm;
 
    const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
       control,
       name: "body"
    });
+
+   // const debouncedSave = useCallback(
+   //    debounce(async () => {
+   //       console.log("Auto Saving Process");
+   //       await handleSubmit(onSaving)();
+   //    }, 1000),
+   //    []
+   // );
+
+   // const watchedData = useWatch({
+   //    control: control
+   // });
+
+   // console.log("watchedData: ", watchedData);
+
+   const debouncedValue = useDebounce(
+      useWatch({
+         control: control
+      }),
+      1000
+   );
+
+   useEffect(() => {
+      console.log("Triggered");
+      if (isDirty) {
+         handleSubmit(onSaving)();
+      }
+   }, [debouncedValue]);
+
+   const onSaving = async (data) => {
+      console.log("onSaving");
+      // console.log("data: ", data);
+
+      const { title, body, slideType } = data;
+      const slideTypeId = slideType.value;
+
+      const savingData = { title, body, slideTypeId };
+
+      // const state = presentationDetailStore.state;
+      // const slides = state.slides;
+      // console.log("state: ", state);
+      // console.log("slides: ", slides);
+
+      const result = await presentationDetailStore.method.save(savingData);
+   };
+
+   // console.log("presentationDetailStore.state.slides: ", presentationDetailStore.state.slides);
 
    return (
       <div className={cx("config-container")}>
@@ -121,6 +172,7 @@ function SlideConfig() {
                </div>
             </div>
          </div>
+         {/* {presentationDetailStore.state.slides.length > 0 && <AutoSave onSubmit={onSaving} />} */}
       </div>
    );
 }

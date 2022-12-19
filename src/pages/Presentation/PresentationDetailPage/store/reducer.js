@@ -14,7 +14,7 @@ const initState = {
    presentation: {},
    slides: [],
 
-   currentSlideIndex: 0,
+   currentSlideIndex: -1,
    currentSlide: {},
 
    isInit: false,

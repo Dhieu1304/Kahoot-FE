@@ -125,8 +125,10 @@ const savePresentation = async (presentation) => {
 };
 
 const updateSlides = async (presentation_id, slides) => {
+   console.log("[SERVICE] updateSlides");
+
    const data = slides.map((slide, index) => {
-      const ordinal_slide_number = index;
+      const ordinal_slide_number = index + 1;
       const { slideTypeId: slide_type_id, title, body } = slide;
 
       return {
@@ -137,11 +139,16 @@ const updateSlides = async (presentation_id, slides) => {
       };
    });
 
+   console.log("data: ", data);
+
    try {
       const res = await axiosClient.put(`/slide/update`, {
          presentation_id,
          data
       });
+
+      console.log("res: ", res);
+
       return res.status;
    } catch (e) {
       console.error(e.message);

@@ -1,5 +1,5 @@
 export const slideTypes = [
-   { value: 0, label: "Multi choice" },
-   { value: 1, label: "Heading" },
-   { value: 2, label: "Paragrapth" }
+   { value: 1, label: "Multi choice" },
+   { value: 2, label: "Heading" },
+   { value: 3, label: "Paragrapth" }
 ];

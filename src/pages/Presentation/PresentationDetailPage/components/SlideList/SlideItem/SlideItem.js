@@ -2,14 +2,16 @@ import { usePresentationDetailStore } from "../../../store";
 
 import classNames from "classnames/bind";
 import styles from "./SlideItem.module.scss";
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { Link, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
 const SlideItem = ({ slide, index, presentationId }) => {
+   const navigate = useNavigate();
    const presentationDetailStore = usePresentationDetailStore();
 
    const to = `/presentation/${presentationId}/${slide?.ordinalSlideNumber}/edit`;
@@ -18,6 +20,12 @@ const SlideItem = ({ slide, index, presentationId }) => {
    const active = useMatch({ path: resolved.pathname, end: false });
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
+
+   useEffect(() => {
+      const currentIndex = presentationDetailStore.state.currentSlideIndex;
+      if (currentIndex === -1) navigate(`/presentation/${presentationId}/1/edit`);
+      if (active && index !== currentIndex) presentationDetailStore.method.setCurrentSlide(index);
+   }, [presentationDetailStore.state.currentSlideIndex]);
 
    return (
       <Link

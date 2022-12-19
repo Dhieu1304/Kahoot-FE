@@ -142,33 +142,76 @@ function PresentationDetailProvider({ children }) {
          dispatch(actions.setPresentation(presentation));
       },
 
-      save: async () => {
+      save: async (slide) => {
          dispatch(actions.fetchApi());
 
-         const resultPresentation = await presentationServices.savePresentation(state.presentation);
+         const oldSlides = [...state.slides];
+         const newSlides = oldSlides.map((cur) => cur);
+         const index = state.currentSlideIndex;
+
+         console.log("index: ", index);
+         newSlides.splice(index, 1, slide);
+
+         console.log("oldSlides: ", oldSlides);
+         console.log("newSlides: ", newSlides);
+
+         console.log("state: ", state);
+
+         // const resultPresentation = await presentationServices.savePresentation(state.presentation);
+
          const resultSlide = await presentationServices.updateSlides(
             state.presentation.id,
-            state.slides
+            newSlides
          );
 
-         if (resultPresentation && resultSlide) {
-            const presentation = await presentationServices.getPresentationById(
-               state.presentation?.id
-            );
+         // console.log("resultSlide: ", resultSlide);
 
-            if (presentation) {
-               dispatch(actions.setPresentation(presentation));
-            } else {
-               const message = "Error API";
-               dispatch(actions.fetchApiFailed(message));
-               return presentation;
-            }
-         } else {
-            const message = "Error API";
-            dispatch(actions.fetchApiFailed(message));
-            return false;
-         }
+         // if (resultPresentation && resultSlide) {
+         // if (resultPresentation && resultSlide) {
+         //    const presentation = await presentationServices.getPresentationById(
+         //       state.presentation?.id
+         //    );
+
+         //    if (presentation) {
+         //       dispatch(actions.setPresentation(presentation));
+         //    } else {
+         //       const message = "Error API";
+         //       dispatch(actions.fetchApiFailed(message));
+         //       return presentation;
+         //    }
+         // } else {
+         //    const message = "Error API";
+         //    dispatch(actions.fetchApiFailed(message));
+         //    return false;
+         // }
       },
+      // save: async () => {
+      //    dispatch(actions.fetchApi());
+
+      //    const resultPresentation = await presentationServices.savePresentation(state.presentation);
+      //    const resultSlide = await presentationServices.updateSlides(
+      //       state.presentation.id,
+      //       state.slides
+      //    );
+
+      //    if (resultPresentation && resultSlide) {
+      //       const presentation = await presentationServices.getPresentationById(
+      //          state.presentation?.id
+      //       );
+
+      //       if (presentation) {
+      //          dispatch(actions.setPresentation(presentation));
+      //       } else {
+      //          const message = "Error API";
+      //          dispatch(actions.fetchApiFailed(message));
+      //          return presentation;
+      //       }
+      //    } else {
+      //       const message = "Error API";
+      //       dispatch(actions.fetchApiFailed(message));
+      //       return false;
+      //    }
+      // },
 
       deleteSlide: () => {
          const newSlides = [...state.slides];
