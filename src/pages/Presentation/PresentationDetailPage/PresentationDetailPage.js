@@ -35,44 +35,41 @@ function PresentationDetailPage() {
       loadData();
    }, []);
 
-   const isDesktop = useMediaQuery({ minWidth: 992 });
-   const isMobile = useMediaQuery({ maxWidth: 767 });
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
-   const isNotMobile = useMediaQuery({ minWidth: 768 });
 
    return (
       presentationDetailStore.state?.isInit && (
          <div className={cx("wrapper")}>
             <Header />
 
-            {isDesktop ? (
+            {!isNotDesktop ? (
                <div className={cx("container")}>
                   <SlideList />
 
-                  <Container>
-                     <Row>
-                        <Col lg={8} md={12}>
-                           <SlideArea />
-                        </Col>
-                        <Col lg={4} md={0}>
-                           <SlideConfig />
-                        </Col>
-                     </Row>
-                  </Container>
+                  <div className={cx("slide-current")}>
+                     <div className={cx("slide-area-wrapper")}>
+                        <SlideArea />
+                     </div>
+                     <div className={cx("slide-config-wrapper")}>
+                        <SlideConfig />
+                     </div>
+                  </div>
                </div>
             ) : presentationDetailStore.state.isShowSlideListWhenNotDesktop ? (
                <SlideList />
             ) : (
-               <Container>
-                  <Row>
-                     <Col lg={8} md={12}>
-                        <SlideArea />
-                     </Col>
-                     <Col lg={4} md={0}>
-                        <SlideConfig />
-                     </Col>
-                  </Row>
-               </Container>
+               <div
+                  className={cx("slide-current", {
+                     isNotDesktop
+                  })}
+               >
+                  <div className={cx("slide-area-wrapper")}>
+                     <SlideArea />
+                  </div>
+                  <div className={cx("slide-config-wrapper")}>
+                     <SlideConfig />
+                  </div>
+               </div>
             )}
          </div>
       )

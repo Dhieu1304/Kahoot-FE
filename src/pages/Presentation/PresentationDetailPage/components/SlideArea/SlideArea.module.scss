@@ -1,30 +1,25 @@
-.wrapper {
-   height: 100%;
-   display: flex;
-   flex-direction: row;
-   justify-content: flex-start;
-   align-items: flex-start;
-   background-color: white;
+.container {
+   width: 100%;
+   padding-top: 60%;
+   background-color: var(--black-color);
+   position: relative;
 
-   padding: 1rem;
+   .board {
+      // padding: 1rem;
 
-   .container {
-      padding: 1rem;
+      // display: flex;
+      // flex-direction: column;
+      // justify-content: flex-start;
+      // align-items: center;
+      // position: relative;
 
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
 
-      background-color: var(--black-color);
-
-      // $width-value: 70rem;
-      // width: $width-value;
-      // height: calc($width-value * 75 / 100);
-
-      max-width: 100%;
       overflow-x: hidden;
+      width: 100%;
+      height: 100%;
 
       .infor {
          color: var(--white-color);

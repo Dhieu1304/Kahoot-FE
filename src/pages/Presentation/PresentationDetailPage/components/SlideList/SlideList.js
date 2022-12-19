@@ -3,9 +3,6 @@ import SlideItem from "./SlideItem";
 
 import classNames from "classnames/bind";
 import styles from "./SlideList.module.scss";
-import { useMediaQuery } from "react-responsive";
-import { Offcanvas } from "react-bootstrap";
-import { useState } from "react";
 
 const cx = classNames.bind(styles);
 

@@ -30,8 +30,8 @@ function SlideArea() {
    const currentIndex = presentationDetailStore.state.currentSlideIndex;
 
    return (
-      <div className={cx("wrapper")}>
-         <div className={cx("container")}>
+      <div className={cx("container")}>
+         <div className={cx("board")}>
             <h1 className={cx("infor")}>
                Go to
                <span className={cx("infor-label")}>{process.env.REACT_APP_BE_URL + "game"}</span>

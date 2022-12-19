@@ -8,6 +8,7 @@
    padding: 1rem;
 
    .left {
+      margin-left: 1rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -45,8 +46,8 @@
 
       background-color: rgb(23, 26, 29);
 
-      width: 200px;
-      height: 125px;
+      width: 160px;
+      height: 100px;
 
       .title {
          font-size: 2rem;
@@ -59,6 +60,24 @@
 
 .wrapper.active {
    background-color: rgba(25, 108, 255, 0.2);
+   position: relative;
+
+   .container {
+      border: 2px solid rgb(25, 108, 255);
+      border-radius: 5px;
+   }
+
+   &::before {
+      position: absolute;
+      top: 0;
+      left: 5px;
+      display: block;
+      content: "";
+      background-color: rgb(25, 108, 255);
+      height: 100%;
+      width: 5px;
+      transform: scaleY(60%);
+   }
 }
 
 .wrapper.isNotDesktop {
