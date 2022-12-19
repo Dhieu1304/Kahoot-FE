@@ -6,7 +6,8 @@ import {
    SET_CURRENT_SLIDE,
    SET_CURRENT_SLIDE_INDEX,
    SET_SLIDES,
-   CHANGE_SLIDE
+   CHANGE_SLIDE,
+   SET_SHOW_SLIDE_LIST
 } from "./contants";
 
 const initState = {
@@ -19,7 +20,9 @@ const initState = {
    isInit: false,
    isLoading: false,
    isFetchApiError: false,
-   fetchApiError: ""
+   fetchApiError: "",
+
+   isShowSlideListWhenNotDesktop: false
 };
 
 function reducer(state, action) {
@@ -94,6 +97,12 @@ function reducer(state, action) {
             isLoading: false,
             isFetchApiError: true,
             fetchApiError: action.payload
+         };
+
+      case SET_SHOW_SLIDE_LIST:
+         return {
+            ...state,
+            isShowSlideListWhenNotDesktop: action.payload
          };
 
       default:

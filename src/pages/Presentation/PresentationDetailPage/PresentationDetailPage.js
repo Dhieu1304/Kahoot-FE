@@ -9,15 +9,24 @@ import styles from "./PresentationDetailPage.module.scss";
 import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import CurrentSlide from "./components/CurrentSlide";
 import { useLocation } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+import { Col, Container, Row } from "react-bootstrap";
 const cx = classNames.bind(styles);
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   const location = useLocation();
+   const configSlideForm = useForm({
+      defaultValues: {
+         title: "",
+         body: [],
+         description: ""
+      }
+   });
 
+   // LoadData for presentation detail
+   const location = useLocation();
    useEffect(() => {
       const loadData = async () => {
          const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
@@ -26,21 +35,45 @@ function PresentationDetailPage() {
       loadData();
    }, []);
 
-   // console.log("PresentationDetailPage re-render: ", presentationDetailStore.state.presentation);
-   // console.log("PresentationDetailPage re-render: ", presentationDetailStore.state.slides);
+   const isDesktop = useMediaQuery({ minWidth: 992 });
+   const isMobile = useMediaQuery({ maxWidth: 767 });
+   const isNotDesktop = useMediaQuery({ maxWidth: 992 });
+   const isNotMobile = useMediaQuery({ minWidth: 768 });
 
    return (
       presentationDetailStore.state?.isInit && (
          <div className={cx("wrapper")}>
             <Header />
 
-            <div className={cx("container")}>
-               <SlideList />
+            {isDesktop ? (
+               <div className={cx("container")}>
+                  <SlideList />
 
-               <div className={cx("slide-current")}>
-                  <CurrentSlide />
+                  <Container>
+                     <Row>
+                        <Col lg={8} md={12}>
+                           <SlideArea />
+                        </Col>
+                        <Col lg={4} md={0}>
+                           <SlideConfig />
+                        </Col>
+                     </Row>
+                  </Container>
                </div>
-            </div>
+            ) : presentationDetailStore.state.isShowSlideListWhenNotDesktop ? (
+               <SlideList />
+            ) : (
+               <Container>
+                  <Row>
+                     <Col lg={8} md={12}>
+                        <SlideArea />
+                     </Col>
+                     <Col lg={4} md={0}>
+                        <SlideConfig />
+                     </Col>
+                  </Row>
+               </Container>
+            )}
          </div>
       )
    );

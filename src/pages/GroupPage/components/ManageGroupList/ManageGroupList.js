@@ -70,6 +70,8 @@ function ManageGroupList() {
       }
    };
 
+   // console.log("ManageGroupList re-render");
+
    return (
       <div className={cx("container")}>
          <TopBar showSideBar={showSideBar} setShowSideBar={setShowSideBar} />

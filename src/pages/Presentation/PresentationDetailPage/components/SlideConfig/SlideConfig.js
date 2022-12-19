@@ -18,7 +18,7 @@ function SlideConfig() {
          <div>
             <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Your question?</span>
-               <input
+               {/* <input
                   value={presentationDetailStore.state?.slides[currentIndex]?.title}
                   onChange={(e) => {
                      const val = e.target.value;
@@ -26,7 +26,7 @@ function SlideConfig() {
                      slide.title = val;
                      presentationDetailStore.method.changeSlides(slide);
                   }}
-               />
+               /> */}
             </div>
 
             <div className={cx("config-container-content")}>
@@ -36,7 +36,7 @@ function SlideConfig() {
                      (option, index) => {
                         return (
                            <div key={index} className={cx("option-item")}>
-                              <input
+                              {/* <input
                                  value={option.name}
                                  placeholder={`option ${index + 1}`}
                                  onChange={(e) => {
@@ -48,7 +48,7 @@ function SlideConfig() {
                                     slide.body[index].name = val;
                                     presentationDetailStore.method.changeSlides(slide);
                                  }}
-                              />
+                              /> */}
                               <FontAwesomeIcon
                                  icon={faX}
                                  className={cx("remove-icon")}

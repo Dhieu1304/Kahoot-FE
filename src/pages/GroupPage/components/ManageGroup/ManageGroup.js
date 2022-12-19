@@ -91,6 +91,8 @@ function ManageGroup() {
 
    const columns = useMemo(() => COLUMNS, []);
 
+   // console.log("ManageGroup re-render");
+
    return (
       <div className={cx("container")}>
          <TopBar groupId={id} showSideBar={showSideBar} setShowSideBar={setShowSideBar} />

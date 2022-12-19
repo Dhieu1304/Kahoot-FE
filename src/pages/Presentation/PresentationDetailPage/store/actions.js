@@ -6,7 +6,8 @@ import {
    SET_CURRENT_SLIDE,
    SET_CURRENT_SLIDE_INDEX,
    SET_SLIDES,
-   CHANGE_SLIDE
+   CHANGE_SLIDE,
+   SET_SHOW_SLIDE_LIST
 } from "./contants";
 
 export const setPresentation = (payload) => ({
@@ -49,6 +50,11 @@ export const fetchApiFailed = (payload) => ({
    payload
 });
 
+export const setShowSlideList = (payload) => ({
+   type: SET_SHOW_SLIDE_LIST,
+   payload
+});
+
 export default {
    changeSlide,
    setSlides,
@@ -57,5 +63,6 @@ export default {
    setCurrentSlideIndex,
    fetchApi,
    fetchApiSuccess,
-   fetchApiFailed
+   fetchApiFailed,
+   setShowSlideList
 };

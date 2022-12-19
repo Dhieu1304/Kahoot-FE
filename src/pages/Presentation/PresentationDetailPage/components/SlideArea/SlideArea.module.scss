@@ -19,9 +19,12 @@
 
       background-color: var(--black-color);
 
-      $width-value: 70rem;
-      width: $width-value;
-      height: calc($width-value * 75 / 100);
+      // $width-value: 70rem;
+      // width: $width-value;
+      // height: calc($width-value * 75 / 100);
+
+      max-width: 100%;
+      overflow-x: hidden;
 
       .infor {
          color: var(--white-color);
@@ -71,4 +74,3 @@
       }
    }
 }
-// rgba(25, 108, 255, 0.2)

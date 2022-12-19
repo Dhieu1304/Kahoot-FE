@@ -1,11 +1,14 @@
 .config-container {
-   width: 100%;
+   width: 200px;
    height: 100%;
    margin-left: 4rem;
    padding: 2rem;
    padding-right: 4rem;
 
-   overflow: scroll;
+   min-width: 200px;
+
+   overflow-y: scroll;
+   overflow-x: hidden;
 
    .config-container-content {
       width: 100%;

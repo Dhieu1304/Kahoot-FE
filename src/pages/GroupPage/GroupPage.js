@@ -67,6 +67,8 @@ function GroupPage() {
       setRecentGroupsList(newRecentGroupsList);
    };
 
+   // console.log("GroupPage re-render");
+
    return (
       <div className={cx("wrapper")}>
          <SideBar

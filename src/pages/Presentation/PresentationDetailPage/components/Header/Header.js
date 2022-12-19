@@ -136,7 +136,8 @@ function Header() {
                   navigate(`/presentation/${presentationId}/${slideId}`);
                }}
             />
-            {/* <Button
+
+            <Button
                title={"Themes"}
                basicTeal
                big
@@ -144,9 +145,9 @@ function Header() {
                className={cx("btn")}
                leftIcon={<FontAwesomeIcon icon={faDroplet} />}
                onClick={() => {
-                  setShowChangeThemModal(true);
+                  presentationDetailStore.method.showSlideList();
                }}
-            /> */}
+            />
             <Button
                title={"Save"}
                basicYellow

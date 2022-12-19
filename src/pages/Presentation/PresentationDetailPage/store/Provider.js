@@ -201,6 +201,10 @@ function PresentationDetailProvider({ children }) {
          newSlides.splice(state.slides.length, 0, newSlide);
 
          dispatch(actions.setSlides(newSlides));
+      },
+
+      showSlideList: () => {
+         dispatch(actions.setShowSlideList(!state.isShowSlideListWhenNotDesktop));
       }
    };
 
