@@ -37,14 +37,18 @@
    }
 }
 
-.slide-current.isNotDesktop {
-   flex-direction: column;
-   padding: 0 2rem;
-   .slide-area-wrapper {
-      flex: 0;
-   }
+.wrapper.isNotDesktop {
+   height: calc(100% + 100px);
+   .slide-current {
+      flex-direction: column;
+      padding: 0 2rem;
+      overflow-y: scroll;
+      .slide-area-wrapper {
+         flex: 0;
+      }
 
-   .slide-config-wrapper {
-      flex: 0;
+      .slide-config-wrapper {
+         flex: 0;
+      }
    }
 }

@@ -44,7 +44,7 @@ const Input = forwardRef(
             </div>
             {error && (
                <span className={cx("error")}>
-                  {label} {error.message}
+                  {label} {error?.message}
                </span>
             )}
          </div>

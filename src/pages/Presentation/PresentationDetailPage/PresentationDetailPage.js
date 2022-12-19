@@ -12,16 +12,19 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { Col, Container, Row } from "react-bootstrap";
+import { slideTypes } from "./config";
 const cx = classNames.bind(styles);
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
 
    const configSlideForm = useForm({
+      mode: "onBlur",
       defaultValues: {
          title: "",
          body: [],
-         description: ""
+         description: "",
+         slideType: slideTypes[0]
       }
    });
 
@@ -35,42 +38,57 @@ function PresentationDetailPage() {
       loadData();
    }, []);
 
+   useEffect(() => {
+      const index = presentationDetailStore.state.currentSlideIndex;
+      const slide = presentationDetailStore.state.slides?.[index];
+
+      configSlideForm.setValue("title", slide?.title);
+      configSlideForm.setValue("body", slide?.body);
+      configSlideForm.setValue("description", slide?.description);
+   }, [presentationDetailStore.state.slides, presentationDetailStore.state.currentSlideIndex]);
+
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
+
+   // console.log("===========================================");
+   // console.log("title: ", configSlideForm.watch("title"));
+   // console.log("body: ", configSlideForm.watch("body"));
+   // console.log("description: ", configSlideForm.watch("description"));
+   // console.log("slideType: ", configSlideForm.watch("slideType"));
+   // console.log("===========================================");
 
    return (
       presentationDetailStore.state?.isInit && (
-         <div className={cx("wrapper")}>
+         <div
+            className={cx("wrapper", {
+               isNotDesktop
+            })}
+         >
             <Header />
 
-            {!isNotDesktop ? (
-               <div className={cx("container")}>
-                  <SlideList />
+            <FormProvider {...configSlideForm}>
+               {!isNotDesktop ? (
+                  <div className={cx("container")}>
+                     <SlideList />
 
-                  <div className={cx("slide-current")}>
-                     <div className={cx("slide-area-wrapper")}>
-                        <SlideArea />
+                     <div className={cx("slide-current")}>
+                        <div className={cx("slide-area-wrapper")}>
+                           <SlideArea />
+                        </div>
+                        <div className={cx("slide-config-wrapper")}>
+                           <SlideConfig />
+                        </div>
                      </div>
+                  </div>
+               ) : presentationDetailStore.state.isShowSlideListWhenNotDesktop ? (
+                  <SlideList />
+               ) : (
+                  <div className={cx("slide-current")}>
                      <div className={cx("slide-config-wrapper")}>
                         <SlideConfig />
                      </div>
                   </div>
-               </div>
-            ) : presentationDetailStore.state.isShowSlideListWhenNotDesktop ? (
-               <SlideList />
-            ) : (
-               <div
-                  className={cx("slide-current", {
-                     isNotDesktop
-                  })}
-               >
-                  <div className={cx("slide-area-wrapper")}>
-                     <SlideArea />
-                  </div>
-                  <div className={cx("slide-config-wrapper")}>
-                     <SlideConfig />
-                  </div>
-               </div>
-            )}
+               )}
+            </FormProvider>
          </div>
       )
    );

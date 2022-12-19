@@ -1,7 +1,7 @@
 .config-container {
    width: 100%;
    height: 100%;
-   margin-left: 4rem;
+
    padding: 2rem;
    padding-right: 4rem;
 
@@ -20,6 +20,11 @@
       .config-label {
          font-weight: var(--font-weight-big);
          margin-bottom: 1rem;
+      }
+
+      .select-type {
+         width: 100%;
+         text-align: left;
       }
    }
    .option-list {
@@ -41,6 +46,13 @@
    .option-add-wrapper {
       margin: 0 auto;
       width: 100%;
-      // display: flex;
+      display: flex;
+      // justify-self: stretch;
+      justify-content: center;
+
+      .btn {
+         flex: 1;
+         width: 100%;
+      }
    }
 }

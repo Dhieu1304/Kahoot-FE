@@ -135,7 +135,7 @@ function PresentationPage() {
                            <input
                               type={"checkbox"}
                               checked={isSelectAll}
-                              onChange={handleSelectedAll}
+                              onClick={handleSelectedAll}
                               className={cx("checkbox")}
                            />
                         </th>
@@ -162,7 +162,7 @@ function PresentationPage() {
                                  <input
                                     type={"checkbox"}
                                     checked={isChecked}
-                                    onChange={() => handleSelected(presentation.id, isChecked)}
+                                    onClick={() => handleSelected(presentation.id, isChecked)}
                                     className={cx("checkbox")}
                                  />
                               </td>
