@@ -2,17 +2,16 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-import Input from "../../../../../components/Input";
-import Modal from "../../../../../components/Modal";
+import Input from "../../../../components/Input";
+import Modal from "../../../../components/Modal";
 
-import { AuthContext } from "../../../../../providers/auth";
-import presentationServices from "../../../../../services/presentationServices";
+import { AuthContext } from "../../../../providers/auth";
+import presentationServices from "../../../../services/presentationServices";
 
-function CreatePresentationModal({ show, setShow }) {
+function useContext({ show, setShow }) {
    const {
       register,
       handleSubmit,
-      watch,
       resetField,
       formState: { errors }
    } = useForm({
@@ -22,8 +21,6 @@ function CreatePresentationModal({ show, setShow }) {
       },
       criteriaMode: "all"
    });
-
-   const authContext = useContext(AuthContext);
 
    const navigate = useNavigate();
 
@@ -59,4 +56,4 @@ function CreatePresentationModal({ show, setShow }) {
    );
 }
 
-export default CreatePresentationModal;
+export default useContext;

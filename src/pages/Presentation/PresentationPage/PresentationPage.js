@@ -1,53 +1,55 @@
-import {
-   faAdd,
-   faEdit,
-   faEllipsis,
-   faEllipsisVertical,
-   faL,
-   faPlayCircle,
-   faX
-} from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
-import { Container, Dropdown, ListGroup, Table } from "react-bootstrap";
-import { useMediaQuery } from "react-responsive";
+import { ListGroup, Pagination, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Select from "react-select";
+import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
 
 import Button from "../../../components/Button";
-import CreatePresentationModal from "./components/CreateGroupModal/CreatePresentationModal";
+import CreatePresentationModal from "./components/CreatePresentationModal";
 import styles from "./PresentationPage.module.scss";
 import { usePresentationStore } from "./store";
-import CustomToggleDropdownBtn from "../../../components/CustomToggleDropdownBtn";
 import ActionMenu from "./components/ActionMenu";
+
+import { limitOptions, selectOptions } from "./config";
+
 const cx = classNames.bind(styles);
 
 function PresentationPage() {
    const presentationStore = usePresentationStore();
 
+   // show/hide modal state
    const [showCreateModal, setShowCreateModal] = useState(false);
+   const [showRenameModal, setShowRenameModal] = useState(false);
+   const [currentPresentationRowId, setCurrentPresentationRowId] = useState(false);
 
+   // filter state
    const [isSelectAll, setIsSelectAll] = useState(false);
    const [selectedRowIds, setSelectedRowIds] = useState([]);
 
+   const [selectedOption, setSelectedOption] = useState(selectOptions[0]);
+   const [limit, setLimit] = useState(null);
+
+   // responsive
    const isDesktop = useMediaQuery({ minWidth: 992 });
-   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
    const isMobile = useMediaQuery({ maxWidth: 767 });
    const isNotMobile = useMediaQuery({ minWidth: 768 });
 
    useEffect(() => {
+      // load data
       const loadData = async () => {
          presentationStore.method.loadPresentations();
       };
-
       loadData();
    }, []);
 
-   // console.log("presentationStore.state.presentations: ", presentationStore.state.presentations);
-   // console.log("selectedRowIds: ", selectedRowIds);
-
+   // handle when select all rows
    const handleSelectedAll = () => {
+      // if isSelectAll === true => clear setSelectedRowIds;
+      // else checked all rows
       if (isSelectAll) {
          setSelectedRowIds([]);
       } else {
@@ -62,7 +64,9 @@ function PresentationPage() {
       setIsSelectAll((prev) => !prev);
    };
 
+   // handle when select 1 row
    const handleSelected = (id, isChecked) => {
+      // handle checked row
       setSelectedRowIds((prev) => {
          const newSelectedRowIds = [...prev];
          if (isChecked) {
@@ -73,17 +77,23 @@ function PresentationPage() {
          }
          return [...newSelectedRowIds];
       });
+
+      // If current row is checked => after clicking this row, clear selectAll checkbox
       if (isChecked) {
          setIsSelectAll(false);
       }
    };
 
    return (
-      <div className={cx("wrapper")}>
+      <div
+         className={cx("wrapper", {
+            isMobile
+         })}
+      >
          <div className={cx("container")}>
             <div className={cx("header")}>
                <h1 className={cx("title")}>My Presentations</h1>
-               <div>
+               <div className={cx("nav")}>
                   <div className={cx("btn-group")}>
                      <Button
                         title="Create"
@@ -95,6 +105,23 @@ function PresentationPage() {
                         onClick={() => {
                            setShowCreateModal(true);
                         }}
+                     />
+                  </div>
+                  <div className={cx("filters")}>
+                     <Select
+                        defaultValue={limit}
+                        placeholder="limit"
+                        onChange={setLimit}
+                        options={limitOptions}
+                        className={cx("limit")}
+                        isSearchable={false}
+                     />
+                     <Select
+                        defaultValue={selectedOption}
+                        onChange={setSelectedOption}
+                        options={selectOptions}
+                        className={cx("select")}
+                        isSearchable={false}
                      />
                   </div>
                </div>
@@ -109,6 +136,7 @@ function PresentationPage() {
                               type={"checkbox"}
                               checked={isSelectAll}
                               onClick={handleSelectedAll}
+                              className={cx("checkbox")}
                            />
                         </th>
                         <th className={cx("th")}>id</th>
@@ -122,6 +150,7 @@ function PresentationPage() {
                               <th className={cx("th")}>Created</th>
                            </>
                         )}
+                        <th className={cx("th")}></th>
                      </tr>
                   </thead>
                   <tbody>
@@ -134,18 +163,23 @@ function PresentationPage() {
                                     type={"checkbox"}
                                     checked={isChecked}
                                     onClick={() => handleSelected(presentation.id, isChecked)}
+                                    className={cx("checkbox")}
                                  />
                               </td>
                               <td className={cx("td")}>{presentation?.id}</td>
-                              <td className={cx("td", "presentation-infor-col")}>
-                                 <Link to={`${presentation.id}/1`}>
-                                    <FontAwesomeIcon
-                                       icon={faPlayCircle}
-                                       size="1x"
-                                       className={cx("icon")}
-                                    />
-                                 </Link>
-                                 <Link to={`${presentation.id}/1/edit`}>{presentation?.name}</Link>
+                              <td className={cx("td")}>
+                                 <div className={cx("presentation-infor-cell")}>
+                                    <Link to={`${presentation.id}/1`}>
+                                       <FontAwesomeIcon
+                                          icon={faPlayCircle}
+                                          size="1x"
+                                          className={cx("icon")}
+                                       />
+                                    </Link>
+                                    <Link to={`${presentation.id}/1/edit`}>
+                                       {presentation?.name}
+                                    </Link>
+                                 </div>
                               </td>
                               <td className={cx("td")}>{presentation?.code}</td>
                               <td className={cx("td")}>Me</td>
@@ -159,7 +193,6 @@ function PresentationPage() {
                                        )}
                                     </td>
                                     <td className={cx("td")}>
-                                       {" "}
                                        {dateFormat.format(
                                           new Date(presentation?.updatedAt),
                                           "DD/MM/YYYY HH:mm"
@@ -201,6 +234,25 @@ function PresentationPage() {
                   })}
                </ListGroup>
             )}
+            {/* <div className={cx("footer")}>
+               <Pagination size="lg" className="justify-content-end">
+                  <Pagination.First />
+                  <Pagination.Prev />
+                  <Pagination.Item>{1}</Pagination.Item>
+                  <Pagination.Ellipsis />
+
+                  <Pagination.Item>{10}</Pagination.Item>
+                  <Pagination.Item>{11}</Pagination.Item>
+                  <Pagination.Item active>{12}</Pagination.Item>
+                  <Pagination.Item>{13}</Pagination.Item>
+                  <Pagination.Item disabled>{14}</Pagination.Item>
+
+                  <Pagination.Ellipsis />
+                  <Pagination.Item>{20}</Pagination.Item>
+                  <Pagination.Next />
+                  <Pagination.Last />
+               </Pagination>
+            </div> */}
          </div>
 
          <CreatePresentationModal show={showCreateModal} setShow={setShowCreateModal} />
