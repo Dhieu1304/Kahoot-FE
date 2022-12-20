@@ -1,32 +1,100 @@
 .container {
    display: flex;
-   justify-content: space-between;
-   align-items: center;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
 
-   padding: 10px 40px;
+   padding: 10px 10px;
 
    width: 100%;
    overflow-x: hidden;
 
-   .left {
+   .top {
+      width: 100%;
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
-      .btn {
-         margin-right: 10px;
-         margin-top: 5px;
-         margin-bottom: 5px;
+
+      .left {
+         display: flex;
+         justify-content: flex-start;
+         align-items: center;
+         .icon {
+            padding: 2rem;
+         }
+         .infor {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: baseline;
+            // max-width: 100px;
+            // overflow: hidden;
+
+            .name {
+               width: 100%;
+               font-weight: 800;
+               font-size: 1.6rem;
+               color: var(--black-color);
+
+               text-overflow: ellipsis;
+               white-space: nowrap;
+               overflow: hidden;
+            }
+            .owner {
+               width: 100%;
+               font-weight: 600;
+               font-size: 1.2rem;
+               color: rgba(0, 0, 0, 0.4);
+
+               text-overflow: ellipsis;
+               white-space: nowrap;
+               overflow: hidden;
+            }
+         }
+      }
+
+      .right {
+         display: flex;
+         justify-content: flex-end;
+         align-items: center;
+         .btn {
+            margin-left: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+         }
+
+         .save-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-right: 1rem;
+
+            .saved-icon {
+               margin-right: 1rem;
+               color: rgb(19, 213, 194);
+            }
+            .loading-icon {
+               margin-right: 1rem;
+               color: aqua;
+               transform: translateY(-25%);
+            }
+         }
       }
    }
 
-   .right {
+   .bottom {
+      width: 100%;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
-      .btn {
-         margin-left: 10px;
-         margin-top: 5px;
-         margin-bottom: 5px;
+
+      .left {
+         .btn {
+            margin-left: 2rem;
+         }
+      }
+
+      .right {
       }
    }
 }

@@ -56,7 +56,7 @@ function PresentationDetailProvider({ children }) {
             dispatch(actions.fetchApiFailed(message));
          }
 
-         return presentation;
+         return { presentation, slides, currentSlideIndex: state.currentSlideIndex };
       },
 
       loadPresentationDetailReturnSlides: async (id) => {

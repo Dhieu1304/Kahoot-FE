@@ -72,11 +72,6 @@ function SlideConfig() {
 
       const savingData = { title, body, slideTypeId };
 
-      // const state = presentationDetailStore.state;
-      // const slides = state.slides;
-      // console.log("state: ", state);
-      // console.log("slides: ", slides);
-
       const result = await presentationDetailStore.method.save(savingData);
    };
 

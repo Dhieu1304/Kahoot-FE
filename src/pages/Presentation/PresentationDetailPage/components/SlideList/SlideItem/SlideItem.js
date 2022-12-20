@@ -14,7 +14,8 @@ const SlideItem = ({ slide, index, presentationId }) => {
    const navigate = useNavigate();
    const presentationDetailStore = usePresentationDetailStore();
 
-   const to = `/presentation/${presentationId}/${slide?.ordinalSlideNumber}/edit`;
+   // const to = `/presentation/${presentationId}/${slide?.ordinalSlideNumber}/edit`;
+   const to = `/presentation/${presentationId}/${index + 1}/edit`;
 
    const resolved = useResolvedPath(to);
    const active = useMatch({ path: resolved.pathname, end: false });
@@ -34,7 +35,7 @@ const SlideItem = ({ slide, index, presentationId }) => {
          onClick={() => presentationDetailStore.method.setCurrentSlide(index)}
       >
          <div className={cx("left")}>
-            <span className={cx("index")}>{index}</span>
+            <span className={cx("index")}>{index + 1}</span>
             <div className={cx("icon-wrapper")}>
                <FontAwesomeIcon size="1x" icon={faGripVertical} className={cx("icon")} />
             </div>

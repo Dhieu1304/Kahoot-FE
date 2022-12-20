@@ -21,6 +21,7 @@ const initState = {
    isLoading: false,
    isFetchApiError: false,
    fetchApiError: "",
+   isSaving: true,
 
    isShowSlideListWhenNotDesktop: false
 };
