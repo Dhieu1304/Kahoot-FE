@@ -7,7 +7,9 @@ import {
    SET_CURRENT_SLIDE_INDEX,
    SET_SLIDES,
    CHANGE_SLIDE,
-   SET_SHOW_SLIDE_LIST
+   SET_SHOW_SLIDE_LIST,
+   SET_SHOW_CREATE_NEW_SLIDE_MODAL,
+   SET_SHOW_CHANGE_THEME_MODAL
 } from "./contants";
 
 export const setPresentation = (payload) => ({
@@ -55,6 +57,16 @@ export const setShowSlideList = (payload) => ({
    payload
 });
 
+export const setShowCreateNewSlideModal = (payload) => ({
+   type: SET_SHOW_CREATE_NEW_SLIDE_MODAL,
+   payload
+});
+
+export const setShowChangeThemeModal = (payload) => ({
+   type: SET_SHOW_CHANGE_THEME_MODAL,
+   payload
+});
+
 export default {
    changeSlide,
    setSlides,
@@ -64,5 +76,8 @@ export default {
    fetchApi,
    fetchApiSuccess,
    fetchApiFailed,
-   setShowSlideList
+   setShowSlideList,
+
+   setShowCreateNewSlideModal,
+   setShowChangeThemeModal
 };

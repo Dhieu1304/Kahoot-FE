@@ -52,3 +52,25 @@
       }
    }
 }
+
+.choice-theme-group {
+   .item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .label {
+         margin-left: 10px;
+      }
+   }
+}
+
+.choice-slide-group {
+   .item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .label {
+         margin-left: 10px;
+      }
+   }
+}

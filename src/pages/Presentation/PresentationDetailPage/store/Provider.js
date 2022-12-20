@@ -248,6 +248,14 @@ function PresentationDetailProvider({ children }) {
 
       showSlideList: () => {
          dispatch(actions.setShowSlideList(!state.isShowSlideListWhenNotDesktop));
+      },
+
+      setShowCreateNewSlideModal: (value) => {
+         dispatch(actions.setShowCreateNewSlideModal(value));
+      },
+
+      setShowChangeThemeModal: (value) => {
+         dispatch(actions.setShowChangeThemeModal(value));
       }
    };
 

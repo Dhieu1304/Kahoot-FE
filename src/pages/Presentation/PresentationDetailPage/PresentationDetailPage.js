@@ -13,6 +13,7 @@ import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { Col, Container, Row } from "react-bootstrap";
 import { slideTypes } from "./config";
+import Modal from "../../../components/Modal";
 const cx = classNames.bind(styles);
 
 function PresentationDetailPage() {
@@ -92,6 +93,46 @@ function PresentationDetailPage() {
          >
             <FormProvider {...configPresentationForm}>
                <Header />
+
+               <Modal
+                  title={"Create Slide"}
+                  show={presentationDetailStore.state.showCreateNewSlideModal}
+                  setShow={presentationDetailStore.method.setShowCreateNewSlideModal}
+               >
+                  <div className={cx("choice-slide-group")}>
+                     <div className={cx("item")}>
+                        <input type="radio" value="MULTI" name="type" />
+                        <span className={cx("label")}>Muti choices</span>
+                     </div>
+                     {/* <div className={cx("item")}>
+               <input type="radio" value="SLIDE" name="type" />
+               <span className={cx("label")}>Slide</span>
+            </div>
+            <div className={cx("item")}>
+               <input type="radio" value="QUIZ" name="type" />
+               <span className={cx("label")}>Quiz</span>
+            </div> */}
+                  </div>
+               </Modal>
+
+               <Modal
+                  title={"Change theme"}
+                  show={presentationDetailStore.state.showChangeThemeModal}
+                  setShow={presentationDetailStore.method.setShowChangeThemeModal}
+                  haveSubmitBtn
+                  submitBtnTitle={"Create"}
+               >
+                  <div className={cx("choice-theme-group")}>
+                     <div className={cx("item")}>
+                        <input type="radio" value="DARK" name="theme" />
+                        <span className={cx("label")}>Dark</span>
+                     </div>
+                     <div className={cx("item")}>
+                        <input type="radio" value="LIGHT" name="theme" />
+                        <span className={cx("label")}>Light</span>
+                     </div>
+                  </div>
+               </Modal>
             </FormProvider>
 
             <FormProvider {...configSlideForm}>

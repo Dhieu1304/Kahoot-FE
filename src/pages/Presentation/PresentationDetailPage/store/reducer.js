@@ -7,7 +7,9 @@ import {
    SET_CURRENT_SLIDE_INDEX,
    SET_SLIDES,
    CHANGE_SLIDE,
-   SET_SHOW_SLIDE_LIST
+   SET_SHOW_SLIDE_LIST,
+   SET_SHOW_CREATE_NEW_SLIDE_MODAL,
+   SET_SHOW_CHANGE_THEME_MODAL
 } from "./contants";
 
 const initState = {
@@ -23,7 +25,10 @@ const initState = {
    fetchApiError: "",
    isSaving: true,
 
-   isShowSlideListWhenNotDesktop: false
+   isShowSlideListWhenNotDesktop: false,
+
+   showCreateNewSlideModal: false,
+   showChangeThemeModal: false
 };
 
 function reducer(state, action) {
@@ -104,6 +109,18 @@ function reducer(state, action) {
          return {
             ...state,
             isShowSlideListWhenNotDesktop: action.payload
+         };
+
+      case SET_SHOW_CREATE_NEW_SLIDE_MODAL:
+         return {
+            ...state,
+            showCreateNewSlideModal: action.payload
+         };
+
+      case SET_SHOW_CHANGE_THEME_MODAL:
+         return {
+            ...state,
+            showChangeThemeModal: action.payload
          };
 
       default:

@@ -1,44 +1,33 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
    faDroplet,
-   faGear,
    faPlus,
-   faUpload,
    faArrowLeft,
-   faPresentationScreen,
    faPlay,
-   faSave,
-   faRemove,
    faCheck,
-   faShare
+   faBars
 } from "@fortawesome/free-solid-svg-icons";
 
 import classNames from "classnames/bind";
 
-import styles from "./Header.module.scss";
-import Button from "../../../../../components/Button";
 import { useCallback, useContext, useEffect, useState } from "react";
-import CreateSlideModal from "../CreateSlideModal";
-import ChangeThemeModal from "../ChangeThemeModal";
+
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+import ReactLoading from "react-loading";
 
 import { usePresentationDetailStore } from "../../store";
-import Modal from "../../../../../components/Modal";
+
+import Button from "../../../../../components/Button";
 import { SocketContext } from "../../../../../providers/socket";
 import { PRESENTATION_EVENT } from "../../../../../providers/socket/socket.constant";
 import { useFormContext, useWatch } from "react-hook-form";
-import Input from "../../../../../components/Input";
+
 import useDebounce from "../../../../../hooks/useDebounce";
 import Avatar from "../../../../../components/Avatar/Avatar";
 import { AuthContext } from "../../../../../providers/auth";
-import { useMediaQuery } from "react-responsive";
-
-import ReactLoading from "react-loading";
+import styles from "./Header.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -179,7 +168,7 @@ function Header() {
                   hideTitle={isNotDesktop}
                   leftIcon={<FontAwesomeIcon icon={faDroplet} />}
                   onClick={() => {
-                     setShowChangeThemModal(true);
+                     presentationDetailStore.method.setShowChangeThemeModal(true);
                   }}
                />
 
@@ -210,7 +199,7 @@ function Header() {
                   className={cx("btn")}
                   leftIcon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={() => {
-                     setShowCreateSlideModal(true);
+                     presentationDetailStore.method.setShowCreateNewSlideModal(true);
                   }}
                />
             </div>
@@ -226,6 +215,16 @@ function Header() {
                      setShowChangeThemModal(true);
                   }}
                /> */}
+               {isNotDesktop && (
+                  <FontAwesomeIcon
+                     icon={faBars}
+                     size="1x"
+                     onClick={() => {
+                        presentationDetailStore.method.showSlideList();
+                     }}
+                     className={cx("toggle-icon")}
+                  />
+               )}
             </div>
          </div>
       </div>
