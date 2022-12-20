@@ -58,12 +58,12 @@ function Header() {
       1000
    );
 
-   useEffect(() => {
-      console.log("Triggered");
-      if (isDirty) {
-         handleSubmit(onSaving)();
-      }
-   }, [debouncedValue]);
+   // useEffect(() => {
+   //    console.log("Triggered");
+   //    if (isDirty) {
+   //       handleSubmit(onSaving)();
+   //    }
+   // }, [debouncedValue]);
 
    const onSaving = async (data) => {
       console.log("onSaving presentation");
@@ -106,6 +106,15 @@ function Header() {
                   />
                   <input className={cx("owner")} value={"Created by Ngọc Sang Trần"} readOnly />
                </div>
+
+               <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size="1x"
+                  className={cx("icon")}
+                  onClick={async () => {
+                     await presentationDetailStore.method.loadPresentationDetailReturnSlides();
+                  }}
+               />
             </div>
             <div className={cx("right")}>
                {presentationDetailStore.state.isSaving ? (

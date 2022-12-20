@@ -34,7 +34,8 @@ function PresentationDetailPage() {
          title: "",
          body: [],
          description: "",
-         slideType: slideTypes[0]
+         slideType: slideTypes[0],
+         isFetchingApi: false
       }
    });
 
@@ -46,43 +47,33 @@ function PresentationDetailPage() {
          const presentationDetail = await presentationDetailStore.method.loadPresentationDetail(
             presentationId
          );
-
-         // console.log("presentationDetail: ", presentationDetail);
       };
       loadData();
    }, []);
 
    useEffect(() => {
-      const index = presentationDetailStore.state.currentSlideIndex;
-      const slides = [...presentationDetailStore.state.slides];
-      const slide = slides?.[index];
+      if (presentationDetailStore.state.isInit) {
+         const index = presentationDetailStore.state.currentSlideIndex;
+         const slides = [...presentationDetailStore.state.slides];
+         const slide = slides?.[index];
 
-      configSlideForm.setValue("title", slide?.title || "");
-      configSlideForm.setValue("body", slide?.body || []);
-      configSlideForm.setValue("description", slide?.description || "");
+         configSlideForm.setValue("title", slide?.title);
+         configSlideForm.setValue("body", slide?.body);
+         configSlideForm.setValue("description", slide?.description);
+         configSlideForm.setValue("isFetchingApi", true);
+      }
    }, [presentationDetailStore.state.slides, presentationDetailStore.state.currentSlideIndex]);
 
-   useEffect(() => {
-      const presentation = { ...presentationDetailStore.state.presentation };
+   // useEffect(() => {
+   //    const presentation = { ...presentationDetailStore.state.presentation };
 
-      // console.log("presentation: ", presentation);
-      configPresentationForm.setValue("name", presentation?.name);
-      configPresentationForm.setValue("presentationThemeId", presentation?.presentationThemeId);
-      configPresentationForm.setValue("presentationTypeId", presentation?.presentationTypeId);
-   }, [presentationDetailStore.state.presentation]);
+   //    // console.log("presentation: ", presentation);
+   //    configPresentationForm.setValue("name", presentation?.name);
+   //    configPresentationForm.setValue("presentationThemeId", presentation?.presentationThemeId);
+   //    configPresentationForm.setValue("presentationTypeId", presentation?.presentationTypeId);
+   // }, [presentationDetailStore.state.presentation]);
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
-
-   // console.log("===========================================");
-   // console.log("title: ", configSlideForm.watch("title"));
-   // console.log("body: ", configSlideForm.watch("body"));
-   // console.log("description: ", configSlideForm.watch("description"));
-   // console.log("slideType: ", configSlideForm.watch("slideType"));
-
-   console.log("name: ", configPresentationForm.watch("name"));
-   // console.log("presentationThemeId: ", configPresentationForm.watch("presentationThemeId"));
-   // console.log("presentationTypeId: ", configPresentationForm.watch("presentationTypeId"));
-   // console.log("===========================================");
 
    return (
       presentationDetailStore.state?.isInit && (

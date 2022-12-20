@@ -63,7 +63,7 @@ const getPresentationById = async (id) => {
 };
 
 const getAllSlidesByPresentationId = async (id) => {
-   // console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
+   console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
    // const slide = await mockApi.mockSlide;
 
    //    console.log("presentation", presentation);
@@ -71,8 +71,8 @@ const getAllSlidesByPresentationId = async (id) => {
    try {
       const res = await axiosClient.get(`/presentation/${id}/all-slide`);
 
-      // console.log("res: ", res);
-      // console.log("res.data: ", res.data);
+      console.log("res: ", res);
+      console.log("res.data: ", res.data);
       // console.log(
       //    "camelcaseKeys(res.data, { deep: true }): ",
       //    camelcaseKeys(res.data, { deep: true })
@@ -147,7 +147,7 @@ const updateSlides = async (presentation_id, slides) => {
          data
       });
 
-      console.log("res: ", res);
+      console.log("success res: ", res);
 
       return res.status;
    } catch (e) {

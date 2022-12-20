@@ -164,6 +164,26 @@ function PresentationDetailProvider({ children }) {
             newSlides
          );
 
+         console.log("resultSlide: ", resultSlide);
+
+         const id = state.presentation.id;
+         console.log("Chuan bi load id: ", id);
+
+         if (resultSlide) {
+            dispatch(actions.fetchApi());
+
+            const slides = await presentationServices.getAllSlidesByPresentationId(id);
+
+            // console.log("slides: ", slides);
+
+            if (slides) {
+               dispatch(actions.setSlides(slides));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+         }
+
          // console.log("resultSlide: ", resultSlide);
 
          // if (resultPresentation && resultSlide) {

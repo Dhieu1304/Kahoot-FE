@@ -19,13 +19,14 @@ function SlideConfig() {
    const presentationDetailStore = usePresentationDetailStore();
 
    const configSlideForm = useFormContext();
-   const [isFirstLoading, setIsFirstLoading] = useState(true);
 
    const {
       register,
       handleSubmit,
       watch,
       control,
+      setValue,
+      reset,
       resetField,
       formState: { errors, isDirty }
    } = configSlideForm;
@@ -35,47 +36,46 @@ function SlideConfig() {
       name: "body"
    });
 
-   // const debouncedSave = useCallback(
-   //    debounce(async () => {
-   //       console.log("Auto Saving Process");
-   //       await handleSubmit(onSaving)();
-   //    }, 1000),
-   //    []
-   // );
-
-   // const watchedData = useWatch({
-   //    control: control
-   // });
-
-   // console.log("watchedData: ", watchedData);
+   const watchBodyNested = watch({ nest: true }).body?.map((cur) => cur.name);
 
    const debouncedValue = useDebounce(
-      useWatch({
-         control: control
-      }),
+      [watch("title"), watch("description"), watch("body"), watchBodyNested],
+
       1000
    );
-
    useEffect(() => {
-      console.log("Triggered");
+      const isXXX = watch("isFetchingApi");
+      console.log("isXXX: ", isXXX);
+      if (isXXX) {
+         // do nothing
+         setValue("isFetchingApi", false);
+         return;
+      }
+
       if (isDirty) {
          handleSubmit(onSaving)();
       }
    }, [debouncedValue]);
 
    const onSaving = async (data) => {
+      //
+
       console.log("onSaving");
-      // console.log("data: ", data);
 
       const { title, body, slideType } = data;
       const slideTypeId = slideType.value;
 
       const savingData = { title, body, slideTypeId };
 
+      // const state = presentationDetailStore.state;
+      // const slides = state.slides;
+      //
+      //
+
       const result = await presentationDetailStore.method.save(savingData);
    };
 
-   // console.log("presentationDetailStore.state.slides: ", presentationDetailStore.state.slides);
+   //
 
    return (
       <div className={cx("config-container")}>
