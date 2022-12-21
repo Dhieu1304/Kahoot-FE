@@ -21,7 +21,9 @@ function PresentationDetailEditPage() {
       showCreateSlideModal,
       setShowCreateSlideModal,
       showChangeThemeModal,
-      setShowChangeThemeModal
+      setShowChangeThemeModal,
+      showSlideListWhenNotDesktop,
+      setShowSlideListWhenNotDesktop
    } = useOutletContext();
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
@@ -58,6 +60,13 @@ function PresentationDetailEditPage() {
 
    console.log("slideType: ", configSlideForm.watch("slideType"));
 
+   const createNewSlideForm = useForm({
+      mode: "onSubmit",
+      defaultValues: {
+         slideTypeId: 1
+      }
+   });
+
    useEffect(() => {
       console.log("Change slide");
       configSlideForm.setValue("title", slide?.title);
@@ -65,6 +74,22 @@ function PresentationDetailEditPage() {
       configSlideForm.setValue("description", slide?.description);
       configSlideForm.setValue("slideType", slideTypes?.[slide?.slideTypeId - 1 || 0] || {});
    }, [slideId]);
+
+   const handleCreateNewSlide = async (data) => {
+      console.log("data: ", data);
+      const index = slide.ordinalSlideNumber + 1 - 1;
+      const title = "New slide";
+      const slideTypeId = data.slideTypeId;
+      const body = [];
+
+      const newSlide = {
+         title,
+         slideTypeId,
+         body
+      };
+
+      presentationDetailStore.method.createNewSlide(newSlide, index);
+   };
 
    return (
       <div
@@ -77,6 +102,9 @@ function PresentationDetailEditPage() {
 
             <Modal
                title={"Create Slide"}
+               haveSubmitBtn
+               submitBtnTitle={"Create"}
+               onSubmitModal={createNewSlideForm.handleSubmit(handleCreateNewSlide)}
                show={showCreateSlideModal}
                setShow={setShowCreateSlideModal}
             >
@@ -115,13 +143,13 @@ function PresentationDetailEditPage() {
                </div>
             </Modal>
          </FormProvider>
+         (
+         <FormProvider {...configSlideForm}>
+            {!isNotDesktop ? (
+               <div className={cx("container")}>
+                  <SlideList />
 
-         {slide ? (
-            <FormProvider {...configSlideForm}>
-               {!isNotDesktop ? (
-                  <div className={cx("container")}>
-                     <SlideList />
-
+                  {slide ? (
                      <div className={cx("slide-current")}>
                         <div className={cx("slide-area-wrapper")}>
                            <SlideArea />
@@ -130,20 +158,27 @@ function PresentationDetailEditPage() {
                            <SlideConfig />
                         </div>
                      </div>
-                  </div>
-               ) : presentationDetailStore.state.isShowSlideListWhenNotDesktop ? (
+                  ) : (
+                     <h1>No slides, please create new slide</h1>
+                  )}
+               </div>
+            ) : showSlideListWhenNotDesktop ? (
+               slide ? (
                   <SlideList />
                ) : (
-                  <div className={cx("slide-current")}>
-                     <div className={cx("slide-config-wrapper")}>
-                        <SlideConfig />
-                     </div>
+                  <h1>No slide</h1>
+               )
+            ) : slide ? (
+               <div className={cx("slide-current")}>
+                  <div className={cx("slide-config-wrapper")}>
+                     <SlideConfig />
                   </div>
-               )}
-            </FormProvider>
-         ) : (
-            <h1>Error link</h1>
-         )}
+               </div>
+            ) : (
+               <h1>No slide</h1>
+            )}
+         </FormProvider>
+         )
       </div>
    );
 }

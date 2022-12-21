@@ -22,6 +22,7 @@ function PresentationDetailPage() {
 
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemeModal, setShowChangeThemeModal] = useState(false);
+   const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
 
    const location = useLocation();
 
@@ -45,7 +46,9 @@ function PresentationDetailPage() {
                showCreateSlideModal,
                setShowCreateSlideModal,
                showChangeThemeModal,
-               setShowChangeThemeModal
+               setShowChangeThemeModal,
+               showSlideListWhenNotDesktop,
+               setShowSlideListWhenNotDesktop
             }}
          />
       )

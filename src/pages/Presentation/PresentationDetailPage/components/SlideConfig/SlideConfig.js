@@ -14,6 +14,7 @@ import AutoSave from "../../../../../components/AutoSave";
 import { debounce } from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import usePrevious from "../../../../../hooks/usePrevious";
+import { useParams } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function SlideConfig() {
@@ -36,6 +37,8 @@ function SlideConfig() {
       control,
       name: "body"
    });
+
+   const params = useParams();
 
    const watchBodyNested = watch({ nest: true }).body?.map((cur) => cur.name);
 
@@ -94,8 +97,12 @@ function SlideConfig() {
       // const slides = state.slides;
       //
       //
+      const slideId = params.slideId;
 
-      const result = await presentationDetailStore.method.saveSlides(newSlide);
+      console.log("slideId in saving: ", slideId);
+      const index = parseInt(slideId) - 1;
+
+      const result = await presentationDetailStore.method.saveSlides(newSlide, index);
    };
 
    //

@@ -35,7 +35,12 @@ function Header() {
    const authContext = useContext(AuthContext);
    const presentationDetailStore = usePresentationDetailStore();
 
-   const { setShowCreateSlideModal, setShowChangeThemeModal } = useOutletContext();
+   const {
+      setShowCreateSlideModal,
+      setShowChangeThemeModal,
+      showSlideListWhenNotDesktop,
+      setShowSlideListWhenNotDesktop
+   } = useOutletContext();
 
    const {
       register,
@@ -226,7 +231,7 @@ function Header() {
                      icon={faBars}
                      size="1x"
                      onClick={() => {
-                        presentationDetailStore.method.showSlideList();
+                        setShowSlideListWhenNotDesktop(!showSlideListWhenNotDesktop);
                      }}
                      className={cx("toggle-icon")}
                   />

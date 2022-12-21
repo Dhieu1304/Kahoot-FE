@@ -60,12 +60,11 @@ function PresentationDetailProvider({ children }) {
          return { presentation, slides };
       },
 
-      saveSlides: async (slide) => {
+      saveSlides: async (slide, index) => {
          dispatch(actions.fetchApi());
 
          const oldSlides = [...state.slides];
          const newSlides = oldSlides.map((cur) => cur);
-         const index = state.currentSlideIndex;
 
          console.log("index: ", index);
          newSlides.splice(index, 1, slide);
@@ -123,6 +122,47 @@ function PresentationDetailProvider({ children }) {
          //    dispatch(actions.fetchApiFailed(message));
          //    return false;
          // }
+      },
+      createNewSlide: async (slide, index) => {
+         dispatch(actions.fetchApi());
+
+         const oldSlides = [...state.slides];
+         const newSlides = oldSlides.map((cur) => cur);
+
+         console.log("index: ", index);
+         newSlides.splice(index, 0, slide);
+
+         console.log("oldSlides: ", oldSlides);
+         console.log("newSlides: ", newSlides);
+
+         console.log("state: ", state);
+
+         const resultSlide = await presentationServices.updateSlides(
+            state.presentation.id,
+            newSlides
+         );
+
+         console.log("resultSlide: ", resultSlide);
+
+         const id = state.presentation.id;
+         console.log("Chuan bi load id: ", id);
+
+         if (resultSlide) {
+            dispatch(actions.fetchApi());
+
+            const slides = await presentationServices.getAllSlidesByPresentationId(id);
+
+            console.log("slides: ", slides);
+
+            if (slides) {
+               dispatch(actions.setSlides(slides));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+         }
+
+         dispatch(actions.setCheckLoadNewData());
       }
    };
 
