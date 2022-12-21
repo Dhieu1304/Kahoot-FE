@@ -27,6 +27,7 @@ import PresentationPlay from "./pages/Presentation/PresentationPlay";
 import PresentationClientPage from "./pages/PresentationClient/PresentationClientPage";
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
 import PresentationProvider from "./pages/Presentation/PresentationPage/store";
+import PresentationDetailWrapper from "./pages/Presentation/PresentationDetailWrapper";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -120,7 +121,10 @@ function App() {
                               </DefaultLayout>
                            }
                         />
-                        <Route path=":id">
+                        <Route
+                           path=":id"
+                           element={<PresentationDetailWrapper></PresentationDetailWrapper>}
+                        >
                            <Route path=":id">
                               <Route
                                  path="edit"
