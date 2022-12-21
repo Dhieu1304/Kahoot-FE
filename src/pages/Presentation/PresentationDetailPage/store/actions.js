@@ -3,13 +3,9 @@ import {
    FETCHING_API,
    FETCHING_API_SUCCESS,
    FETCHING_API_FAILED,
-   SET_CURRENT_SLIDE,
-   SET_CURRENT_SLIDE_INDEX,
    SET_SLIDES,
-   CHANGE_SLIDE,
-   SET_SHOW_SLIDE_LIST,
-   SET_SHOW_CREATE_NEW_SLIDE_MODAL,
-   SET_SHOW_CHANGE_THEME_MODAL
+   SET_INIT,
+   CHECK_LOAD_NEW_DATA
 } from "./contants";
 
 export const setPresentation = (payload) => ({
@@ -19,21 +15,6 @@ export const setPresentation = (payload) => ({
 
 export const setSlides = (payload) => ({
    type: SET_SLIDES,
-   payload
-});
-
-export const changeSlide = (payload) => ({
-   type: CHANGE_SLIDE,
-   payload
-});
-
-export const setCurrentSlide = (payload) => ({
-   type: SET_CURRENT_SLIDE,
-   payload
-});
-
-export const setCurrentSlideIndex = (payload) => ({
-   type: SET_CURRENT_SLIDE_INDEX,
    payload
 });
 
@@ -52,32 +33,22 @@ export const fetchApiFailed = (payload) => ({
    payload
 });
 
-export const setShowSlideList = (payload) => ({
-   type: SET_SHOW_SLIDE_LIST,
+export const setInit = (payload) => ({
+   type: SET_INIT,
    payload
 });
 
-export const setShowCreateNewSlideModal = (payload) => ({
-   type: SET_SHOW_CREATE_NEW_SLIDE_MODAL,
-   payload
-});
-
-export const setShowChangeThemeModal = (payload) => ({
-   type: SET_SHOW_CHANGE_THEME_MODAL,
+export const setCheckLoadNewData = (payload) => ({
+   type: CHECK_LOAD_NEW_DATA,
    payload
 });
 
 export default {
-   changeSlide,
    setSlides,
    setPresentation,
-   setCurrentSlide,
-   setCurrentSlideIndex,
    fetchApi,
    fetchApiSuccess,
    fetchApiFailed,
-   setShowSlideList,
-
-   setShowCreateNewSlideModal,
-   setShowChangeThemeModal
+   setInit,
+   setCheckLoadNewData
 };

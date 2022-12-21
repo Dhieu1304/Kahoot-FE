@@ -3,32 +3,21 @@ import {
    FETCHING_API,
    FETCHING_API_SUCCESS,
    FETCHING_API_FAILED,
-   SET_CURRENT_SLIDE,
-   SET_CURRENT_SLIDE_INDEX,
    SET_SLIDES,
-   CHANGE_SLIDE,
-   SET_SHOW_SLIDE_LIST,
-   SET_SHOW_CREATE_NEW_SLIDE_MODAL,
-   SET_SHOW_CHANGE_THEME_MODAL
+   SET_INIT,
+   CHECK_LOAD_NEW_DATA
 } from "./contants";
 
 const initState = {
    presentation: {},
    slides: [],
 
-   currentSlideIndex: -1,
-   currentSlide: {},
-
    isInit: false,
    isLoading: false,
    isFetchApiError: false,
    fetchApiError: "",
-   isSaving: true,
 
-   isShowSlideListWhenNotDesktop: false,
-
-   showCreateNewSlideModal: false,
-   showChangeThemeModal: false
+   checkLoadNewData: true
 };
 
 function reducer(state, action) {
@@ -36,7 +25,7 @@ function reducer(state, action) {
       case SET_PRESENTATION:
          return {
             ...state,
-            isInit: true,
+
             isLoading: false,
             isFetchApiError: false,
             fetchApiError: "",
@@ -45,43 +34,14 @@ function reducer(state, action) {
       case SET_SLIDES: {
          return {
             ...state,
-            isInit: true,
+
             isLoading: false,
             isFetchApiError: false,
             fetchApiError: "",
+
             slides: action.payload
          };
       }
-
-      // case CHANGE_SLIDE: {
-      //    const slide = action.payload;
-      //    const newSlides = [...slides];
-      //    newSlides[currentSlideIndex] === slide;
-
-      //    console.log("newSlides: ");
-
-      //    return {
-      //       ...state,
-      //       slides: newSlides
-      //    };
-      // }
-      case SET_CURRENT_SLIDE:
-         return {
-            ...state,
-            isLoading: false,
-            isFetchApiError: false,
-            fetchApiError: "",
-            currentSlide: action.payload
-         };
-
-      case SET_CURRENT_SLIDE_INDEX:
-         return {
-            ...state,
-            isLoading: false,
-            isFetchApiError: false,
-            fetchApiError: "",
-            currentSlideIndex: action.payload
-         };
 
       case FETCHING_API:
          return {
@@ -105,23 +65,21 @@ function reducer(state, action) {
             fetchApiError: action.payload
          };
 
-      case SET_SHOW_SLIDE_LIST:
+      case SET_INIT:
          return {
             ...state,
-            isShowSlideListWhenNotDesktop: action.payload
+            isInit: true
          };
 
-      case SET_SHOW_CREATE_NEW_SLIDE_MODAL:
+      case CHECK_LOAD_NEW_DATA: {
+         console.log("checkLoadNewData old: ", state.checkLoadNewData);
+         const newCheckLoadNewData = !state.checkLoadNewData;
+         console.log("checkLoadNewData new: ", newCheckLoadNewData);
          return {
             ...state,
-            showCreateNewSlideModal: action.payload
+            checkLoadNewData: newCheckLoadNewData
          };
-
-      case SET_SHOW_CHANGE_THEME_MODAL:
-         return {
-            ...state,
-            showChangeThemeModal: action.payload
-         };
+      }
 
       default:
          throw new Error("Invalid action");

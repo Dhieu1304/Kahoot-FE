@@ -139,7 +139,11 @@ const updateSlides = async (presentation_id, slides) => {
       };
    });
 
-   console.log("data: ", data);
+   // console.log("data slide update: ", data);
+   console.log("data slide update co pre: ", {
+      presentation_id,
+      data
+   });
 
    try {
       const res = await axiosClient.put(`/slide/update`, {
@@ -147,7 +151,7 @@ const updateSlides = async (presentation_id, slides) => {
          data
       });
 
-      console.log("success res: ", res);
+      console.log("success res update: ", res);
 
       return res.status;
    } catch (e) {

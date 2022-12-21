@@ -135,7 +135,7 @@ function PresentationPage() {
                            <input
                               type={"checkbox"}
                               checked={isSelectAll}
-                              onClick={handleSelectedAll}
+                              onChange={handleSelectedAll}
                               className={cx("checkbox")}
                            />
                         </th>
@@ -162,7 +162,7 @@ function PresentationPage() {
                                  <input
                                     type={"checkbox"}
                                     checked={isChecked}
-                                    onClick={() => handleSelected(presentation.id, isChecked)}
+                                    onChange={() => handleSelected(presentation.id, isChecked)}
                                     className={cx("checkbox")}
                                  />
                               </td>
@@ -176,9 +176,7 @@ function PresentationPage() {
                                           className={cx("icon")}
                                        />
                                     </Link>
-                                    <Link to={`${presentation.id}/1/edit`}>
-                                       {presentation?.name}
-                                    </Link>
+                                    <Link to={`${presentation.id}/edit`}>{presentation?.name}</Link>
                                  </div>
                               </td>
                               <td className={cx("td")}>{presentation?.code}</td>
@@ -222,7 +220,8 @@ function PresentationPage() {
                                        className={cx("icon")}
                                     />
                                  </Link>
-                                 <Link to={`${presentation.id}/1/edit`}>{presentation?.name}</Link>
+
+                                 <Link to={`${presentation.id}/edit`}>{presentation?.name}</Link>
                               </div>
                               <ActionMenu id={presentation.id} />
                            </div>

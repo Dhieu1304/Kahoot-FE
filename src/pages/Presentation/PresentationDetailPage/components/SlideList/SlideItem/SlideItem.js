@@ -14,26 +14,16 @@ const SlideItem = ({ slide, index, presentationId }) => {
    const navigate = useNavigate();
    const presentationDetailStore = usePresentationDetailStore();
 
-   // const to = `/presentation/${presentationId}/${slide?.ordinalSlideNumber}/edit`;
-   const to = `/presentation/${presentationId}/${index + 1}/edit`;
+   const to = `/presentation/${presentationId}/edit/${slide?.ordinalSlideNumber}`;
+   // const to = `/presentation/${presentationId}/${index + 1}/edit`;
 
    const resolved = useResolvedPath(to);
    const active = useMatch({ path: resolved.pathname, end: false });
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
 
-   useEffect(() => {
-      const currentIndex = presentationDetailStore.state.currentSlideIndex;
-      if (currentIndex === -1) navigate(`/presentation/${presentationId}/1/edit`);
-      if (active && index !== currentIndex) presentationDetailStore.method.setCurrentSlide(index);
-   }, [presentationDetailStore.state.currentSlideIndex]);
-
    return (
-      <Link
-         to={to}
-         className={cx("wrapper", { active, isNotDesktop })}
-         onClick={() => presentationDetailStore.method.setCurrentSlide(index)}
-      >
+      <Link to={to} className={cx("wrapper", { active, isNotDesktop })}>
          <div className={cx("left")}>
             <span className={cx("index")}>{index + 1}</span>
             <div className={cx("icon-wrapper")}>

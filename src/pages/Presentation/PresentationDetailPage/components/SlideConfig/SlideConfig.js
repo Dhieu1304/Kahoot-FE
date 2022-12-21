@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import AutoSave from "../../../../../components/AutoSave";
 import { debounce } from "debounce";
 import useDeepCompareEffect from "use-deep-compare-effect";
+import usePrevious from "../../../../../hooks/usePrevious";
 const cx = classNames.bind(styles);
 
 function SlideConfig() {
@@ -38,11 +39,33 @@ function SlideConfig() {
 
    const watchBodyNested = watch({ nest: true }).body?.map((cur) => cur.name);
 
+   console.log(
+      "useW: ",
+      useWatch({
+         control: configSlideForm.control
+      })
+   );
+
    const debouncedValue = useDebounce(
-      [watch("title"), watch("description"), watch("body"), watchBodyNested],
+      // [watch("title"), watch("description"), watch("body"), watchBodyNested],
+      [
+         useWatch({
+            control: configSlideForm.control
+         }),
+         watchBodyNested
+      ],
 
       1000
    );
+
+   const xxx = usePrevious(presentationDetailStore.state.checkLoadNewData);
+
+   console.log(
+      "presentationDetailStore.state.checkLoadNewData: ",
+      presentationDetailStore.state.checkLoadNewData
+   );
+   console.log("xxx: ", xxx);
+
    useEffect(() => {
       const isXXX = watch("isFetchingApi");
       console.log("isXXX: ", isXXX);
@@ -65,14 +88,14 @@ function SlideConfig() {
       const { title, body, slideType } = data;
       const slideTypeId = slideType.value;
 
-      const savingData = { title, body, slideTypeId };
+      const newSlide = { title, body, slideTypeId };
 
       // const state = presentationDetailStore.state;
       // const slides = state.slides;
       //
       //
 
-      const result = await presentationDetailStore.method.save(savingData);
+      const result = await presentationDetailStore.method.saveSlides(newSlide);
    };
 
    //

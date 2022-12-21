@@ -13,7 +13,7 @@ import classNames from "classnames/bind";
 
 import { useCallback, useContext, useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import ReactLoading from "react-loading";
 
@@ -34,6 +34,9 @@ const cx = classNames.bind(styles);
 function Header() {
    const authContext = useContext(AuthContext);
    const presentationDetailStore = usePresentationDetailStore();
+
+   const { setShowCreateSlideModal, setShowChangeThemeModal } = useOutletContext();
+
    const {
       register,
       watch,
@@ -44,12 +47,6 @@ function Header() {
 
    const socket = useContext(SocketContext);
    // console.log("presentationDetailStore.state header: ", presentationDetailStore.state);
-
-   const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
-   const [showChangeThemModal, setShowChangeThemModal] = useState(false);
-   const [showSaveModal, setShowSaveModal] = useState(false);
-   const [showDeleteSlideModal, setShowDeleteSlideModal] = useState(false);
-   const [showDeletePresentationModal, setShowDeletePresentationModal] = useState(false);
 
    const debouncedValue = useDebounce(
       useWatch({
@@ -177,7 +174,7 @@ function Header() {
                   hideTitle={isNotDesktop}
                   leftIcon={<FontAwesomeIcon icon={faDroplet} />}
                   onClick={() => {
-                     presentationDetailStore.method.setShowChangeThemeModal(true);
+                     setShowChangeThemeModal(true);
                   }}
                />
 
@@ -208,7 +205,7 @@ function Header() {
                   className={cx("btn")}
                   leftIcon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={() => {
-                     presentationDetailStore.method.setShowCreateNewSlideModal(true);
+                     setShowCreateSlideModal(true);
                   }}
                />
             </div>

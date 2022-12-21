@@ -23,11 +23,11 @@ import LinkPage from "./pages/LinkPage";
 import PresentationPage from "./pages/Presentation/PresentationPage";
 import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
 import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store";
-import PresentationPlay from "./pages/Presentation/PresentationPlay";
 import PresentationClientPage from "./pages/PresentationClient/PresentationClientPage";
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
 import PresentationProvider from "./pages/Presentation/PresentationPage/store";
-import PresentationDetailWrapper from "./pages/Presentation/PresentationDetailWrapper";
+import PresentationDetailEditPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailEditPage";
+import PresentationDetailEmptyPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailEmptyPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -121,29 +121,26 @@ function App() {
                               </DefaultLayout>
                            }
                         />
-                        <Route
-                           path=":id"
-                           element={<PresentationDetailWrapper></PresentationDetailWrapper>}
-                        >
-                           <Route path=":id">
-                              <Route
-                                 path="edit"
-                                 element={
-                                    <PresentationDetailProvider>
-                                       <PresentationDetailPage />
-                                    </PresentationDetailProvider>
-                                 }
-                              />
-                              {/* show */}
-                              <Route
-                                 path=""
-                                 element={
-                                    <PresentationDetailProvider>
-                                       <PresentationPlay />
-                                    </PresentationDetailProvider>
-                                 }
-                              />
+                        <Route path=":id">
+                           <Route path="" element={<h2>No outlet</h2>} />
+                           <Route
+                              path="edit"
+                              element={
+                                 <PresentationDetailProvider>
+                                    <PresentationDetailPage />
+                                 </PresentationDetailProvider>
+                              }
+                           >
+                              <Route path="" element={<PresentationDetailEmptyPage />} />
+                              <Route path=":slideId" element={<PresentationDetailEditPage />} />
                            </Route>
+
+                           {/* <Route path="play" element={<PresentationDetailPlayPage />} /> */}
+                           {/* <Route path=":id">
+                              <Route path="edit" element={<PresentationDetailPage />} />
+
+                              <Route path="" element={<PresentationPlay />} />
+                           </Route> */}
                         </Route>
                      </Route>
                      <Route path={"/presentation-client"}>
