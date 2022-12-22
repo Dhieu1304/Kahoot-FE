@@ -1,1 +1,1 @@
-export { default } from "./PresentationPlay";
+export { default } from "./PresentationPlayPage";

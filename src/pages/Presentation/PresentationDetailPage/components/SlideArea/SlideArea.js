@@ -63,7 +63,7 @@ function SlideArea() {
             </h1>
 
             <div className={cx("content")}>
-               {false && (
+               {true && (
                   <div className={cx("content-multiphy")}>
                      <h1 className={cx("title")}>{watch("title")}</h1>
                      <div className={cx("chart-area")}>
@@ -98,16 +98,6 @@ function SlideArea() {
                            </BarChart>
                         </ResponsiveContainer>
                      </div>
-                     <div className={cx("count-votes")}>
-                        <span className={cx("count-votes-number")}>
-                           {result?.reduce((sum, cur) => sum + cur.count, 0) || 0}
-                        </span>
-                        <FontAwesomeIcon
-                           icon={faUser}
-                           size={"1x"}
-                           className={cx("count-votes-icon")}
-                        />
-                     </div>
                   </div>
                )}
 
@@ -118,7 +108,7 @@ function SlideArea() {
                   </div>
                )}
 
-               {true && (
+               {false && (
                   <div className={cx("content-paragraph")}>
                      <h1 className={cx("title")}>{watch("title")}</h1>
                      <h1 className={cx("description")}>{watch("description")}</h1>

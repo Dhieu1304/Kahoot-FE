@@ -28,6 +28,10 @@ import PresentationClientDetailPage from "./pages/PresentationClient/Presentatio
 import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 import PresentationDetailEditPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailEditPage";
 import PresentationDetailEmptyPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailEmptyPage";
+import PresentationPlayProviderWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayProviderWrapper";
+import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
+import PresentationPlayPage from "./pages/Presentation/PresentationPlay/PresentationPlayPage";
+import PresentationPlayEmptyPage from "./pages/Presentation/PresentationPlay/PresentationPlayEmptyPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -135,12 +139,17 @@ function App() {
                               <Route path=":slideId" element={<PresentationDetailEditPage />} />
                            </Route>
 
-                           {/* <Route path="play" element={<PresentationDetailPlayPage />} /> */}
-                           {/* <Route path=":id">
-                              <Route path="edit" element={<PresentationDetailPage />} />
-
-                              <Route path="" element={<PresentationPlay />} />
-                           </Route> */}
+                           <Route
+                              path="play"
+                              element={
+                                 <PresentationPlayProvider>
+                                    <PresentationPlayProviderWrapper />
+                                 </PresentationPlayProvider>
+                              }
+                           >
+                              <Route path="" element={<PresentationPlayEmptyPage />} />
+                              <Route path=":slideId" element={<PresentationPlayPage />} />
+                           </Route>
                         </Route>
                      </Route>
                      <Route path={"/presentation-client"}>
