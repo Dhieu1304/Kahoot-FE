@@ -22,7 +22,7 @@ import { usePresentationDetailStore } from "../../store";
 import Button from "../../../../../components/Button";
 import { SocketContext } from "../../../../../providers/socket";
 import { PRESENTATION_EVENT } from "../../../../../providers/socket/socket.constant";
-import { useFormContext, useWatch } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import useDebounce from "../../../../../hooks/useDebounce";
 import Avatar from "../../../../../components/Avatar/Avatar";
@@ -69,14 +69,18 @@ function Header() {
 
    const onSaving = async (data) => {
       console.log("onSaving presentation");
-      // console.log("data: ", data);
+      console.log("data: ", data);
+
+      const { name, presentationThemeId: themeId, presentationTypeId } = data;
+
+      const newPresentation = { name, themeId, type: "PUBLIC" };
 
       // const { title, body, slideType } = data;
       // const slideTypeId = slideType.value;
 
       // const savingData = { title, body, slideTypeId };
 
-      // const result = await presentationDetailStore.method.save(savingData);
+      const result = await presentationDetailStore.method.savePresentation(newPresentation);
    };
 
    const navigate = useNavigate();
@@ -87,6 +91,14 @@ function Header() {
 
    // console.log("name: ", watch("name"));
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
+
+   // const xxx = usePrevious(presentationDetailStore.state.checkLoadNewData);
+
+   useEffect(() => {
+      if (isDirty) {
+         handleSubmit(onSaving)();
+      }
+   }, [debouncedValue]);
 
    return (
       <div className={cx("container")}>
@@ -101,11 +113,26 @@ function Header() {
                   }}
                />
                <div className={cx("infor")}>
-                  <input
-                     className={cx("name")}
-                     value={presentationDetailStore.state.presentation?.name}
-                     readOnly
+                  <Controller
+                     control={control}
+                     rules={{
+                        required: "Required"
+                     }}
+                     render={({
+                        field: { onChange, onBlur, value, name },
+                        fieldState: { error }
+                     }) => (
+                        <input
+                           className={cx("name", { error: error?.message })}
+                           value={watch("name")}
+                           placeholder={error?.message}
+                           onChange={onChange}
+                           onBlur={onBlur}
+                        />
+                     )}
+                     name="name"
                   />
+
                   <input className={cx("owner")} value={"Created by Ngọc Sang Trần"} readOnly />
                </div>
 

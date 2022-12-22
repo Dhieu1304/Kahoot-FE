@@ -42,12 +42,12 @@ function SlideConfig() {
 
    const watchBodyNested = watch({ nest: true }).body?.map((cur) => cur.name);
 
-   console.log(
-      "useW: ",
-      useWatch({
-         control: configSlideForm.control
-      })
-   );
+   // console.log(
+   //    "useW: ",
+   //    useWatch({
+   //       control: configSlideForm.control
+   //    })
+   // );
 
    const debouncedValue = useDebounce(
       // [watch("title"), watch("description"), watch("body"), watchBodyNested],
@@ -61,22 +61,16 @@ function SlideConfig() {
       1000
    );
 
-   const xxx = usePrevious(presentationDetailStore.state.checkLoadNewData);
-
-   console.log(
-      "presentationDetailStore.state.checkLoadNewData: ",
-      presentationDetailStore.state.checkLoadNewData
-   );
-   console.log("xxx: ", xxx);
+   // const xxx = usePrevious(presentationDetailStore.state.checkLoadNewData);
 
    useEffect(() => {
-      const isXXX = watch("isFetchingApi");
-      console.log("isXXX: ", isXXX);
-      if (isXXX) {
-         // do nothing
-         setValue("isFetchingApi", false);
-         return;
-      }
+      // const isXXX = watch("isFetchingApi");
+      // // console.log("isXXX: ", isXXX);
+      // if (isXXX) {
+      //    // do nothing
+      //    setValue("isFetchingApi", false);
+      //    return;
+      // }
 
       if (isDirty) {
          handleSubmit(onSaving)();
@@ -86,20 +80,15 @@ function SlideConfig() {
    const onSaving = async (data) => {
       //
 
-      console.log("onSaving");
+      // console.log("onSaving");
 
       const { title, body, slideType } = data;
       const slideTypeId = slideType.value;
 
       const newSlide = { title, body, slideTypeId };
 
-      // const state = presentationDetailStore.state;
-      // const slides = state.slides;
-      //
-      //
       const slideId = params.slideId;
 
-      console.log("slideId in saving: ", slideId);
       const index = parseInt(slideId) - 1;
 
       const result = await presentationDetailStore.method.saveSlides(newSlide, index);

@@ -5,7 +5,10 @@ import {
    FETCHING_API_FAILED,
    SET_SLIDES,
    SET_INIT,
-   CHECK_LOAD_NEW_DATA
+   CHECK_LOAD_NEW_DATA,
+   SET_PRESENTATION_TYPES_CONFIG,
+   SET_PRESENTATION_THEMES_CONFIG,
+   SET_SLIDE_TYPES_CONFIG
 } from "./contants";
 
 const initState = {
@@ -17,7 +20,11 @@ const initState = {
    isFetchApiError: false,
    fetchApiError: "",
 
-   checkLoadNewData: true
+   checkLoadNewData: true,
+
+   presentationTypesConfig: [],
+   presentationThemesConfig: [],
+   slideTypesConfig: []
 };
 
 function reducer(state, action) {
@@ -78,6 +85,25 @@ function reducer(state, action) {
          return {
             ...state,
             checkLoadNewData: newCheckLoadNewData
+         };
+      }
+
+      case SET_PRESENTATION_TYPES_CONFIG: {
+         return {
+            ...state,
+            presentationTypesConfig: action.payload
+         };
+      }
+      case SET_PRESENTATION_THEMES_CONFIG: {
+         return {
+            ...state,
+            presentationThemesConfig: action.payload
+         };
+      }
+      case SET_SLIDE_TYPES_CONFIG: {
+         return {
+            ...state,
+            slideTypesConfig: action.payload
          };
       }
 

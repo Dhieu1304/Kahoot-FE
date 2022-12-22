@@ -1,7 +1,7 @@
 .container {
    width: 100%;
    padding-top: 60%;
-   background-color: rgb(23, 26, 29);
+   // background-color: rgb(23, 26, 29);
    position: relative;
 
    .board {
@@ -9,9 +9,9 @@
       top: 0;
       left: 0;
 
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: space-between;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       padding: 4rem;
 
       overflow-x: hidden;
@@ -19,13 +19,13 @@
       height: 100%;
 
       .infor {
-         color: var(--white-color);
+         // color: var(--white-color);
          font-size: 1.6rem;
          word-spacing: 0.5rem;
       }
 
       .infor-label {
-         color: var(--white-color);
+         // color: var(--white-color);
          font-size: 1.6rem;
          font-weight: 700;
          margin: 0 1rem;
@@ -37,6 +37,7 @@
    // position: relative;
    height: 60%;
    margin: 0 4rem;
+   flex: 1;
 
    display: flex;
    flex-direction: column;
@@ -46,7 +47,7 @@
       width: 100%;
       font-size: 2rem;
       padding: 0;
-      color: var(--white-color);
+      // color: var(--white-color);
       text-align: left;
       font-size: 3rem;
       font-weight: bolder;

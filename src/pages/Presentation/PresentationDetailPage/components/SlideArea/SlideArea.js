@@ -37,14 +37,21 @@ function SlideArea() {
 
       const resultWithCount = currentBody?.map((cur) => ({
          ...cur,
-         count: 5
+         count: 200
       }));
 
       setResult(resultWithCount);
    }, [watch("body")]);
 
    return (
-      <div className={cx("container")}>
+      <div
+         className={cx("container")}
+         style={{
+            backgroundColor:
+               presentationDetailStore.state.presentation?.presentationTheme.backgroundColor,
+            color: presentationDetailStore.state.presentation?.presentationTheme.textColor
+         }}
+      >
          <div className={cx("board")}>
             <h1 className={cx("infor")}>
                Go to

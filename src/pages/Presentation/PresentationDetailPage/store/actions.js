@@ -5,7 +5,10 @@ import {
    FETCHING_API_FAILED,
    SET_SLIDES,
    SET_INIT,
-   CHECK_LOAD_NEW_DATA
+   CHECK_LOAD_NEW_DATA,
+   SET_PRESENTATION_TYPES_CONFIG,
+   SET_PRESENTATION_THEMES_CONFIG,
+   SET_SLIDE_TYPES_CONFIG
 } from "./contants";
 
 export const setPresentation = (payload) => ({
@@ -43,6 +46,21 @@ export const setCheckLoadNewData = (payload) => ({
    payload
 });
 
+export const setPresentationTypesConfig = (payload) => ({
+   type: SET_PRESENTATION_TYPES_CONFIG,
+   payload
+});
+
+export const setPresentationThemesConfig = (payload) => ({
+   type: SET_PRESENTATION_THEMES_CONFIG,
+   payload
+});
+
+export const setSlideTypesConfig = (payload) => ({
+   type: SET_SLIDE_TYPES_CONFIG,
+   payload
+});
+
 export default {
    setSlides,
    setPresentation,
@@ -50,5 +68,9 @@ export default {
    fetchApiSuccess,
    fetchApiFailed,
    setInit,
-   setCheckLoadNewData
+   setCheckLoadNewData,
+
+   setPresentationTypesConfig,
+   setPresentationThemesConfig,
+   setSlideTypesConfig
 };

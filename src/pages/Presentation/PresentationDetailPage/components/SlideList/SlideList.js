@@ -9,6 +9,11 @@ const cx = classNames.bind(styles);
 const SlideList = ({}) => {
    const presentationDetailStore = usePresentationDetailStore();
 
+   // console.log(
+   //    "presentationDetailStore.state.slides in list: ",
+   //    presentationDetailStore.state.slides
+   // );
+
    return (
       <div className={cx("wrapper")}>
          <div className={cx("container")}>

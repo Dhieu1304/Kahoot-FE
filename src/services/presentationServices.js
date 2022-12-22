@@ -106,17 +106,19 @@ const getResultBySlideId = async (slideId) => {
    return slide;
 };
 
-const savePresentation = async (presentation) => {
-   const { id: presentationId, name, presentationTheme, presentationType } = presentation;
-   const type = presentationType.name || "PUBLIC";
-   const themeId = presentationTheme.id;
+const savePresentation = async (presentationSaveData, presentationId) => {
+   console.log("[SERVICE][PRESENTATION] savePresentation: ", presentationSaveData);
+
+   const { name, themeId } = presentationSaveData;
+   const data = { presentationId, name, themeId, type: "PUBLIC" };
+
+   console.log("data send: ", data);
+
    try {
-      const res = await axiosClient.put(`/presentation/edit`, {
-         presentationId,
-         name,
-         type,
-         themeId
-      });
+      const res = await axiosClient.put(`/presentation/edit`, data);
+
+      console.log("success res edit presentation: ", res);
+
       return res.status;
    } catch (e) {
       console.error(e.message);
@@ -173,6 +175,48 @@ const deletePresentationById = async (presentation_id) => {
    }
 };
 
+const getListPresentationThemeConfig = async () => {
+   console.log("[SERVICE][PRESENTATION] getListPresentationThemeConfig: ");
+
+   try {
+      const res = await axiosClient.get(`/presentation/theme`);
+
+      console.log("res: ", res);
+      console.log("res.data: ", res.data);
+      // console.log(
+      //    "camelcaseKeys(res.data, { deep: true }): ",
+      //    camelcaseKeys(res.data, { deep: true })
+      // );
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+};
+
+const getListSlideTypeConfig = async () => {
+   console.log("[SERVICE][PRESENTATION] getListSlideTypeConfig: ");
+
+   try {
+      const res = await axiosClient.get(`/slide/type`);
+
+      console.log("res: ", res);
+      console.log("res.data: ", res.data);
+      // console.log(
+      //    "camelcaseKeys(res.data, { deep: true }): ",
+      //    camelcaseKeys(res.data, { deep: true })
+      // );
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getAllSlidesByPresentationId,
@@ -182,5 +226,8 @@ export default {
    createPresentation,
    updateSlides,
    savePresentation,
-   deletePresentationById
+   deletePresentationById,
+
+   getListPresentationThemeConfig,
+   getListSlideTypeConfig
 };

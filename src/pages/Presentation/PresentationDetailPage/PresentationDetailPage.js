@@ -29,12 +29,16 @@ function PresentationDetailPage() {
    useEffect(() => {
       console.log("Load data");
       const loadData = async () => {
+         const presentationConfig = await presentationDetailStore.method.loadConfig();
+         console.log("presentationConfig: ", presentationConfig);
+
          const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
          const presentationDetail = await presentationDetailStore.method.loadPresentationDetail(
             presentationId
          );
-
          console.log("presentationDetail: ", presentationDetail);
+
+         presentationDetailStore.method.setInit();
       };
       loadData();
    }, []);

@@ -8,6 +8,36 @@ function PresentationDetailProvider({ children }) {
    const [state, dispatch] = useReducer(reducer, initState);
 
    const method = {
+      loadConfig: async (id) => {
+         dispatch(actions.fetchApi());
+         const presentationThemes = await presentationServices.getListPresentationThemeConfig();
+
+         if (presentationThemes) {
+            dispatch(actions.setPresentationThemesConfig(presentationThemes));
+         } else {
+            const message = "Error API";
+            dispatch(actions.fetchApiFailed(message));
+            return presentation;
+         }
+
+         // presentation true
+         dispatch(actions.fetchApi());
+
+         const slideTypes = await presentationServices.getListSlideTypeConfig();
+
+         if (slideTypes) {
+            dispatch(actions.setSlideTypesConfig(slideTypes));
+         } else {
+            const message = "Error API";
+            dispatch(actions.fetchApiFailed(message));
+         }
+
+         // dispatch(actions.setCheckLoadNewData());
+         // dispatch(actions.setInit(true));
+
+         return { presentationThemes, slideTypes };
+      },
+
       loadPresentationDetail: async (id) => {
          dispatch(actions.fetchApi());
          const presentation = await presentationServices.getPresentationById(id);
@@ -25,29 +55,9 @@ function PresentationDetailProvider({ children }) {
 
          const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-         // console.log("slides: ", slides);
+         console.log("slides in load Provider: ", slides);
 
          if (slides) {
-            if (slides.length === 0) {
-               const slide = {
-                  presentation_id: id,
-                  ordinal_slide_number: 1,
-                  slide_type_id: 1,
-                  title: "Slide 1",
-                  body: [
-                     {
-                        id: 1,
-                        name: "option 1"
-                     },
-                     {
-                        id: 2,
-                        name: "option 1"
-                     }
-                  ]
-               };
-               slides.push(slide);
-            }
-
             dispatch(actions.setSlides(slides));
          } else {
             const message = "Error API";
@@ -55,9 +65,13 @@ function PresentationDetailProvider({ children }) {
          }
 
          dispatch(actions.setCheckLoadNewData());
-         dispatch(actions.setInit(true));
+         // dispatch(actions.setInit(true));
 
          return { presentation, slides };
+      },
+
+      setInit: () => {
+         dispatch(actions.setInit(true));
       },
 
       saveSlides: async (slide, index) => {
@@ -91,7 +105,7 @@ function PresentationDetailProvider({ children }) {
 
             const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-            console.log("slides: ", slides);
+            console.log("slides in Provider: ", slides);
 
             if (slides) {
                dispatch(actions.setSlides(slides));
@@ -123,6 +137,37 @@ function PresentationDetailProvider({ children }) {
          //    return false;
          // }
       },
+
+      savePresentation: async (presentationSaveData) => {
+         dispatch(actions.fetchApi());
+
+         console.log("presentationSaveData: ", presentationSaveData);
+
+         const id = state.presentation.id;
+
+         const resultPresentation = await presentationServices.savePresentation(
+            presentationSaveData,
+            id
+         );
+
+         if (resultPresentation) {
+            dispatch(actions.fetchApi());
+
+            const presentation = await presentationServices.getPresentationById(id);
+
+            console.log("presentation in Provider: ", presentation);
+
+            if (presentation) {
+               dispatch(actions.setPresentation(presentation));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+         }
+
+         dispatch(actions.setCheckLoadNewData());
+      },
+
       createNewSlide: async (slide, index) => {
          dispatch(actions.fetchApi());
 

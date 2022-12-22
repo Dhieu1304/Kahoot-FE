@@ -8,6 +8,8 @@
 
    width: 100%;
    overflow-x: hidden;
+   // overflow-y: hidden;
+   min-height: 115px;
 
    .top {
       width: 100%;
@@ -39,7 +41,20 @@
                text-overflow: ellipsis;
                white-space: nowrap;
                overflow: hidden;
+
+               &::placeholder {
+                  color: red;
+                  font-style: italic;
+                  font-size: 1.2rem;
+               }
+
+               &.error {
+                  border: solid 1px rgb(255, 0, 0, 0.4);
+                  border-radius: 2px;
+                  padding: 2px;
+               }
             }
+
             .owner {
                width: 100%;
                font-weight: 600;

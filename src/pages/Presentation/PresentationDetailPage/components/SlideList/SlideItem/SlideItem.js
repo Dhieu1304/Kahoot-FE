@@ -14,7 +14,11 @@ const SlideItem = ({ slide, index, presentationId }) => {
    const navigate = useNavigate();
    const presentationDetailStore = usePresentationDetailStore();
 
+   // console.log("slide in slideItem: ", slide);
+
    const to = `/presentation/${presentationId}/edit/${slide?.ordinalSlideNumber}`;
+
+   // console.log("to: ", to);
    // const to = `/presentation/${presentationId}/${index + 1}/edit`;
 
    const resolved = useResolvedPath(to);
@@ -30,7 +34,14 @@ const SlideItem = ({ slide, index, presentationId }) => {
                <FontAwesomeIcon size="1x" icon={faGripVertical} className={cx("icon")} />
             </div>
          </div>
-         <div className={cx("container")}>
+         <div
+            className={cx("container")}
+            style={{
+               backgroundColor:
+                  presentationDetailStore.state.presentation?.presentationTheme.backgroundColor,
+               color: presentationDetailStore.state.presentation?.presentationTheme.textColor
+            }}
+         >
             <h1 className={cx("title")}>{slide?.title}</h1>;
          </div>
       </Link>
