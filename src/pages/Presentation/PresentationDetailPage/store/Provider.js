@@ -55,8 +55,6 @@ function PresentationDetailProvider({ children }) {
 
          const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-         console.log("slides in load Provider: ", slides);
-
          if (slides) {
             dispatch(actions.setSlides(slides));
          } else {
@@ -80,13 +78,7 @@ function PresentationDetailProvider({ children }) {
          const oldSlides = [...state.slides];
          const newSlides = oldSlides.map((cur) => cur);
 
-         console.log("index: ", index);
          newSlides.splice(index, 1, slide);
-
-         console.log("oldSlides: ", oldSlides);
-         console.log("newSlides: ", newSlides);
-
-         console.log("state: ", state);
 
          // const resultPresentation = await presentationServices.savePresentation(state.presentation);
 
@@ -95,17 +87,12 @@ function PresentationDetailProvider({ children }) {
             newSlides
          );
 
-         console.log("resultSlide: ", resultSlide);
-
          const id = state.presentation.id;
-         console.log("Chuan bi load id: ", id);
 
          if (resultSlide) {
             dispatch(actions.fetchApi());
 
             const slides = await presentationServices.getAllSlidesByPresentationId(id);
-
-            console.log("slides in Provider: ", slides);
 
             if (slides) {
                dispatch(actions.setSlides(slides));
@@ -117,7 +104,7 @@ function PresentationDetailProvider({ children }) {
 
          dispatch(actions.setCheckLoadNewData());
 
-         // console.log("resultSlide: ", resultSlide);
+         //
 
          // if (resultPresentation && resultSlide) {
          //    const presentation = await presentationServices.getPresentationById(
@@ -141,8 +128,6 @@ function PresentationDetailProvider({ children }) {
       savePresentation: async (presentationSaveData) => {
          dispatch(actions.fetchApi());
 
-         console.log("presentationSaveData: ", presentationSaveData);
-
          const id = state.presentation.id;
 
          const resultPresentation = await presentationServices.savePresentation(
@@ -154,8 +139,6 @@ function PresentationDetailProvider({ children }) {
             dispatch(actions.fetchApi());
 
             const presentation = await presentationServices.getPresentationById(id);
-
-            console.log("presentation in Provider: ", presentation);
 
             if (presentation) {
                dispatch(actions.setPresentation(presentation));
@@ -174,30 +157,19 @@ function PresentationDetailProvider({ children }) {
          const oldSlides = [...state.slides];
          const newSlides = oldSlides.map((cur) => cur);
 
-         console.log("index: ", index);
          newSlides.splice(index, 0, slide);
-
-         console.log("oldSlides: ", oldSlides);
-         console.log("newSlides: ", newSlides);
-
-         console.log("state: ", state);
 
          const resultSlide = await presentationServices.updateSlides(
             state.presentation.id,
             newSlides
          );
 
-         console.log("resultSlide: ", resultSlide);
-
          const id = state.presentation.id;
-         console.log("Chuan bi load id: ", id);
 
          if (resultSlide) {
             dispatch(actions.fetchApi());
 
             const slides = await presentationServices.getAllSlidesByPresentationId(id);
-
-            console.log("slides: ", slides);
 
             if (slides) {
                dispatch(actions.setSlides(slides));
@@ -228,7 +200,7 @@ function PresentationDetailProvider({ children }) {
 
    //    const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-   //    // console.log("slides: ", slides);
+   //    //
 
    //    if (slides) {
    //       if (slides.length === 0) {
@@ -301,13 +273,13 @@ function PresentationDetailProvider({ children }) {
    //    const newSlides = oldSlides.map((cur) => cur);
    //    const index = state.currentSlideIndex;
 
-   //    console.log("index: ", index);
+   //
    //    newSlides.splice(index, 1, slide);
 
-   //    console.log("oldSlides: ", oldSlides);
-   //    console.log("newSlides: ", newSlides);
+   //
+   //
 
-   //    console.log("state: ", state);
+   //
 
    //    // const resultPresentation = await presentationServices.savePresentation(state.presentation);
 
@@ -316,17 +288,17 @@ function PresentationDetailProvider({ children }) {
    //       newSlides
    //    );
 
-   //    console.log("resultSlide: ", resultSlide);
+   //
 
    //    const id = state.presentation.id;
-   //    console.log("Chuan bi load id: ", id);
+   //
 
    //    if (resultSlide) {
    //       dispatch(actions.fetchApi());
 
    //       const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-   //       // console.log("slides: ", slides);
+   //       //
 
    //       if (slides) {
    //          dispatch(actions.setSlides(slides));
@@ -336,7 +308,7 @@ function PresentationDetailProvider({ children }) {
    //       }
    //    }
 
-   // console.log("resultSlide: ", resultSlide);
+   //
 
    // if (resultPresentation && resultSlide) {
    // if (resultPresentation && resultSlide) {

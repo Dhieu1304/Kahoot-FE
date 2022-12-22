@@ -55,8 +55,6 @@ function PresentationPlayProvider({ children }) {
 
          const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-         console.log("slides in load Provider: ", slides);
-
          if (slides) {
             dispatch(actions.setSlides(slides));
          } else {

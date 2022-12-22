@@ -79,9 +79,8 @@ function reducer(state, action) {
          };
 
       case CHECK_LOAD_NEW_DATA: {
-         console.log("checkLoadNewData old: ", state.checkLoadNewData);
          const newCheckLoadNewData = !state.checkLoadNewData;
-         console.log("checkLoadNewData new: ", newCheckLoadNewData);
+
          return {
             ...state,
             checkLoadNewData: newCheckLoadNewData

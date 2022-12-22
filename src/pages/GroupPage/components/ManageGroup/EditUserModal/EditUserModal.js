@@ -32,14 +32,7 @@ function EditUserModal({ show, setShow, groupId, userId }) {
    const groupItemContext = useGroupItemContext();
 
    const handleSubmitModal = async (data) => {
-      console.log("handleSubmitModal: data: ", data);
-      console.log("groupId", groupId);
-      console.log("userId", userId);
-      console.log("roleId", data.role);
-
       const result = await changeRole(groupId, userId, data.role);
-
-      console.log("result");
 
       if (result) {
          const usersData = await getUsersByGroupId(groupId);

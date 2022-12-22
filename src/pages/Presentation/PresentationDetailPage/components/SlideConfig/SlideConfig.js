@@ -42,7 +42,7 @@ function SlideConfig({ slide }) {
 
    const watchBodyNested = watch({ nest: true }).body?.map((cur) => cur.name);
 
-   // console.log(
+   //
    //    "useW: ",
    //    useWatch({
    //       control: configSlideForm.control
@@ -65,7 +65,7 @@ function SlideConfig({ slide }) {
 
    useEffect(() => {
       // const isXXX = watch("isFetchingApi");
-      // // console.log("isXXX: ", isXXX);
+      // //
       // if (isXXX) {
       //    // do nothing
       //    setValue("isFetchingApi", false);
@@ -80,14 +80,10 @@ function SlideConfig({ slide }) {
    const onSaving = async (data) => {
       //
 
-      console.log("onSavingSlide");
-
       const { title, body, description, slideType } = data;
       const slideTypeId = slideType.value;
 
       const newSlide = { ...slide, title, body, description, slideTypeId };
-
-      console.log("newSlide: ", newSlide);
 
       const slideId = params.slideId;
 

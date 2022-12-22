@@ -1,0 +1,54 @@
+.container {
+   position: absolute;
+   bottom: 3rem;
+   //    left: 50%;
+   z-index: 2000;
+
+   background-color: rgb(0, 255, 255, 0.5);
+   width: 200px;
+   height: 250px;
+   overflow-y: scroll;
+
+   .list {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 1rem 0;
+      width: 100%;
+
+      .item {
+         width: 100%;
+         display: flex;
+         align-items: center;
+         padding: 1rem 0.5rem;
+
+         .message {
+            .text {
+               font-size: 1.2rem;
+            }
+         }
+      }
+
+      .item.left {
+         justify-content: flex-start;
+
+         .message {
+            margin-left: 1rem;
+            .text {
+               font-size: 1.2rem;
+            }
+         }
+      }
+      .item.right {
+         justify-content: flex-end;
+
+         .message {
+            margin-right: 1rem;
+            .text {
+               font-size: 1.2rem;
+            }
+         }
+      }
+   }
+}

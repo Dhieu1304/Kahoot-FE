@@ -27,16 +27,13 @@ function PresentationDetailPage() {
    const location = useLocation();
 
    useEffect(() => {
-      console.log("Load data");
       const loadData = async () => {
          const presentationConfig = await presentationDetailStore.method.loadConfig();
-         console.log("presentationConfig: ", presentationConfig);
 
          const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
          const presentationDetail = await presentationDetailStore.method.loadPresentationDetail(
             presentationId
          );
-         console.log("presentationDetail: ", presentationDetail);
 
          presentationDetailStore.method.setInit();
       };
@@ -71,7 +68,7 @@ function PresentationDetailPage() {
 //       }
 //    });
 
-//    console.log("presentationDetailStore.state: ", presentationDetailStore.state);
+//
 
 //    const configSlideForm = useForm({
 //       mode: "onBlur",
@@ -111,12 +108,12 @@ function PresentationDetailPage() {
 //       }
 //    }, [presentationDetailStore.state.slides, presentationDetailStore.state.currentSlideIndex]);
 
-//    console.log("title: ", configSlideForm.watch("title"));
+//
 
 //    // useEffect(() => {
 //    //    const presentation = { ...presentationDetailStore.state.presentation };
 
-//    //    // console.log("presentation: ", presentation);
+//    //    //
 //    //    configPresentationForm.setValue("name", presentation?.name);
 //    //    configPresentationForm.setValue("presentationThemeId", presentation?.presentationThemeId);
 //    //    configPresentationForm.setValue("presentationTypeId", presentation?.presentationTypeId);

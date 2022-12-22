@@ -51,7 +51,7 @@ function Header() {
    } = useFormContext();
 
    const socket = useContext(SocketContext);
-   // console.log("presentationDetailStore.state header: ", presentationDetailStore.state);
+   //
 
    const debouncedValue = useDebounce(
       useWatch({
@@ -61,16 +61,13 @@ function Header() {
    );
 
    // useEffect(() => {
-   //    console.log("Triggered");
+   //
    //    if (isDirty) {
    //       handleSubmit(onSaving)();
    //    }
    // }, [debouncedValue]);
 
    const onSaving = async (data) => {
-      console.log("onSaving presentation");
-      console.log("data: ", data);
-
       const { name, presentationThemeId: themeId, presentationTypeId } = data;
 
       const newPresentation = { name, themeId, type: "PUBLIC" };
@@ -89,7 +86,7 @@ function Header() {
       socket.emit(PRESENTATION_EVENT.PRESENT, { presentation_id, ordinal_slide_number });
    }, []);
 
-   // console.log("name: ", watch("name"));
+   //
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
 
    // const xxx = usePrevious(presentationDetailStore.state.checkLoadNewData);
@@ -222,7 +219,7 @@ function Header() {
                      const presentationId = presentationDetailStore.state.presentation?.id;
                      const slideId = 1;
                      handlePresent(presentationId, slideId);
-                     navigate(`/presentation/${presentationId}/${slideId}`);
+                     navigate(`/presentation/${presentationId}/play`);
                   }}
                />
             </div>

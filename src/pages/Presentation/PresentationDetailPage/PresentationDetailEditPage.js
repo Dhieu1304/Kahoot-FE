@@ -36,10 +36,6 @@ function PresentationDetailEditPage() {
       return currentSlide.ordinalSlideNumber + "" === slideId + "";
    });
 
-   console.log("slideId: ", slideId);
-   console.log("slide: ", slide);
-
-   console.log("presentationDetailStore.state: ", presentationDetailStore.state);
    const configPresentationForm = useForm({
       mode: "onBlur",
       defaultValues: {
@@ -48,11 +44,6 @@ function PresentationDetailEditPage() {
          presentationTypeId: presentationDetailStore.state.presentation?.presentationTypeId
       }
    });
-
-   console.log(
-      'configPresentationForm.watch("presentationThemeId"): ',
-      configPresentationForm.watch("presentationThemeId")
-   );
 
    const configSlideForm = useForm({
       mode: "onBlur",
@@ -65,8 +56,6 @@ function PresentationDetailEditPage() {
       }
    });
 
-   console.log("slideType: ", configSlideForm.watch("slideType"));
-
    const createNewSlideForm = useForm({
       mode: "onSubmit",
       defaultValues: {
@@ -75,7 +64,6 @@ function PresentationDetailEditPage() {
    });
 
    useEffect(() => {
-      console.log("Change slide");
       configSlideForm.setValue("title", slide?.title);
       configSlideForm.setValue("body", slide?.body);
       configSlideForm.setValue("description", slide?.description);
@@ -83,7 +71,6 @@ function PresentationDetailEditPage() {
    }, [slideId]);
 
    const handleCreateNewSlide = async (data) => {
-      console.log("data: ", data);
       let index = 0;
 
       if (slide?.ordinalSlideNumber) {

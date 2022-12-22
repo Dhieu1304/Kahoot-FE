@@ -10,7 +10,6 @@ const AutoSave = memo(({ defaultValues, onSubmit }) => {
 
    const debouncedSave = useCallback(
       debounce(async () => {
-         console.log("Auto Saving Process");
          await methods.handleSubmit(onSubmit)();
       }, 1000),
       []
@@ -21,10 +20,7 @@ const AutoSave = memo(({ defaultValues, onSubmit }) => {
       defaultValue: defaultValues
    });
 
-   console.log("watchedData: ", watchedData);
-
    useDeepCompareEffect(() => {
-      console.log("Triggered");
       if (methods.formState.isDirty) {
          debouncedSave();
       }

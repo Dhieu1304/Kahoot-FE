@@ -1,4 +1,11 @@
-import { faArrowLeft, faArrowRight, faExpand, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+   faArrowLeft,
+   faArrowRight,
+   faComment,
+   faExpand,
+   faMessage,
+   faUser
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
    Bar,
@@ -21,6 +28,7 @@ import Button from "../../../components/Button";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 import { usePresentationPlayStore } from "./store";
+import Chat from "./components/Chat";
 
 const cx = classNames.bind(styles);
 
@@ -36,8 +44,6 @@ function PresentationPlayPage() {
    const slide = presentatioPlayStore.state.slides.find((currentSlide) => {
       return currentSlide.ordinalSlideNumber + "" === slideId + "";
    });
-
-   console.log("slide: ", slide);
 
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
@@ -55,15 +61,9 @@ function PresentationPlayPage() {
             presentation_id: presentationId,
             ordinal_slide_number: slideId
          });
-         socket.on(SOCKET_EVENT.ERROR, (message) => {
-            console.error(message);
-         });
-         socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
-            console.info(message);
-         });
-         socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-            console.log(message);
-         });
+         socket.on(SOCKET_EVENT.ERROR, (message) => {});
+         socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {});
+         socket.on(SOCKET_EVENT.SUCCESS, (message) => {});
          socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
             setCountOnl(countOnl);
          });
@@ -81,9 +81,7 @@ function PresentationPlayPage() {
                return newResultData;
             });
          });
-         socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
-            console.log(data);
-         });
+         socket.on(PRESENTATION_EVENT.SLIDE, (data) => {});
 
          return () => {
             const arrSocketEvent = Object.values(SOCKET_EVENT);
@@ -99,8 +97,6 @@ function PresentationPlayPage() {
 
       loadData();
    }, [slideId]);
-
-   console.log("result: ", result);
 
    const handleFullscreen = useFullScreenHandle();
 
@@ -216,6 +212,23 @@ function PresentationPlayPage() {
                         )}
 
                         <div className={cx("menu")}>
+                           <div className={cx("item", "item-has-chat")}>
+                              <FontAwesomeIcon
+                                 className={cx("icon")}
+                                 size={"1x"}
+                                 icon={faMessage}
+                                 onClick={() => {}}
+                              />
+                              <Chat />
+                           </div>
+                           <div className={cx("item")}>
+                              <FontAwesomeIcon
+                                 className={cx("icon")}
+                                 size={"1x"}
+                                 icon={faComment}
+                                 onClick={() => {}}
+                              />
+                           </div>
                            <div className={cx("item")}>
                               <FontAwesomeIcon
                                  className={cx("icon")}

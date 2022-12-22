@@ -14,7 +14,6 @@ function CurrentSlide({ slide }) {
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
 
-   console.log("slide in Current Slide: ", slide);
    const configSlideForm = useForm({
       mode: "onBlur",
       defaultValues: {
@@ -24,8 +23,6 @@ function CurrentSlide({ slide }) {
          slideType: slideTypes?.[slide?.slideTypeId] || 1
       }
    });
-
-   console.log("slideType: ", configSlideForm.watch("slideType"));
 
    return (
       <FormProvider {...configSlideForm}>

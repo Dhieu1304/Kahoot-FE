@@ -4,7 +4,7 @@ import axiosClient from "../config/axiosClient";
 import mockApi from "../mockApi";
 
 const getOwnedPresentations = async () => {
-   console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
+   // console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
 
    try {
       const res = await axiosClient.get(`/presentation/list`);
@@ -21,10 +21,10 @@ const getOwnedPresentations = async () => {
 };
 
 const createPresentation = async (name, type = "PUBLIC") => {
-   console.log("[SERVICE][PRESENTATION] createPresentation: ", {
-      name,
-      type
-   });
+   // console.log("[SERVICE][PRESENTATION] createPresentation: ", {
+   //    name,
+   //    type
+   // });
 
    try {
       const res = await axiosClient.post(`/presentation/create`, {
@@ -63,7 +63,7 @@ const getPresentationById = async (id) => {
 };
 
 const getAllSlidesByPresentationId = async (id) => {
-   console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
+   // console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
    // const slide = await mockApi.mockSlide;
 
    //    console.log("presentation", presentation);
@@ -71,8 +71,8 @@ const getAllSlidesByPresentationId = async (id) => {
    try {
       const res = await axiosClient.get(`/presentation/${id}/all-slide`);
 
-      console.log("res: ", res);
-      console.log("res.data: ", res.data);
+      // console.log("res: ", res);
+      // console.log("res.data: ", res.data);
       // console.log(
       //    "camelcaseKeys(res.data, { deep: true }): ",
       //    camelcaseKeys(res.data, { deep: true })
@@ -107,17 +107,17 @@ const getResultBySlideId = async (slideId) => {
 };
 
 const savePresentation = async (presentationSaveData, presentationId) => {
-   console.log("[SERVICE][PRESENTATION] savePresentation: ", presentationSaveData);
+   // console.log("[SERVICE][PRESENTATION] savePresentation: ", presentationSaveData);
 
    const { name, themeId } = presentationSaveData;
    const data = { presentationId, name, themeId, type: "PUBLIC" };
 
-   console.log("data send: ", data);
+   // console.log("data send: ", data);
 
    try {
       const res = await axiosClient.put(`/presentation/edit`, data);
 
-      console.log("success res edit presentation: ", res);
+      // console.log("success res edit presentation: ", res);
 
       return res.status;
    } catch (e) {
@@ -127,7 +127,7 @@ const savePresentation = async (presentationSaveData, presentationId) => {
 };
 
 const updateSlides = async (presentation_id, slides) => {
-   console.log("[SERVICE] updateSlides");
+   // console.log("[SERVICE] updateSlides");
 
    const data = slides.map((slide, index) => {
       const ordinal_slide_number = index + 1;
@@ -143,10 +143,10 @@ const updateSlides = async (presentation_id, slides) => {
    });
 
    // console.log("data slide update: ", data);
-   console.log("data slide update co pre: ", {
-      presentation_id,
-      data
-   });
+   // console.log("data slide update co pre: ", {
+   //    presentation_id,
+   //    data
+   // });
 
    try {
       const res = await axiosClient.put(`/slide/update`, {
@@ -154,7 +154,7 @@ const updateSlides = async (presentation_id, slides) => {
          data
       });
 
-      console.log("success res update: ", res);
+      // console.log("success res update: ", res);
 
       return res.status;
    } catch (e) {
@@ -168,7 +168,7 @@ const deletePresentationById = async (presentation_id) => {
       const res = await axiosClient.post(`/presentation/delete`, {
          presentation_id
       });
-      console.log("res: ", res);
+      // console.log("res: ", res);
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -177,13 +177,13 @@ const deletePresentationById = async (presentation_id) => {
 };
 
 const getListPresentationThemeConfig = async () => {
-   console.log("[SERVICE][PRESENTATION] getListPresentationThemeConfig: ");
+   // console.log("[SERVICE][PRESENTATION] getListPresentationThemeConfig: ");
 
    try {
       const res = await axiosClient.get(`/presentation/theme`);
 
-      console.log("res: ", res);
-      console.log("res.data: ", res.data);
+      // console.log("res: ", res);
+      // console.log("res.data: ", res.data);
       // console.log(
       //    "camelcaseKeys(res.data, { deep: true }): ",
       //    camelcaseKeys(res.data, { deep: true })
@@ -198,13 +198,13 @@ const getListPresentationThemeConfig = async () => {
 };
 
 const getListSlideTypeConfig = async () => {
-   console.log("[SERVICE][PRESENTATION] getListSlideTypeConfig: ");
+   // console.log("[SERVICE][PRESENTATION] getListSlideTypeConfig: ");
 
    try {
       const res = await axiosClient.get(`/slide/type`);
 
-      console.log("res: ", res);
-      console.log("res.data: ", res.data);
+      // console.log("res: ", res);
+      // console.log("res.data: ", res.data);
       // console.log(
       //    "camelcaseKeys(res.data, { deep: true }): ",
       //    camelcaseKeys(res.data, { deep: true })
