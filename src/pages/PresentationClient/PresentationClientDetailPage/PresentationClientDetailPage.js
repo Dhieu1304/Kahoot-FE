@@ -21,32 +21,30 @@ function PresentationClientDetailPage() {
 
    useEffect(() => {
       socket.emit(PRESENTATION_EVENT.JOIN, { code });
-      socket.on(SOCKET_EVENT.ERROR, (message) => {
-         console.error(message);
-      });
-      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
-         console.info(message);
-      });
-      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-         console.log(message);
-      });
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
-         console.log(data);
-         if (data?.body) {
-            setOptions(data.body);
-            setIsSubmitSuccess(false);
-         } else {
-            setMessage(data);
-            setIsSubmitSuccess(true);
+         console.log(">>>>> SLIDE", data);
+         switch (data.slide_type_id) {
+            case 1: // multi choice
+               setOptions(data.body);
+               setIsSubmitSuccess(false);
+               break;
+            case 2: // Heading
+               setMessage("Slide with Heading");
+               setIsSubmitSuccess(true);
+               break;
+            case 3: // Paragraph
+               setMessage("Slide with Paragraph");
+               setIsSubmitSuccess(true);
+               break;
+            default:
+               setMessage(data);
+               setIsSubmitSuccess(true);
          }
       });
 
       return () => {
-         const arrSocketEvent = Object.values(SOCKET_EVENT);
-         for (let i = 0; i < arrSocketEvent.length; i++) {
-            socket.off(arrSocketEvent[i]);
-         }
          socket.off(PRESENTATION_EVENT.SLIDE);
+         socket.emit(PRESENTATION_EVENT.LEAVE);
       };
    }, []);
 

@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import Context from "./Context";
 import reducer, { initState } from "./reducer";
-import actions, { setResults } from "./actions";
+import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
 
 function PresentationPlayProvider({ children }) {

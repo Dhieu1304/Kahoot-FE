@@ -177,43 +177,21 @@ const deletePresentationById = async (presentation_id) => {
 };
 
 const getListPresentationThemeConfig = async () => {
-   // console.log("[SERVICE][PRESENTATION] getListPresentationThemeConfig: ");
-
    try {
       const res = await axiosClient.get(`/presentation/theme`);
-
-      // console.log("res: ", res);
-      // console.log("res.data: ", res.data);
-      // console.log(
-      //    "camelcaseKeys(res.data, { deep: true }): ",
-      //    camelcaseKeys(res.data, { deep: true })
-      // );
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
-
       return false;
    }
 };
 
 const getListSlideTypeConfig = async () => {
-   // console.log("[SERVICE][PRESENTATION] getListSlideTypeConfig: ");
-
    try {
       const res = await axiosClient.get(`/slide/type`);
-
-      // console.log("res: ", res);
-      // console.log("res.data: ", res.data);
-      // console.log(
-      //    "camelcaseKeys(res.data, { deep: true }): ",
-      //    camelcaseKeys(res.data, { deep: true })
-      // );
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
-
       return false;
    }
 };
