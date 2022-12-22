@@ -17,7 +17,7 @@ import usePrevious from "../../../../../hooks/usePrevious";
 import { useParams } from "react-router-dom";
 const cx = classNames.bind(styles);
 
-function SlideConfig() {
+function SlideConfig({ slide }) {
    const presentationDetailStore = usePresentationDetailStore();
 
    const configSlideForm = useFormContext();
@@ -80,12 +80,14 @@ function SlideConfig() {
    const onSaving = async (data) => {
       //
 
-      // console.log("onSaving");
+      console.log("onSavingSlide");
 
-      const { title, body, slideType } = data;
+      const { title, body, description, slideType } = data;
       const slideTypeId = slideType.value;
 
-      const newSlide = { title, body, slideTypeId };
+      const newSlide = { ...slide, title, body, description, slideTypeId };
+
+      console.log("newSlide: ", newSlide);
 
       const slideId = params.slideId;
 
@@ -123,6 +125,47 @@ function SlideConfig() {
             </div>
 
             <div className={cx("config-container-content")}>
+               <span className={cx("config-label")}>Title</span>
+               <Input
+                  {...register("title", {
+                     required: "Name is required"
+                  })}
+                  error={errors.title}
+               />
+            </div>
+
+            <div className={cx("config-container-content")}>
+               <span className={cx("config-label")}>Paragrapth</span>
+               <Input
+                  {...register("description", {
+                     required: "Name is required"
+                  })}
+                  error={errors.description}
+                  multiple
+               />
+            </div>
+
+            {/* <div className={cx("config-container-content")}>
+               <span className={cx("config-label")}>Heading</span>
+               <Input
+                  {...register("title", {
+                     required: "Name is required"
+                  })}
+                  error={errors.title}
+               />
+            </div>
+
+            <div className={cx("config-container-content")}>
+               <span className={cx("config-label")}>Sub heading</span>
+               <Input
+                  {...register("description", {
+                     required: "Name is required"
+                  })}
+                  error={errors.description}
+               />
+            </div> */}
+
+            {/* <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Your question?</span>
                <Input
                   {...register("title", {
@@ -184,7 +227,7 @@ function SlideConfig() {
                      }}
                   />
                </div>
-            </div>
+            </div> */}
          </div>
          {/* {presentationDetailStore.state.slides.length > 0 && <AutoSave onSubmit={onSaving} />} */}
       </div>

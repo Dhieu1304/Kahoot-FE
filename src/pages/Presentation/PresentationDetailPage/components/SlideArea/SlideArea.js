@@ -63,39 +63,68 @@ function SlideArea() {
             </h1>
 
             <div className={cx("content")}>
-               <h1 className={cx("title")}>{watch("title")}</h1>
-               <div className={cx("chart-area")}>
-                  <ResponsiveContainer width="100%" height="100%">
-                     <BarChart
-                        width={"100%"}
-                        height={"100%"}
-                        data={result}
-                        margin={{
-                           top: 5,
-                           right: 30,
-                           left: 20,
-                           bottom: 5
-                        }}
-                     >
-                        <XAxis dataKey="name" />
-                        <YAxis dataKey="count" domain={[0, "dataMax + 10"]} />
-                        <Tooltip />
-                        <Legend />
-                        <Bar
-                           dataKey="count"
-                           fill="rgba(206, 179, 101)"
-                           margin={{
-                              top: 5,
-                              right: 30,
-                              left: 20,
-                              bottom: 5
-                           }}
-                        >
-                           <LabelList dataKey="count" position="top" />
-                        </Bar>
-                     </BarChart>
-                  </ResponsiveContainer>
-               </div>
+               {false && (
+                  <div className={cx("content-multiphy")}>
+                     <h1 className={cx("title")}>{watch("title")}</h1>
+                     <div className={cx("chart-area")}>
+                        <ResponsiveContainer width="100%" height="100%">
+                           <BarChart
+                              width={"100%"}
+                              height={"100%"}
+                              data={result}
+                              margin={{
+                                 top: 5,
+                                 right: 30,
+                                 left: 20,
+                                 bottom: 5
+                              }}
+                           >
+                              <XAxis dataKey="name" />
+                              <YAxis dataKey="count" domain={[0, "dataMax + 10"]} />
+                              <Tooltip />
+                              <Legend />
+                              <Bar
+                                 dataKey="count"
+                                 fill="rgba(206, 179, 101)"
+                                 margin={{
+                                    top: 5,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 5
+                                 }}
+                              >
+                                 <LabelList dataKey="count" position="top" />
+                              </Bar>
+                           </BarChart>
+                        </ResponsiveContainer>
+                     </div>
+                     <div className={cx("count-votes")}>
+                        <span className={cx("count-votes-number")}>
+                           {result?.reduce((sum, cur) => sum + cur.count, 0) || 0}
+                        </span>
+                        <FontAwesomeIcon
+                           icon={faUser}
+                           size={"1x"}
+                           className={cx("count-votes-icon")}
+                        />
+                     </div>
+                  </div>
+               )}
+
+               {false && (
+                  <div className={cx("content-heading")}>
+                     <h1 className={cx("title")}>{watch("title")}</h1>
+                     <h1 className={cx("description")}>{watch("description")}</h1>
+                  </div>
+               )}
+
+               {true && (
+                  <div className={cx("content-paragraph")}>
+                     <h1 className={cx("title")}>{watch("title")}</h1>
+                     <h1 className={cx("description")}>{watch("description")}</h1>
+                  </div>
+               )}
+
                <div className={cx("count-votes")}>
                   <span className={cx("count-votes-number")}>
                      {result?.reduce((sum, cur) => sum + cur.count, 0) || 0}

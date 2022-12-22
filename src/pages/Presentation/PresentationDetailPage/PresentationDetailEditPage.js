@@ -190,7 +190,7 @@ function PresentationDetailEditPage() {
                            <SlideArea />
                         </div>
                         <div className={cx("slide-config-wrapper")}>
-                           <SlideConfig />
+                           <SlideConfig slide={slide} />
                         </div>
                      </div>
                   ) : (

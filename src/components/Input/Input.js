@@ -22,15 +22,18 @@ const Input = forwardRef(
          rightBtn,
          hidden,
          hiddenInputField,
+         multiple,
          ...props
       },
       ref
    ) => {
+      const Comp = multiple ? "textarea" : "input";
+
       return (
          <div className={cx("wrapper", { hidden })}>
             {showLabel && <span className={cx("label")}>{label}</span>}
             <div className={cx("container")}>
-               <input
+               <Comp
                   className={cx("input-field", { hiddenInputField })}
                   placeholder={placeholder}
                   type={type}
@@ -39,6 +42,12 @@ const Input = forwardRef(
                   {...props}
                   ref={ref}
                   readOnly={disable}
+                  multiple={multiple}
+                  style={
+                     multiple && {
+                        height: 100
+                     }
+                  }
                />
                {rightBtn && <div className={cx("rightBtn-container")}>{rightBtn}</div>}
             </div>

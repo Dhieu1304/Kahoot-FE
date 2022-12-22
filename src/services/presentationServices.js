@@ -131,13 +131,14 @@ const updateSlides = async (presentation_id, slides) => {
 
    const data = slides.map((slide, index) => {
       const ordinal_slide_number = index + 1;
-      const { slideTypeId: slide_type_id, title, body } = slide;
+      const { slideTypeId: slide_type_id, title, body, description } = slide;
 
       return {
          ordinal_slide_number,
          slide_type_id,
          title,
          body
+         // description
       };
    });
 
