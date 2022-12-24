@@ -27,7 +27,7 @@ import PresentationClientPage from "./pages/PresentationClient/PresentationClien
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
 import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 import PresentationDetailEditPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailEditPage";
-import PresentationDetailEmptyPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailEmptyPage";
+
 import PresentationPlayProviderWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayProviderWrapper";
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
 import PresentationPlayPage from "./pages/Presentation/PresentationPlay/PresentationPlayPage";
@@ -135,7 +135,7 @@ function App() {
                                  </PresentationDetailProvider>
                               }
                            >
-                              <Route path="" element={<PresentationDetailEmptyPage />} />
+                              {/* <Route path="" element={<Navigate to={"/"} />} /> */}
                               <Route path=":slideId" element={<PresentationDetailEditPage />} />
                            </Route>
 

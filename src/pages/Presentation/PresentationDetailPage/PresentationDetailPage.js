@@ -9,7 +9,7 @@ import styles from "./PresentationDetailPage.module.scss";
 import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { Outlet, useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { Col, Container, Row } from "react-bootstrap";
 import { slideTypes } from "./config";
@@ -25,6 +25,7 @@ function PresentationDetailPage() {
    const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
 
    const location = useLocation();
+   const outlet = useOutlet();
 
    useEffect(() => {
       const loadData = async () => {
@@ -40,8 +41,24 @@ function PresentationDetailPage() {
       loadData();
    }, []);
 
+   const renderNoOutlet = () => {
+      const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
+      const slides = presentationDetailStore.state.slides;
+      const slide =
+         presentationDetailStore.state.slides.length > 0 && presentationDetailStore.state.slides[0];
+
+      let to = `/presentation/${presentationId}/edit/0`;
+      if (slide && slide?.ordinalSlideNumber) {
+         const slideId = slide?.ordinalSlideNumber;
+
+         to = `/presentation/${presentationId}/edit/${slideId}`;
+      }
+      return <Navigate to={to} />;
+   };
+
    return (
-      presentationDetailStore.state.isInit && (
+      presentationDetailStore.state.isInit &&
+      (outlet ? (
          <Outlet
             context={{
                showCreateSlideModal,
@@ -52,7 +69,9 @@ function PresentationDetailPage() {
                setShowSlideListWhenNotDesktop
             }}
          />
-      )
+      ) : (
+         renderNoOutlet()
+      ))
    );
 }
 

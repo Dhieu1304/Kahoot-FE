@@ -6,7 +6,10 @@ import {
    faArrowLeft,
    faPlay,
    faCheck,
-   faBars
+   faBars,
+   faX,
+   faXmarkCircle,
+   faTrash
 } from "@fortawesome/free-solid-svg-icons";
 
 import classNames from "classnames/bind";
@@ -238,6 +241,7 @@ function Header() {
                   }}
                />
             </div>
+
             <div className={cx("right")}>
                {/* <Button
                   title={"Themes"}
