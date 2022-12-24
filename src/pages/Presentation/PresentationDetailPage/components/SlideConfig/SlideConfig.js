@@ -120,7 +120,7 @@ function SlideConfig({ slide }) {
                />
             </div>
 
-            <div className={cx("config-container-content")}>
+            {/* <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Title</span>
                <Input
                   {...register("title", {
@@ -139,7 +139,7 @@ function SlideConfig({ slide }) {
                   error={errors.description}
                   multiple
                />
-            </div>
+            </div> */}
 
             {/* <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Heading</span>
@@ -161,7 +161,7 @@ function SlideConfig({ slide }) {
                />
             </div> */}
 
-            {/* <div className={cx("config-container-content")}>
+            <div className={cx("config-container-content")}>
                <span className={cx("config-label")}>Your question?</span>
                <Input
                   {...register("title", {
@@ -223,7 +223,7 @@ function SlideConfig({ slide }) {
                      }}
                   />
                </div>
-            </div> */}
+            </div>
          </div>
          {/* {presentationDetailStore.state.slides.length > 0 && <AutoSave onSubmit={onSaving} />} */}
       </div>

@@ -15,6 +15,8 @@ import { usePresentationStore } from "./store";
 import ActionMenu from "./components/ActionMenu";
 
 import { limitOptions, selectOptions } from "./config";
+import RenamePresentationModal from "./components/RenamePresentationModal";
+import InviteToPresentationModal from "./components/InviteToPresentationModal";
 
 const cx = classNames.bind(styles);
 
@@ -22,9 +24,16 @@ function PresentationPage() {
    const presentationStore = usePresentationStore();
 
    // show/hide modal state
-   const [showCreateModal, setShowCreateModal] = useState(false);
-   const [showRenameModal, setShowRenameModal] = useState(false);
-   const [currentPresentationRowId, setCurrentPresentationRowId] = useState(false);
+   const {
+      showCreateModal,
+      setShowCreateModal,
+      showRenameModal,
+      setShowRenameModal,
+      showDeleteModal,
+      setShowDeleteModal,
+      showInviteModal,
+      setShowInviteModal
+   } = presentationStore;
 
    // filter state
    const [isSelectAll, setIsSelectAll] = useState(false);
@@ -255,6 +264,8 @@ function PresentationPage() {
          </div>
 
          <CreatePresentationModal show={showCreateModal} setShow={setShowCreateModal} />
+         <RenamePresentationModal show={showRenameModal} setShow={setShowRenameModal} />
+         <InviteToPresentationModal show={showInviteModal} setShow={setShowInviteModal} />
       </div>
    );
 }

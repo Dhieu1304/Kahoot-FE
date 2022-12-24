@@ -3,8 +3,25 @@ import Context from "./Context";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
+import { useState } from "react";
 
 function PresentationProvider({ children }) {
+   const [showCreateModal, setShowCreateModal] = useState(false);
+   const [showRenameModal, setShowRenameModal] = useState(false);
+   const [showDeleteModal, setShowDeleteModal] = useState(false);
+   const [showInviteModal, setShowInviteModal] = useState(false);
+
+   const rest = {
+      showCreateModal,
+      setShowCreateModal,
+      showRenameModal,
+      setShowRenameModal,
+      showDeleteModal,
+      setShowDeleteModal,
+      showInviteModal,
+      setShowInviteModal
+   };
+
    const [state, dispatch] = useReducer(reducer, initState);
 
    const method = {
@@ -28,7 +45,7 @@ function PresentationProvider({ children }) {
       }
    };
 
-   return <Context.Provider value={{ state, method }}>{children}</Context.Provider>;
+   return <Context.Provider value={{ state, method, ...rest }}>{children}</Context.Provider>;
 }
 
 export default PresentationProvider;

@@ -24,10 +24,10 @@ function CreatePresentationModal({ show, setShow }) {
 
    const navigate = useNavigate();
 
-   const handleRename = async ({ name }) => {
-      // call service to rename
+   const handleSubmitCreateModal = async ({ name }) => {
+      const presentation = await presentationServices.createPresentation(name);
 
-      //
+      if (presentation) navigate(`/presentation/${presentation.id}/1/edit`);
 
       resetField("name");
       setShow(false);
@@ -39,7 +39,7 @@ function CreatePresentationModal({ show, setShow }) {
          show={show}
          setShow={setShow}
          haveSubmitBtn
-         onSubmitModal={handleSubmit(handleRename)}
+         onSubmitModal={handleSubmit(handleSubmitCreateModal)}
          submitBtnTitle={"Create"}
       >
          <Input

@@ -1,14 +1,11 @@
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
 import Input from "../../../../components/Input";
 import Modal from "../../../../components/Modal";
 
-import { AuthContext } from "../../../../providers/auth";
 import presentationServices from "../../../../services/presentationServices";
 
-function useContext({ show, setShow }) {
+function RenamePresentationModal({ show, setShow }) {
    const {
       register,
       handleSubmit,
@@ -22,12 +19,12 @@ function useContext({ show, setShow }) {
       criteriaMode: "all"
    });
 
-   const navigate = useNavigate();
+   const handleSubmitRenameModal = async ({ name }) => {
+      // call service to rename
 
-   const handleSubmitCreateModal = async ({ name }) => {
-      const presentation = await presentationServices.createPresentation(name);
+      //
 
-      if (presentation) navigate(`/presentation/${presentation.id}/1/edit`);
+      console.log("name: ", name);
 
       resetField("name");
       setShow(false);
@@ -35,12 +32,12 @@ function useContext({ show, setShow }) {
 
    return (
       <Modal
-         title={"Create Presentation"}
+         title={"Rename Presentation"}
          show={show}
          setShow={setShow}
          haveSubmitBtn
-         onSubmitModal={handleSubmit(handleSubmitCreateModal)}
-         submitBtnTitle={"Create"}
+         onSubmitModal={handleSubmit(handleSubmitRenameModal)}
+         submitBtnTitle={"Rename"}
       >
          <Input
             placeholder="Name"
@@ -56,4 +53,4 @@ function useContext({ show, setShow }) {
    );
 }
 
-export default useContext;
+export default RenamePresentationModal;

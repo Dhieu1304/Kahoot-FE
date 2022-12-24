@@ -11,9 +11,14 @@ import { useNavigate } from "react-router-dom";
 
 import CustomDropdownMenu from "../../../../components/CustomDropdownMenu";
 import CustomDropdownMenuItem from "../../../../components/CustomDropdownMenu/CustomDropdownMenuItem";
+import { usePresentationStore } from "../store";
 
 function ActionMenu({ id }) {
    const navigate = useNavigate();
+
+   const presentationStore = usePresentationStore();
+
+   const { setShowRenameModal, setShowDeleteModal, setShowInviteModal } = presentationStore;
 
    return (
       <CustomDropdownMenu>
@@ -31,6 +36,7 @@ function ActionMenu({ id }) {
          <CustomDropdownMenuItem
             label={"Invite collaborator"}
             leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
+            onClick={() => setShowInviteModal(true)}
          />
          <CustomDropdownMenuItem
             label={"Share"}
@@ -39,10 +45,12 @@ function ActionMenu({ id }) {
          <CustomDropdownMenuItem
             label={"Rename"}
             leftIcon={<FontAwesomeIcon icon={faPen} size={"1x"} />}
+            onClick={() => setShowRenameModal(true)}
          />
          <CustomDropdownMenuItem
             label={"Delete"}
             leftIcon={<FontAwesomeIcon icon={faTrash} size={"1x"} />}
+            onClick={() => setShowDeleteModal(true)}
          />
       </CustomDropdownMenu>
    );
