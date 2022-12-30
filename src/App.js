@@ -25,7 +25,7 @@ import PresentationPage from "./pages/Presentation/PresentationPage";
 
 import PresentationDetailPageWrapper from "./pages/Presentation/PresentationDetailPage/PresentationDetailPageWrapper";
 import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store/Provider";
-import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
+import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailPage";
 
 import PresentationClientPage from "./pages/PresentationClient/PresentationClientPage";
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";

@@ -2,7 +2,8 @@ import {
    SET_PRESENTATIONS,
    FETCHING_API,
    FETCHING_API_SUCCESS,
-   FETCHING_API_FAILED
+   FETCHING_API_FAILED,
+   SET_INIT
 } from "./contants";
 
 export const setPresentations = (payload) => ({
@@ -25,9 +26,15 @@ export const fetchApiFailed = (payload) => ({
    payload
 });
 
+export const setInit = (payload) => ({
+   type: SET_INIT,
+   payload
+});
+
 export default {
    setPresentations,
    fetchApi,
    fetchApiSuccess,
-   fetchApiFailed
+   fetchApiFailed,
+   setInit
 };

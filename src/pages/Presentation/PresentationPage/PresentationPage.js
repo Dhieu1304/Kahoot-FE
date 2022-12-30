@@ -54,6 +54,7 @@ function PresentationPage() {
       // load data
       const loadData = async () => {
          presentationStore.method.loadPresentations();
+         presentationStore.method.setInit();
       };
       loadData();
    }, []);
@@ -105,90 +106,137 @@ function PresentationPage() {
    };
 
    return (
-      <div
-         className={cx("wrapper", {
-            isMobile
-         })}
-      >
-         <div className={cx("container")}>
-            <div className={cx("header")}>
-               <h1 className={cx("title")}>My Presentations</h1>
-               <div className={cx("nav")}>
-                  <div className={cx("btn-group")}>
-                     <Button
-                        title="Create"
-                        basicBlue
-                        big
-                        rounded
-                        className={cx("btn")}
-                        leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
-                        onClick={() => {
-                           setShowCreateModal(true);
-                        }}
-                     />
-                  </div>
-                  <div className={cx("filters")}>
-                     <Select
-                        defaultValue={limit}
-                        placeholder="limit"
-                        onChange={setLimit}
-                        options={limitOptions}
-                        className={cx("limit")}
-                        isSearchable={false}
-                     />
-                     <Select
-                        defaultValue={selectedOption}
-                        onChange={setSelectedOption}
-                        options={selectOptions}
-                        className={cx("select")}
-                        isSearchable={false}
-                     />
+      presentationStore.state.isInit && (
+         <div
+            className={cx("wrapper", {
+               isMobile
+            })}
+         >
+            <div className={cx("container")}>
+               <div className={cx("header")}>
+                  <h1 className={cx("title")}>My Presentations</h1>
+                  <div className={cx("nav")}>
+                     <div className={cx("btn-group")}>
+                        <Button
+                           title="Create"
+                           basicBlue
+                           big
+                           rounded
+                           className={cx("btn")}
+                           leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
+                           onClick={() => {
+                              setShowCreateModal(true);
+                           }}
+                        />
+                     </div>
+                     <div className={cx("filters")}>
+                        <Select
+                           defaultValue={limit}
+                           placeholder="limit"
+                           onChange={setLimit}
+                           options={limitOptions}
+                           className={cx("limit")}
+                           isSearchable={false}
+                        />
+                        <Select
+                           defaultValue={selectedOption}
+                           onChange={setSelectedOption}
+                           options={selectOptions}
+                           className={cx("select")}
+                           isSearchable={false}
+                        />
+                     </div>
                   </div>
                </div>
-            </div>
 
-            {isNotMobile ? (
-               <Table className={cx("table")}>
-                  <thead className={cx("thead")}>
-                     <tr className={cx("tr")}>
-                        <th className={cx("th")}>
-                           <input
-                              type={"checkbox"}
-                              checked={isSelectAll}
-                              onChange={handleSelectedAll}
-                              className={cx("checkbox")}
-                           />
-                        </th>
-                        <th className={cx("th")}>id</th>
-                        <th className={cx("th")}>Name</th>
-                        <th className={cx("th")}>Code</th>
-                        <th className={cx("th")}>Owner</th>
+               {isNotMobile ? (
+                  <Table className={cx("table")}>
+                     <thead className={cx("thead")}>
+                        <tr className={cx("tr")}>
+                           <th className={cx("th")}>
+                              <input
+                                 type={"checkbox"}
+                                 checked={isSelectAll}
+                                 onChange={handleSelectedAll}
+                                 className={cx("checkbox")}
+                              />
+                           </th>
+                           <th className={cx("th")}>id</th>
+                           <th className={cx("th")}>Name</th>
+                           <th className={cx("th")}>Code</th>
+                           <th className={cx("th")}>Owner</th>
 
-                        {isDesktop && (
-                           <>
-                              <th className={cx("th")}>Modified</th>
-                              <th className={cx("th")}>Created</th>
-                           </>
-                        )}
-                        <th className={cx("th")}></th>
-                     </tr>
-                  </thead>
-                  <tbody className={cx("tbody")}>
+                           {isDesktop && (
+                              <>
+                                 <th className={cx("th")}>Modified</th>
+                                 <th className={cx("th")}>Created</th>
+                              </>
+                           )}
+                           <th className={cx("th")}></th>
+                        </tr>
+                     </thead>
+                     <tbody className={cx("tbody")}>
+                        {presentationStore.state.presentations?.map((presentation, index) => {
+                           const isChecked = selectedRowIds.includes(presentation.id);
+                           return (
+                              <tr className={cx("tr")} key={index}>
+                                 <td className={cx("td")}>
+                                    <input
+                                       type={"checkbox"}
+                                       checked={isChecked}
+                                       onChange={() => handleSelected(presentation.id, isChecked)}
+                                       className={cx("checkbox")}
+                                    />
+                                 </td>
+                                 <td className={cx("td")}>{presentation?.id}</td>
+                                 <td className={cx("td")}>
+                                    <div className={cx("presentation-infor-cell")}>
+                                       <Link to={`${presentation.id}/1`}>
+                                          <FontAwesomeIcon
+                                             icon={faPlayCircle}
+                                             size="1x"
+                                             className={cx("icon")}
+                                          />
+                                       </Link>
+                                       <Link to={`${presentation.id}/edit`}>
+                                          {presentation?.name}
+                                       </Link>
+                                    </div>
+                                 </td>
+                                 <td className={cx("td")}>{presentation?.code}</td>
+                                 <td className={cx("td")}>Me</td>
+
+                                 {isDesktop && (
+                                    <>
+                                       <td className={cx("td")}>
+                                          {dateFormat.format(
+                                             new Date(presentation?.createdAt),
+                                             "DD/MM/YYYY HH:mm"
+                                          )}
+                                       </td>
+                                       <td className={cx("td")}>
+                                          {dateFormat.format(
+                                             new Date(presentation?.updatedAt),
+                                             "DD/MM/YYYY HH:mm"
+                                          )}
+                                       </td>
+                                    </>
+                                 )}
+                                 <td className={cx("td")}>
+                                    <ActionMenu id={presentation.id} />
+                                 </td>
+                              </tr>
+                           );
+                        })}
+                     </tbody>
+                  </Table>
+               ) : (
+                  <ListGroup className={cx("list")}>
                      {presentationStore.state.presentations?.map((presentation, index) => {
-                        const isChecked = selectedRowIds.includes(presentation.id);
                         return (
-                           <tr className={cx("tr")} key={index}>
-                              <td className={cx("td")}>
-                                 <input
-                                    type={"checkbox"}
-                                    checked={isChecked}
-                                    onChange={() => handleSelected(presentation.id, isChecked)}
-                                    className={cx("checkbox")}
-                                 />
-                              </td>
-                              <td className={cx("td")}>{presentation?.id}</td>
-                              <td className={cx("td")}>
-                                 <div className={cx("presentation-infor-cell")}>
+                           <ListGroup.Item className={cx("item")} key={index}>
+                              <div className={cx("top")}>
+                                 <div className={cx("infor")}>
                                     <Link to={`${presentation.id}/1`}>
                                        <FontAwesomeIcon
                                           icon={faPlayCircle}
@@ -196,77 +244,34 @@ function PresentationPage() {
                                           className={cx("icon")}
                                        />
                                     </Link>
+
                                     <Link to={`${presentation.id}/edit`}>{presentation?.name}</Link>
                                  </div>
-                              </td>
-                              <td className={cx("td")}>{presentation?.code}</td>
-                              <td className={cx("td")}>Me</td>
-
-                              {isDesktop && (
-                                 <>
-                                    <td className={cx("td")}>
-                                       {dateFormat.format(
-                                          new Date(presentation?.createdAt),
-                                          "DD/MM/YYYY HH:mm"
-                                       )}
-                                    </td>
-                                    <td className={cx("td")}>
-                                       {dateFormat.format(
-                                          new Date(presentation?.updatedAt),
-                                          "DD/MM/YYYY HH:mm"
-                                       )}
-                                    </td>
-                                 </>
-                              )}
-                              <td className={cx("td")}>
                                  <ActionMenu id={presentation.id} />
-                              </td>
-                           </tr>
+                              </div>
+                              <div className={cx("bottom")}>
+                                 <span className={cx("onwer")}>me</span>
+                              </div>
+                           </ListGroup.Item>
                         );
                      })}
-                  </tbody>
-               </Table>
-            ) : (
-               <ListGroup className={cx("list")}>
-                  {presentationStore.state.presentations?.map((presentation, index) => {
-                     return (
-                        <ListGroup.Item className={cx("item")} key={index}>
-                           <div className={cx("top")}>
-                              <div className={cx("infor")}>
-                                 <Link to={`${presentation.id}/1`}>
-                                    <FontAwesomeIcon
-                                       icon={faPlayCircle}
-                                       size="1x"
-                                       className={cx("icon")}
-                                    />
-                                 </Link>
+                  </ListGroup>
+               )}
+            </div>
 
-                                 <Link to={`${presentation.id}/edit`}>{presentation?.name}</Link>
-                              </div>
-                              <ActionMenu id={presentation.id} />
-                           </div>
-                           <div className={cx("bottom")}>
-                              <span className={cx("onwer")}>me</span>
-                           </div>
-                        </ListGroup.Item>
-                     );
-                  })}
-               </ListGroup>
-            )}
+            <CreatePresentationModal show={showCreateModal} setShow={setShowCreateModal} />
+            <RenamePresentationModal show={showRenameModal} setShow={setShowRenameModal} />
+            <InviteToPresentationModal show={showInviteModal} setShow={setShowInviteModal} />
+            <Modal
+               title={"Delete Presentation"}
+               haveSubmitBtn
+               submitBtnTitle={"Delete"}
+               onSubmitModal={handleDeletePresentation}
+               show={showDeleteModal}
+               setShow={setShowDeleteModal}
+            />
          </div>
-
-         <CreatePresentationModal show={showCreateModal} setShow={setShowCreateModal} />
-         <RenamePresentationModal show={showRenameModal} setShow={setShowRenameModal} />
-         <InviteToPresentationModal show={showInviteModal} setShow={setShowInviteModal} />
-         <Modal
-            title={"Delete Presentation"}
-            haveSubmitBtn
-            submitBtnTitle={"Delete"}
-            onSubmitModal={handleDeletePresentation}
-            show={showDeleteModal}
-            setShow={setShowDeleteModal}
-         />
-      </div>
+      )
    );
 }
 

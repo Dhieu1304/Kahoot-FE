@@ -1,7 +1,11 @@
-import { useForm } from "react-hook-form";
+import { useContext, useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
 
 import Input from "../../../../components/Input";
 import Modal from "../../../../components/Modal";
+import { AuthContext } from "../../../../providers/auth";
+import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../services/groupService";
 
 import presentationServices from "../../../../services/presentationServices";
 
@@ -9,24 +13,58 @@ function RenamePresentationModal({ show, setShow }) {
    const {
       register,
       handleSubmit,
-      resetField,
+      reset,
+      setValue,
+      watch,
+      control,
       formState: { errors }
    } = useForm({
       mode: "onChange",
       defaultValues: {
-         name: ""
+         name: "",
+         groups: [],
+         type: "PUBLIC"
       },
       criteriaMode: "all"
    });
 
-   const handleSubmitRenameModal = async ({ name }) => {
+   const [groupList, setGroupList] = useState([]);
+
+   const authContext = useContext(AuthContext);
+
+   useEffect(() => {
+      const loadData = async () => {
+         const userId = authContext.user.id;
+         const groupOwnedData = await getGroupsByOwnUserId(userId);
+         // console.log("groupOwnedData: ", groupOwnedData);
+         const groupJoinedData = await getGroupsByJoinedUserId(userId);
+         // console.log("groupJoinedData: ", groupJoinedData);
+
+         const groups = [
+            {
+               label: "Owned",
+               options: groupOwnedData
+            },
+            {
+               label: "Joined",
+               options: groupJoinedData
+            }
+         ];
+
+         setGroupList(groups);
+      };
+
+      loadData();
+   }, [authContext.user.id]);
+
+   const handleSubmitRenameModal = async ({ name, groups, type }) => {
       // call service to rename
 
       //
 
-      console.log("name: ", name);
+      console.log("handleSubmitRenameModal: ", { name, groups, type });
 
-      resetField("name");
+      reset();
       setShow(false);
    };
 
@@ -49,6 +87,58 @@ function RenamePresentationModal({ show, setShow }) {
             })}
             error={errors.name}
          />
+         <div>
+            <div>
+               <input
+                  checked={watch("type") + "PRIVATE"}
+                  type="radio"
+                  value={"PRIVATE"}
+                  {...register("type")}
+               />
+               <span>Private</span>
+            </div>
+            <div>
+               <input
+                  checked={watch("type") + "PUBLIC"}
+                  type="radio"
+                  value={"PUBLIC"}
+                  {...register("type")}
+               />
+               <span>Public</span>
+            </div>
+         </div>
+
+         <div>
+            <span>Slide type</span>
+
+            <Controller
+               control={control}
+               rules={{
+                  required: "require"
+               }}
+               render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => (
+                  <Select
+                     isMulti={true}
+                     defaultValue={watch("groups")}
+                     placeholder="Select"
+                     onChange={onChange}
+                     value={value}
+                     onBlur={onBlur}
+                     options={groupList}
+                     isSearchable={false}
+                     formatGroupLabel={({ label }) => {
+                        return <div>{label}</div>;
+                     }}
+                     formatOptionLabel={({ name }) => {
+                        return <div>{name}</div>;
+                     }}
+                     getOptionValue={(option) => option.id}
+                     theme={"white"}
+                  />
+               )}
+               name="groups"
+            />
+         </div>
       </Modal>
    );
 }

@@ -47,6 +47,10 @@ function PresentationProvider({ children }) {
          return data;
       },
 
+      setInit: () => {
+         dispatch(actions.setInit(true));
+      },
+
       deletePresentation: async (presentationId) => {
          const resultPresentation = await presentationServices.deletePresentationById(
             presentationId

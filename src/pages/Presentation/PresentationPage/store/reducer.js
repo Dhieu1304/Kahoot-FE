@@ -2,13 +2,15 @@ import {
    SET_PRESENTATIONS,
    FETCHING_API,
    FETCHING_API_SUCCESS,
-   FETCHING_API_FAILED
+   FETCHING_API_FAILED,
+   SET_INIT
 } from "./contants";
 
 const initState = {
    presentations: [],
    count: 0,
 
+   isInit: false,
    isLoading: false,
    isFetchApiError: false,
    fetchApiError: ""
@@ -46,6 +48,12 @@ function reducer(state, action) {
             isLoading: false,
             isFetchApiError: true,
             fetchApiError: action.payload
+         };
+
+      case SET_INIT:
+         return {
+            ...state,
+            isInit: true
          };
 
       default:
