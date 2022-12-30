@@ -8,6 +8,9 @@ function PresentationDetailProvider({ children }) {
    const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
    const [showChangeThemeModal, setShowChangeThemeModal] = useState(false);
    const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
+   const [showDeleteSlideModal, setShowDeleteSlideModal] = useState(false);
+
+   const [selectedSlideIndexToAction, setSelectedSlideIndexToAction] = useState(-1);
 
    const rest = {
       showCreateSlideModal,
@@ -15,7 +18,11 @@ function PresentationDetailProvider({ children }) {
       showChangeThemeModal,
       setShowChangeThemeModal,
       showSlideListWhenNotDesktop,
-      setShowSlideListWhenNotDesktop
+      setShowSlideListWhenNotDesktop,
+      showDeleteSlideModal,
+      setShowDeleteSlideModal,
+      selectedSlideIndexToAction,
+      setSelectedSlideIndexToAction
    };
 
    const [state, dispatch] = useReducer(reducer, initState);
@@ -92,6 +99,39 @@ function PresentationDetailProvider({ children }) {
          const newSlides = oldSlides.map((cur) => cur);
 
          newSlides.splice(index, 1, slide);
+
+         // const resultPresentation = await presentationServices.savePresentation(state.presentation);
+
+         const resultSlide = await presentationServices.updateSlides(
+            state.presentation.id,
+            newSlides
+         );
+
+         const id = state.presentation.id;
+
+         if (resultSlide) {
+            dispatch(actions.fetchApi());
+
+            const slides = await presentationServices.getAllSlidesByPresentationId(id);
+
+            if (slides) {
+               dispatch(actions.setSlides(slides));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+         }
+
+         dispatch(actions.setCheckLoadNewData());
+      },
+
+      deleteSlide: async (index) => {
+         dispatch(actions.fetchApi());
+
+         const oldSlides = [...state.slides];
+         const newSlides = oldSlides.map((cur) => cur);
+
+         newSlides.splice(index, 1);
 
          // const resultPresentation = await presentationServices.savePresentation(state.presentation);
 

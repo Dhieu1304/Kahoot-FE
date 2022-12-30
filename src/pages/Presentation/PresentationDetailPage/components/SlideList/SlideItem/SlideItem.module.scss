@@ -4,6 +4,7 @@
    justify-content: flex-start;
    align-items: stretch;
    background-color: white;
+   position: relative;
 
    padding: 1rem;
 
@@ -30,6 +31,10 @@
 
    &:hover {
       opacity: 0.6;
+
+      .delete-icon {
+         color: red;
+      }
    }
 
    &:hover .icon-wrapper {
@@ -56,6 +61,13 @@
          // color: var(--white-color);
          text-align: center;
       }
+   }
+   .delete-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #ccc;
+      cursor: pointer;
    }
 }
 
@@ -93,5 +105,15 @@
    .container {
       width: 250px;
       height: 150px;
+   }
+}
+
+.wrapper.isSelectToRemove {
+   background-color: rgba(25, 108, 255, 0.2);
+   position: relative;
+
+   .container {
+      border: 2px solid rgb(255, 25, 25);
+      border-radius: 5px;
    }
 }

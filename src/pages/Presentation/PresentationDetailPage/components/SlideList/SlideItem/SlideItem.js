@@ -5,14 +5,19 @@ import styles from "./SlideItem.module.scss";
 import { Link, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
+import { faGripVertical, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
 const SlideItem = ({ slide, index, presentationId }) => {
    const navigate = useNavigate();
    const presentationDetailStore = usePresentationDetailStore();
+   const {
+      showDeleteSlideModal,
+      setShowDeleteSlideModal,
+      selectedSlideIndexToAction,
+      setSelectedSlideIndexToAction
+   } = presentationDetailStore;
 
    // console.log("slide in slideItem: ", slide);
 
@@ -27,14 +32,28 @@ const SlideItem = ({ slide, index, presentationId }) => {
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
 
    return (
-      <Link to={to} className={cx("wrapper", { active, isNotDesktop })}>
+      <div
+         className={cx("wrapper", {
+            active,
+            isNotDesktop,
+            isSelectToRemove: showDeleteSlideModal && selectedSlideIndexToAction === index
+         })}
+      >
          <div className={cx("left")}>
             <span className={cx("index")}>{index + 1}</span>
             <div className={cx("icon-wrapper")}>
-               <FontAwesomeIcon size="1x" icon={faGripVertical} className={cx("icon")} />
+               <FontAwesomeIcon
+                  size="1x"
+                  icon={faGripVertical}
+                  className={cx("icon")}
+                  onClick={() => {
+                     setShowDeleteSlideModal(true);
+                  }}
+               />
             </div>
          </div>
-         <div
+         <Link
+            to={to}
             className={cx("container")}
             style={{
                backgroundColor:
@@ -42,9 +61,18 @@ const SlideItem = ({ slide, index, presentationId }) => {
                color: presentationDetailStore.state.presentation?.presentationTheme.textColor
             }}
          >
-            <h1 className={cx("title")}>{slide?.title}</h1>;
-         </div>
-      </Link>
+            <h1 className={cx("title")}>{slide?.title}</h1>
+         </Link>
+         <FontAwesomeIcon
+            size="1x"
+            icon={faXmark}
+            className={cx("delete-icon")}
+            onClick={() => {
+               setShowDeleteSlideModal(true);
+               setSelectedSlideIndexToAction(index);
+            }}
+         />
+      </div>
    );
 };
 

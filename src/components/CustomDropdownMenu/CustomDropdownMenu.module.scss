@@ -3,6 +3,10 @@
    .toggle-icon {
    }
    .menu {
+      z-index: 10000;
+      position: absolute;
+      background-color: red;
+
       .item {
          font-size: 1.6rem;
 

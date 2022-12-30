@@ -7,15 +7,19 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
-function ActionMenu({ children }) {
+function CustomDropdownMenu({ children, toggleIcon }) {
    return (
       <Dropdown className={cx("container")}>
          <Dropdown.Toggle as={CustomToggleDropdownBtn}>
-            <FontAwesomeIcon icon={faEllipsis} size={"1x"} className={cx("toggle-icon")} />
+            {toggleIcon ? (
+               toggleIcon
+            ) : (
+               <FontAwesomeIcon icon={faEllipsis} size={"1x"} className={cx("toggle-icon")} />
+            )}
          </Dropdown.Toggle>
          <Dropdown.Menu className={cx("menu")}>{children}</Dropdown.Menu>
       </Dropdown>
    );
 }
 
-export default ActionMenu;
+export default CustomDropdownMenu;
