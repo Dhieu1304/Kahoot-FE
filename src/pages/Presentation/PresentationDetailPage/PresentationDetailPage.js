@@ -129,18 +129,23 @@ function PresentationDetailPage() {
                setShow={setShowCreateSlideModal}
             >
                <div className={cx("choice-slide-group")}>
-                  <div className={cx("item")}>
-                     <input type="radio" value="MULTI" name="type" />
-                     <span className={cx("label")}>Muti choices</span>
-                  </div>
-                  {/* <div className={cx("item")}>
-                <input type="radio" value="SLIDE" name="type" />
-                <span className={cx("label")}>Slide</span>
-             </div>
-             <div className={cx("item")}>
-                <input type="radio" value="QUIZ" name="type" />
-                <span className={cx("label")}>Quiz</span>
-             </div> */}
+                  {presentationDetailStore.state.slideTypesConfig.map((current, index) => {
+                     return current.slideTypes?.map((type, typeIndex) => {
+                        return (
+                           <div className={cx("item")} key={typeIndex}>
+                              <input
+                                 checked={
+                                    type?.id + "" === createNewSlideForm.watch("slideTypeId") + ""
+                                 }
+                                 type="radio"
+                                 value={type?.id}
+                                 {...createNewSlideForm.register("slideTypeId")}
+                              />
+                              <span className={cx("label")}>{type?.name}</span>
+                           </div>
+                        );
+                     });
+                  })}
                </div>
             </Modal>
 

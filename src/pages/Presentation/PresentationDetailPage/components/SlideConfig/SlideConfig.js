@@ -241,6 +241,7 @@ function SlideConfig({ slide }) {
                         defaultValue={watch("slideType")}
                         placeholder="Select"
                         onChange={onChange}
+                        value={value}
                         onBlur={onBlur}
                         options={slideTypes}
                         className={cx("select-type")}
