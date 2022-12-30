@@ -18,7 +18,12 @@ function ActionMenu({ id }) {
 
    const presentationStore = usePresentationStore();
 
-   const { setShowRenameModal, setShowDeleteModal, setShowInviteModal } = presentationStore;
+   const {
+      setShowRenameModal,
+      setShowDeleteModal,
+      setShowInviteModal,
+      setSelectedPresentationIdToAction
+   } = presentationStore;
 
    return (
       <CustomDropdownMenu>
@@ -50,7 +55,11 @@ function ActionMenu({ id }) {
          <CustomDropdownMenuItem
             label={"Delete"}
             leftIcon={<FontAwesomeIcon icon={faTrash} size={"1x"} />}
-            onClick={() => setShowDeleteModal(true)}
+            onClick={() => {
+               console.log("delete");
+               setShowDeleteModal(true);
+               setSelectedPresentationIdToAction(id);
+            }}
          />
       </CustomDropdownMenu>
    );

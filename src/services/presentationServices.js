@@ -168,7 +168,7 @@ const deletePresentationById = async (presentation_id) => {
       const res = await axiosClient.post(`/presentation/delete`, {
          presentation_id
       });
-      // console.log("res: ", res);
+      console.log("res: ", res);
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);

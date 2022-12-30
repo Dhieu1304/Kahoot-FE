@@ -17,6 +17,7 @@ import ActionMenu from "./components/ActionMenu";
 import { limitOptions, selectOptions } from "./config";
 import RenamePresentationModal from "./components/RenamePresentationModal";
 import InviteToPresentationModal from "./components/InviteToPresentationModal";
+import Modal from "../../../components/Modal";
 
 const cx = classNames.bind(styles);
 
@@ -32,7 +33,9 @@ function PresentationPage() {
       showDeleteModal,
       setShowDeleteModal,
       showInviteModal,
-      setShowInviteModal
+      setShowInviteModal,
+      selectedPresentationIdToAction,
+      setSelectedPresentationIdToAction
    } = presentationStore;
 
    // filter state
@@ -91,6 +94,14 @@ function PresentationPage() {
       if (isChecked) {
          setIsSelectAll(false);
       }
+   };
+
+   const handleDeletePresentation = async () => {
+      console.log("selectedPresentationIdToAction: ", selectedPresentationIdToAction);
+      await presentationStore.method.deletePresentation(selectedPresentationIdToAction);
+
+      setShowDeleteModal(false);
+      setSelectedPresentationIdToAction(-1);
    };
 
    return (
@@ -247,6 +258,14 @@ function PresentationPage() {
          <CreatePresentationModal show={showCreateModal} setShow={setShowCreateModal} />
          <RenamePresentationModal show={showRenameModal} setShow={setShowRenameModal} />
          <InviteToPresentationModal show={showInviteModal} setShow={setShowInviteModal} />
+         <Modal
+            title={"Delete Presentation"}
+            haveSubmitBtn
+            submitBtnTitle={"Delete"}
+            onSubmitModal={handleDeletePresentation}
+            show={showDeleteModal}
+            setShow={setShowDeleteModal}
+         />
       </div>
    );
 }

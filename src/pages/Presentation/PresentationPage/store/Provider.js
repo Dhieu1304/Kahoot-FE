@@ -10,6 +10,7 @@ function PresentationProvider({ children }) {
    const [showRenameModal, setShowRenameModal] = useState(false);
    const [showDeleteModal, setShowDeleteModal] = useState(false);
    const [showInviteModal, setShowInviteModal] = useState(false);
+   const [selectedPresentationIdToAction, setSelectedPresentationIdToAction] = useState(-1);
 
    const rest = {
       showCreateModal,
@@ -19,7 +20,9 @@ function PresentationProvider({ children }) {
       showDeleteModal,
       setShowDeleteModal,
       showInviteModal,
-      setShowInviteModal
+      setShowInviteModal,
+      selectedPresentationIdToAction,
+      setSelectedPresentationIdToAction
    };
 
    const [state, dispatch] = useReducer(reducer, initState);
@@ -42,6 +45,33 @@ function PresentationProvider({ children }) {
          }
 
          return data;
+      },
+
+      deletePresentation: async (presentationId) => {
+         const resultPresentation = await presentationServices.deletePresentationById(
+            presentationId
+         );
+
+         console.log("resultPresentation: ", resultPresentation);
+
+         if (resultPresentation) {
+            dispatch(actions.fetchApi());
+            const data = await presentationServices.getOwnedPresentations();
+
+            console.log("data: ", data);
+
+            if (data) {
+               const { presentations, count } = data;
+
+               console.log("{ presentations, count }: ", { presentations, count });
+               dispatch(actions.setPresentations({ presentations, count }));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+
+            return data;
+         }
       }
    };
 
