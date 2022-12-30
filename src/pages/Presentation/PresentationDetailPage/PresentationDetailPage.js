@@ -193,14 +193,14 @@ function PresentationDetailPage() {
                         </div>
                      </div>
                   ) : (
-                     <h1>No slides, please create new slide</h1>
+                     <h1 className={cx("no-slide")}>No slides, please create new slide</h1>
                   )}
                </div>
             ) : showSlideListWhenNotDesktop ? (
                slide ? (
                   <SlideList />
                ) : (
-                  <h1>No slide</h1>
+                  <h1 className={cx("no-slide")}>No slides, please create new slide</h1>
                )
             ) : slide ? (
                <div className={cx("slide-current")}>
@@ -209,7 +209,7 @@ function PresentationDetailPage() {
                   </div>
                </div>
             ) : (
-               <h1>No slide</h1>
+               <h1 className={cx("no-slide")}>No slides, please create new slide</h1>
             )}
          </FormProvider>
 

@@ -31,7 +31,7 @@ const createPresentation = async (name, type = "PUBLIC") => {
          name,
          type
       });
-      // console.log("res: ", res);
+      console.log("res: ", res);
 
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {

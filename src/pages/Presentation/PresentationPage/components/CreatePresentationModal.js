@@ -27,7 +27,9 @@ function CreatePresentationModal({ show, setShow }) {
    const handleSubmitCreateModal = async ({ name }) => {
       const presentation = await presentationServices.createPresentation(name);
 
-      if (presentation) navigate(`/presentation/${presentation.id}/1/edit`);
+      console.log("presentation: ", presentation);
+      // TẠM THỜI
+      if (presentation) navigate(`/presentation/${presentation?.id}/edit`);
 
       resetField("name");
       setShow(false);

@@ -9,6 +9,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
+      width: 100%;
 
       .slide-current {
          padding-top: 20px;
@@ -33,6 +34,11 @@
             flex: 4;
             padding: 0 1rem;
          }
+      }
+
+      .no-slide {
+         flex: 1;
+         align-content: stretch;
       }
    }
    .footer {

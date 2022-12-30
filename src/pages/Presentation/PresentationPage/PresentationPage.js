@@ -149,7 +149,7 @@ function PresentationPage() {
 
             {isNotMobile ? (
                <Table className={cx("table")}>
-                  <thead>
+                  <thead className={cx("thead")}>
                      <tr className={cx("tr")}>
                         <th className={cx("th")}>
                            <input
@@ -173,7 +173,7 @@ function PresentationPage() {
                         <th className={cx("th")}></th>
                      </tr>
                   </thead>
-                  <tbody>
+                  <tbody className={cx("tbody")}>
                      {presentationStore.state.presentations?.map((presentation, index) => {
                         const isChecked = selectedRowIds.includes(presentation.id);
                         return (
