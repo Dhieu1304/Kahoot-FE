@@ -52,7 +52,7 @@ function PresentationPlayPage() {
 
    useEffect(() => {
       const loadData = async () => {
-         console.log(">>>>>>>>>>>>>>>>>>>>> loaddata");
+         // console.log(">>>>>>>>>>>>>>>>>>>>> loaddata");
          const resultData = slide.body;
          socket.emit(PRESENTATION_EVENT.PRESENT, {
             presentation_id: presentationId,
@@ -71,7 +71,7 @@ function PresentationPlayPage() {
             console.info(message);
          });
          socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-            console.log(message);
+            // console.log(message);
          });
          // DEBUG
 
@@ -79,7 +79,7 @@ function PresentationPlayPage() {
             setCountOnl(countOnl);
          });
          socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
-            console.log(">>>>>>>>> SLIDE DATA: ", data);
+            // console.log(">>>>>>>>> SLIDE DATA: ", data);
             const newResultData = [...resultData];
             if (data && data.length > 0) {
                for (let i = 0; i < newResultData.length; i++) {
@@ -94,7 +94,7 @@ function PresentationPlayPage() {
                   newResultData[i].value = 0;
                }
             }
-            console.log("newResultData: ", newResultData);
+            // console.log("newResultData: ", newResultData);
             setResult(newResultData);
          });
          // socket.on(PRESENTATION_EVENT.SLIDE, (data) => {});

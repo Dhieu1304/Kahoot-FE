@@ -10,6 +10,9 @@ function PresentationPlayEmptyPage() {
    useEffect(() => {
       const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
       const slides = presentationPlayStore.state.slides;
+
+      // Thay vì lấy slide thứ [0] nó sẽ lấy theo slide_origin_ hienj tại mà socket đưa về
+
       const slide =
          presentationPlayStore.state.slides.length > 0 && presentationPlayStore.state.slides[0];
       if (slide && slide?.ordinalSlideNumber) {

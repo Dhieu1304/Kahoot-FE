@@ -136,13 +136,13 @@ const updateSlides = async (presentation_id, slides) => {
       return {
          ordinal_slide_number,
          slide_type_id,
-         title,
-         body,
-         description
+         title: title || " ",
+         body: Array.isArray(body) ? body : [],
+         description: description || " "
       };
    });
 
-   // console.log("data slide update: ", data);
+   console.log("data slide update: ", data);
    console.log("data slide update co pre: ", {
       presentation_id,
       data

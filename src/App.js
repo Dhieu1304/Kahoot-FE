@@ -20,13 +20,16 @@ import DefaultPage from "./pages/DefaultPage/DefaultPage";
 import { GroupListProvider } from "./providers/groupList";
 import { GroupItemProvider } from "./providers/groupItem";
 import LinkPage from "./pages/LinkPage";
+
 import PresentationPage from "./pages/Presentation/PresentationPage";
+
+import PresentationDetailPageWrapper from "./pages/Presentation/PresentationDetailPage/PresentationDetailPageWrapper";
+import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store/Provider";
 import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
-import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store";
+
 import PresentationClientPage from "./pages/PresentationClient/PresentationClientPage";
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
 import PresentationProvider from "./pages/Presentation/PresentationPage/store";
-import PresentationDetailEditPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailEditPage";
 
 import PresentationPlayProviderWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayProviderWrapper";
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
@@ -131,12 +134,11 @@ function App() {
                               path="edit"
                               element={
                                  <PresentationDetailProvider>
-                                    <PresentationDetailPage />
+                                    <PresentationDetailPageWrapper />
                                  </PresentationDetailProvider>
                               }
                            >
-                              {/* <Route path="" element={<Navigate to={"/"} />} /> */}
-                              <Route path=":slideId" element={<PresentationDetailEditPage />} />
+                              <Route path=":slideId" element={<PresentationDetailPage />} />
                            </Route>
 
                            <Route

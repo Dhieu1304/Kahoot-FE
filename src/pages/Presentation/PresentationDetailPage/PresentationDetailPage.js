@@ -1,223 +1,222 @@
-import { useEffect, useState } from "react";
-
-import Header from "./components/Header";
-import SlideList from "./components/SlideList";
-import { usePresentationDetailStore } from "./store";
-
 import classNames from "classnames/bind";
-import styles from "./PresentationDetailPage.module.scss";
+import { useEffect } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import Modal from "../../../components/Modal";
+import Header from "./components/Header";
 import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { Navigate, Outlet, useLocation, useNavigate, useOutlet, useParams } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
-import { Col, Container, Row } from "react-bootstrap";
-import { slideTypes } from "./config";
-import Modal from "../../../components/Modal";
-import Button from "../../../components/Button";
+import SlideList from "./components/SlideList";
+import styles from "./PresentationDetailPage.module.scss";
 const cx = classNames.bind(styles);
+
+import { usePresentationDetailStore } from "./store";
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
-   const [showChangeThemeModal, setShowChangeThemeModal] = useState(false);
-   const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
+   const {
+      showCreateSlideModal,
+      setShowCreateSlideModal,
+      showChangeThemeModal,
+      setShowChangeThemeModal,
+      showSlideListWhenNotDesktop
+   } = presentationDetailStore;
 
-   const location = useLocation();
-   const outlet = useOutlet();
+   const isNotDesktop = useMediaQuery({ maxWidth: 992 });
+   const params = useParams();
+   const slideId = params.slideId;
 
+   const navigate = useNavigate();
+
+   // find slide data by slideId of params from presentationDetailStore
+   const slide = presentationDetailStore.state.slides.find((currentSlide) => {
+      return currentSlide.ordinalSlideNumber + "" === slideId + "";
+   });
+
+   // Initialization configPresentationForm from presentationDetailStore.state.presentation
+   const configPresentationForm = useForm({
+      mode: "onBlur",
+      defaultValues: {
+         name: presentationDetailStore.state.presentation?.name,
+         presentationThemeId: presentationDetailStore.state.presentation?.presentationThemeId,
+         presentationTypeId: presentationDetailStore.state.presentation?.presentationTypeId
+      }
+   });
+
+   // Initialization configSlideForm from presentationDetailStore.state.slides and presentationDetailStore.state.slideTypesConfig
+   const slideTypesConfig = presentationDetailStore.state.slideTypesConfig;
+
+   let currentSlideType = null;
+   slideTypesConfig.some((currentSlideTypeConfig) => {
+      currentSlideType = currentSlideTypeConfig?.slideTypes.find(
+         (type) => type.id + "" === slide?.slideTypeId + ""
+      );
+      return currentSlideType;
+   });
+
+   const configSlideForm = useForm({
+      mode: "onBlur",
+      defaultValues: {
+         title: slide?.title,
+         body: slide?.body,
+         description: slide?.description,
+
+         slideType: currentSlideType || {}
+      }
+   });
+
+   const createNewSlideForm = useForm({
+      mode: "onSubmit",
+      defaultValues: {
+         slideTypeId: 1
+      }
+   });
+
+   // slideId changed => That means user have moved to another slide, so we have to re-initialize defaultValue for configSlideForm
    useEffect(() => {
-      const loadData = async () => {
-         const presentationConfig = await presentationDetailStore.method.loadConfig();
+      configSlideForm.setValue("title", slide?.title);
+      configSlideForm.setValue("body", slide?.body);
+      configSlideForm.setValue("description", slide?.description);
+      configSlideForm.setValue("slideType", currentSlideType || {});
+   }, [slideId]);
 
-         const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
-         const presentationDetail = await presentationDetailStore.method.loadPresentationDetail(
-            presentationId
+   const handleCreateNewSlide = async (data) => {
+      let index = 0;
+
+      if (slide?.ordinalSlideNumber) {
+         index = slide?.ordinalSlideNumber ? slide?.ordinalSlideNumber + 1 - 1 : 0;
+      } else if (presentationDetailStore.state.slides.length > 0) {
+         index = presentationDetailStore.state.slides.length;
+      }
+
+      const title = "New slide";
+      const slideTypeId = data.slideTypeId;
+      const body = [];
+
+      const newSlide = {
+         title,
+         slideTypeId,
+         body
+      };
+
+      presentationDetailStore.method.createNewSlide(newSlide, index);
+
+      if (!slide?.ordinalSlideNumber)
+         navigate(
+            `/presentation/${presentationDetailStore.state.presentation?.id}/edit/${index + 1}`
          );
 
-         presentationDetailStore.method.setInit();
-      };
-      loadData();
-   }, []);
-
-   const renderNoOutlet = () => {
-      const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
-      const slides = presentationDetailStore.state.slides;
-      const slide =
-         presentationDetailStore.state.slides.length > 0 && presentationDetailStore.state.slides[0];
-
-      let to = `/presentation/${presentationId}/edit/0`;
-      if (slide && slide?.ordinalSlideNumber) {
-         const slideId = slide?.ordinalSlideNumber;
-
-         to = `/presentation/${presentationId}/edit/${slideId}`;
-      }
-      return <Navigate to={to} />;
+      setShowCreateSlideModal(false);
    };
 
    return (
-      presentationDetailStore.state.isInit &&
-      (outlet ? (
-         <Outlet
-            context={{
-               showCreateSlideModal,
-               setShowCreateSlideModal,
-               showChangeThemeModal,
-               setShowChangeThemeModal,
-               showSlideListWhenNotDesktop,
-               setShowSlideListWhenNotDesktop
-            }}
-         />
-      ) : (
-         renderNoOutlet()
-      ))
+      <div
+         className={cx("wrapper", {
+            isNotDesktop
+         })}
+      >
+         <FormProvider {...configPresentationForm}>
+            <Header />
+
+            <Modal
+               title={"Create Slide"}
+               haveSubmitBtn
+               submitBtnTitle={"Create"}
+               onSubmitModal={createNewSlideForm.handleSubmit(handleCreateNewSlide)}
+               show={showCreateSlideModal}
+               setShow={setShowCreateSlideModal}
+            >
+               <div className={cx("choice-slide-group")}>
+                  <div className={cx("item")}>
+                     <input type="radio" value="MULTI" name="type" />
+                     <span className={cx("label")}>Muti choices</span>
+                  </div>
+                  {/* <div className={cx("item")}>
+                <input type="radio" value="SLIDE" name="type" />
+                <span className={cx("label")}>Slide</span>
+             </div>
+             <div className={cx("item")}>
+                <input type="radio" value="QUIZ" name="type" />
+                <span className={cx("label")}>Quiz</span>
+             </div> */}
+               </div>
+            </Modal>
+
+            <Modal
+               title={"Change theme"}
+               show={showChangeThemeModal}
+               setShow={setShowChangeThemeModal}
+            >
+               <div className={cx("choice-theme-group")}>
+                  {presentationDetailStore.state.presentationThemesConfig.map((theme, index) => {
+                     return (
+                        <div className={cx("item")} key={index}>
+                           <input
+                              checked={
+                                 theme?.id + "" ===
+                                 // presentationDetailStore.state.presentation?.presentationThemeId
+                                 configPresentationForm.watch("presentationThemeId") + ""
+                              }
+                              type="radio"
+                              value={theme?.id}
+                              {...configPresentationForm.register("presentationThemeId")}
+                           />
+                           <span className={cx("label")}>{theme?.name}</span>
+                        </div>
+                     );
+                  })}
+
+                  {/* <div className={cx("item")}>
+                     <input type="radio" value="DARK" name="theme" />
+                     <span className={cx("label")}>Dark</span>
+                  </div>
+                  <div className={cx("item")}>
+                     <input type="radio" value="LIGHT" name="theme" />
+                     <span className={cx("label")}>Light</span>
+                  </div> */}
+               </div>
+            </Modal>
+         </FormProvider>
+         <FormProvider {...configSlideForm}>
+            {!isNotDesktop ? (
+               <div className={cx("container")}>
+                  <SlideList />
+
+                  {slide ? (
+                     <div className={cx("slide-current")}>
+                        <div className={cx("slide-area-wrapper")}>
+                           <SlideArea />
+                        </div>
+                        <div className={cx("slide-config-wrapper")}>
+                           <SlideConfig slide={slide} />
+                        </div>
+                     </div>
+                  ) : (
+                     <h1>No slides, please create new slide</h1>
+                  )}
+               </div>
+            ) : showSlideListWhenNotDesktop ? (
+               slide ? (
+                  <SlideList />
+               ) : (
+                  <h1>No slide</h1>
+               )
+            ) : slide ? (
+               <div className={cx("slide-current")}>
+                  <div className={cx("slide-config-wrapper")}>
+                     <SlideConfig />
+                  </div>
+               </div>
+            ) : (
+               <h1>No slide</h1>
+            )}
+         </FormProvider>
+
+         <div className={cx("footer")} />
+      </div>
    );
 }
-
-// function PresentationDetailPage() {
-//    const presentationDetailStore = usePresentationDetailStore();
-
-//    const configPresentationForm = useForm({
-//       mode: "onBlur",
-//       defaultValues: {
-//          name: "",
-//          presentationThemeId: 0,
-//          presentationTypeId: 0
-//       }
-//    });
-
-//
-
-//    const configSlideForm = useForm({
-//       mode: "onBlur",
-//       defaultValues: {
-//          title: presentationDetailStore.state.slides[
-//             presentationDetailStore.state.currentSlideIndex
-//          ]?.title,
-//          body: [],
-//          description: "",
-//          slideType: slideTypes[0],
-//          isFetchingApi: false
-//       }
-//    });
-
-//    // LoadData for presentation detail
-//    // const location = useLocation();
-//    // useEffect(() => {
-//    //    const loadData = async () => {
-//    //       const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
-//    //       const presentationDetail = await presentationDetailStore.method.loadPresentationDetail(
-//    //          presentationId
-//    //       );
-//    //    };
-//    //    loadData();
-//    // }, []);
-
-//    useEffect(() => {
-//       if (presentationDetailStore.state.isInit) {
-//          const index = presentationDetailStore.state.currentSlideIndex;
-//          const slides = [...presentationDetailStore.state.slides];
-//          const slide = slides?.[index];
-
-//          // configSlideForm.setValue("title", slide?.title);
-//          configSlideForm.setValue("body", slide?.body);
-//          configSlideForm.setValue("description", slide?.description);
-//          configSlideForm.setValue("isFetchingApi", true);
-//       }
-//    }, [presentationDetailStore.state.slides, presentationDetailStore.state.currentSlideIndex]);
-
-//
-
-//    // useEffect(() => {
-//    //    const presentation = { ...presentationDetailStore.state.presentation };
-
-//    //    //
-//    //    configPresentationForm.setValue("name", presentation?.name);
-//    //    configPresentationForm.setValue("presentationThemeId", presentation?.presentationThemeId);
-//    //    configPresentationForm.setValue("presentationTypeId", presentation?.presentationTypeId);
-//    // }, [presentationDetailStore.state.presentation]);
-
-//    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
-
-//    return (
-//       presentationDetailStore.state?.isInit && (
-//          <div
-//             className={cx("wrapper", {
-//                isNotDesktop
-//             })}
-//          >
-//             <FormProvider {...configPresentationForm}>
-//                <Header />
-
-//                <Modal
-//                   title={"Create Slide"}
-//                   show={presentationDetailStore.state.showCreateNewSlideModal}
-//                   setShow={presentationDetailStore.method.setShowCreateNewSlideModal}
-//                >
-//                   <div className={cx("choice-slide-group")}>
-//                      <div className={cx("item")}>
-//                         <input type="radio" value="MULTI" name="type" />
-//                         <span className={cx("label")}>Muti choices</span>
-//                      </div>
-//                      {/* <div className={cx("item")}>
-//                <input type="radio" value="SLIDE" name="type" />
-//                <span className={cx("label")}>Slide</span>
-//             </div>
-//             <div className={cx("item")}>
-//                <input type="radio" value="QUIZ" name="type" />
-//                <span className={cx("label")}>Quiz</span>
-//             </div> */}
-//                   </div>
-//                </Modal>
-
-//                <Modal
-//                   title={"Change theme"}
-//                   show={presentationDetailStore.state.showChangeThemeModal}
-//                   setShow={presentationDetailStore.method.setShowChangeThemeModal}
-//                   haveSubmitBtn
-//                   submitBtnTitle={"Create"}
-//                >
-//                   <div className={cx("choice-theme-group")}>
-//                      <div className={cx("item")}>
-//                         <input type="radio" value="DARK" name="theme" />
-//                         <span className={cx("label")}>Dark</span>
-//                      </div>
-//                      <div className={cx("item")}>
-//                         <input type="radio" value="LIGHT" name="theme" />
-//                         <span className={cx("label")}>Light</span>
-//                      </div>
-//                   </div>
-//                </Modal>
-//             </FormProvider>
-
-//             <FormProvider {...configSlideForm}>
-//                {!isNotDesktop ? (
-//                   <div className={cx("container")}>
-//                      <SlideList />
-
-//                      <div className={cx("slide-current")}>
-//                         <div className={cx("slide-area-wrapper")}>
-//                            <SlideArea />
-//                         </div>
-//                         <div className={cx("slide-config-wrapper")}>
-//                            <SlideConfig />
-//                         </div>
-//                      </div>
-//                   </div>
-//                ) : presentationDetailStore.state.isShowSlideListWhenNotDesktop ? (
-//                   <SlideList />
-//                ) : (
-//                   <div className={cx("slide-current")}>
-//                      <div className={cx("slide-config-wrapper")}>
-//                         <SlideConfig />
-//                      </div>
-//                   </div>
-//                )}
-//             </FormProvider>
-//          </div>
-//       )
-//    );
-// }
 
 export default PresentationDetailPage;

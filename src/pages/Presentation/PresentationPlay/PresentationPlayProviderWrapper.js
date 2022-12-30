@@ -9,6 +9,8 @@ function PresentationPlayProviderWrapper() {
 
    useEffect(() => {
       const loadData = async () => {
+         console.log("LOAD");
+
          const presentationConfig = await presentationPlayStore.method.loadConfig();
 
          const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];

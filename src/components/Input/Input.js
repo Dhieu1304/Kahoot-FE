@@ -45,9 +45,11 @@ const Input = forwardRef(
                   multiple={multiple}
                   style={
                      multiple && {
-                        height: 100
+                        height: 150,
+                        whiteSpace: "normal"
                      }
                   }
+                  wrap={multiple && "hard"}
                />
                {rightBtn && <div className={cx("rightBtn-container")}>{rightBtn}</div>}
             </div>

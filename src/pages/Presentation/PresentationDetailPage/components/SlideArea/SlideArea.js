@@ -20,6 +20,7 @@ import presentationServices from "../../../../../services/presentationServices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useFormContext } from "react-hook-form";
+import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../../../config/configSlideTypes";
 const cx = classNames.bind(styles);
 
 function SlideArea() {
@@ -29,8 +30,6 @@ function SlideArea() {
    const { watch } = configSlideForm;
 
    const [result, setResult] = useState([]);
-
-   const currentIndex = presentationDetailStore.state.currentSlideIndex;
 
    useEffect(() => {
       const currentBody = watch("body");
@@ -42,6 +41,68 @@ function SlideArea() {
 
       setResult(resultWithCount);
    }, [watch("body")]);
+
+   const renderContenBySlideTypeId = () => {
+      const slideType = watch("slideType");
+      switch (slideType.id) {
+         case MULTIPLE_CHOICE:
+            return (
+               <div className={cx("content-multiphy")}>
+                  <h1 className={cx("title")}>{watch("title")}</h1>
+                  <div className={cx("chart-area")}>
+                     <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                           width={"100%"}
+                           height={"100%"}
+                           data={result}
+                           margin={{
+                              top: 5,
+                              right: 30,
+                              left: 20,
+                              bottom: 5
+                           }}
+                        >
+                           <XAxis dataKey="name" />
+                           <YAxis dataKey="count" domain={[0, "dataMax + 10"]} />
+                           <Tooltip />
+                           <Legend />
+                           <Bar
+                              dataKey="count"
+                              fill="rgba(206, 179, 101)"
+                              margin={{
+                                 top: 5,
+                                 right: 30,
+                                 left: 20,
+                                 bottom: 5
+                              }}
+                           >
+                              <LabelList dataKey="count" position="top" />
+                           </Bar>
+                        </BarChart>
+                     </ResponsiveContainer>
+                  </div>
+               </div>
+            );
+
+         case HEADING:
+            return (
+               <div className={cx("content-heading")}>
+                  <h1 className={cx("title")}>{watch("title")}</h1>
+                  <h1 className={cx("description")}>{watch("description")}</h1>
+               </div>
+            );
+         case PARAGRAPH:
+            return (
+               <div className={cx("content-paragraph")}>
+                  <h1 className={cx("title")}>{watch("title")}</h1>
+                  <h1 className={cx("description")}>{watch("description")}</h1>
+               </div>
+            );
+
+         default:
+            return <h1>No slide type</h1>;
+      }
+   };
 
    return (
       <div
@@ -63,57 +124,7 @@ function SlideArea() {
             </h1>
 
             <div className={cx("content")}>
-               {true && (
-                  <div className={cx("content-multiphy")}>
-                     <h1 className={cx("title")}>{watch("title")}</h1>
-                     <div className={cx("chart-area")}>
-                        <ResponsiveContainer width="100%" height="100%">
-                           <BarChart
-                              width={"100%"}
-                              height={"100%"}
-                              data={result}
-                              margin={{
-                                 top: 5,
-                                 right: 30,
-                                 left: 20,
-                                 bottom: 5
-                              }}
-                           >
-                              <XAxis dataKey="name" />
-                              <YAxis dataKey="count" domain={[0, "dataMax + 10"]} />
-                              <Tooltip />
-                              <Legend />
-                              <Bar
-                                 dataKey="count"
-                                 fill="rgba(206, 179, 101)"
-                                 margin={{
-                                    top: 5,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 5
-                                 }}
-                              >
-                                 <LabelList dataKey="count" position="top" />
-                              </Bar>
-                           </BarChart>
-                        </ResponsiveContainer>
-                     </div>
-                  </div>
-               )}
-
-               {false && (
-                  <div className={cx("content-heading")}>
-                     <h1 className={cx("title")}>{watch("title")}</h1>
-                     <h1 className={cx("description")}>{watch("description")}</h1>
-                  </div>
-               )}
-
-               {false && (
-                  <div className={cx("content-paragraph")}>
-                     <h1 className={cx("title")}>{watch("title")}</h1>
-                     <h1 className={cx("description")}>{watch("description")}</h1>
-                  </div>
-               )}
+               {renderContenBySlideTypeId()}
 
                <div className={cx("count-votes")}>
                   <span className={cx("count-votes-number")}>

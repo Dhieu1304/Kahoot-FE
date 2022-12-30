@@ -43,7 +43,7 @@ function Header() {
       setShowChangeThemeModal,
       showSlideListWhenNotDesktop,
       setShowSlideListWhenNotDesktop
-   } = useOutletContext();
+   } = presentationDetailStore;
 
    const {
       register,
