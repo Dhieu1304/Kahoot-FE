@@ -7,10 +7,13 @@ import { useState } from "react";
 
 function PresentationPlayProvider({ children }) {
    const [showChatBox, setShowChatBox] = useState(false);
+   const [showQuestionModal, setShowQuestionModal] = useState(false);
 
    const rest = {
       showChatBox,
-      setShowChatBox
+      setShowChatBox,
+      showQuestionModal,
+      setShowQuestionModal
    };
 
    const [state, dispatch] = useReducer(reducer, initState);

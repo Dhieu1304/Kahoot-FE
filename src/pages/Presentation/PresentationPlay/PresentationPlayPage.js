@@ -31,6 +31,7 @@ import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/sock
 import { usePresentationPlayStore } from "./store";
 import Chat from "./components/Chat";
 import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
+import QuestionModal from "./components/QuestionModal";
 
 const cx = classNames.bind(styles);
 
@@ -79,12 +80,56 @@ function PresentationPlayPage() {
       }
    ]);
 
+   const [questionList, setQuestionList] = useState([
+      {
+         userId: 1,
+         content: "Hello World 1"
+      },
+      {
+         userId: 2,
+         content: "Hello World 2"
+      },
+      {
+         userId: 3,
+         content: "Hello World 3"
+      },
+      {
+         userId: 4,
+         content: "Hello World 4"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 1,
+         content: "Hello World 1"
+      }
+   ]);
+
    const [countOnl, setCountOnl] = useState(0);
    const socket = useContext(SocketContext);
 
    const presentatioPlayStore = usePresentationPlayStore();
 
-   const { showChatBox, setShowChatBox } = presentatioPlayStore;
+   const { showChatBox, setShowChatBox, showQuestionModal, setShowQuestionModal } =
+      presentatioPlayStore;
 
    const params = useParams();
    const slideId = params.slideId;
@@ -322,7 +367,9 @@ function PresentationPlayPage() {
                                  className={cx("icon")}
                                  size={"1x"}
                                  icon={faComment}
-                                 onClick={() => {}}
+                                 onClick={() => {
+                                    setShowQuestionModal((prev) => !prev);
+                                 }}
                               />
                            </div>
                            <div className={cx("item")}>
@@ -367,6 +414,7 @@ function PresentationPlayPage() {
                   </div>
                </div>
             </div>
+            {showQuestionModal && <QuestionModal questionList={questionList} />}
          </FullScreen>
       </div>
    );
