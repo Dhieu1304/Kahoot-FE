@@ -1,4 +1,4 @@
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCircle, faComment, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -7,9 +7,61 @@ import styles from "./PresentationClientDetailPage.module.scss";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 import { useParams } from "react-router-dom";
+import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
+import { usePresentationClientDetailStore } from "./store";
+import Chat from "./components/Chat/Chat";
+import SendQuestionModal from "./components/SendQuestionModal";
 const cx = classNames.bind(styles);
 
 function PresentationClientDetailPage() {
+   const presentationClientDetailStore = usePresentationClientDetailStore();
+
+   const { showChatBox, setShowChatBox, showQuestionModal, setShowQuestionModal } =
+      presentationClientDetailStore;
+
+   const [chatMessageList, setChatMessageList] = useState([
+      {
+         userId: 1,
+         content: "Hello World 1"
+      },
+      {
+         userId: 2,
+         content: "Hello World 2"
+      },
+      {
+         userId: 3,
+         content: "Hello World 3"
+      },
+      {
+         userId: 4,
+         content: "Hello World 4"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 1,
+         content: "Hello World 1"
+      }
+   ]);
+
    const defaultMessage = "Please waiting host change slide";
    const [optionIndex, setOptionIndex] = useState(-1);
    const [options, setOptions] = useState([]);
@@ -59,32 +111,97 @@ function PresentationClientDetailPage() {
       handleSubmit(name);
    };
 
+   const renderContentBySlideTypeId = () => {
+      // SẼ SỬA LẠI
+      const slideTypeId = MULTIPLE_CHOICE;
+
+      switch (slideTypeId) {
+         case MULTIPLE_CHOICE:
+            return !isSubmitSuccess ? (
+               <>
+                  <div className={cx("option-list")}>
+                     {options.map((option, index) => {
+                        return (
+                           <div className={cx("option-item")} key={index}>
+                              <FontAwesomeIcon
+                                 icon={faCircle}
+                                 size="1x"
+                                 onClick={() => {
+                                    setOptionIndex(index);
+                                 }}
+                                 color={optionIndex === index ? "red" : "white"}
+                              />
+                              <span className={cx("label")}>{option.name}</span>
+                           </div>
+                        );
+                     })}
+                  </div>
+                  <Button
+                     title={"Submit"}
+                     rounded
+                     basicBlue
+                     big
+                     w100
+                     onClick={handleSubmitAnswer}
+                     className={cx("btn")}
+                  />
+               </>
+            ) : (
+               <h1 className={cx("success-message")}>{message}</h1>
+            );
+
+         case HEADING:
+            return (
+               <div className={cx("content-heading")}>
+                  <h1 className={cx("title")}>{slide?.title}</h1>
+                  <h1 className={cx("description")}>{slide?.description}</h1>
+               </div>
+            );
+         case PARAGRAPH:
+            return (
+               <div className={cx("content-paragraph")}>
+                  <h1 className={cx("title")}>{slide?.title}</h1>
+                  <h1 className={cx("description")}>{slide?.description}</h1>
+               </div>
+            );
+
+         default:
+            return <h1>No slide type</h1>;
+      }
+   };
+
    return (
       <div className={cx("wrapper")}>
-         {!isSubmitSuccess ? (
-            <div className={cx("container")}>
-               <div className={cx("option-list")}>
-                  {options.map((option, index) => {
-                     return (
-                        <div className={cx("option-item")} key={index}>
-                           <FontAwesomeIcon
-                              icon={faCircle}
-                              size="1x"
-                              onClick={() => {
-                                 setOptionIndex(index);
-                              }}
-                              color={optionIndex === index ? "red" : "white"}
-                           />
-                           <span className={cx("label")}>{option.name}</span>
-                        </div>
-                     );
-                  })}
+         <div className={cx("container")}>
+            {renderContentBySlideTypeId()}
+
+            <div className={cx("menu")}>
+               <div className={cx("item", "item-has-chat")}>
+                  <FontAwesomeIcon
+                     className={cx("icon")}
+                     size={"1x"}
+                     icon={faMessage}
+                     onClick={() => {
+                        setShowChatBox((prev) => !prev);
+                     }}
+                  />
+
+                  {showChatBox && <Chat chatMessageList={chatMessageList} />}
                </div>
-               <Button title={"Submit"} rounded basicBlue big w100 onClick={handleSubmitAnswer} />
+               <div className={cx("item")}>
+                  <FontAwesomeIcon
+                     className={cx("icon")}
+                     size={"1x"}
+                     icon={faComment}
+                     onClick={() => {
+                        setShowQuestionModal((prev) => !prev);
+                     }}
+                  />
+               </div>
             </div>
-         ) : (
-            <h1 className={cx("success-message")}>{message}</h1>
-         )}
+         </div>
+
+         <SendQuestionModal show={showQuestionModal} setShow={setShowQuestionModal} />
       </div>
    );
 }

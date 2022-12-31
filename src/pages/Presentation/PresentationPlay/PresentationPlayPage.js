@@ -208,7 +208,7 @@ function PresentationPlayPage() {
 
    const handleFullscreen = useFullScreenHandle();
 
-   const renderContenBySlideTypeId = () => {
+   const renderContentBySlideTypeId = () => {
       const slideTypeId = slide.slideTypeId;
       switch (slideTypeId) {
          case MULTIPLE_CHOICE:
@@ -347,7 +347,7 @@ function PresentationPlayPage() {
                      </h1>
 
                      <div className={cx("content")}>
-                        {renderContenBySlideTypeId()}
+                        {renderContentBySlideTypeId()}
 
                         <div className={cx("menu")}>
                            <div className={cx("item", "item-has-chat")}>

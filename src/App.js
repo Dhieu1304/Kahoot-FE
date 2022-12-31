@@ -34,6 +34,7 @@ import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 import PresentationPlayWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayWrapper";
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
 import PresentationPlayPage from "./pages/Presentation/PresentationPlay/PresentationPlayPage";
+import PresentationClientDetailProvider from "./pages/PresentationClient/PresentationClientDetailPage/store/Provider";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -154,7 +155,14 @@ function App() {
                      </Route>
                      <Route path={"/presentation-client"}>
                         <Route path={""} element={<PresentationClientPage />} />
-                        <Route path={":code"} element={<PresentationClientDetailPage />}></Route>
+                        <Route
+                           path={":code"}
+                           element={
+                              <PresentationClientDetailProvider>
+                                 <PresentationClientDetailPage />
+                              </PresentationClientDetailProvider>
+                           }
+                        ></Route>
                      </Route>
                   </Routes>
                ) : (
@@ -169,7 +177,14 @@ function App() {
                      />
                      <Route path={"/presentation-client"}>
                         <Route path={""} element={<PresentationClientPage />} />
-                        <Route path={":code"} element={<PresentationClientDetailPage />}></Route>
+                        <Route
+                           path={":code"}
+                           element={
+                              <PresentationClientDetailProvider>
+                                 <PresentationClientDetailPage />
+                              </PresentationClientDetailProvider>
+                           }
+                        ></Route>
                      </Route>
                      <Route
                         path={"/auth/register"}

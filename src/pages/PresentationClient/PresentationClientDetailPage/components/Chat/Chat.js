@@ -12,7 +12,8 @@ import { Controller, useForm } from "react-hook-form";
 import Avatar from "../../../../../components/Avatar/Avatar";
 import Button from "../../../../../components/Button";
 import { AuthContext } from "../../../../../providers/auth";
-import { usePresentationPlayStore } from "../../store";
+import { usePresentationClientDetailStore } from "../../store";
+
 import styles from "./Chat.module.scss";
 const cx = classNames.bind(styles);
 
@@ -31,9 +32,9 @@ function Chat({ show, setShow, chatMessageList }) {
    });
 
    const authContext = useContext(AuthContext);
-   const presentatioPlayStore = usePresentationPlayStore();
+   const presentationClientDetailStore = usePresentationClientDetailStore();
 
-   const { setShowChatBox } = presentatioPlayStore;
+   const { setShowChatBox } = presentationClientDetailStore;
 
    const handleSendMessage = async ({ message }) => {
       console.log("message: ", message);
@@ -43,7 +44,7 @@ function Chat({ show, setShow, chatMessageList }) {
    return (
       <div className={cx("container")}>
          <div className={cx("header")}>
-            <span className={cx("name")}>{presentatioPlayStore.state.presentation?.name}</span>
+            <span className={cx("name")}>TÊN CỦA PRESENTATION</span>
             <FontAwesomeIcon
                size="1x"
                icon={faX}
