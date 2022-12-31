@@ -149,7 +149,7 @@ function App() {
                                  </PresentationPlayProvider>
                               }
                            >
-                              <Route path=":slideId" element={<PresentationPlayPage />} />
+                              {/* <Route path=":slideId" element={<PresentationPlayPage />} /> */}
                            </Route>
                         </Route>
                      </Route>

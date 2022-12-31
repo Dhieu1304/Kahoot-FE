@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Navigate, Outlet, useLocation, useOutlet } from "react-router-dom";
+import PresentationPlayPage from "./PresentationPlayPage";
 import { usePresentationPlayStore } from "./store";
 
 function PresentationPlayProviderWrapper() {
@@ -24,22 +25,23 @@ function PresentationPlayProviderWrapper() {
       loadData();
    }, []);
 
-   const renderNoOutlet = () => {
-      const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
-      const slides = presentationPlayStore.state.slides;
-      const slide = slides.length > 0 && presentationPlayStore.state.slides[0];
+   // const renderNoOutlet = () => {
+   //    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
+   //    const slides = presentationPlayStore.state.slides;
+   //    const slide = slides.length > 0 && presentationPlayStore.state.slides[0];
 
-      let to = `/presentation/${presentationId}/edit/0`;
-      if (slide && slide?.ordinalSlideNumber) {
-         const slideId = slide?.ordinalSlideNumber;
+   //    let to = `/presentation/${presentationId}/edit/0`;
+   //    if (slide && slide?.ordinalSlideNumber) {
+   //       const slideId = slide?.ordinalSlideNumber;
 
-         to = `/presentation/${presentationId}/play/${slideId}`;
-      }
-      return <Navigate to={to} />;
-   };
+   //       to = `/presentation/${presentationId}/play/${slideId}`;
+   //    }
+   //    return <Navigate to={to} />;
+   // };
 
    // Make sure to only return to the UI after the API has finished loading
-   return presentationPlayStore.state.isInit && (outlet ? <Outlet /> : renderNoOutlet());
+   // return presentationPlayStore.state.isInit && (outlet ? <Outlet /> : renderNoOutlet());
+   return presentationPlayStore.state.isInit && <PresentationPlayPage />;
 }
 
 export default PresentationPlayProviderWrapper;
