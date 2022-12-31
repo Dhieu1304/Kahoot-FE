@@ -146,14 +146,16 @@ function PresentationPlayPage() {
 
    useEffect(() => {
       // console.log(">>>>>>>>>>>>>>>>>>>>> loaddata");
-      const resultData = slide.body;
+      // const resultData = slide?.body || [];
+      const resultData = [];
       socket.emit(PRESENTATION_EVENT.PRESENT, {
-         presentation_id: presentationId,
-         ordinal_slide_number: slideId
+         presentation_id: presentationId
+         // ordinal_slide_number: slideId
       });
       socket.emit(PRESENTATION_EVENT.SLIDE_DATA, {
          presentation_id: presentationId,
-         ordinal_slide_number: slideId
+         // ordinal_slide_number: slideId
+         ordinal_slide_number: 1
       });
 
       // DEBUG
@@ -218,9 +220,11 @@ function PresentationPlayPage() {
       //    return currentSlide.ordinalSlideNumber + "" === slideId + "";
       // });
 
+      const slide = null;
+
       if (!slide) return;
 
-      const slideTypeId = slide.slideTypeId || -1;
+      const slideTypeId = slide?.slideTypeId || -1;
 
       switch (slideTypeId) {
          case MULTIPLE_CHOICE:
