@@ -145,67 +145,68 @@ function PresentationPlayPage() {
    const navigate = useNavigate();
 
    useEffect(() => {
-      const loadData = async () => {
-         // console.log(">>>>>>>>>>>>>>>>>>>>> loaddata");
-         const resultData = slide.body;
-         socket.emit(PRESENTATION_EVENT.PRESENT, {
-            presentation_id: presentationId,
-            ordinal_slide_number: slideId
-         });
-         socket.emit(PRESENTATION_EVENT.SLIDE_DATA, {
-            presentation_id: presentationId,
-            ordinal_slide_number: slideId
-         });
+      // console.log(">>>>>>>>>>>>>>>>>>>>> loaddata");
+      const resultData = slide.body;
+      socket.emit(PRESENTATION_EVENT.PRESENT, {
+         presentation_id: presentationId,
+         ordinal_slide_number: slideId
+      });
+      socket.emit(PRESENTATION_EVENT.SLIDE_DATA, {
+         presentation_id: presentationId,
+         ordinal_slide_number: slideId
+      });
 
-         // DEBUG
-         socket.on(SOCKET_EVENT.ERROR, (message) => {
-            console.error(message);
-         });
-         socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
-            console.info(message);
-         });
-         socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-            // console.log(message);
-         });
-         // DEBUG
+      // DEBUG
+      socket.on(SOCKET_EVENT.ERROR, (message) => {
+         console.error(message);
+      });
+      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
+         console.info(message);
+      });
+      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
+         // console.log(message);
+      });
+      // DEBUG
 
-         socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
-            setCountOnl(countOnl);
-         });
-         socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
-            // console.log(">>>>>>>>> SLIDE DATA: ", data);
-            const newResultData = [...resultData];
-            if (data && data.length > 0) {
-               for (let i = 0; i < newResultData.length; i++) {
-                  for (let j = 0; j < data.length; j++) {
-                     if (newResultData[i].name === data[j].name) {
-                        newResultData[i].value = data[j].count;
-                     }
+      socket.on(PRESENTATION_EVENT.SLIDE_DETAIL, (data) => {
+         console.log(">>>>>>>>>>SLIDE_DETAIL: ", data);
+      });
+
+      socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
+         setCountOnl(countOnl);
+      });
+      socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
+         // console.log(">>>>>>>>> SLIDE DATA: ", data);
+         const newResultData = [...resultData];
+         if (data && data.length > 0) {
+            for (let i = 0; i < newResultData.length; i++) {
+               for (let j = 0; j < data.length; j++) {
+                  if (newResultData[i].name === data[j].name) {
+                     newResultData[i].value = data[j].count;
                   }
                }
-            } else {
-               for (let i = 0; i < newResultData.length; i++) {
-                  newResultData[i].value = 0;
-               }
             }
-            // console.log("newResultData: ", newResultData);
-            setResult(newResultData);
-         });
-         // socket.on(PRESENTATION_EVENT.SLIDE, (data) => {});
+         } else {
+            for (let i = 0; i < newResultData.length; i++) {
+               newResultData[i].value = 0;
+            }
+         }
+         // console.log("newResultData: ", newResultData);
+         setResult(newResultData);
+      });
+      // socket.on(PRESENTATION_EVENT.SLIDE, (data) => {});
 
-         return () => {
-            const arrSocketEvent = Object.values(SOCKET_EVENT);
-            for (let i = 0; i < arrSocketEvent.length; i++) {
-               socket.off(arrSocketEvent[i]);
-            }
-            socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
-            socket.off(PRESENTATION_EVENT.COUNT_ONL);
-            socket.off(PRESENTATION_EVENT.SLIDE);
-            socket.off(PRESENTATION_EVENT.SLIDE_DATA);
-         };
+      return () => {
+         const arrSocketEvent = Object.values(SOCKET_EVENT);
+         for (let i = 0; i < arrSocketEvent.length; i++) {
+            socket.off(arrSocketEvent[i]);
+         }
+         socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
+         socket.off(PRESENTATION_EVENT.COUNT_ONL);
+         socket.off(PRESENTATION_EVENT.SLIDE);
+         socket.off(PRESENTATION_EVENT.SLIDE_DATA);
+         socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
       };
-
-      loadData();
    }, [slideIndex]);
 
    const handleFullscreen = useFullScreenHandle();
