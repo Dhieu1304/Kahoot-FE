@@ -6,6 +6,19 @@
    justify-content: center;
    align-items: center;
    background-color: black;
+   position: relative;
+
+   .header-icon-group {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 100;
+
+      .icon {
+         margin-right: 2rem;
+         font-size: 2rem;
+      }
+   }
 
    .container {
       width: 100%;

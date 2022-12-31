@@ -31,10 +31,9 @@ import PresentationClientPage from "./pages/PresentationClient/PresentationClien
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
 import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 
-import PresentationPlayProviderWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayProviderWrapper";
+import PresentationPlayWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayWrapper";
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
 import PresentationPlayPage from "./pages/Presentation/PresentationPlay/PresentationPlayPage";
-import PresentationPlayEmptyPage from "./pages/Presentation/PresentationPlay/PresentationPlayEmptyPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -145,11 +144,10 @@ function App() {
                               path="play"
                               element={
                                  <PresentationPlayProvider>
-                                    <PresentationPlayProviderWrapper />
+                                    <PresentationPlayWrapper />
                                  </PresentationPlayProvider>
                               }
                            >
-                              <Route path="" element={<PresentationPlayEmptyPage />} />
                               <Route path=":slideId" element={<PresentationPlayPage />} />
                            </Route>
                         </Route>

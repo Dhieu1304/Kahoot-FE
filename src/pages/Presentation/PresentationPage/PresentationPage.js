@@ -191,7 +191,7 @@ function PresentationPage() {
                                  <td className={cx("td")}>{presentation?.id}</td>
                                  <td className={cx("td")}>
                                     <div className={cx("presentation-infor-cell")}>
-                                       <Link to={`${presentation.id}/1`}>
+                                       <Link to={`/presentation/${presentation.id}/play`}>
                                           <FontAwesomeIcon
                                              icon={faPlayCircle}
                                              size="1x"

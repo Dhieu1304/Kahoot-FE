@@ -2,6 +2,7 @@ import {
    faArrowLeft,
    faArrowRight,
    faComment,
+   faEdit,
    faExpand,
    faMessage,
    faUser
@@ -29,15 +30,61 @@ import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 import { usePresentationPlayStore } from "./store";
 import Chat from "./components/Chat";
+import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
 
 const cx = classNames.bind(styles);
 
 function PresentationPlayPage() {
    const [result, setResult] = useState([]);
+   const [chatMessageList, setChatMessageList] = useState([
+      {
+         userId: 1,
+         content: "Hello World 1"
+      },
+      {
+         userId: 2,
+         content: "Hello World 2"
+      },
+      {
+         userId: 3,
+         content: "Hello World 3"
+      },
+      {
+         userId: 4,
+         content: "Hello World 4"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 1,
+         content: "Hello World 1"
+      }
+   ]);
+
    const [countOnl, setCountOnl] = useState(0);
    const socket = useContext(SocketContext);
 
    const presentatioPlayStore = usePresentationPlayStore();
+
+   const { showChatBox, setShowChatBox } = presentatioPlayStore;
 
    const params = useParams();
    const slideId = params.slideId;
@@ -116,6 +163,69 @@ function PresentationPlayPage() {
 
    const handleFullscreen = useFullScreenHandle();
 
+   const renderContenBySlideTypeId = () => {
+      const slideTypeId = slide.slideTypeId;
+      switch (slideTypeId) {
+         case MULTIPLE_CHOICE:
+            return (
+               <div className={cx("content-multiphy")}>
+                  <h1 className={cx("title")}>{slide?.title}</h1>
+                  <div className={cx("chart-area")}>
+                     <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                           width={"100%"}
+                           height={"100%"}
+                           data={result}
+                           margin={{
+                              top: 5,
+                              right: 30,
+                              left: 20,
+                              bottom: 5
+                           }}
+                        >
+                           <XAxis dataKey="name" />
+                           {/* <YAxis dataKey="value" domain={[0, (dataMax) => 1]} /> */}
+                           <YAxis dataKey="value" />
+                           <Tooltip />
+                           <Legend />
+                           <Bar
+                              dataKey="value"
+                              fill="rgba(206, 179, 101)"
+                              margin={{
+                                 top: 5,
+                                 right: 30,
+                                 left: 20,
+                                 bottom: 5
+                              }}
+                           >
+                              <LabelList dataKey="value" position="top" />
+                           </Bar>
+                        </BarChart>
+                     </ResponsiveContainer>
+                  </div>
+               </div>
+            );
+
+         case HEADING:
+            return (
+               <div className={cx("content-heading")}>
+                  <h1 className={cx("title")}>{slide?.title}</h1>
+                  <h1 className={cx("description")}>{slide?.description}</h1>
+               </div>
+            );
+         case PARAGRAPH:
+            return (
+               <div className={cx("content-paragraph")}>
+                  <h1 className={cx("title")}>{slide?.title}</h1>
+                  <h1 className={cx("description")}>{slide?.description}</h1>
+               </div>
+            );
+
+         default:
+            return <h1>No slide type</h1>;
+      }
+   };
+
    return (
       <div>
          <FullScreen handle={handleFullscreen}>
@@ -152,6 +262,24 @@ function PresentationPlayPage() {
                      />
                   </div>
                </div> */}
+               <div className={cx("header-icon-group")}>
+                  <FontAwesomeIcon
+                     icon={faArrowLeft}
+                     size="1x"
+                     className={cx("icon")}
+                     onClick={() => {
+                        navigate("/presentation");
+                     }}
+                  />
+                  <FontAwesomeIcon
+                     icon={faEdit}
+                     size="1x"
+                     className={cx("icon")}
+                     onClick={() => {
+                        navigate(`/presentation/${presentationId}/edit`);
+                     }}
+                  />
+               </div>
 
                <div
                   className={cx("container")}
@@ -174,58 +302,7 @@ function PresentationPlayPage() {
                      </h1>
 
                      <div className={cx("content")}>
-                        {true && (
-                           <div className={cx("content-multiphy")}>
-                              <h1 className={cx("title")}>{slide?.title}</h1>
-                              <div className={cx("chart-area")}>
-                                 <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart
-                                       width={"100%"}
-                                       height={"100%"}
-                                       data={result}
-                                       margin={{
-                                          top: 5,
-                                          right: 30,
-                                          left: 20,
-                                          bottom: 5
-                                       }}
-                                    >
-                                       <XAxis dataKey="name" />
-                                       {/* <YAxis dataKey="value" domain={[0, (dataMax) => 1]} /> */}
-                                       <YAxis dataKey="value" />
-                                       <Tooltip />
-                                       <Legend />
-                                       <Bar
-                                          dataKey="value"
-                                          fill="rgba(206, 179, 101)"
-                                          margin={{
-                                             top: 5,
-                                             right: 30,
-                                             left: 20,
-                                             bottom: 5
-                                          }}
-                                       >
-                                          <LabelList dataKey="value" position="top" />
-                                       </Bar>
-                                    </BarChart>
-                                 </ResponsiveContainer>
-                              </div>
-                           </div>
-                        )}
-
-                        {false && (
-                           <div className={cx("content-heading")}>
-                              <h1 className={cx("title")}>{slide?.title}</h1>
-                              <h1 className={cx("description")}>{slide?.description}</h1>
-                           </div>
-                        )}
-
-                        {false && (
-                           <div className={cx("content-paragraph")}>
-                              <h1 className={cx("title")}>{slide?.title}</h1>
-                              <h1 className={cx("description")}>{slide?.description}</h1>
-                           </div>
-                        )}
+                        {renderContenBySlideTypeId()}
 
                         <div className={cx("menu")}>
                            <div className={cx("item", "item-has-chat")}>
@@ -233,9 +310,12 @@ function PresentationPlayPage() {
                                  className={cx("icon")}
                                  size={"1x"}
                                  icon={faMessage}
-                                 onClick={() => {}}
+                                 onClick={() => {
+                                    setShowChatBox((prev) => !prev);
+                                 }}
                               />
-                              <Chat />
+
+                              {showChatBox && <Chat chatMessageList={chatMessageList} />}
                            </div>
                            <div className={cx("item")}>
                               <FontAwesomeIcon

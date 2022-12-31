@@ -3,8 +3,16 @@ import Context from "./Context";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
+import { useState } from "react";
 
 function PresentationPlayProvider({ children }) {
+   const [showChatBox, setShowChatBox] = useState(false);
+
+   const rest = {
+      showChatBox,
+      setShowChatBox
+   };
+
    const [state, dispatch] = useReducer(reducer, initState);
 
    const method = {
@@ -73,7 +81,7 @@ function PresentationPlayProvider({ children }) {
       }
    };
 
-   return <Context.Provider value={{ state, method }}> {children} </Context.Provider>;
+   return <Context.Provider value={{ state, method, ...rest }}> {children} </Context.Provider>;
 }
 
 export default PresentationPlayProvider;
