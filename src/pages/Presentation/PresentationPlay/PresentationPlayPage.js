@@ -152,11 +152,11 @@ function PresentationPlayPage() {
          presentation_id: presentationId
          // ordinal_slide_number: slideId
       });
-      // socket.emit(PRESENTATION_EVENT.SLIDE_DATA, {
-      //    presentation_id: presentationId,
-      //    // ordinal_slide_number: slideId
-      //    ordinal_slide_number: 1
-      // });
+      socket.emit(PRESENTATION_EVENT.SLIDE_DATA, {
+         presentation_id: presentationId,
+         // ordinal_slide_number: slideId
+         ordinal_slide_number: 1
+      });
 
       // DEBUG
       socket.on(SOCKET_EVENT.ERROR, (message) => {
@@ -178,11 +178,25 @@ function PresentationPlayPage() {
          setCountOnl(countOnl);
       });
       socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
-         console.log(">>>>>>>>> SLIDE DATA: ", data);
-         // const newResultData = [...resultData];
+         // console.log(">>>>>>>>> SLIDE DATA: ", data);
+         const newResultData = [...resultData];
+         if (data && data.length > 0) {
+            for (let i = 0; i < newResultData.length; i++) {
+               for (let j = 0; j < data.length; j++) {
+                  if (newResultData[i].name === data[j].name) {
+                     newResultData[i].value = data[j].count;
+                  }
+               }
+            }
+         } else {
+            for (let i = 0; i < newResultData.length; i++) {
+               newResultData[i].value = 0;
+            }
+         }
          // console.log("newResultData: ", newResultData);
-         // setResult(newResultData);
+         setResult(newResultData);
       });
+      // socket.on(PRESENTATION_EVENT.SLIDE, (data) => {});
 
       return () => {
          const arrSocketEvent = Object.values(SOCKET_EVENT);
@@ -191,6 +205,7 @@ function PresentationPlayPage() {
          }
          socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
+         socket.off(PRESENTATION_EVENT.SLIDE);
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
          socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
       };
