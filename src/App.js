@@ -35,6 +35,8 @@ import PresentationPlayWrapper from "./pages/Presentation/PresentationPlay/Prese
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
 import PresentationPlayPage from "./pages/Presentation/PresentationPlay/PresentationPlayPage";
 import PresentationClientDetailProvider from "./pages/PresentationClient/PresentationClientDetailPage/store/Provider";
+import PresentationManageUser from "./pages/Presentation/PresentationManageUser";
+import PresenationManageLayout from "./pages/Presentation/layout/PresenationManageLayout";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -119,17 +121,52 @@ function App() {
                      <Route path={"/presentation"}>
                         {/* Presentation list */}
                         <Route
-                           path=""
+                           path="owned"
                            element={
                               <DefaultLayout>
-                                 <PresentationProvider>
-                                    <PresentationPage />
-                                 </PresentationProvider>
+                                 <PresenationManageLayout>
+                                    <PresentationProvider>
+                                       <PresentationPage />
+                                    </PresentationProvider>
+                                 </PresenationManageLayout>
                               </DefaultLayout>
                            }
                         />
+                        <Route
+                           path="joined"
+                           element={
+                              <DefaultLayout>
+                                 <PresenationManageLayout>
+                                    <PresentationProvider>
+                                       <PresentationPage />
+                                    </PresentationProvider>
+                                 </PresenationManageLayout>
+                              </DefaultLayout>
+                           }
+                        />
+
                         <Route path=":id">
                            <Route path="" element={<h2>No outlet</h2>} />
+                           <Route
+                              path="user"
+                              element={
+                                 <DefaultLayout>
+                                    <PresenationManageLayout>
+                                       <PresentationManageUser />
+                                    </PresenationManageLayout>
+                                 </DefaultLayout>
+                              }
+                           />
+                           <Route
+                              path="group"
+                              element={
+                                 <DefaultLayout>
+                                    <PresenationManageLayout>
+                                       <PresentationManageUser />
+                                    </PresenationManageLayout>
+                                 </DefaultLayout>
+                              }
+                           />
                            <Route
                               path="edit"
                               element={

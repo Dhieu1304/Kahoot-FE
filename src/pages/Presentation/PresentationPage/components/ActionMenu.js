@@ -44,6 +44,11 @@ function ActionMenu({ id }) {
             onClick={() => setShowInviteModal(true)}
          />
          <CustomDropdownMenuItem
+            label={"Manage user"}
+            leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
+            onClick={() => navigate(`/presentation/${id}/user`)}
+         />
+         <CustomDropdownMenuItem
             label={"Share"}
             leftIcon={<FontAwesomeIcon icon={faShareNodes} size={"1x"} />}
          />

@@ -1,9 +1,9 @@
-import { faAdd, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faPlayCircle, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { ListGroup, Pagination, Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
@@ -18,11 +18,18 @@ import { limitOptions, selectOptions } from "./config";
 import RenamePresentationModal from "./components/RenamePresentationModal";
 import InviteToPresentationModal from "./components/InviteToPresentationModal";
 import Modal from "../../../components/Modal";
+import SideBar from "../../../components/SideBar/SideBar";
+import { LOCAL_STORAGE } from "../../../utils/localStorage";
+import useSideBar from "../../../components/SideBar/hooks";
+import { useContext } from "react";
+import { PresenationManageLayoutContext } from "../layout/PresenationManageLayout";
 
 const cx = classNames.bind(styles);
 
 function PresentationPage() {
    const presentationStore = usePresentationStore();
+
+   const navigate = useNavigate();
 
    // show/hide modal state
    const {
@@ -37,6 +44,8 @@ function PresentationPage() {
       selectedPresentationIdToAction,
       setSelectedPresentationIdToAction
    } = presentationStore;
+
+   const { handleUpdateRecentSideBarMenuBottomItems } = useContext(PresenationManageLayoutContext);
 
    // filter state
    const [isSelectAll, setIsSelectAll] = useState(false);
@@ -53,6 +62,7 @@ function PresentationPage() {
    useEffect(() => {
       // load data
       const loadData = async () => {
+         console.log("load data");
          presentationStore.method.loadPresentations();
          presentationStore.method.setInit();
       };
@@ -165,6 +175,7 @@ function PresentationPage() {
                            <th className={cx("th")}>Name</th>
                            <th className={cx("th")}>Code</th>
                            <th className={cx("th")}>Owner</th>
+                           <th className={cx("th")}>Too</th>
 
                            {isDesktop && (
                               <>
@@ -205,6 +216,15 @@ function PresentationPage() {
                                  </td>
                                  <td className={cx("td")}>{presentation?.code}</td>
                                  <td className={cx("td")}>Me</td>
+                                 <td className={cx("td")}>
+                                    <Button
+                                       onClick={() => {
+                                          handleUpdateRecentSideBarMenuBottomItems(presentation);
+                                          navigate(`/presentation/${presentation?.id}/user`);
+                                       }}
+                                       title="XXX"
+                                    />
+                                 </td>
 
                                  {isDesktop && (
                                     <>
