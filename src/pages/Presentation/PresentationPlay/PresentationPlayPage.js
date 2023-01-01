@@ -25,7 +25,6 @@ import styles from "./PresentationPlayPage.module.scss";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 
-import Button from "../../../components/Button";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 import { usePresentationPlayStore } from "./store";
@@ -81,7 +80,6 @@ function PresentationPlayPage() {
          content: "Hello World 1"
       }
    ]);
-
    const [questionList, setQuestionList] = useState([
       {
          userId: 1,
@@ -124,20 +122,12 @@ function PresentationPlayPage() {
          content: "Hello World 1"
       }
    ]);
-
    const [countOnl, setCountOnl] = useState(0);
    const socket = useContext(SocketContext);
-
    const presentatioPlayStore = usePresentationPlayStore();
 
    const { showChatBox, setShowChatBox, showQuestionModal, setShowQuestionModal } =
       presentatioPlayStore;
-
-   // const params = useParams();
-   // const slideId = params.slideId;
-   // const slide = presentatioPlayStore.state.slides.find((currentSlide) => {
-   //    return currentSlide.ordinalSlideNumber + "" === slideId + "";
-   // });
 
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
@@ -145,17 +135,8 @@ function PresentationPlayPage() {
    const navigate = useNavigate();
 
    useEffect(() => {
-      // console.log(">>>>>>>>>>>>>>>>>>>>> loaddata");
-      // const resultData = slide?.body || [];
-      const resultData = [];
       socket.emit(PRESENTATION_EVENT.PRESENT, {
          presentation_id: presentationId
-         // ordinal_slide_number: slideId
-      });
-      socket.emit(PRESENTATION_EVENT.SLIDE_DATA, {
-         presentation_id: presentationId,
-         // ordinal_slide_number: slideId
-         ordinal_slide_number: 1
       });
 
       // DEBUG
@@ -166,7 +147,7 @@ function PresentationPlayPage() {
          console.info(message);
       });
       socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-         // console.log(message);
+         console.log(message);
       });
       // DEBUG
 
@@ -180,33 +161,21 @@ function PresentationPlayPage() {
       socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
          console.log(">>>>>>>>> SLIDE DATA: ", data);
          setSlide(data);
-         const newResultData = [...resultData];
-         if (data && data.length > 0) {
-            for (let i = 0; i < newResultData.length; i++) {
-               for (let j = 0; j < data.length; j++) {
-                  if (newResultData[i].name === data[j].name) {
-                     newResultData[i].value = data[j].count;
-                  }
-               }
-            }
-         } else {
-            for (let i = 0; i < newResultData.length; i++) {
-               newResultData[i].value = 0;
-            }
+         if (data.slide_type_id === 1) {
+            setResult(data.body);
          }
-         // console.log("newResultData: ", newResultData);
-         setResult(newResultData);
       });
-      // socket.on(PRESENTATION_EVENT.SLIDE, (data) => {});
 
       return () => {
          const arrSocketEvent = Object.values(SOCKET_EVENT);
          for (let i = 0; i < arrSocketEvent.length; i++) {
             socket.off(arrSocketEvent[i]);
          }
-         socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
+         socket.emit(PRESENTATION_EVENT.STOP_PRESENT, {
+            presentation_id: presentationId,
+            user_id: 1
+         });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
-         socket.off(PRESENTATION_EVENT.SLIDE);
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
          socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
       };
@@ -215,18 +184,8 @@ function PresentationPlayPage() {
    const handleFullscreen = useFullScreenHandle();
 
    const renderContentBySlideTypeId = () => {
-      // slideId = slideIndex
-
-      // const slide = presentationDetailStore.state.slides.find((currentSlide) => {
-      //    return currentSlide.ordinalSlideNumber + "" === slideId + "";
-      // });
-
-      const slide = null;
-
       if (!slide) return;
-
-      const slideTypeId = slide?.slideTypeId || -1;
-
+      const slideTypeId = slide?.slide_type_id || -1;
       switch (slideTypeId) {
          case MULTIPLE_CHOICE:
             return (
