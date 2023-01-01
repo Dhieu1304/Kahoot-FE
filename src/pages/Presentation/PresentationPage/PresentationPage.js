@@ -145,23 +145,6 @@ function PresentationPage() {
                            }}
                         />
                      </div>
-                     <div className={cx("filters")}>
-                        <Select
-                           defaultValue={limit}
-                           placeholder="limit"
-                           onChange={setLimit}
-                           options={limitOptions}
-                           className={cx("limit")}
-                           isSearchable={false}
-                        />
-                        <Select
-                           defaultValue={selectedOption}
-                           onChange={setSelectedOption}
-                           options={selectOptions}
-                           className={cx("select")}
-                           isSearchable={false}
-                        />
-                     </div>
                   </div>
                </div>
 

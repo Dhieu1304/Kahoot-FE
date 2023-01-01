@@ -10,6 +10,9 @@ import { useContext } from "react";
 import { AuthContext } from "../../providers/auth";
 import { useEffect } from "react";
 
+import Select from "react-select";
+import { useMediaQuery } from "react-responsive";
+
 const cx = classNames.bind(styles);
 
 // function SideBar({ recentGroupsList, setRecentGroupsList, showSideBar, setShowSideBar }) {
@@ -31,7 +34,9 @@ function SideBar({
    //    }
    // };
 
-   const render = () => {
+   const isMobile = useMediaQuery({ maxWidth: 767 });
+
+   const renderForNotMobile = () => {
       return (
          <div
             className={cx("container", {
@@ -70,15 +75,44 @@ function SideBar({
       );
    };
 
-   // return mobile ? (
-   //    <Offcanvas id="groupSidebar" show={showSideBar} onHide={() => setShowSideBar(false)}>
-   //       {render()}
-   //    </Offcanvas>
-   // ) : (
-   //    <div>{render()}</div>
-   // );
+   const renderForMobile = () => {
+      const manageOptions = [...menuTop?.items];
+      const itemOptions = [...recentSideBarMenuBottomItems];
 
-   return render();
+      console.log("manageOptions: ", manageOptions);
+      console.log("itemOptions: ", itemOptions);
+
+      const options = [
+         {
+            label: menuTop?.label,
+            options: manageOptions
+         },
+         {
+            label: menuBottomLabel,
+            options: itemOptions
+         }
+      ];
+
+      return (
+         <Select
+            // defaultValue={watch("slideType")}
+            placeholder="Select"
+            // onChange={onChange}
+            // value={value}
+            // onBlur={onBlur}
+            options={options}
+            className={cx("select")}
+            isSearchable={false}
+            formatOptionLabel={({ name }) => {
+               return <div>{name}</div>;
+            }}
+            getOptionValue={(option) => option.name}
+            theme={"white"}
+         />
+      );
+   };
+
+   return isMobile ? renderForMobile() : renderForNotMobile();
 }
 
 export default SideBar;

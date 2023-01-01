@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 import SideBar from "../../../../components/SideBar/SideBar";
 import { createContext } from "react";
+import { useMediaQuery } from "react-responsive";
 
 const PresenationManageLayoutContext = createContext();
 const cx = classNames.bind(styles);
@@ -29,6 +30,8 @@ const menuTop = {
 };
 
 function PresenationManageLayout({ children }) {
+   const isMobile = useMediaQuery({ maxWidth: 767 });
+
    const { recentSideBarMenuBottomItems, updateRecentSideBarMenuBottomItems } = useSideBar(
       LOCAL_STORAGE.RECENT_PRESENTATIONS
    );
@@ -60,7 +63,7 @@ function PresenationManageLayout({ children }) {
    return (
       <div
          className={cx("wrapper", {
-            // isMobile
+            isMobile
          })}
       >
          <SideBar
