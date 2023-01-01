@@ -36,7 +36,7 @@ import QuestionModal from "./components/QuestionModal";
 const cx = classNames.bind(styles);
 
 function PresentationPlayPage() {
-   const [slideIndex, setSlideIndex] = useState(-1);
+   const [slide, setSlide] = useState();
 
    const [result, setResult] = useState([]);
    const [chatMessageList, setChatMessageList] = useState([
@@ -178,7 +178,8 @@ function PresentationPlayPage() {
          setCountOnl(countOnl);
       });
       socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
-         // console.log(">>>>>>>>> SLIDE DATA: ", data);
+         console.log(">>>>>>>>> SLIDE DATA: ", data);
+         setSlide(data);
          const newResultData = [...resultData];
          if (data && data.length > 0) {
             for (let i = 0; i < newResultData.length; i++) {
@@ -209,7 +210,7 @@ function PresentationPlayPage() {
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
          socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
       };
-   }, [slideIndex]);
+   }, []);
 
    const handleFullscreen = useFullScreenHandle();
 
@@ -362,9 +363,9 @@ function PresentationPlayPage() {
                                  size={"1x"}
                                  icon={faArrowLeft}
                                  onClick={() => {
-                                    let prevSlideId = parseInt(slideId) - 1;
-                                    if (prevSlideId < 1) prevSlideId = 1;
-                                    navigate(`/presentation/${presentationId}/play/${prevSlideId}`);
+                                    // let prevSlideId = parseInt(slideId) - 1;
+                                    // if (prevSlideId < 1) prevSlideId = 1;
+                                    // navigate(`/presentation/${presentationId}/play/${prevSlideId}`);
                                  }}
                               />
                            </div>
@@ -374,10 +375,10 @@ function PresentationPlayPage() {
                                  size={"1x"}
                                  icon={faArrowRight}
                                  onClick={() => {
-                                    let nextSlideId = parseInt(slideId) + 1;
-                                    if (nextSlideId > presentatioPlayStore.state.slides?.length)
-                                       nextSlideId = presentatioPlayStore.state.slides?.length;
-                                    navigate(`/presentation/${presentationId}/play/${nextSlideId}`);
+                                    // let nextSlideId = parseInt(slideId) + 1;
+                                    // if (nextSlideId > presentatioPlayStore.state.slides?.length)
+                                    //    nextSlideId = presentatioPlayStore.state.slides?.length;
+                                    // navigate(`/presentation/${presentationId}/play/${nextSlideId}`);
                                  }}
                               />
                            </div>
