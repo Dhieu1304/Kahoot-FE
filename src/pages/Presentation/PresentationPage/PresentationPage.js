@@ -2,7 +2,7 @@ import { faAdd, faPlayCircle, faUser, faUsers } from "@fortawesome/free-solid-sv
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
-import { ListGroup, Pagination, Table } from "react-bootstrap";
+import { ListGroup, Pagination } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useMediaQuery } from "react-responsive";
@@ -23,6 +23,12 @@ import { LOCAL_STORAGE } from "../../../utils/localStorage";
 import useSideBar from "../../../components/SideBar/hooks";
 import { useContext } from "react";
 import { PresenationManageLayoutContext } from "../layout/PresenationManageLayout";
+import Table from "../../../components/Table";
+import TableTHead from "../../../components/Table/components/TableTHead";
+import TableTr from "../../../components/Table/components/TableTr";
+import TableTh from "../../../components/Table/components/TableTh";
+import TableTd from "../../../components/Table/components/TableTd";
+import TableTBody from "../../../components/Table/components/TableTBody";
 
 const cx = classNames.bind(styles);
 
@@ -160,47 +166,47 @@ function PresentationPage() {
                </div>
 
                {isNotMobile ? (
-                  <Table className={cx("table")}>
-                     <thead className={cx("thead")}>
-                        <tr className={cx("tr")}>
-                           <th className={cx("th")}>
+                  <Table>
+                     <TableTHead>
+                        <TableTr>
+                           <TableTh>
                               <input
                                  type={"checkbox"}
                                  checked={isSelectAll}
                                  onChange={handleSelectedAll}
                                  className={cx("checkbox")}
                               />
-                           </th>
-                           <th className={cx("th")}>id</th>
-                           <th className={cx("th")}>Name</th>
-                           <th className={cx("th")}>Code</th>
-                           <th className={cx("th")}>Owner</th>
-                           <th className={cx("th")}>Too</th>
+                           </TableTh>
+                           <TableTh>id</TableTh>
+                           <TableTh>Name</TableTh>
+                           <TableTh>Code</TableTh>
+                           <TableTh>Owner</TableTh>
+                           <TableTh>Too</TableTh>
 
                            {isDesktop && (
                               <>
-                                 <th className={cx("th")}>Modified</th>
-                                 <th className={cx("th")}>Created</th>
+                                 <TableTh>Modified</TableTh>
+                                 <TableTh>Created</TableTh>
                               </>
                            )}
-                           <th className={cx("th")}></th>
-                        </tr>
-                     </thead>
-                     <tbody className={cx("tbody")}>
+                           <TableTh></TableTh>
+                        </TableTr>
+                     </TableTHead>
+                     <TableTBody>
                         {presentationStore.state.presentations?.map((presentation, index) => {
                            const isChecked = selectedRowIds.includes(presentation.id);
                            return (
-                              <tr className={cx("tr")} key={index}>
-                                 <td className={cx("td")}>
+                              <TableTr key={index}>
+                                 <TableTd>
                                     <input
                                        type={"checkbox"}
                                        checked={isChecked}
                                        onChange={() => handleSelected(presentation.id, isChecked)}
                                        className={cx("checkbox")}
                                     />
-                                 </td>
-                                 <td className={cx("td")}>{presentation?.id}</td>
-                                 <td className={cx("td")}>
+                                 </TableTd>
+                                 <TableTd>{presentation?.id}</TableTd>
+                                 <TableTd>
                                     <div className={cx("presentation-infor-cell")}>
                                        <Link to={`/presentation/${presentation.id}/play`}>
                                           <FontAwesomeIcon
@@ -213,10 +219,10 @@ function PresentationPage() {
                                           {presentation?.name}
                                        </Link>
                                     </div>
-                                 </td>
-                                 <td className={cx("td")}>{presentation?.code}</td>
-                                 <td className={cx("td")}>Me</td>
-                                 <td className={cx("td")}>
+                                 </TableTd>
+                                 <TableTd>{presentation?.code}</TableTd>
+                                 <TableTd>Me</TableTd>
+                                 <TableTd>
                                     <Button
                                        onClick={() => {
                                           handleUpdateRecentSideBarMenuBottomItems(presentation);
@@ -224,31 +230,31 @@ function PresentationPage() {
                                        }}
                                        title="XXX"
                                     />
-                                 </td>
+                                 </TableTd>
 
                                  {isDesktop && (
                                     <>
-                                       <td className={cx("td")}>
+                                       <TableTd>
                                           {dateFormat.format(
                                              new Date(presentation?.createdAt),
                                              "DD/MM/YYYY HH:mm"
                                           )}
-                                       </td>
-                                       <td className={cx("td")}>
+                                       </TableTd>
+                                       <TableTd>
                                           {dateFormat.format(
                                              new Date(presentation?.updatedAt),
                                              "DD/MM/YYYY HH:mm"
                                           )}
-                                       </td>
+                                       </TableTd>
                                     </>
                                  )}
-                                 <td className={cx("td")}>
+                                 <TableTd>
                                     <ActionMenu id={presentation.id} />
-                                 </td>
-                              </tr>
+                                 </TableTd>
+                              </TableTr>
                            );
                         })}
-                     </tbody>
+                     </TableTBody>
                   </Table>
                ) : (
                   <ListGroup className={cx("list")}>

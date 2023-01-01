@@ -1,0 +1,29 @@
+.table {
+   position: relative;
+   .thead {
+      border: 1px solid var(--border-color);
+      border-top: 0px;
+      .tr {
+         .th {
+            padding: 8px 16px;
+            color: var(--black-color);
+            font-weight: var(--font-weight-big);
+            font-size: 1.6rem;
+            text-align: left;
+         }
+      }
+   }
+   .tbody {
+      border: 1px solid var(--border-color);
+      .tr {
+         .td {
+            padding: 8px 16px;
+            text-align: left;
+            border: none;
+            text-align: left;
+            padding-left: 1rem;
+            color: rgba(0, 0, 0, 0.7);
+         }
+      }
+   }
+}
