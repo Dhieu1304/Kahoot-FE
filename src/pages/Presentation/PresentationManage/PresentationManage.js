@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
 
@@ -65,6 +65,7 @@ function PresentationManage() {
    const isMobile = useMediaQuery({ maxWidth: 767 });
    const isNotMobile = useMediaQuery({ minWidth: 768 });
 
+   const navigate = useNavigate();
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
 
@@ -126,6 +127,17 @@ function PresentationManage() {
                         )}
 
                         <Button
+                           title="Edit"
+                           basicTeal
+                           big
+                           rounded
+                           className={cx("btn")}
+                           leftIcon={<FontAwesomeIcon icon={faEdit} size="1x" />}
+                           onClick={() => {
+                              navigate(`/presentation/${presentationId}/edit`);
+                           }}
+                        />
+                        <Button
                            title="Invite"
                            basicBlue
                            big
@@ -139,8 +151,17 @@ function PresentationManage() {
                         />
                      </div>
                   </div>
+
                   <h1 className={cx("title")}>
                      {presentationManageStore.state.presentation?.name}
+                     <FontAwesomeIcon
+                        icon={faPlayCircle}
+                        className={cx("icon")}
+                        size="1x"
+                        onClick={() => {
+                           navigate(`/presentation/${presentationId}/play`);
+                        }}
+                     />
                   </h1>
                </div>
 

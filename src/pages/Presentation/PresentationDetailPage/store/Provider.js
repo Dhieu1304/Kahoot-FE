@@ -3,26 +3,21 @@ import Context from "./Context";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
+import { useModal } from "../../../../components/Modal";
 
 function PresentationDetailProvider({ children }) {
-   const [showCreateSlideModal, setShowCreateSlideModal] = useState(false);
-   const [showChangeThemeModal, setShowChangeThemeModal] = useState(false);
-   const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
-   const [showDeleteSlideModal, setShowDeleteSlideModal] = useState(false);
+   const createSlideModal = useModal();
+   const changeThemeModal = useModal();
+   const deleteSlideModal = useModal();
 
-   const [selectedSlideIndexToAction, setSelectedSlideIndexToAction] = useState(-1);
+   const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
 
    const rest = {
-      showCreateSlideModal,
-      setShowCreateSlideModal,
-      showChangeThemeModal,
-      setShowChangeThemeModal,
+      createSlideModal,
+      changeThemeModal,
+      deleteSlideModal,
       showSlideListWhenNotDesktop,
-      setShowSlideListWhenNotDesktop,
-      showDeleteSlideModal,
-      setShowDeleteSlideModal,
-      selectedSlideIndexToAction,
-      setSelectedSlideIndexToAction
+      setShowSlideListWhenNotDesktop
    };
 
    const [state, dispatch] = useReducer(reducer, initState);

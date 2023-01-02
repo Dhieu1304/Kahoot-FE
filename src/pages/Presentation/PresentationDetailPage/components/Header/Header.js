@@ -39,8 +39,9 @@ function Header() {
    const presentationDetailStore = usePresentationDetailStore();
 
    const {
-      setShowCreateSlideModal,
-      setShowChangeThemeModal,
+      createSlideModal,
+      changeThemeModal,
+
       showSlideListWhenNotDesktop,
       setShowSlideListWhenNotDesktop
    } = presentationDetailStore;
@@ -73,7 +74,7 @@ function Header() {
    const onSaving = async (data) => {
       const { name, presentationThemeId: themeId, presentationTypeId } = data;
 
-      const newPresentation = { name, themeId, type: "PUBLIC" };
+      const newPresentation = { name, themeId };
 
       // const { title, body, slideType } = data;
       // const slideTypeId = slideType.value;
@@ -133,7 +134,11 @@ function Header() {
                      name="name"
                   />
 
-                  <input className={cx("owner")} value={"Created by Ngọc Sang Trần"} readOnly />
+                  <input
+                     className={cx("owner")}
+                     value={`Created by ${presentationDetailStore.state.presentation?.owner?.fullName}`}
+                     readOnly
+                  />
                </div>
 
                <FontAwesomeIcon
@@ -206,7 +211,7 @@ function Header() {
                   hideTitle={isNotDesktop}
                   leftIcon={<FontAwesomeIcon icon={faDroplet} />}
                   onClick={() => {
-                     setShowChangeThemeModal(true);
+                     changeThemeModal.setShow(true);
                   }}
                />
 
@@ -237,23 +242,12 @@ function Header() {
                   className={cx("btn")}
                   leftIcon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={() => {
-                     setShowCreateSlideModal(true);
+                     createSlideModal.setShow(true);
                   }}
                />
             </div>
 
             <div className={cx("right")}>
-               {/* <Button
-                  title={"Themes"}
-                  basicTeal
-                  big
-                  rounded
-                  className={cx("btn")}
-                  leftIcon={<FontAwesomeIcon icon={faDroplet} />}
-                  onClick={() => {
-                     setShowChangeThemModal(true);
-                  }}
-               /> */}
                {isNotDesktop && (
                   <FontAwesomeIcon
                      icon={faBars}
@@ -271,152 +265,3 @@ function Header() {
 }
 
 export default Header;
-
-{
-   /* <div className={cx("left")}>
-<Button
-   title={"Back"}
-   outline
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faArrowLeft} />}
-   onClick={() => {
-      navigate("/presentation");
-   }}
-/>
-<Button
-   title={"New slide"}
-   basicBlue
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faPlus} />}
-   onClick={() => {
-      setShowCreateSlideModal(true);
-   }}
-/>
-
-<Input
-   {...register("name", {
-      required: "Name is required"
-   })}
-   error={errors.name}
-/>
-</div>
-<CreateSlideModal show={showCreateSlideModal} setShow={setShowCreateSlideModal} />
-<ChangeThemeModal show={showChangeThemModal} setShow={setShowChangeThemModal} />
-<Modal
-title={"Save Presentation"}
-show={showSaveModal}
-setShow={setShowSaveModal}
-haveSubmitBtn
-onSubmitModal={async () => {
-   setShowSaveModal(false);
-   await presentationDetailStore.method.save();
-}}
-submitBtnTitle={"Save"}
->
-<div className={cx("choice-slide-group")}>
-   <div className={cx("item")}>
-      <input type="radio" value="MULTI" name="type" />
-      <span className={cx("label")}>Muti choices</span>
-   </div>
-</div>
-</Modal>
-<Modal
-title={"Delete Slide"}
-show={showDeleteSlideModal}
-setShow={setShowDeleteSlideModal}
-haveSubmitBtn
-onSubmitModal={async () => {
-   setShowDeleteSlideModal(false);
-   await presentationDetailStore.method.deleteSlide();
-}}
-submitBtnTitle={"Delete"}
-></Modal>
-<Modal
-title={"Delete Presentation"}
-show={showDeletePresentationModal}
-setShow={setShowDeletePresentationModal}
-haveSubmitBtn
-onSubmitModal={async () => {
-   setShowDeletePresentationModal(false);
-   await presentationDetailStore.method.deletePresentation();
-   navigate("/presentation");
-}}
-submitBtnTitle={"Delete"}
-></Modal>
-<div className={cx("right")}>
-<Button
-   title={"Play"}
-   basicTeal
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faPlay} />}
-   onClick={() => {
-      const presentationId = presentationDetailStore.state.presentation?.id;
-      const slideId = 1; // presentationDetailStore.state.currentSlide?.id;
-      handlePresent(presentationId, slideId);
-      navigate(`/presentation/${presentationId}/${slideId}`);
-   }}
-/>
-
-<Button
-   title={"Toggle"}
-   basicTeal
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faDroplet} />}
-   onClick={() => {
-      presentationDetailStore.method.showSlideList();
-   }}
-/>
-<Button
-   title={"Themes"}
-   basicTeal
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faDroplet} />}
-   onClick={() => {
-      setShowChangeThemModal(true);
-   }}
-/>
-<Button
-   title={"Save"}
-   basicYellow
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faSave} />}
-   onClick={() => {
-      setShowSaveModal(true);
-   }}
-/>
-<Button
-   title={"Remove Slide"}
-   basicRed
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faRemove} />}
-   onClick={() => {
-      setShowDeleteSlideModal(true);
-   }}
-/>
-<Button
-   title={"Remove Presentation"}
-   basicRed
-   big
-   rounded
-   className={cx("btn")}
-   leftIcon={<FontAwesomeIcon icon={faRemove} />}
-   onClick={() => {
-      setShowDeletePresentationModal(true);
-   }}
-/>
-</div> */
-}

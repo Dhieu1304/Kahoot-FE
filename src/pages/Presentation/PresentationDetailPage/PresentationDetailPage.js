@@ -16,17 +16,7 @@ import { usePresentationDetailStore } from "./store";
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   const {
-      showCreateSlideModal,
-      setShowCreateSlideModal,
-      showChangeThemeModal,
-      setShowChangeThemeModal,
-      showSlideListWhenNotDesktop,
-      showDeleteSlideModal,
-      setShowDeleteSlideModal,
-      selectedSlideIndexToAction,
-      setSelectedSlideIndexToAction
-   } = presentationDetailStore;
+   const { createSlideModal, changeThemeModal, deleteSlideModal } = presentationDetailStore;
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
    const params = useParams();
@@ -112,21 +102,21 @@ function PresentationDetailPage() {
             `/presentation/${presentationDetailStore.state.presentation?.id}/edit/${index + 1}`
          );
 
-      setShowCreateSlideModal(false);
+      createSlideModal.setShow(false);
    };
 
    const handleDeleteSlide = async () => {
-      console.log("selectedSlideIndexToAction: ", selectedSlideIndexToAction);
-      await presentationDetailStore.method.deleteSlide(selectedSlideIndexToAction);
+      const actionIndex = deleteSlideModal.data;
+      await presentationDetailStore.method.deleteSlide(actionIndex);
 
-      setShowDeleteSlideModal(false);
-      setSelectedSlideIndexToAction(-1);
+      deleteSlideModal.setShow(false);
+      deleteSlideModal.setData(-1);
 
       const slideIndex = presentationDetailStore.state.slides.findIndex((currentSlide) => {
          return currentSlide.ordinalSlideNumber + "" === slideId + "";
       });
 
-      if (selectedSlideIndexToAction <= slideIndex)
+      if (actionIndex <= slideIndex)
          navigate(
             `/presentation/${presentationDetailStore.state.presentation?.id}/edit/${
                slide.ordinalSlideNumber - 1
@@ -143,40 +133,33 @@ function PresentationDetailPage() {
          <FormProvider {...configPresentationForm}>
             <Header />
 
-            <Modal
-               title={"Change theme"}
-               show={showChangeThemeModal}
-               setShow={setShowChangeThemeModal}
-            >
-               <div className={cx("choice-theme-group")}>
-                  {presentationDetailStore.state.presentationThemesConfig.map((theme, index) => {
-                     return (
-                        <div className={cx("item")} key={index}>
-                           <input
-                              checked={
-                                 theme?.id + "" ===
-                                 // presentationDetailStore.state.presentation?.presentationThemeId
-                                 configPresentationForm.watch("presentationThemeId") + ""
-                              }
-                              type="radio"
-                              value={theme?.id}
-                              {...configPresentationForm.register("presentationThemeId")}
-                           />
-                           <span className={cx("label")}>{theme?.name}</span>
-                        </div>
-                     );
-                  })}
-
-                  {/* <div className={cx("item")}>
-                     <input type="radio" value="DARK" name="theme" />
-                     <span className={cx("label")}>Dark</span>
+            {changeThemeModal.show && (
+               <Modal
+                  title={"Change theme"}
+                  show={changeThemeModal.show}
+                  setShow={changeThemeModal.setShow}
+               >
+                  <div className={cx("choice-theme-group")}>
+                     {presentationDetailStore.state.presentationThemesConfig.map((theme, index) => {
+                        return (
+                           <div className={cx("item")} key={index}>
+                              <input
+                                 checked={
+                                    theme?.id + "" ===
+                                    // presentationDetailStore.state.presentation?.presentationThemeId
+                                    configPresentationForm.watch("presentationThemeId") + ""
+                                 }
+                                 type="radio"
+                                 value={theme?.id}
+                                 {...configPresentationForm.register("presentationThemeId")}
+                              />
+                              <span className={cx("label")}>{theme?.name}</span>
+                           </div>
+                        );
+                     })}
                   </div>
-                  <div className={cx("item")}>
-                     <input type="radio" value="LIGHT" name="theme" />
-                     <span className={cx("label")}>Light</span>
-                  </div> */}
-               </div>
-            </Modal>
+               </Modal>
+            )}
          </FormProvider>
          <FormProvider {...configSlideForm}>
             {!isNotDesktop ? (
@@ -215,43 +198,49 @@ function PresentationDetailPage() {
 
          <div className={cx("footer")} />
 
-         <Modal
-            title={"Create Slide"}
-            haveSubmitBtn
-            submitBtnTitle={"Create"}
-            onSubmitModal={createNewSlideForm.handleSubmit(handleCreateNewSlide)}
-            show={showCreateSlideModal}
-            setShow={setShowCreateSlideModal}
-         >
-            <div className={cx("choice-slide-group")}>
-               {presentationDetailStore.state.slideTypesConfig.map((current, index) => {
-                  return current.slideTypes?.map((type, typeIndex) => {
-                     return (
-                        <div className={cx("item")} key={typeIndex}>
-                           <input
-                              checked={
-                                 type?.id + "" === createNewSlideForm.watch("slideTypeId") + ""
-                              }
-                              type="radio"
-                              value={type?.id}
-                              {...createNewSlideForm.register("slideTypeId")}
-                           />
-                           <span className={cx("label")}>{type?.name}</span>
-                        </div>
-                     );
-                  });
-               })}
-            </div>
-         </Modal>
+         {createSlideModal.show && (
+            <Modal
+               title={"Create Slide"}
+               haveSubmitBtn
+               submitBtnTitle={"Create"}
+               onSubmitModal={createNewSlideForm.handleSubmit(handleCreateNewSlide)}
+               show={createSlideModal.show}
+               setShow={createSlideModal.setShow}
+            >
+               <div className={cx("choice-slide-group")}>
+                  {presentationDetailStore.state.slideTypesConfig.map((current, index) => {
+                     return current.slideTypes?.map((type, typeIndex) => {
+                        return (
+                           <div className={cx("item")} key={typeIndex}>
+                              <input
+                                 checked={
+                                    type?.id + "" === createNewSlideForm.watch("slideTypeId") + ""
+                                 }
+                                 type="radio"
+                                 value={type?.id}
+                                 {...createNewSlideForm.register("slideTypeId")}
+                              />
+                              <span className={cx("label")}>{type?.name}</span>
+                           </div>
+                        );
+                     });
+                  })}
+               </div>
+            </Modal>
+         )}
 
-         <Modal
-            title={"Delete Slide"}
-            haveSubmitBtn
-            submitBtnTitle={"Delete"}
-            onSubmitModal={handleDeleteSlide}
-            show={showDeleteSlideModal}
-            setShow={setShowDeleteSlideModal}
-         />
+         {deleteSlideModal.show && (
+            <Modal
+               title={"Delete Slide"}
+               haveSubmitBtn
+               submitBtnTitle={"Delete"}
+               onSubmitModal={handleDeleteSlide}
+               show={deleteSlideModal.show}
+               setShow={deleteSlideModal.setShow}
+               data={deleteSlideModal.data}
+               setData={deleteSlideModal.setData}
+            />
+         )}
       </div>
    );
 }

@@ -12,12 +12,7 @@ const cx = classNames.bind(styles);
 const SlideItem = ({ slide, index, presentationId }) => {
    const navigate = useNavigate();
    const presentationDetailStore = usePresentationDetailStore();
-   const {
-      showDeleteSlideModal,
-      setShowDeleteSlideModal,
-      selectedSlideIndexToAction,
-      setSelectedSlideIndexToAction
-   } = presentationDetailStore;
+   const { deleteSlideModal } = presentationDetailStore;
 
    // console.log("slide in slideItem: ", slide);
 
@@ -36,7 +31,7 @@ const SlideItem = ({ slide, index, presentationId }) => {
          className={cx("wrapper", {
             active,
             isNotDesktop,
-            isSelectToRemove: showDeleteSlideModal && selectedSlideIndexToAction === index
+            isSelectToRemove: deleteSlideModal.show && deleteSlideModal.data === index
          })}
       >
          <div className={cx("left")}>
@@ -47,7 +42,8 @@ const SlideItem = ({ slide, index, presentationId }) => {
                   icon={faGripVertical}
                   className={cx("icon")}
                   onClick={() => {
-                     setShowDeleteSlideModal(true);
+                     // deleteSlideModal.setShow(true);
+                     // deleteSlideModal.setData(index)
                   }}
                />
             </div>
@@ -68,8 +64,8 @@ const SlideItem = ({ slide, index, presentationId }) => {
             icon={faXmark}
             className={cx("delete-icon")}
             onClick={() => {
-               setShowDeleteSlideModal(true);
-               setSelectedSlideIndexToAction(index);
+               deleteSlideModal.setShow(true);
+               deleteSlideModal.setData(index);
             }}
          />
       </div>
