@@ -5,11 +5,11 @@ import Modal from "../../../../components/Modal";
 import Button from "../../../../components/Button";
 import { toast } from "react-toastify";
 
-function InviteToPresentationModal({ show, setShow, groupId }) {
+function InviteToPresentationModal({ show, setShow, data, setData }) {
    const {
       register,
       handleSubmit,
-      resetField,
+      reset,
       formState: { errors }
    } = useForm({
       mode: "onChange",
@@ -21,16 +21,13 @@ function InviteToPresentationModal({ show, setShow, groupId }) {
    });
 
    const handleInviteByEmail = async ({ email }) => {
-      const result = await inviteToGroupByEmail(groupId, email);
-      if (result) {
-         toast("Invited");
-         resetField("email");
-      } else {
-         toast("Invite Fail");
-      }
+      console.log("handleInviteByEmail: ", { data, email });
+      reset();
+      setShow(false);
+      setData(null);
    };
    return (
-      <Modal title={"Invite"} show={show} setShow={setShow}>
+      <Modal title={"Invite"} show={show} setShow={setShow} data={data} setData={setData}>
          <Input
             placeholder="Email"
             label={"Email"}

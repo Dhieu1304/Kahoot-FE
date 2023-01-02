@@ -18,12 +18,7 @@ function ActionMenu({ id }) {
 
    const presentationStore = usePresentationStore();
 
-   const {
-      setShowRenameModal,
-      setShowDeleteModal,
-      setShowInviteModal,
-      setSelectedPresentationIdToAction
-   } = presentationStore;
+   const { renameModal, inviteModal, deleteModal } = presentationStore;
 
    return (
       <CustomDropdownMenu>
@@ -41,7 +36,11 @@ function ActionMenu({ id }) {
          <CustomDropdownMenuItem
             label={"Invite collaborator"}
             leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
-            onClick={() => setShowInviteModal(true)}
+            onClick={() => {
+               console.log("id: ", id);
+               inviteModal.setData(id);
+               inviteModal.setShow(true);
+            }}
          />
          <CustomDropdownMenuItem
             label={"Manage user"}
@@ -55,15 +54,17 @@ function ActionMenu({ id }) {
          <CustomDropdownMenuItem
             label={"Rename"}
             leftIcon={<FontAwesomeIcon icon={faPen} size={"1x"} />}
-            onClick={() => setShowRenameModal(true)}
+            onClick={() => {
+               renameModal.setShow(true);
+               renameModal.setData(id);
+            }}
          />
          <CustomDropdownMenuItem
             label={"Delete"}
             leftIcon={<FontAwesomeIcon icon={faTrash} size={"1x"} />}
             onClick={() => {
-               console.log("delete");
-               setShowDeleteModal(true);
-               setSelectedPresentationIdToAction(id);
+               deleteModal.setShow(true);
+               deleteModal.setData(id);
             }}
          />
       </CustomDropdownMenu>

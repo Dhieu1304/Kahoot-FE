@@ -1,25 +1,17 @@
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { AuthContext } from "../../providers/auth";
-import * as localStorageApp from "../../utils/localStorage";
+import { AuthContext } from "../../../providers/auth";
+import * as localStorageApp from "../../../utils/localStorage";
 
 const useSideBar = (localStorageKey) => {
    const authContext = useContext(AuthContext);
 
    const [recentSideBarMenuBottomItems, setRecentSideBarMenuBottomItems] = useState([]);
 
-   console.log("localStorageKey: ", localStorageKey);
-
    // load recent menuBottom items
    useEffect(() => {
       const recentMenuBottomItemsObject = localStorageApp.getItem(
-         localStorageApp.LOCAL_STORAGE[localStorageKey]
-      );
-
-      console.log("recentMenuBottomItemsObject: ", recentMenuBottomItemsObject);
-      console.log(
-         "localStorageApp.LOCAL_STORAGE[localStorageKey]: ",
          localStorageApp.LOCAL_STORAGE[localStorageKey]
       );
 
@@ -35,8 +27,6 @@ const useSideBar = (localStorageKey) => {
       }
    }, [authContext.user.id]);
 
-   console.log("recentMenuBottomItems: ", recentSideBarMenuBottomItems);
-
    const updateRecentSideBarMenuBottomItems = (newRecentSideBarMenuBottomItems) => {
       localStorageApp.setItem(localStorageApp.LOCAL_STORAGE[localStorageKey], {
          [authContext.user.id]: newRecentSideBarMenuBottomItems
@@ -51,4 +41,4 @@ const useSideBar = (localStorageKey) => {
    };
 };
 
-export default useSideBar;
+export { useSideBar };

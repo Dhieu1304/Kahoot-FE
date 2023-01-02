@@ -1,64 +1,46 @@
-import { faAdd, faPlayCircle, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faEdit, faPlayCircle, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import classNames from "classnames/bind";
+
 import { useEffect, useState } from "react";
-import { ListGroup, Pagination } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import Select from "react-select";
+import { ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
 
 import Button from "../../../components/Button";
 import CreatePresentationModal from "./components/CreatePresentationModal";
-import styles from "./PresentationPage.module.scss";
 import { usePresentationStore } from "./store";
 import ActionMenu from "./components/ActionMenu";
 
-import { limitOptions, selectOptions } from "./config";
 import RenamePresentationModal from "./components/RenamePresentationModal";
 import InviteToPresentationModal from "./components/InviteToPresentationModal";
 import Modal from "../../../components/Modal";
-import SideBar from "../../../components/SideBar/SideBar";
-import { LOCAL_STORAGE } from "../../../utils/localStorage";
-import useSideBar from "../../../components/SideBar/hooks";
-import { useContext } from "react";
-import { PresenationManageLayoutContext } from "../layout/PresenationManageLayout";
-import Table from "../../../components/Table";
-import TableTHead from "../../../components/Table/components/TableTHead";
-import TableTr from "../../../components/Table/components/TableTr";
-import TableTh from "../../../components/Table/components/TableTh";
-import TableTd from "../../../components/Table/components/TableTd";
-import TableTBody from "../../../components/Table/components/TableTBody";
 
+import Table, {
+   TableTHead,
+   TableTBody,
+   TableTd,
+   TableTh,
+   TableTr,
+   useTableSelect
+} from "../../../components/Table";
+
+import { usePresenationManageLayoutStore } from "../../../layouts/PresenationManageLayout";
+
+import classNames from "classnames/bind";
+import styles from "./PresentationPage.module.scss";
 const cx = classNames.bind(styles);
 
 function PresentationPage() {
    const presentationStore = usePresentationStore();
 
-   const navigate = useNavigate();
+   const { handleUpdateRecentSideBarMenuBottomItems } = usePresenationManageLayoutStore();
+
+   const { isSelectAll, selectedRowIds, handleSelectedAll, handleSelected, setRowIds } =
+      useTableSelect([]);
 
    // show/hide modal state
-   const {
-      showCreateModal,
-      setShowCreateModal,
-      showRenameModal,
-      setShowRenameModal,
-      showDeleteModal,
-      setShowDeleteModal,
-      showInviteModal,
-      setShowInviteModal,
-      selectedPresentationIdToAction,
-      setSelectedPresentationIdToAction
-   } = presentationStore;
-
-   const { handleUpdateRecentSideBarMenuBottomItems } = useContext(PresenationManageLayoutContext);
-
-   // filter state
-   const [isSelectAll, setIsSelectAll] = useState(false);
-   const [selectedRowIds, setSelectedRowIds] = useState([]);
-
-   const [selectedOption, setSelectedOption] = useState(selectOptions[0]);
-   const [limit, setLimit] = useState(null);
+   const { createModal, renameModal, deleteModal, inviteModal } = presentationStore;
 
    // responsive
    const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -68,57 +50,26 @@ function PresentationPage() {
    useEffect(() => {
       // load data
       const loadData = async () => {
-         console.log("load data");
-         presentationStore.method.loadPresentations();
+         const data = await presentationStore.method.loadPresentations();
+         if (data) {
+            const { presentations } = data;
+
+            setRowIds((prev) => {
+               return presentations?.map((presentation) => presentation?.id);
+            });
+         }
+
          presentationStore.method.setInit();
       };
       loadData();
    }, []);
 
-   // handle when select all rows
-   const handleSelectedAll = () => {
-      // if isSelectAll === true => clear setSelectedRowIds;
-      // else checked all rows
-      if (isSelectAll) {
-         setSelectedRowIds([]);
-      } else {
-         setSelectedRowIds((prev) => {
-            const newSelectedRowIds = presentationStore.state.presentations.map(
-               (presentation) => presentation.id
-            );
-            return [...newSelectedRowIds];
-         });
-      }
-
-      setIsSelectAll((prev) => !prev);
-   };
-
-   // handle when select 1 row
-   const handleSelected = (id, isChecked) => {
-      // handle checked row
-      setSelectedRowIds((prev) => {
-         const newSelectedRowIds = [...prev];
-         if (isChecked) {
-            const index = newSelectedRowIds.indexOf(id);
-            newSelectedRowIds.splice(index, 1);
-         } else {
-            newSelectedRowIds.push(id);
-         }
-         return [...newSelectedRowIds];
-      });
-
-      // If current row is checked => after clicking this row, clear selectAll checkbox
-      if (isChecked) {
-         setIsSelectAll(false);
-      }
-   };
-
    const handleDeletePresentation = async () => {
-      console.log("selectedPresentationIdToAction: ", selectedPresentationIdToAction);
-      await presentationStore.method.deletePresentation(selectedPresentationIdToAction);
+      await presentationStore.method.deletePresentation(deleteModal?.data);
 
-      setShowDeleteModal(false);
-      setSelectedPresentationIdToAction(-1);
+      console.log("presentationStore deleteModal.data: ", deleteModal?.data);
+      deleteModal.setShow(false);
+      deleteModal.setData(null);
    };
 
    return (
@@ -133,6 +84,20 @@ function PresentationPage() {
                   <h1 className={cx("title")}>My Presentations</h1>
                   <div className={cx("nav")}>
                      <div className={cx("btn-group")}>
+                        {selectedRowIds.length > 0 && isNotMobile && (
+                           <Button
+                              title="Remove"
+                              basicRed
+                              big
+                              rounded
+                              className={cx("btn")}
+                              leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
+                              // onClick={() => {
+
+                              // }}
+                           />
+                        )}
+
                         <Button
                            title="Create"
                            basicBlue
@@ -141,7 +106,7 @@ function PresentationPage() {
                            className={cx("btn")}
                            leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
                            onClick={() => {
-                              setShowCreateModal(true);
+                              createModal.setShow(true);
                            }}
                         />
                      </div>
@@ -164,20 +129,19 @@ function PresentationPage() {
                            <TableTh>Name</TableTh>
                            <TableTh>Code</TableTh>
                            <TableTh>Owner</TableTh>
-                           <TableTh>Too</TableTh>
-
                            {isDesktop && (
                               <>
                                  <TableTh>Modified</TableTh>
                                  <TableTh>Created</TableTh>
                               </>
                            )}
+                           <TableTh>Edit</TableTh>
                            <TableTh></TableTh>
                         </TableTr>
                      </TableTHead>
                      <TableTBody>
                         {presentationStore.state.presentations?.map((presentation, index) => {
-                           const isChecked = selectedRowIds.includes(presentation.id);
+                           const isChecked = selectedRowIds?.includes(presentation.id);
                            return (
                               <TableTr key={index}>
                                  <TableTd>
@@ -198,22 +162,18 @@ function PresentationPage() {
                                              className={cx("icon")}
                                           />
                                        </Link>
-                                       <Link to={`${presentation.id}/edit`}>
+                                       <Link
+                                          to={`/presentation/${presentation.id}/user`}
+                                          onClick={() => {
+                                             handleUpdateRecentSideBarMenuBottomItems(presentation);
+                                          }}
+                                       >
                                           {presentation?.name}
                                        </Link>
                                     </div>
                                  </TableTd>
                                  <TableTd>{presentation?.code}</TableTd>
                                  <TableTd>Me</TableTd>
-                                 <TableTd>
-                                    <Button
-                                       onClick={() => {
-                                          handleUpdateRecentSideBarMenuBottomItems(presentation);
-                                          navigate(`/presentation/${presentation?.id}/user`);
-                                       }}
-                                       title="XXX"
-                                    />
-                                 </TableTd>
 
                                  {isDesktop && (
                                     <>
@@ -232,6 +192,16 @@ function PresentationPage() {
                                     </>
                                  )}
                                  <TableTd>
+                                    <Link to={`/presentation/${presentation.id}/edit`}>
+                                       <FontAwesomeIcon
+                                          icon={faEdit}
+                                          size="1x"
+                                          className={cx("icon")}
+                                       />
+                                    </Link>
+                                 </TableTd>
+
+                                 <TableTd>
                                     <ActionMenu id={presentation.id} />
                                  </TableTd>
                               </TableTr>
@@ -246,7 +216,7 @@ function PresentationPage() {
                            <ListGroup.Item className={cx("item")} key={index}>
                               <div className={cx("top")}>
                                  <div className={cx("infor")}>
-                                    <Link to={`${presentation.id}/1`}>
+                                    <Link to={`/presentation/${presentation.id}/play`}>
                                        <FontAwesomeIcon
                                           icon={faPlayCircle}
                                           size="1x"
@@ -254,9 +224,26 @@ function PresentationPage() {
                                        />
                                     </Link>
 
-                                    <Link to={`${presentation.id}/edit`}>{presentation?.name}</Link>
+                                    <Link
+                                       to={`/presentation/${presentation.id}/user`}
+                                       onClick={() => {
+                                          handleUpdateRecentSideBarMenuBottomItems(presentation);
+                                       }}
+                                    >
+                                       {presentation?.name}
+                                    </Link>
                                  </div>
-                                 <ActionMenu id={presentation.id} />
+
+                                 <div className={cx("action")}>
+                                    <Link to={`/presentation/${presentation.id}/edit`}>
+                                       <FontAwesomeIcon
+                                          icon={faEdit}
+                                          size="1x"
+                                          className={cx("icon")}
+                                       />
+                                    </Link>
+                                    <ActionMenu id={presentation.id} />
+                                 </div>
                               </div>
                               <div className={cx("bottom")}>
                                  <span className={cx("onwer")}>me</span>
@@ -268,17 +255,40 @@ function PresentationPage() {
                )}
             </div>
 
-            <CreatePresentationModal show={showCreateModal} setShow={setShowCreateModal} />
-            <RenamePresentationModal show={showRenameModal} setShow={setShowRenameModal} />
-            <InviteToPresentationModal show={showInviteModal} setShow={setShowInviteModal} />
-            <Modal
-               title={"Delete Presentation"}
-               haveSubmitBtn
-               submitBtnTitle={"Delete"}
-               onSubmitModal={handleDeletePresentation}
-               show={showDeleteModal}
-               setShow={setShowDeleteModal}
-            />
+            {createModal.show && (
+               <CreatePresentationModal
+                  show={createModal.show}
+                  setShow={createModal.setShow}
+                  data={createModal.data}
+                  setData={createModal.setData}
+               />
+            )}
+            {renameModal.show && (
+               <RenamePresentationModal
+                  show={renameModal.show}
+                  setShow={renameModal.setShow}
+                  data={renameModal.data}
+                  setData={renameModal.setData}
+               />
+            )}
+            {inviteModal.show && (
+               <InviteToPresentationModal
+                  show={inviteModal.show}
+                  setShow={inviteModal.setShow}
+                  data={inviteModal.data}
+                  setData={inviteModal.setData}
+               />
+            )}
+            {deleteModal.show && (
+               <Modal
+                  title={"Delete Presentation"}
+                  haveSubmitBtn
+                  submitBtnTitle={"Delete"}
+                  onSubmitModal={handleDeletePresentation}
+                  show={deleteModal.show}
+                  setShow={deleteModal.setShow}
+               />
+            )}
          </div>
       )
    );

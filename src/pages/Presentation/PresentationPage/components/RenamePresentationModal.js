@@ -9,7 +9,7 @@ import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../servi
 
 import presentationServices from "../../../../services/presentationServices";
 
-function RenamePresentationModal({ show, setShow }) {
+function RenamePresentationModal({ show, setShow, data, setData }) {
    const {
       register,
       handleSubmit,
@@ -36,9 +36,8 @@ function RenamePresentationModal({ show, setShow }) {
       const loadData = async () => {
          const userId = authContext.user.id;
          const groupOwnedData = await getGroupsByOwnUserId(userId);
-         // console.log("groupOwnedData: ", groupOwnedData);
+
          const groupJoinedData = await getGroupsByJoinedUserId(userId);
-         // console.log("groupJoinedData: ", groupJoinedData);
 
          const groups = [
             {
@@ -58,14 +57,11 @@ function RenamePresentationModal({ show, setShow }) {
    }, [authContext.user.id]);
 
    const handleSubmitRenameModal = async ({ name, groups, type }) => {
-      // call service to rename
-
-      //
-
       console.log("handleSubmitRenameModal: ", { name, groups, type });
 
       reset();
       setShow(false);
+      setData(null);
    };
 
    return (
@@ -73,6 +69,8 @@ function RenamePresentationModal({ show, setShow }) {
          title={"Rename Presentation"}
          show={show}
          setShow={setShow}
+         data={data}
+         setData={setData}
          haveSubmitBtn
          onSubmitModal={handleSubmit(handleSubmitRenameModal)}
          submitBtnTitle={"Rename"}
@@ -90,7 +88,7 @@ function RenamePresentationModal({ show, setShow }) {
          <div>
             <div>
                <input
-                  checked={watch("type") + "PRIVATE"}
+                  checked={watch("type") === "PRIVATE"}
                   type="radio"
                   value={"PRIVATE"}
                   {...register("type")}
@@ -99,7 +97,7 @@ function RenamePresentationModal({ show, setShow }) {
             </div>
             <div>
                <input
-                  checked={watch("type") + "PUBLIC"}
+                  checked={watch("type") === "PUBLIC"}
                   type="radio"
                   value={"PUBLIC"}
                   {...register("type")}
@@ -109,7 +107,7 @@ function RenamePresentationModal({ show, setShow }) {
          </div>
 
          <div>
-            <span>Slide type</span>
+            <span>Groups</span>
 
             <Controller
                control={control}

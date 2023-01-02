@@ -33,10 +33,9 @@ import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 
 import PresentationPlayWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayWrapper";
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
-import PresentationPlayPage from "./pages/Presentation/PresentationPlay/PresentationPlayPage";
 import PresentationClientDetailProvider from "./pages/PresentationClient/PresentationClientDetailPage/store/Provider";
 import PresentationManageUser from "./pages/Presentation/PresentationManageUser";
-import PresenationManageLayout from "./pages/Presentation/layout/PresenationManageLayout";
+import PresenationManageLayout from "./layouts/PresenationManageLayout";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -119,29 +118,25 @@ function App() {
                      ></Route>
 
                      <Route path={"/presentation"}>
-                        {/* Presentation list */}
+                        <Route path="" element={<Navigate to={"owned"} replace />} />
                         <Route
                            path="owned"
                            element={
-                              <DefaultLayout>
-                                 <PresenationManageLayout>
-                                    <PresentationProvider>
-                                       <PresentationPage />
-                                    </PresentationProvider>
-                                 </PresenationManageLayout>
-                              </DefaultLayout>
+                              <PresenationManageLayout>
+                                 <PresentationProvider>
+                                    <PresentationPage />
+                                 </PresentationProvider>
+                              </PresenationManageLayout>
                            }
                         />
                         <Route
                            path="joined"
                            element={
-                              <DefaultLayout>
-                                 <PresenationManageLayout>
-                                    <PresentationProvider>
-                                       <PresentationPage />
-                                    </PresentationProvider>
-                                 </PresenationManageLayout>
-                              </DefaultLayout>
+                              <PresenationManageLayout>
+                                 <PresentationProvider>
+                                    <PresentationPage />
+                                 </PresentationProvider>
+                              </PresenationManageLayout>
                            }
                         />
 
@@ -150,21 +145,9 @@ function App() {
                            <Route
                               path="user"
                               element={
-                                 <DefaultLayout>
-                                    <PresenationManageLayout>
-                                       <PresentationManageUser />
-                                    </PresenationManageLayout>
-                                 </DefaultLayout>
-                              }
-                           />
-                           <Route
-                              path="group"
-                              element={
-                                 <DefaultLayout>
-                                    <PresenationManageLayout>
-                                       <PresentationManageUser />
-                                    </PresenationManageLayout>
-                                 </DefaultLayout>
+                                 <PresenationManageLayout>
+                                    <PresentationManageUser />
+                                 </PresenationManageLayout>
                               }
                            />
                            <Route

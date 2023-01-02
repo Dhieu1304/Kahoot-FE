@@ -1,17 +1,12 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 
-import * as localStorageApp from "../../utils/localStorage";
 import SidebarItem from "./SidebarItem";
 
 import styles from "./SideBar.module.scss";
-import { useState } from "react";
-import { useContext } from "react";
-import { AuthContext } from "../../providers/auth";
-import { useEffect } from "react";
 
 import Select from "react-select";
 import { useMediaQuery } from "react-responsive";
+import { useResolvedPath, useMatch, useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -35,6 +30,8 @@ function SideBar({
    // };
 
    const isMobile = useMediaQuery({ maxWidth: 767 });
+
+   const navigate = useNavigate();
 
    const renderForNotMobile = () => {
       return (
@@ -64,7 +61,8 @@ function SideBar({
                         key={index}
                         to={`${preLink}/${item?.id.toString()}/user`}
                         label={item.name}
-                        matchLink={`${preLink}/${item?.id.toString()}`}
+
+                        // matchLink={`${preLink}/${item?.id.toString()}`}
 
                         // onClick={() => handleUpdateSideBarMenuBottomItems(item)}
                      />
@@ -77,10 +75,10 @@ function SideBar({
 
    const renderForMobile = () => {
       const manageOptions = [...menuTop?.items];
-      const itemOptions = [...recentSideBarMenuBottomItems];
-
-      console.log("manageOptions: ", manageOptions);
-      console.log("itemOptions: ", itemOptions);
+      const itemOptions = recentSideBarMenuBottomItems?.map((item) => ({
+         ...item,
+         to: `${preLink}/${item?.id.toString()}/user`
+      }));
 
       const options = [
          {
@@ -97,16 +95,16 @@ function SideBar({
          <Select
             // defaultValue={watch("slideType")}
             placeholder="Select"
-            // onChange={onChange}
-            // value={value}
-            // onBlur={onBlur}
+            onChange={(val) => {
+               navigate(val.to);
+            }}
             options={options}
             className={cx("select")}
             isSearchable={false}
             formatOptionLabel={({ name }) => {
                return <div>{name}</div>;
             }}
-            getOptionValue={(option) => option.name}
+            getOptionValue={(option) => option.to}
             theme={"white"}
          />
       );

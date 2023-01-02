@@ -1,12 +1,11 @@
 .wrapper {
-   padding: 0 50px;
+   padding: 0;
    min-height: 100vh;
-
-   // display: flex;
-   // justify-content: space-between;
-   // align-items: flex-start;
+   width: 100%;
 
    .container {
+      padding: 0 40px;
+
       .header {
          display: flex;
          flex-direction: column;
@@ -29,7 +28,7 @@
                width: 100%;
                display: flex;
                flex-direction: row;
-               justify-content: flex-start;
+               justify-content: flex-end;
                align-items: center;
 
                .btn {
@@ -58,54 +57,6 @@
          }
       }
 
-      // .table {
-      //    border: 1px solid var(--border-color);
-      //    position: relative;
-
-      //    .tr {
-      //       .th {
-      //          text-align: left;
-      //          padding-left: 1rem;
-      //       }
-      //       .td {
-      //          border: none;
-      //          text-align: left;
-      //          padding-left: 1rem;
-      //          color: rgba(0, 0, 0, 0.7);
-      //       }
-      //    }
-      // }
-
-      // .table {
-      //    position: relative;
-      //    .thead {
-      //       border: 1px solid var(--border-color);
-      //       border-top: 0px;
-      //       .tr {
-      //          .th {
-      //             padding: 8px 16px;
-      //             color: var(--black-color);
-      //             font-weight: var(--font-weight-big);
-      //             font-size: 1.6rem;
-      //             text-align: left;
-      //          }
-      //       }
-      //    }
-      //    .tbody {
-      //       border: 1px solid var(--border-color);
-      //       .tr {
-      //          .td {
-      //             padding: 8px 16px;
-      //             text-align: left;
-      //             border: none;
-      //             text-align: left;
-      //             padding-left: 1rem;
-      //             color: rgba(0, 0, 0, 0.7);
-      //          }
-      //       }
-      //    }
-      // }
-
       .footer {
          margin-top: 2rem;
       }
@@ -132,6 +83,7 @@
    width: 100%;
 
    .container {
+      padding: 0;
       .header {
          .nav {
             display: flex;
@@ -195,6 +147,16 @@
                         cursor: pointer;
                         color: var(--basic-blue-color);
                      }
+                  }
+               }
+
+               .action {
+                  display: flex;
+                  justify-content: flex-end;
+                  align-items: center;
+
+                  .icon {
+                     margin-right: 1rem;
                   }
                }
             }

@@ -10,7 +10,7 @@ import { AuthContext } from "../../../../providers/auth";
 import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../services/groupService";
 import presentationServices from "../../../../services/presentationServices";
 
-function CreatePresentationModal({ show, setShow }) {
+function CreatePresentationModal({ show, setShow, data, setData }) {
    const {
       register,
       handleSubmit,
@@ -37,9 +37,8 @@ function CreatePresentationModal({ show, setShow }) {
       const loadData = async () => {
          const userId = authContext.user.id;
          const groupOwnedData = await getGroupsByOwnUserId(userId);
-         // console.log("groupOwnedData: ", groupOwnedData);
+
          const groupJoinedData = await getGroupsByJoinedUserId(userId);
-         // console.log("groupJoinedData: ", groupJoinedData);
 
          const groups = [
             {
@@ -65,12 +64,11 @@ function CreatePresentationModal({ show, setShow }) {
 
       const presentation = await presentationServices.createPresentation(name);
 
-      console.log("presentation: ", presentation);
-      // TẠM THỜI
       if (presentation) navigate(`/presentation/${presentation?.id}/edit`);
 
       reset();
       setShow(false);
+      setData(null);
    };
 
    return (
@@ -78,6 +76,8 @@ function CreatePresentationModal({ show, setShow }) {
          title={"Create Presentation"}
          show={show}
          setShow={setShow}
+         data={data}
+         setData={setData}
          haveSubmitBtn
          onSubmitModal={handleSubmit(handleSubmitCreateModal)}
          submitBtnTitle={"Create"}
@@ -95,7 +95,7 @@ function CreatePresentationModal({ show, setShow }) {
          <div>
             <div>
                <input
-                  checked={watch("type") + "PRIVATE"}
+                  checked={watch("type") === "PRIVATE"}
                   type="radio"
                   value={"PRIVATE"}
                   {...register("type")}
@@ -104,7 +104,7 @@ function CreatePresentationModal({ show, setShow }) {
             </div>
             <div>
                <input
-                  checked={watch("type") + "PUBLIC"}
+                  checked={watch("type") === "PUBLIC"}
                   type="radio"
                   value={"PUBLIC"}
                   {...register("type")}
@@ -114,7 +114,7 @@ function CreatePresentationModal({ show, setShow }) {
          </div>
 
          <div>
-            <span>Slide type</span>
+            <span>Groups</span>
 
             <Controller
                control={control}
