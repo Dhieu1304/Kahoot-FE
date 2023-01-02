@@ -111,13 +111,10 @@ function PresentationClientDetailPage() {
       handleSubmit(name);
    };
 
-   const renderContentBySlideTypeId = () => {
-      // SẼ SỬA LẠI
-      const slideTypeId = MULTIPLE_CHOICE;
-
-      switch (slideTypeId) {
-         case MULTIPLE_CHOICE:
-            return !isSubmitSuccess ? (
+   return (
+      <div className={cx("wrapper")}>
+         <div className={cx("container")}>
+            {!isSubmitSuccess ? (
                <>
                   <div className={cx("option-list")}>
                      {options.map((option, index) => {
@@ -148,33 +145,8 @@ function PresentationClientDetailPage() {
                </>
             ) : (
                <h1 className={cx("success-message")}>{message}</h1>
-            );
-
-         case HEADING:
-            return (
-               <div className={cx("content-heading")}>
-                  <h1 className={cx("title")}>{slide?.title}</h1>
-                  <h1 className={cx("description")}>{slide?.description}</h1>
-               </div>
-            );
-         case PARAGRAPH:
-            return (
-               <div className={cx("content-paragraph")}>
-                  <h1 className={cx("title")}>{slide?.title}</h1>
-                  <h1 className={cx("description")}>{slide?.description}</h1>
-               </div>
-            );
-
-         default:
-            return <h1>No slide type</h1>;
-      }
-   };
-
-   return (
-      <div className={cx("wrapper")}>
-         <div className={cx("container")}>
-            {renderContentBySlideTypeId()}
-
+            )}
+            ;
             <div className={cx("menu")}>
                <div className={cx("item", "item-has-chat")}>
                   <FontAwesomeIcon
@@ -185,7 +157,6 @@ function PresentationClientDetailPage() {
                         setShowChatBox((prev) => !prev);
                      }}
                   />
-
                   {showChatBox && <Chat chatMessageList={chatMessageList} />}
                </div>
                <div className={cx("item")}>
@@ -200,7 +171,6 @@ function PresentationClientDetailPage() {
                </div>
             </div>
          </div>
-
          <SendQuestionModal show={showQuestionModal} setShow={setShowQuestionModal} />
       </div>
    );
