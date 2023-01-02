@@ -4,15 +4,31 @@ import axiosClient from "../config/axiosClient";
 import mockApi from "../mockApi";
 
 const getOwnedPresentations = async () => {
-   // console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
+   console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
+   const presentations = await getPresentations("OWNER");
+   console.log("presentations: ", presentations);
+   return presentations;
+};
+
+const getCoOwnedPresentations = async () => {
+   console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
+   const presentations = await getPresentations("CO_OWNER");
+   console.log("presentations: ", presentations);
+   return presentations;
+};
+
+const getPresentations = async (type) => {
+   // console.log("[SERVICE][PRESENTATION] getPresentations: ", { type });
 
    try {
-      const res = await axiosClient.get(`/presentation/list`);
-      // console.log("res: ", res);
+      const res = await axiosClient.get(`/presentation/list`, {
+         params: {
+            type
+         }
+      });
+      // console.log("res.data: ", res.data);
 
-      const { rows: presentations, count } = res.data;
-
-      return camelcaseKeys({ presentations, count }, { deep: true });
+      return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
 
@@ -198,6 +214,7 @@ const getListSlideTypeConfig = async () => {
 
 export default {
    getOwnedPresentations,
+   getCoOwnedPresentations,
    getAllSlidesByPresentationId,
    getPresentationById,
    getSlideById,

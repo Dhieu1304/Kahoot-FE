@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
 
@@ -50,14 +50,26 @@ function PresentationPage() {
    const isNotMobile = useMediaQuery({ minWidth: 768 });
 
    const navigate = useNavigate();
+   const location = useLocation();
 
    useEffect(() => {
       // load data
       const loadData = async () => {
-         const data = await presentationStore.method.loadPresentations();
-         if (data) {
-            const { presentations } = data;
+         console.log("location: ", location);
+         const pathname = location.pathname;
+         let presentations = null;
+         switch (pathname) {
+            case "/presentation/owned":
+               presentations = await presentationStore.method.loadPresentations("OWNER");
+               break;
+            case "/presentation/joined":
+               presentations = await presentationStore.method.loadPresentations("CO_OWNER");
+               break;
+            default:
+               break;
+         }
 
+         if (presentations) {
             setRowIds((prev) => {
                return presentations?.map((presentation) => presentation?.id);
             });
@@ -66,7 +78,7 @@ function PresentationPage() {
          presentationStore.method.setInit();
       };
       loadData();
-   }, []);
+   }, [location]);
 
    const handleSubmitCreateModal = async ({ name, groups, type }) => {
       console.log("handleSubmitCreateModal: ", { name, groups, type });
@@ -194,7 +206,7 @@ function PresentationPage() {
                                     </div>
                                  </TableTd>
                                  <TableTd>{presentation?.code}</TableTd>
-                                 <TableTd>Me</TableTd>
+                                 <TableTd>{presentation?.owner?.fullName}</TableTd>
 
                                  {isDesktop && (
                                     <>

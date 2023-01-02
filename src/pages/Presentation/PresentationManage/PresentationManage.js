@@ -71,9 +71,9 @@ function PresentationManage() {
       const loadData = async () => {
          const data = await presentationManageStore.method.loadPresentationDetail(presentationId);
          if (data) {
-            const { presentations } = data;
+            const { users } = data;
             setRowIds((prev) => {
-               return presentations?.map((presentation) => presentation?.id);
+               return users?.map((presentation) => presentation?.id);
             });
          }
          presentationManageStore.method.setInit();

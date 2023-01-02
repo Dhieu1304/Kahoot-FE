@@ -8,8 +8,6 @@ import {
 
 const initState = {
    presentations: [],
-   count: 0,
-
    isInit: false,
    isLoading: false,
    isFetchApiError: false,
@@ -24,8 +22,7 @@ function reducer(state, action) {
             isLoading: false,
             isFetchApiError: false,
             fetchApiError: "",
-            presentations: action.payload.presentations,
-            count: action.payload.count
+            presentations: action.payload
          };
 
       case FETCHING_API:

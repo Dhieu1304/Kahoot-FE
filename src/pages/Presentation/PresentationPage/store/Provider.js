@@ -22,20 +22,29 @@ function PresentationProvider({ children }) {
    const [state, dispatch] = useReducer(reducer, initState);
 
    const method = {
-      loadPresentations: async () => {
+      loadPresentations: async (type) => {
          dispatch(actions.fetchApi());
-         const data = await presentationServices.getOwnedPresentations();
 
-         if (data) {
-            const { presentations, count } = data;
+         let presentations = null;
+         switch (type) {
+            case "OWNER":
+               presentations = await presentationServices.getOwnedPresentations();
+               break;
+            case "CO_OWNER":
+               presentations = await presentationServices.getCoOwnedPresentations();
+               break;
+            default:
+               break;
+         }
 
-            dispatch(actions.setPresentations({ presentations, count }));
+         if (presentations) {
+            dispatch(actions.setPresentations(presentations));
          } else {
             const message = "Error API";
             dispatch(actions.fetchApiFailed(message));
          }
 
-         return data;
+         return presentations;
       },
 
       setInit: () => {
