@@ -21,57 +21,79 @@ function PresentationProvider({ children }) {
 
    const [state, dispatch] = useReducer(reducer, initState);
 
-   const method = {
-      loadPresentations: async (type) => {
-         dispatch(actions.fetchApi());
+   // method
+   const loadPresentations = async (type) => {
+      dispatch(actions.setListType(type));
 
-         let presentations = null;
-         switch (type) {
-            case "OWNER":
-               presentations = await presentationServices.getOwnedPresentations();
-               break;
-            case "CO_OWNER":
-               presentations = await presentationServices.getCoOwnedPresentations();
-               break;
-            default:
-               break;
-         }
+      dispatch(actions.fetchApi());
 
-         if (presentations) {
-            dispatch(actions.setPresentations(presentations));
-         } else {
-            const message = "Error API";
-            dispatch(actions.fetchApiFailed(message));
-         }
-
-         return presentations;
-      },
-
-      setInit: () => {
-         dispatch(actions.setInit(true));
-      },
-
-      deletePresentation: async (presentationId) => {
-         const resultPresentation = await presentationServices.deletePresentationById(
-            presentationId
-         );
-
-         if (resultPresentation) {
-            dispatch(actions.fetchApi());
-            const data = await presentationServices.getOwnedPresentations();
-
-            if (data) {
-               const { presentations, count } = data;
-
-               dispatch(actions.setPresentations({ presentations, count }));
-            } else {
-               const message = "Error API";
-               dispatch(actions.fetchApiFailed(message));
-            }
-
-            return data;
-         }
+      let presentations = null;
+      switch (type) {
+         case "OWNER":
+            presentations = await presentationServices.getOwnedPresentations();
+            break;
+         case "CO_OWNER":
+            presentations = await presentationServices.getCoOwnedPresentations();
+            break;
+         default:
+            break;
       }
+
+      if (presentations) {
+         dispatch(actions.setPresentations(presentations));
+      } else {
+         const message = "Error API";
+         dispatch(actions.fetchApiFailed(message));
+      }
+
+      return presentations;
+   };
+
+   const initPresentations = async (type) => {
+      dispatch(actions.setListType(type));
+      return await loadPresentations(type);
+   };
+
+   const setInit = () => {
+      dispatch(actions.setInit(true));
+   };
+
+   const deletePresentation = async (presentationId) => {
+      const resultPresentation = await presentationServices.deletePresentationById(presentationId);
+
+      if (resultPresentation) {
+         return await loadPresentations(state.listType);
+      }
+   };
+
+   const renamePresentation = async (presentationId, name) => {
+      const resultPresentation = await presentationServices.savePresentation(
+         { name },
+         presentationId
+      );
+
+      if (resultPresentation) {
+         return await loadPresentations(state.listType);
+      }
+   };
+
+   const addPresentationCoOwner = async (presentationId, email) => {
+      dispatch(actions.fetchApi());
+      const result = await presentationServices.addPresentationCoOwner(presentationId, email);
+      if (result) {
+         dispatch(actions.fetchApiSuccess());
+      } else {
+         const message = "Error API";
+         dispatch(actions.fetchApiFailed(message));
+      }
+   };
+
+   const method = {
+      initPresentations,
+      setInit,
+      deletePresentation,
+      renamePresentation,
+      addPresentationCoOwner
    };
 
    return <Context.Provider value={{ state, method, ...rest }}>{children}</Context.Provider>;

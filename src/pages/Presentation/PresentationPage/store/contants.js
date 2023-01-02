@@ -3,3 +3,4 @@ export const FETCHING_API = "FETCHING_API";
 export const FETCHING_API_SUCCESS = "FETCHING_API_SUCCESS";
 export const FETCHING_API_FAILED = "FETCHING_API_FAILED";
 export const SET_INIT = "SET_INIT";
+export const SET_LIST_TYPE = "SET_LIST_TYPE";

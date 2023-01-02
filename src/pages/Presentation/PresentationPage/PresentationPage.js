@@ -55,15 +55,15 @@ function PresentationPage() {
    useEffect(() => {
       // load data
       const loadData = async () => {
-         console.log("location: ", location);
+         // console.log("location: ", location);
          const pathname = location.pathname;
          let presentations = null;
          switch (pathname) {
             case "/presentation/owned":
-               presentations = await presentationStore.method.loadPresentations("OWNER");
+               presentations = await presentationStore.method.initPresentations("OWNER");
                break;
             case "/presentation/joined":
-               presentations = await presentationStore.method.loadPresentations("CO_OWNER");
+               presentations = await presentationStore.method.initPresentations("CO_OWNER");
                break;
             default:
                break;
@@ -83,19 +83,26 @@ function PresentationPage() {
    const handleSubmitCreateModal = async ({ name, groups, type }) => {
       console.log("handleSubmitCreateModal: ", { name, groups, type });
 
-      const presentation = await presentationServices.createPresentation(name);
+      const presentation = await presentationServices.createPresentation(name, groups, type);
 
       if (presentation) navigate(`/presentation/${presentation?.id}/edit`);
    };
 
    const handleSubmitRenameModal = async ({ name, groups, type }) => {
       console.log("handleSubmitRenameModal: ", { name, groups, type });
+      const presentationId = renameModal.data;
+      const presentations = await presentationStore.method.renamePresentation(
+         presentationId,
+         name,
+         groups,
+         type
+      );
    };
 
    const handleInviteByEmail = async ({ email }) => {
-      console.log("handleInviteByEmail: ");
-      console.log("data: ", inviteModal.data);
-      console.log("email: ", email);
+      console.log("handleInviteByEmail: ", { email });
+      const presentationId = inviteModal.data;
+      const result = await presentationStore.method.addPresentationCoOwner(presentationId, email);
    };
 
    const handleDeletePresentation = async () => {

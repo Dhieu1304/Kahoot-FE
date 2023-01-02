@@ -81,28 +81,32 @@ function CreatePresentationModal({ show, setShow, data, setData, handleSubmitCre
             showLabel
             type={"txt"}
             {...register("name", {
-               required: "Name is required"
+               required: "is required"
             })}
             error={errors.name}
          />
-         <div>
-            <div>
-               <input
-                  checked={watch("type") === "PRIVATE"}
-                  type="radio"
-                  value={"PRIVATE"}
-                  {...register("type")}
-               />
-               <span>Private</span>
-            </div>
-            <div>
-               <input
-                  checked={watch("type") === "PUBLIC"}
-                  type="radio"
-                  value={"PUBLIC"}
-                  {...register("type")}
-               />
-               <span>Public</span>
+
+         <div className="my-2">
+            <span>Type</span>
+            <div className="d-flex justify-content-start">
+               <div>
+                  <input
+                     checked={watch("type") === "PRIVATE"}
+                     type="radio"
+                     value={"PRIVATE"}
+                     {...register("type")}
+                  />
+                  <span className="mx-2">Private</span>
+               </div>
+               <div>
+                  <input
+                     checked={watch("type") === "PUBLIC"}
+                     type="radio"
+                     value={"PUBLIC"}
+                     {...register("type")}
+                  />
+                  <span className="mx-2">Public</span>
+               </div>
             </div>
          </div>
 

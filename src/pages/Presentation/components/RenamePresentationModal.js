@@ -108,9 +108,7 @@ function RenamePresentationModal({ show, setShow, data, setData, handleSubmitRen
 
             <Controller
                control={control}
-               rules={{
-                  required: "require"
-               }}
+               rules={{}}
                render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => (
                   <Select
                      isMulti={true}

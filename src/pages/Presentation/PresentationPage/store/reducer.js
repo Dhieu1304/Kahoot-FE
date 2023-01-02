@@ -1,5 +1,6 @@
 import {
    SET_PRESENTATIONS,
+   SET_LIST_TYPE,
    FETCHING_API,
    FETCHING_API_SUCCESS,
    FETCHING_API_FAILED,
@@ -8,6 +9,7 @@ import {
 
 const initState = {
    presentations: [],
+   listType: "OWNER",
    isInit: false,
    isLoading: false,
    isFetchApiError: false,
@@ -51,6 +53,12 @@ function reducer(state, action) {
          return {
             ...state,
             isInit: true
+         };
+
+      case SET_LIST_TYPE:
+         return {
+            ...state,
+            listType: action.payload
          };
 
       default:
