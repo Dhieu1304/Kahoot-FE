@@ -23,8 +23,7 @@ import ReactLoading from "react-loading";
 import { usePresentationDetailStore } from "../../store";
 
 import Button from "../../../../../components/Button";
-import { SocketContext } from "../../../../../providers/socket";
-import { PRESENTATION_EVENT } from "../../../../../providers/socket/socket.constant";
+
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import useDebounce from "../../../../../hooks/useDebounce";
@@ -41,6 +40,7 @@ function Header() {
    const {
       createSlideModal,
       changeThemeModal,
+      presentModal,
 
       showSlideListWhenNotDesktop,
       setShowSlideListWhenNotDesktop
@@ -54,7 +54,6 @@ function Header() {
       formState: { errors, isDirty }
    } = useFormContext();
 
-   const socket = useContext(SocketContext);
    //
 
    const debouncedValue = useDebounce(
@@ -85,10 +84,6 @@ function Header() {
    };
 
    const navigate = useNavigate();
-
-   const handlePresent = useCallback((presentation_id, ordinal_slide_number) => {
-      socket.emit(PRESENTATION_EVENT.PRESENT, { presentation_id, ordinal_slide_number });
-   }, []);
 
    //
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
@@ -224,10 +219,7 @@ function Header() {
                   hideTitle={isNotDesktop}
                   leftIcon={<FontAwesomeIcon icon={faPlay} />}
                   onClick={() => {
-                     const presentationId = presentationDetailStore.state.presentation?.id;
-                     const slideId = 1;
-                     handlePresent(presentationId, slideId);
-                     navigate(`/presentation/${presentationId}/play`);
+                     presentModal.setShow(true);
                   }}
                />
             </div>

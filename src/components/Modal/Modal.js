@@ -16,7 +16,8 @@ function Modal({
    children,
    haveSubmitBtn,
    onSubmitModal,
-   submitBtnTitle
+   submitBtnTitle,
+   hideCancel
 }) {
    //    const [show, setShow] = useState(false);
 
@@ -34,7 +35,9 @@ function Modal({
                </BootstrapModal.Header>
                <BootstrapModal.Body className={cx("body")}>{children}</BootstrapModal.Body>
                <BootstrapModal.Footer className={cx("footer")}>
-                  <Button cancel onClick={handleClose} title="Cancel" big rounded />
+                  {!hideCancel && (
+                     <Button cancel onClick={handleClose} title="Cancel" big rounded />
+                  )}
                   {haveSubmitBtn && (
                      <Button
                         submitModal

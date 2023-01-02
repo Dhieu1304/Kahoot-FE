@@ -1,22 +1,32 @@
 import classNames from "classnames/bind";
+import { useCallback } from "react";
 import { useEffect } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
 import Header from "./components/Header";
 import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
 import SlideList from "./components/SlideList";
 import styles from "./PresentationDetailPage.module.scss";
+
+import { SocketContext } from "../../../providers/socket";
+import { PRESENTATION_EVENT } from "../../../providers/socket/socket.constant";
+
 const cx = classNames.bind(styles);
 
 import { usePresentationDetailStore } from "./store";
+import { useContext } from "react";
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
 
-   const { createSlideModal, changeThemeModal, deleteSlideModal } = presentationDetailStore;
+   const socket = useContext(SocketContext);
+
+   const { createSlideModal, changeThemeModal, deleteSlideModal, presentModal } =
+      presentationDetailStore;
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
    const params = useParams();
@@ -124,6 +134,25 @@ function PresentationDetailPage() {
          );
    };
 
+   const handlePresent = useCallback((presentation_id, ordinal_slide_number) => {
+      socket.emit(PRESENTATION_EVENT.PRESENT, { presentation_id, ordinal_slide_number });
+   }, []);
+
+   const handleContinuePresent = async () => {
+      const presentationId = presentationDetailStore.state.presentation?.id;
+      const slideId = 1;
+      handlePresent(presentationId, slideId);
+      navigate(`/presentation/${presentationId}/play`);
+   };
+
+   const handleResetPresent = async () => {
+      const presentationId = presentationDetailStore.state.presentation?.id;
+      const slideId = 1;
+      handlePresent(presentationId, slideId);
+      navigate(`/presentation/${presentationId}/play`);
+   };
+
+   const handlePresentModal = async () => {};
    return (
       <div
          className={cx("wrapper", {
@@ -240,6 +269,34 @@ function PresentationDetailPage() {
                data={deleteSlideModal.data}
                setData={deleteSlideModal.setData}
             />
+         )}
+
+         {presentModal.show && (
+            <Modal
+               title={"Present"}
+               show={presentModal.show}
+               setShow={presentModal.setShow}
+               hideCancel
+            >
+               <div className={cx("present-modal-container")}>
+                  <Button
+                     className={cx("btn")}
+                     title={"Continue"}
+                     basicBlue
+                     rounded
+                     big
+                     onClick={handleContinuePresent}
+                  />
+                  <Button
+                     className={cx("btn")}
+                     title={"Reset"}
+                     basicYellow
+                     rounded
+                     big
+                     onClick={handleResetPresent}
+                  />
+               </div>
+            </Modal>
          )}
       </div>
    );

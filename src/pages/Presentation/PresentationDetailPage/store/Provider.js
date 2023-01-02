@@ -9,6 +9,7 @@ function PresentationDetailProvider({ children }) {
    const createSlideModal = useModal();
    const changeThemeModal = useModal();
    const deleteSlideModal = useModal();
+   const presentModal = useModal();
 
    const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
 
@@ -16,6 +17,7 @@ function PresentationDetailProvider({ children }) {
       createSlideModal,
       changeThemeModal,
       deleteSlideModal,
+      presentModal,
       showSlideListWhenNotDesktop,
       setShowSlideListWhenNotDesktop
    };
