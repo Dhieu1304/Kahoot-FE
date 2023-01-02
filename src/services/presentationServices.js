@@ -5,14 +5,30 @@ import mockApi from "../mockApi";
 
 const getOwnedPresentations = async () => {
    // console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
+   const presentations = await getPresentations("OWNER");
+   // console.log("presentations: ", presentations);
+   return presentations;
+};
+
+const getCoOwnedPresentations = async () => {
+   // console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
+   const presentations = await getPresentations("CO_OWNER");
+   // console.log("presentations: ", presentations);
+   return presentations;
+};
+
+const getPresentations = async (type) => {
+   // console.log("[SERVICE][PRESENTATION] getPresentations: ", { type });
 
    try {
-      const res = await axiosClient.get(`/presentation/list`);
-      // console.log("res: ", res);
+      const res = await axiosClient.get(`/presentation/list`, {
+         params: {
+            type
+         }
+      });
+      // console.log("res.data: ", res.data);
 
-      const { rows: presentations, count } = res.data;
-
-      return camelcaseKeys({ presentations, count }, { deep: true });
+      return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
 
@@ -20,7 +36,7 @@ const getOwnedPresentations = async () => {
    }
 };
 
-const createPresentation = async (name, type = "PUBLIC") => {
+const createPresentation = async (name, group, type = "PUBLIC") => {
    // console.log("[SERVICE][PRESENTATION] createPresentation: ", {
    //    name,
    //    type
@@ -107,17 +123,21 @@ const getResultBySlideId = async (slideId) => {
 };
 
 const savePresentation = async (presentationSaveData, presentationId) => {
-   // console.log("[SERVICE][PRESENTATION] savePresentation: ", presentationSaveData);
+   console.log("[SERVICE][PRESENTATION] savePresentation: ", presentationSaveData);
 
-   const { name, themeId } = presentationSaveData;
-   const data = { presentationId, name, themeId, type: "PUBLIC" };
+   const {
+      name,
+      themeId: presentation_theme_id,
+      type: presentation_type_id
+   } = presentationSaveData;
+   const data = { presentationId, name, presentation_theme_id, presentation_type_id };
 
-   // console.log("data send: ", data);
+   console.log("data send: ", data);
 
    try {
       const res = await axiosClient.put(`/presentation/edit`, data);
 
-      // console.log("success res edit presentation: ", res);
+      console.log("success res edit presentation: ", res);
 
       return res.status;
    } catch (e) {
@@ -196,8 +216,30 @@ const getListSlideTypeConfig = async () => {
    }
 };
 
+const addPresentationCoOwner = async (presentation_id, email) => {
+   console.log("[SERVICE][PRESENTATION] addPresentationCoOwner: ", {
+      presentation_id,
+      email
+   });
+
+   try {
+      const res = await axiosClient.post(`/presentation-member/add-co-owner`, {
+         presentation_id,
+         email
+      });
+      console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      // return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
+   getCoOwnedPresentations,
    getAllSlidesByPresentationId,
    getPresentationById,
    getSlideById,
@@ -208,5 +250,7 @@ export default {
    deletePresentationById,
 
    getListPresentationThemeConfig,
-   getListSlideTypeConfig
+   getListSlideTypeConfig,
+
+   addPresentationCoOwner
 };

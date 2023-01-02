@@ -59,14 +59,17 @@ function ActionMenu({ id }) {
                renameModal.setData(id);
             }}
          />
-         <CustomDropdownMenuItem
-            label={"Delete"}
-            leftIcon={<FontAwesomeIcon icon={faTrash} size={"1x"} />}
-            onClick={() => {
-               deleteModal.setShow(true);
-               deleteModal.setData(id);
-            }}
-         />
+
+         {presentationStore.state.lisType === "OWNER" && (
+            <CustomDropdownMenuItem
+               label={"Delete"}
+               leftIcon={<FontAwesomeIcon icon={faTrash} size={"1x"} />}
+               onClick={() => {
+                  deleteModal.setShow(true);
+                  deleteModal.setData(id);
+               }}
+            />
+         )}
       </CustomDropdownMenu>
    );
 }

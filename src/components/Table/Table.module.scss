@@ -17,6 +17,9 @@
    .tbody {
       border: 1px solid var(--border-color);
       .tr {
+         &:hover {
+            background-color: rgb(204, 204, 204, 0.7);
+         }
          .td {
             padding: 8px 16px;
             text-align: left;

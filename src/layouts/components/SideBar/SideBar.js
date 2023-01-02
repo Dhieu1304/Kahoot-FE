@@ -35,11 +35,7 @@ function SideBar({
 
    const renderForNotMobile = () => {
       return (
-         <div
-            className={cx("container", {
-               /*mobile*/
-            })}
-         >
+         <div className={cx("container")}>
             <div className={cx("top")}>
                <span className={cx("label")}>{menuTop?.label}</span>
                <ul className={cx("menu")}>

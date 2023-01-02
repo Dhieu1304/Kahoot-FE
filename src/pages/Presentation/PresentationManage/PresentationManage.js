@@ -26,7 +26,23 @@ import styles from "./PresentationManage.module.scss";
 import InviteToPresentationModal from "../components/InviteToPresentationModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/auth";
+import Tabs from "../../../components/Tabs";
 const cx = classNames.bind(styles);
+
+const tabItems = [
+   {
+      label: "Users",
+      to: "user"
+   },
+   {
+      label: "Groups",
+      to: "group"
+   },
+   {
+      label: "Report",
+      to: "report"
+   }
+];
 
 function PresentationManage() {
    const presentationManageStore = usePresentationManageStore();
@@ -55,9 +71,9 @@ function PresentationManage() {
       const loadData = async () => {
          const data = await presentationManageStore.method.loadPresentationDetail(presentationId);
          if (data) {
-            const { presentations } = data;
+            const { users } = data;
             setRowIds((prev) => {
-               return presentations?.map((presentation) => presentation?.id);
+               return users?.map((presentation) => presentation?.id);
             });
          }
          presentationManageStore.method.setInit();
@@ -80,10 +96,11 @@ function PresentationManage() {
          >
             <div className={cx("container")}>
                <div className={cx("header")}>
-                  <h1 className={cx("title")}>
-                     {presentationManageStore.state.presentation?.name}
-                  </h1>
                   <div className={cx("nav")}>
+                     <Tabs
+                        tabItems={tabItems}
+                        preLink={`/presentation/${presentationManageStore.state.presentation?.id}`}
+                     />
                      <div className={cx("btn-group")}>
                         {selectedRowIds.length > 0 && isNotMobile && (
                            <Button
@@ -113,6 +130,9 @@ function PresentationManage() {
                         />
                      </div>
                   </div>
+                  <h1 className={cx("title")}>
+                     {presentationManageStore.state.presentation?.name}
+                  </h1>
                </div>
 
                {isNotMobile ? (

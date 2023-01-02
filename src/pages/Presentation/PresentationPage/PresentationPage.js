@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
 
@@ -50,14 +50,26 @@ function PresentationPage() {
    const isNotMobile = useMediaQuery({ minWidth: 768 });
 
    const navigate = useNavigate();
+   const location = useLocation();
 
    useEffect(() => {
       // load data
       const loadData = async () => {
-         const data = await presentationStore.method.loadPresentations();
-         if (data) {
-            const { presentations } = data;
+         // console.log("location: ", location);
+         const pathname = location.pathname;
+         let presentations = null;
+         switch (pathname) {
+            case "/presentation/owned":
+               presentations = await presentationStore.method.initPresentations("OWNER");
+               break;
+            case "/presentation/joined":
+               presentations = await presentationStore.method.initPresentations("CO_OWNER");
+               break;
+            default:
+               break;
+         }
 
+         if (presentations) {
             setRowIds((prev) => {
                return presentations?.map((presentation) => presentation?.id);
             });
@@ -66,24 +78,31 @@ function PresentationPage() {
          presentationStore.method.setInit();
       };
       loadData();
-   }, []);
+   }, [location]);
 
    const handleSubmitCreateModal = async ({ name, groups, type }) => {
       console.log("handleSubmitCreateModal: ", { name, groups, type });
 
-      const presentation = await presentationServices.createPresentation(name);
+      const presentation = await presentationServices.createPresentation(name, groups, type);
 
       if (presentation) navigate(`/presentation/${presentation?.id}/edit`);
    };
 
    const handleSubmitRenameModal = async ({ name, groups, type }) => {
       console.log("handleSubmitRenameModal: ", { name, groups, type });
+      const presentationId = renameModal.data;
+      const presentations = await presentationStore.method.renamePresentation(
+         presentationId,
+         name,
+         groups,
+         type
+      );
    };
 
    const handleInviteByEmail = async ({ email }) => {
-      console.log("handleInviteByEmail: ");
-      console.log("data: ", inviteModal.data);
-      console.log("email: ", email);
+      console.log("handleInviteByEmail: ", { email });
+      const presentationId = inviteModal.data;
+      const result = await presentationStore.method.addPresentationCoOwner(presentationId, email);
    };
 
    const handleDeletePresentation = async () => {
@@ -105,19 +124,21 @@ function PresentationPage() {
                   <h1 className={cx("title")}>My Presentations</h1>
                   <div className={cx("nav")}>
                      <div className={cx("btn-group")}>
-                        {selectedRowIds.length > 0 && isNotMobile && (
-                           <Button
-                              title="Remove"
-                              basicRed
-                              big
-                              rounded
-                              className={cx("btn")}
-                              leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
-                              // onClick={() => {
+                        {selectedRowIds.length > 0 &&
+                           isNotMobile &&
+                           presentationStore.state.listType === "OWNER" && (
+                              <Button
+                                 title="Remove"
+                                 basicRed
+                                 big
+                                 rounded
+                                 className={cx("btn")}
+                                 leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
+                                 // onClick={() => {
 
-                              // }}
-                           />
-                        )}
+                                 // }}
+                              />
+                           )}
 
                         <Button
                            title="Create"
@@ -138,14 +159,16 @@ function PresentationPage() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           <TableTh>
-                              <input
-                                 type={"checkbox"}
-                                 checked={isSelectAll}
-                                 onChange={handleSelectedAll}
-                                 className={cx("checkbox")}
-                              />
-                           </TableTh>
+                           {presentationStore.state.listType === "OWNER" && (
+                              <TableTh>
+                                 <input
+                                    type={"checkbox"}
+                                    checked={isSelectAll}
+                                    onChange={handleSelectedAll}
+                                    className={cx("checkbox")}
+                                 />
+                              </TableTh>
+                           )}
                            <TableTh>id</TableTh>
                            <TableTh>Name</TableTh>
                            <TableTh>Code</TableTh>
@@ -165,14 +188,19 @@ function PresentationPage() {
                            const isChecked = selectedRowIds?.includes(presentation.id);
                            return (
                               <TableTr key={index}>
-                                 <TableTd>
-                                    <input
-                                       type={"checkbox"}
-                                       checked={isChecked}
-                                       onChange={() => handleSelected(presentation.id, isChecked)}
-                                       className={cx("checkbox")}
-                                    />
-                                 </TableTd>
+                                 {presentationStore.state.listType === "OWNER" && (
+                                    <TableTd>
+                                       <input
+                                          type={"checkbox"}
+                                          checked={isChecked}
+                                          onChange={() =>
+                                             handleSelected(presentation.id, isChecked)
+                                          }
+                                          className={cx("checkbox")}
+                                       />
+                                    </TableTd>
+                                 )}
+
                                  <TableTd>{presentation?.id}</TableTd>
                                  <TableTd>
                                     <div className={cx("presentation-infor-cell")}>
@@ -194,7 +222,7 @@ function PresentationPage() {
                                     </div>
                                  </TableTd>
                                  <TableTd>{presentation?.code}</TableTd>
-                                 <TableTd>Me</TableTd>
+                                 <TableTd>{presentation?.owner?.fullName}</TableTd>
 
                                  {isDesktop && (
                                     <>

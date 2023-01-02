@@ -3,7 +3,8 @@ import {
    FETCHING_API,
    FETCHING_API_SUCCESS,
    FETCHING_API_FAILED,
-   SET_INIT
+   SET_INIT,
+   SET_LIST_TYPE
 } from "./contants";
 
 export const setPresentations = (payload) => ({
@@ -31,10 +32,16 @@ export const setInit = (payload) => ({
    payload
 });
 
+export const setListType = (payload) => ({
+   type: SET_LIST_TYPE,
+   payload
+});
+
 export default {
    setPresentations,
    fetchApi,
    fetchApiSuccess,
    fetchApiFailed,
-   setInit
+   setInit,
+   setListType
 };
