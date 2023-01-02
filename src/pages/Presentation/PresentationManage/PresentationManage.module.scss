@@ -23,6 +23,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            margin-bottom: 2rem;
 
             .btn-group {
                width: 100%;
@@ -43,16 +44,6 @@
                justify-content: space-between;
                align-items: center;
                text-align: left;
-
-               .limit {
-                  width: 150px;
-                  margin: 0;
-                  margin-right: 1rem;
-               }
-               .select {
-                  width: 200px;
-                  margin: 0;
-               }
             }
          }
       }

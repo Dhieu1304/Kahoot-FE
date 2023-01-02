@@ -154,6 +154,26 @@ function App() {
                               }
                            />
                            <Route
+                              path="group"
+                              element={
+                                 <PresenationManageLayout>
+                                    <PresentationManageProvider>
+                                       <PresentationManage />
+                                    </PresentationManageProvider>
+                                 </PresenationManageLayout>
+                              }
+                           />
+                           <Route
+                              path="report"
+                              element={
+                                 <PresenationManageLayout>
+                                    <PresentationManageProvider>
+                                       <PresentationManage />
+                                    </PresentationManageProvider>
+                                 </PresenationManageLayout>
+                              }
+                           />
+                           <Route
                               path="edit"
                               element={
                                  <PresentationDetailProvider>
