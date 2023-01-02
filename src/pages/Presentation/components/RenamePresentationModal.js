@@ -2,14 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 
-import Input from "../../../../components/Input";
-import Modal from "../../../../components/Modal";
-import { AuthContext } from "../../../../providers/auth";
-import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../services/groupService";
+import Input from "../../../components/Input";
+import Modal from "../../../components/Modal";
+import { AuthContext } from "../../../providers/auth";
+import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../services/groupService";
 
-import presentationServices from "../../../../services/presentationServices";
-
-function RenamePresentationModal({ show, setShow, data, setData }) {
+function RenamePresentationModal({ show, setShow, data, setData, handleSubmitRenameModal }) {
    const {
       register,
       handleSubmit,
@@ -56,9 +54,8 @@ function RenamePresentationModal({ show, setShow, data, setData }) {
       loadData();
    }, [authContext.user.id]);
 
-   const handleSubmitRenameModal = async ({ name, groups, type }) => {
-      console.log("handleSubmitRenameModal: ", { name, groups, type });
-
+   const handleSubmitModal = async (submitData) => {
+      await handleSubmitRenameModal(submitData);
       reset();
       setShow(false);
       setData(null);
@@ -72,7 +69,7 @@ function RenamePresentationModal({ show, setShow, data, setData }) {
          data={data}
          setData={setData}
          haveSubmitBtn
-         onSubmitModal={handleSubmit(handleSubmitRenameModal)}
+         onSubmitModal={handleSubmit(handleSubmitModal)}
          submitBtnTitle={"Rename"}
       >
          <Input

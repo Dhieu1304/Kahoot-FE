@@ -3,14 +3,14 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
-import Input from "../../../../components/Input";
-import Modal from "../../../../components/Modal";
+import Input from "../../../components/Input";
+import Modal from "../../../components/Modal";
+import { AuthContext } from "../../../providers/auth";
+import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../services/groupService";
 
-import { AuthContext } from "../../../../providers/auth";
-import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../services/groupService";
-import presentationServices from "../../../../services/presentationServices";
+import presentationServices from "../../../services/presentationServices";
 
-function CreatePresentationModal({ show, setShow, data, setData }) {
+function CreatePresentationModal({ show, setShow, data, setData, handleSubmitCreateModal }) {
    const {
       register,
       handleSubmit,
@@ -57,15 +57,8 @@ function CreatePresentationModal({ show, setShow, data, setData }) {
       loadData();
    }, [authContext.user.id]);
 
-   const navigate = useNavigate();
-
-   const handleSubmitCreateModal = async ({ name, groups, type }) => {
-      console.log("handleSubmitCreateModal: ", { name, groups, type });
-
-      const presentation = await presentationServices.createPresentation(name);
-
-      if (presentation) navigate(`/presentation/${presentation?.id}/edit`);
-
+   const handleSubmitModal = async (submitData) => {
+      await handleSubmitCreateModal(submitData);
       reset();
       setShow(false);
       setData(null);
@@ -79,7 +72,7 @@ function CreatePresentationModal({ show, setShow, data, setData }) {
          data={data}
          setData={setData}
          haveSubmitBtn
-         onSubmitModal={handleSubmit(handleSubmitCreateModal)}
+         onSubmitModal={handleSubmit(handleSubmitModal)}
          submitBtnTitle={"Create"}
       >
          <Input

@@ -34,8 +34,9 @@ import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 import PresentationPlayWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayWrapper";
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
 import PresentationClientDetailProvider from "./pages/PresentationClient/PresentationClientDetailPage/store/Provider";
-import PresentationManageUser from "./pages/Presentation/PresentationManageUser";
+import PresentationManage from "./pages/Presentation/PresentationManage";
 import PresenationManageLayout from "./layouts/PresenationManageLayout";
+import PresentationManageProvider from "./pages/Presentation/PresentationManage/store/Provider";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -146,7 +147,9 @@ function App() {
                               path="user"
                               element={
                                  <PresenationManageLayout>
-                                    <PresentationManageUser />
+                                    <PresentationManageProvider>
+                                       <PresentationManage />
+                                    </PresentationManageProvider>
                                  </PresenationManageLayout>
                               }
                            />

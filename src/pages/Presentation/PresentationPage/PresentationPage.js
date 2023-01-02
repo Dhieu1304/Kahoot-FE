@@ -3,17 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
 
 import Button from "../../../components/Button";
-import CreatePresentationModal from "./components/CreatePresentationModal";
+import CreatePresentationModal from "../components/CreatePresentationModal";
 import { usePresentationStore } from "./store";
 import ActionMenu from "./components/ActionMenu";
 
-import RenamePresentationModal from "./components/RenamePresentationModal";
-import InviteToPresentationModal from "./components/InviteToPresentationModal";
+import RenamePresentationModal from "../components/RenamePresentationModal";
+import InviteToPresentationModal from "../components/InviteToPresentationModal";
 import Modal from "../../../components/Modal";
 
 import Table, {
@@ -29,6 +29,8 @@ import { usePresenationManageLayoutStore } from "../../../layouts/PresenationMan
 
 import classNames from "classnames/bind";
 import styles from "./PresentationPage.module.scss";
+import DeletePresentationModal from "../components/DeletePresentationModal";
+import presentationServices from "../../../services/presentationServices";
 const cx = classNames.bind(styles);
 
 function PresentationPage() {
@@ -47,6 +49,8 @@ function PresentationPage() {
    const isMobile = useMediaQuery({ maxWidth: 767 });
    const isNotMobile = useMediaQuery({ minWidth: 768 });
 
+   const navigate = useNavigate();
+
    useEffect(() => {
       // load data
       const loadData = async () => {
@@ -64,12 +68,29 @@ function PresentationPage() {
       loadData();
    }, []);
 
-   const handleDeletePresentation = async () => {
-      await presentationStore.method.deletePresentation(deleteModal?.data);
+   const handleSubmitCreateModal = async ({ name, groups, type }) => {
+      console.log("handleSubmitCreateModal: ", { name, groups, type });
 
+      const presentation = await presentationServices.createPresentation(name);
+
+      if (presentation) navigate(`/presentation/${presentation?.id}/edit`);
+   };
+
+   const handleSubmitRenameModal = async ({ name, groups, type }) => {
+      console.log("handleSubmitRenameModal: ", { name, groups, type });
+   };
+
+   const handleInviteByEmail = async ({ email }) => {
+      console.log("handleInviteByEmail: ");
+      console.log("data: ", inviteModal.data);
+      console.log("email: ", email);
+   };
+
+   const handleDeletePresentation = async () => {
+      const result = await presentationStore.method.deletePresentation(deleteModal?.data);
       console.log("presentationStore deleteModal.data: ", deleteModal?.data);
-      deleteModal.setShow(false);
-      deleteModal.setData(null);
+
+      if (result) navigate("/presentation");
    };
 
    return (
@@ -261,6 +282,7 @@ function PresentationPage() {
                   setShow={createModal.setShow}
                   data={createModal.data}
                   setData={createModal.setData}
+                  handleSubmitCreateModal={handleSubmitCreateModal}
                />
             )}
             {renameModal.show && (
@@ -269,6 +291,7 @@ function PresentationPage() {
                   setShow={renameModal.setShow}
                   data={renameModal.data}
                   setData={renameModal.setData}
+                  handleSubmitRenameModal={handleSubmitRenameModal}
                />
             )}
             {inviteModal.show && (
@@ -277,16 +300,16 @@ function PresentationPage() {
                   setShow={inviteModal.setShow}
                   data={inviteModal.data}
                   setData={inviteModal.setData}
+                  handleInviteByEmail={handleInviteByEmail}
                />
             )}
             {deleteModal.show && (
-               <Modal
-                  title={"Delete Presentation"}
-                  haveSubmitBtn
-                  submitBtnTitle={"Delete"}
-                  onSubmitModal={handleDeletePresentation}
+               <DeletePresentationModal
                   show={deleteModal.show}
                   setShow={deleteModal.setShow}
+                  data={deleteModal.data}
+                  setData={deleteModal.setData}
+                  handleDeletePresentation={handleDeletePresentation}
                />
             )}
          </div>

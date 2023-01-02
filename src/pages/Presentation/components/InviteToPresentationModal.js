@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
-import Input from "../../../../components/Input";
-import Modal from "../../../../components/Modal";
 
-import Button from "../../../../components/Button";
-import { toast } from "react-toastify";
+import Input from "../../../components/Input";
+import Modal from "../../../components/Modal";
+import Button from "../../../components/Button";
 
-function InviteToPresentationModal({ show, setShow, data, setData }) {
+function InviteToPresentationModal({ show, setShow, data, setData, handleInviteByEmail }) {
    const {
       register,
       handleSubmit,
@@ -20,12 +19,13 @@ function InviteToPresentationModal({ show, setShow, data, setData }) {
       criteriaMode: "all"
    });
 
-   const handleInviteByEmail = async ({ email }) => {
-      console.log("handleInviteByEmail: ", { data, email });
+   const handleSubmitModal = async (submitData) => {
+      await handleInviteByEmail(submitData);
       reset();
       setShow(false);
       setData(null);
    };
+
    return (
       <Modal title={"Invite"} show={show} setShow={setShow} data={data} setData={setData}>
          <Input
@@ -45,7 +45,7 @@ function InviteToPresentationModal({ show, setShow, data, setData }) {
                   basicBlue
                   rounded
                   big
-                  onClick={handleSubmit(handleInviteByEmail)}
+                  onClick={handleSubmit(handleSubmitModal)}
                />
             }
          />

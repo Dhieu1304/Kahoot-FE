@@ -169,7 +169,7 @@ const deletePresentationById = async (presentation_id) => {
          presentation_id
       });
       console.log("res: ", res);
-      return camelcaseKeys(res.data, { deep: true });
+      return camelcaseKeys(res, { deep: true });
    } catch (e) {
       console.error(e.message);
       return false;
