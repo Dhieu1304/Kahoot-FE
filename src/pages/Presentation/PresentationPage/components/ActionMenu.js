@@ -60,7 +60,7 @@ function ActionMenu({ id }) {
             }}
          />
 
-         {presentationStore.state.lisType === "OWNER" && (
+         {presentationStore.state.listType === "OWNER" && (
             <CustomDropdownMenuItem
                label={"Delete"}
                leftIcon={<FontAwesomeIcon icon={faTrash} size={"1x"} />}

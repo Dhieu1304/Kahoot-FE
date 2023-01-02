@@ -29,7 +29,7 @@ import { usePresenationManageLayoutStore } from "../../../layouts/PresenationMan
 
 import classNames from "classnames/bind";
 import styles from "./PresentationPage.module.scss";
-import DeletePresentationModal from "../components/DeletePresentationModal";
+import DeleteModal from "../components/DeleteModal";
 import presentationServices from "../../../services/presentationServices";
 const cx = classNames.bind(styles);
 
@@ -332,12 +332,12 @@ function PresentationPage() {
                />
             )}
             {deleteModal.show && (
-               <DeletePresentationModal
+               <DeleteModal
                   show={deleteModal.show}
                   setShow={deleteModal.setShow}
                   data={deleteModal.data}
                   setData={deleteModal.setData}
-                  handleDeletePresentation={handleDeletePresentation}
+                  handleSubmitForm={handleDeletePresentation}
                />
             )}
          </div>

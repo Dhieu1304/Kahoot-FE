@@ -33,6 +33,7 @@ function InviteToPresentationModal({ show, setShow, data, setData, handleInviteB
             label={"Email"}
             type={"txt"}
             {...register("email", {
+               required: "is required",
                pattern: {
                   value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                   message: "is wrong format"

@@ -27,6 +27,7 @@ import InviteToPresentationModal from "../components/InviteToPresentationModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/auth";
 import Tabs from "../../../components/Tabs";
+import DeleteModal from "../components/DeleteModal";
 const cx = classNames.bind(styles);
 
 const tabItems = [
@@ -50,7 +51,8 @@ function PresentationManage() {
    console.log("presentationManageStore: ", presentationManageStore);
    const authContext = useContext(AuthContext);
 
-   const { renameModal, deleteModal, inviteModal } = presentationManageStore;
+   const { renameModal, deletePresentationModal, deleteMemberModal, inviteModal } =
+      presentationManageStore;
 
    const { isSelectAll, selectedRowIds, handleSelectedAll, handleSelected, setRowIds } =
       useTableSelect([]);
@@ -75,7 +77,7 @@ function PresentationManage() {
          if (presentation) {
             const { presentationMembers } = presentation;
             setRowIds((prev) => {
-               return presentationMembers?.map((member) => member?.id);
+               return presentationMembers?.map((member) => member?.userId);
             });
          }
          presentationManageStore.method.setInit();
@@ -84,9 +86,14 @@ function PresentationManage() {
    }, []);
 
    const handleInviteByEmail = async ({ email }) => {
-      console.log("handleInviteByEmail: ");
-      console.log("data: ", inviteModal.data);
-      console.log("email: ", email);
+      console.log("handleInviteByEmail: ", { email });
+      const result = await presentationManageStore.method.addMember(email);
+   };
+
+   const handleDeleteMember = async () => {
+      const email = deleteMemberModal?.data;
+      console.log("handleDeleteCoOwner: ", { email });
+      const result = await presentationManageStore.method.deleteMember(email);
    };
 
    return (
@@ -171,12 +178,12 @@ function PresentationManage() {
                                     {authContext.user?.id ===
                                        presentationManageStore.state.presentation?.owner?.id && (
                                        <TableTd>
-                                          {authContext.user?.id !== member?.id && (
+                                          {authContext.user?.id !== member?.userId && (
                                              <input
                                                 type={"checkbox"}
                                                 checked={isChecked}
                                                 onChange={() =>
-                                                   handleSelected(member?.id, isChecked)
+                                                   handleSelected(member?.userId, isChecked)
                                                 }
                                                 className={cx("checkbox")}
                                              />
@@ -194,7 +201,18 @@ function PresentationManage() {
                                     {authContext.user?.id ===
                                        presentationManageStore.state.presentation?.owner?.id && (
                                        <TableTd>
-                                          <FontAwesomeIcon icon={faTrash} size="1x" color="red" />
+                                          {authContext.user?.id !== member?.userId && (
+                                             <FontAwesomeIcon
+                                                icon={faTrash}
+                                                className={cx("icon")}
+                                                size="1x"
+                                                color="red"
+                                                onClick={() => {
+                                                   deleteMemberModal.setData(member?.user?.email);
+                                                   deleteMemberModal.setShow(true);
+                                                }}
+                                             />
+                                          )}
                                        </TableTd>
                                     )}
                                  </TableTr>
@@ -205,29 +223,40 @@ function PresentationManage() {
                   </Table>
                ) : (
                   <ListGroup className={cx("list")}>
-                     {presentationManageStore.state.users?.map((user, index) => {
-                        return (
-                           <ListGroup.Item className={cx("item")} key={index}>
-                              <div className={cx("top")}>
-                                 <div className={cx("infor")}>{user?.name}</div>
+                     {presentationManageStore.state.presentation?.presentationMembers?.map(
+                        (member, index) => {
+                           return (
+                              <ListGroup.Item className={cx("item")} key={index}>
+                                 <div className={cx("top")}>
+                                    <div className={cx("infor")}>{member?.user?.fullName}</div>
 
-                                 <div className={cx("action")}>
-                                    {authContext.user?.id ===
-                                       presentationManageStore.state.presentation?.owner?.id && (
-                                       <FontAwesomeIcon icon={faTrash} size="1x" color="red" />
-                                    )}
+                                    <div className={cx("action")}>
+                                       {authContext.user?.id ===
+                                          presentationManageStore.state.presentation?.owner?.id &&
+                                          authContext.user?.id !== member?.userId && (
+                                             <FontAwesomeIcon
+                                                icon={faTrash}
+                                                className={cx("icon")}
+                                                size="1x"
+                                                color="red"
+                                                onClick={() => {
+                                                   deleteMemberModal.setData(member?.userId);
+                                                   deleteMemberModal.setShow(true);
+                                                }}
+                                             />
+                                          )}
+                                    </div>
                                  </div>
-                              </div>
-                              <div className={cx("bottom")}>
-                                 <span className={cx("role")}>{user?.role}</span>
-                              </div>
-                           </ListGroup.Item>
-                        );
-                     })}
+                                 <div className={cx("bottom")}>
+                                    <span className={cx("role")}>{member?.role?.name}</span>
+                                 </div>
+                              </ListGroup.Item>
+                           );
+                        }
+                     )}
                   </ListGroup>
                )}
             </div>
-
             {inviteModal.show && (
                <InviteToPresentationModal
                   show={inviteModal.show}
@@ -235,6 +264,15 @@ function PresentationManage() {
                   data={inviteModal.data}
                   setData={inviteModal.setData}
                   handleInviteByEmail={handleInviteByEmail}
+               />
+            )}
+            {deleteMemberModal && (
+               <DeleteModal
+                  show={deleteMemberModal.show}
+                  setShow={deleteMemberModal.setShow}
+                  data={deleteMemberModal.data}
+                  setData={deleteMemberModal.setData}
+                  handleSubmitForm={handleDeleteMember}
                />
             )}
          </div>

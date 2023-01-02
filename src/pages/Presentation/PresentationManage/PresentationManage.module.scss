@@ -54,6 +54,10 @@
    }
 }
 
+.icon {
+   cursor: pointer;
+}
+
 .presentation-infor-cell {
    display: flex;
    color: var(--black-clor);
@@ -62,6 +66,7 @@
    .icon {
       margin-right: 0.5rem;
       color: var(--black-color);
+      cursor: pointer;
 
       &:hover {
          cursor: pointer;
@@ -133,6 +138,7 @@
                   .icon {
                      margin-right: 0.5rem;
                      color: var(--black-color);
+                     cursor: pointer;
 
                      &:hover {
                         cursor: pointer;
@@ -147,6 +153,7 @@
                   align-items: center;
 
                   .icon {
+                     cursor: pointer;
                      margin-right: 1rem;
                   }
                }

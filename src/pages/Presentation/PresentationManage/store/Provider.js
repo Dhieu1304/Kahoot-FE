@@ -7,12 +7,14 @@ import { useModal } from "../../../../components/Modal";
 
 function PresentationManageProvider({ children }) {
    const renameModal = useModal();
-   const deleteModal = useModal();
+   const deletePresentationModal = useModal();
+   const deleteMemberModal = useModal();
    const inviteModal = useModal();
 
    const rest = {
       renameModal,
-      deleteModal,
+      deletePresentationModal,
+      deleteMemberModal,
       inviteModal
    };
 
@@ -44,9 +46,31 @@ function PresentationManageProvider({ children }) {
       dispatch(actions.setInit(true));
    };
 
+   const deleteMember = async (email) => {
+      const presentationId = state.presentation?.id;
+      const result = await presentationServices.deleteMember(presentationId, email);
+
+      if (result) {
+         return await loadPresentationDetail(presentationId);
+      }
+   };
+
+   const addMember = async (email) => {
+      const presentationId = state.presentation?.id;
+      const result = await presentationServices.addPresentationCoOwner(presentationId, email);
+
+      console.log("result: ", result);
+
+      if (result) {
+         return await loadPresentationDetail(presentationId);
+      }
+   };
+
    const method = {
       initPresentationDetail,
-      setInit
+      setInit,
+      deleteMember,
+      addMember
    };
 
    return <Context.Provider value={{ state, method, ...rest }}>{children}</Context.Provider>;

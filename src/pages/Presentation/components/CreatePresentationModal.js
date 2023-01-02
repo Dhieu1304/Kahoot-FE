@@ -115,9 +115,7 @@ function CreatePresentationModal({ show, setShow, data, setData, handleSubmitCre
 
             <Controller
                control={control}
-               rules={{
-                  required: "require"
-               }}
+               rules={{}}
                render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => (
                   <Select
                      isMulti={true}

@@ -229,11 +229,25 @@ const addPresentationCoOwner = async (presentation_id, email) => {
       });
       console.log("res: ", res);
 
-      return camelcaseKeys(res.data, { deep: true });
+      return camelcaseKeys(res, { deep: true });
    } catch (e) {
       console.error(e.message);
 
       // return false;
+   }
+};
+
+const deleteMember = async (presentation_id, email) => {
+   try {
+      const res = await axiosClient.post(`/presentation-member/remove-co-owner`, {
+         presentation_id,
+         email
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
    }
 };
 
@@ -252,5 +266,6 @@ export default {
    getListPresentationThemeConfig,
    getListSlideTypeConfig,
 
-   addPresentationCoOwner
+   addPresentationCoOwner,
+   deleteMember
 };

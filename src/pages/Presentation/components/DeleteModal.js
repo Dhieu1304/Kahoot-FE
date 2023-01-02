@@ -1,9 +1,8 @@
 import Modal from "../../../components/Modal";
 
-function DeletePresentationModal({ show, setShow, data, setData, handleDeletePresentation }) {
+function DeleteModal({ show, setShow, data, setData, handleSubmitForm }) {
    const handleSubmitModal = async (submitData) => {
-      await handleDeletePresentation(submitData);
-      reset();
+      await handleSubmitForm(submitData);
       setShow(false);
       setData(null);
    };
@@ -22,4 +21,4 @@ function DeletePresentationModal({ show, setShow, data, setData, handleDeletePre
    );
 }
 
-export default DeletePresentationModal;
+export default DeleteModal;
