@@ -1,13 +1,12 @@
-import { faArrowLeft, faCircle, faComment, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faComment, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import styles from "./PresentationClientDetailPage.module.scss";
 import { SocketContext } from "../../../providers/socket";
-import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
+import { PRESENTATION_EVENT } from "../../../providers/socket/socket.constant";
 import { useParams } from "react-router-dom";
-import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
 import { usePresentationClientDetailStore } from "./store";
 import Chat from "./components/Chat/Chat";
 import SendQuestionModal from "./components/SendQuestionModal";
@@ -74,7 +73,6 @@ function PresentationClientDetailPage() {
    useEffect(() => {
       socket.emit(PRESENTATION_EVENT.JOIN, { code });
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
-         console.log(">>>>> SLIDE", data);
          switch (data.slide_type_id) {
             case 1: // multi choice
                setOptions(data.body);
@@ -114,7 +112,9 @@ function PresentationClientDetailPage() {
    return (
       <div className={cx("wrapper")}>
          <div className={cx("container")}>
-            {!isSubmitSuccess ? (
+            {isSubmitSuccess ? (
+               <h1 className={cx("success-message")}>{message}</h1>
+            ) : (
                <>
                   <div className={cx("option-list")}>
                      {options.map((option, index) => {
@@ -123,9 +123,7 @@ function PresentationClientDetailPage() {
                               <FontAwesomeIcon
                                  icon={faCircle}
                                  size="1x"
-                                 onClick={() => {
-                                    setOptionIndex(index);
-                                 }}
+                                 onClick={() => setOptionIndex(index)}
                                  color={optionIndex === index ? "red" : "white"}
                               />
                               <span className={cx("label")}>{option.name}</span>
@@ -143,19 +141,14 @@ function PresentationClientDetailPage() {
                      className={cx("btn")}
                   />
                </>
-            ) : (
-               <h1 className={cx("success-message")}>{message}</h1>
             )}
-            ;
             <div className={cx("menu")}>
                <div className={cx("item", "item-has-chat")}>
                   <FontAwesomeIcon
                      className={cx("icon")}
                      size={"1x"}
                      icon={faMessage}
-                     onClick={() => {
-                        setShowChatBox((prev) => !prev);
-                     }}
+                     onClick={() => setShowChatBox((prev) => !prev)}
                   />
                   {showChatBox && <Chat chatMessageList={chatMessageList} />}
                </div>
@@ -164,9 +157,7 @@ function PresentationClientDetailPage() {
                      className={cx("icon")}
                      size={"1x"}
                      icon={faComment}
-                     onClick={() => {
-                        setShowQuestionModal((prev) => !prev);
-                     }}
+                     onClick={() => setShowQuestionModal((prev) => !prev)}
                   />
                </div>
             </div>

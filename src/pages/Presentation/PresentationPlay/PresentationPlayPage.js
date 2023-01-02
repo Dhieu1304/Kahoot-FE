@@ -161,13 +161,13 @@ function PresentationPlayPage() {
          setCountOnl(countOnl);
       });
       socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
-         console.log(">>>>>>>>> SLIDE DATA: ", data);
          setSlide(data);
          if (data.slide_type_id === 1) {
             setResult(data.body);
          }
       });
-      socket.on(PRESENTATION_EVENT.STOP_PRESENT, () => {
+      socket.on(PRESENTATION_EVENT.STOP_PRESENT, (data) => {
+         toast.info(data);
          // Todo: Đá nó ra 1 trang nào đó
       });
 
@@ -194,7 +194,6 @@ function PresentationPlayPage() {
    }, []);
 
    const handleChangeSlide = (type) => {
-      console.log("slide:   ", slide);
       switch (type) {
          case "next":
             if (slide?.ordinal_slide_number < countSlide) {
