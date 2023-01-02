@@ -69,11 +69,13 @@ function PresentationManage() {
    useEffect(() => {
       // load data
       const loadData = async () => {
-         const data = await presentationManageStore.method.loadPresentationDetail(presentationId);
-         if (data) {
-            const { users } = data;
+         const presentation = await presentationManageStore.method.initPresentationDetail(
+            presentationId
+         );
+         if (presentation) {
+            const { presentationMembers } = presentation;
             setRowIds((prev) => {
-               return users?.map((presentation) => presentation?.id);
+               return presentationMembers?.map((member) => member?.id);
             });
          }
          presentationManageStore.method.setInit();
@@ -139,68 +141,66 @@ function PresentationManage() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           {
-                              // authContext.user?.id === presentationManageStore.state.presentation?.owner?.id
-                              true && (
-                                 <TableTh>
-                                    <input
-                                       type={"checkbox"}
-                                       checked={isSelectAll}
-                                       onChange={handleSelectedAll}
-                                       className={cx("checkbox")}
-                                    />
-                                 </TableTh>
-                              )
-                           }
+                           {authContext.user?.id ===
+                              presentationManageStore.state.presentation?.owner?.id && (
+                              <TableTh>
+                                 <input
+                                    type={"checkbox"}
+                                    checked={isSelectAll}
+                                    onChange={handleSelectedAll}
+                                    className={cx("checkbox")}
+                                 />
+                              </TableTh>
+                           )}
 
                            <TableTh>Id</TableTh>
                            <TableTh>Name</TableTh>
                            <TableTh>Role</TableTh>
-                           {
-                              // authContext.user?.id === presentationManageStore.state.presentation?.owner?.id
-                              true && <TableTh></TableTh>
-                           }
+                           {authContext.user?.id ===
+                              presentationManageStore.state.presentation?.owner?.id && (
+                              <TableTh></TableTh>
+                           )}
                         </TableTr>
                      </TableTHead>
                      <TableTBody>
-                        {presentationManageStore.state.users?.map((user, index) => {
-                           const isChecked = selectedRowIds?.includes(user.id);
-                           return (
-                              <TableTr key={index}>
-                                 {
-                                    // authContext.user?.id === presentationManageStore.state.presentation?.owner?.id
-                                    true && (
+                        {presentationManageStore.state.presentation?.presentationMembers?.map(
+                           (member, index) => {
+                              const isChecked = selectedRowIds?.includes(member.id);
+                              return (
+                                 <TableTr key={index}>
+                                    {authContext.user?.id ===
+                                       presentationManageStore.state.presentation?.owner?.id && (
                                        <TableTd>
-                                          {authContext.user?.id !== user?.id && (
+                                          {authContext.user?.id !== member?.id && (
                                              <input
                                                 type={"checkbox"}
                                                 checked={isChecked}
-                                                onChange={() => handleSelected(user?.id, isChecked)}
+                                                onChange={() =>
+                                                   handleSelected(member?.id, isChecked)
+                                                }
                                                 className={cx("checkbox")}
                                              />
                                           )}
                                        </TableTd>
-                                    )
-                                 }
-                                 <TableTd>{user?.id}</TableTd>
-                                 <TableTd>
-                                    <div className={cx("presentation-infor-cell")}>
-                                       {user?.name}
-                                    </div>
-                                 </TableTd>
-                                 <TableTd>{user?.role}</TableTd>
+                                    )}
+                                    <TableTd>{member?.user?.id}</TableTd>
+                                    <TableTd>
+                                       <div className={cx("presentation-infor-cell")}>
+                                          {member?.user?.fullName}
+                                       </div>
+                                    </TableTd>
+                                    <TableTd>{member?.role?.name}</TableTd>
 
-                                 {
-                                    // authContext.user?.id === presentationManageStore.state.presentation?.owner?.id
-                                    true && (
+                                    {authContext.user?.id ===
+                                       presentationManageStore.state.presentation?.owner?.id && (
                                        <TableTd>
                                           <FontAwesomeIcon icon={faTrash} size="1x" color="red" />
                                        </TableTd>
-                                    )
-                                 }
-                              </TableTr>
-                           );
-                        })}
+                                    )}
+                                 </TableTr>
+                              );
+                           }
+                        )}
                      </TableTBody>
                   </Table>
                ) : (
@@ -212,12 +212,10 @@ function PresentationManage() {
                                  <div className={cx("infor")}>{user?.name}</div>
 
                                  <div className={cx("action")}>
-                                    {
-                                       // authContext.user?.id === presentationManageStore.state.presentation?.owner?.id
-                                       true && (
-                                          <FontAwesomeIcon icon={faTrash} size="1x" color="red" />
-                                       )
-                                    }
+                                    {authContext.user?.id ===
+                                       presentationManageStore.state.presentation?.owner?.id && (
+                                       <FontAwesomeIcon icon={faTrash} size="1x" color="red" />
+                                    )}
                                  </div>
                               </div>
                               <div className={cx("bottom")}>

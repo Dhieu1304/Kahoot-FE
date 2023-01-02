@@ -18,36 +18,35 @@ function PresentationManageProvider({ children }) {
 
    const [state, dispatch] = useReducer(reducer, initState);
 
-   const method = {
-      loadPresentationDetail: async (id) => {
-         dispatch(actions.fetchApi());
-         const presentation = await presentationServices.getPresentationById(id);
+   const loadPresentationDetail = async (id) => {
+      dispatch(actions.fetchApi());
+      const presentation = await presentationServices.getPresentationById(id);
 
-         if (presentation) {
-            dispatch(actions.setPresentation(presentation));
-         } else {
-            const message = "Error API";
-            dispatch(actions.fetchApiFailed(message));
-            return presentation;
-         }
-
-         // presentation true
-         dispatch(actions.fetchApi());
-
-         const users = [
-            { id: 1, name: "Sang 1", role: "Owner" },
-            { id: 2, name: "Sang 2", role: "Collaborate" },
-            { id: 4, name: "Sang 4", role: "Collaborate" }
-         ];
-
-         dispatch(actions.setUsers(users));
-
-         return { presentation, users };
-      },
-
-      setInit: () => {
-         dispatch(actions.setInit(true));
+      if (presentation) {
+         dispatch(actions.setPresentation(presentation));
+      } else {
+         const message = "Error API";
+         dispatch(actions.fetchApiFailed(message));
+         return presentation;
       }
+
+      // presentation true
+      dispatch(actions.fetchApi());
+
+      return presentation;
+   };
+
+   const initPresentationDetail = async (id) => {
+      return await loadPresentationDetail(id);
+   };
+
+   const setInit = () => {
+      dispatch(actions.setInit(true));
+   };
+
+   const method = {
+      initPresentationDetail,
+      setInit
    };
 
    return <Context.Provider value={{ state, method, ...rest }}>{children}</Context.Provider>;
