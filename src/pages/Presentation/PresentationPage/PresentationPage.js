@@ -124,19 +124,21 @@ function PresentationPage() {
                   <h1 className={cx("title")}>My Presentations</h1>
                   <div className={cx("nav")}>
                      <div className={cx("btn-group")}>
-                        {selectedRowIds.length > 0 && isNotMobile && (
-                           <Button
-                              title="Remove"
-                              basicRed
-                              big
-                              rounded
-                              className={cx("btn")}
-                              leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
-                              // onClick={() => {
+                        {selectedRowIds.length > 0 &&
+                           isNotMobile &&
+                           presentationStore.state.listType === "OWNER" && (
+                              <Button
+                                 title="Remove"
+                                 basicRed
+                                 big
+                                 rounded
+                                 className={cx("btn")}
+                                 leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
+                                 // onClick={() => {
 
-                              // }}
-                           />
-                        )}
+                                 // }}
+                              />
+                           )}
 
                         <Button
                            title="Create"
@@ -157,14 +159,16 @@ function PresentationPage() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           <TableTh>
-                              <input
-                                 type={"checkbox"}
-                                 checked={isSelectAll}
-                                 onChange={handleSelectedAll}
-                                 className={cx("checkbox")}
-                              />
-                           </TableTh>
+                           {presentationStore.state.listType === "OWNER" && (
+                              <TableTh>
+                                 <input
+                                    type={"checkbox"}
+                                    checked={isSelectAll}
+                                    onChange={handleSelectedAll}
+                                    className={cx("checkbox")}
+                                 />
+                              </TableTh>
+                           )}
                            <TableTh>id</TableTh>
                            <TableTh>Name</TableTh>
                            <TableTh>Code</TableTh>
@@ -184,14 +188,19 @@ function PresentationPage() {
                            const isChecked = selectedRowIds?.includes(presentation.id);
                            return (
                               <TableTr key={index}>
-                                 <TableTd>
-                                    <input
-                                       type={"checkbox"}
-                                       checked={isChecked}
-                                       onChange={() => handleSelected(presentation.id, isChecked)}
-                                       className={cx("checkbox")}
-                                    />
-                                 </TableTd>
+                                 {presentationStore.state.listType === "OWNER" && (
+                                    <TableTd>
+                                       <input
+                                          type={"checkbox"}
+                                          checked={isChecked}
+                                          onChange={() =>
+                                             handleSelected(presentation.id, isChecked)
+                                          }
+                                          className={cx("checkbox")}
+                                       />
+                                    </TableTd>
+                                 )}
+
                                  <TableTd>{presentation?.id}</TableTd>
                                  <TableTd>
                                     <div className={cx("presentation-infor-cell")}>
