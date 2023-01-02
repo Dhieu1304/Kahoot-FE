@@ -7,10 +7,23 @@ import styles from "./Modal.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Modal({ title, show, setShow, children, haveSubmitBtn, onSubmitModal, submitBtnTitle }) {
+function Modal({
+   title,
+   show,
+   setShow,
+   data,
+   setData,
+   children,
+   haveSubmitBtn,
+   onSubmitModal,
+   submitBtnTitle
+}) {
    //    const [show, setShow] = useState(false);
 
-   const handleClose = () => setShow(false);
+   const handleClose = () => {
+      setShow(false);
+      setData && setData(null);
+   };
 
    return (
       <div>

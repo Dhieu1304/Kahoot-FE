@@ -9,11 +9,7 @@ import { faAdd, faX } from "@fortawesome/free-solid-svg-icons";
 import { Controller, useFieldArray, useForm, useFormContext, useWatch } from "react-hook-form";
 
 import useDebounce from "../../../../../hooks/useDebounce";
-import { useCallback, useEffect, useState } from "react";
-import AutoSave from "../../../../../components/AutoSave";
-import { debounce } from "debounce";
-import useDeepCompareEffect from "use-deep-compare-effect";
-import usePrevious from "../../../../../hooks/usePrevious";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../../../config/configSlideTypes";
 const cx = classNames.bind(styles);

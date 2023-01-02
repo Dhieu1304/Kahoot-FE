@@ -4,25 +4,19 @@ import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
 import { useState } from "react";
+import { useModal } from "../../../../components/Modal";
 
 function PresentationProvider({ children }) {
-   const [showCreateModal, setShowCreateModal] = useState(false);
-   const [showRenameModal, setShowRenameModal] = useState(false);
-   const [showDeleteModal, setShowDeleteModal] = useState(false);
-   const [showInviteModal, setShowInviteModal] = useState(false);
-   const [selectedPresentationIdToAction, setSelectedPresentationIdToAction] = useState(-1);
+   const createModal = useModal();
+   const renameModal = useModal();
+   const deleteModal = useModal();
+   const inviteModal = useModal();
 
    const rest = {
-      showCreateModal,
-      setShowCreateModal,
-      showRenameModal,
-      setShowRenameModal,
-      showDeleteModal,
-      setShowDeleteModal,
-      showInviteModal,
-      setShowInviteModal,
-      selectedPresentationIdToAction,
-      setSelectedPresentationIdToAction
+      createModal,
+      renameModal,
+      deleteModal,
+      inviteModal
    };
 
    const [state, dispatch] = useReducer(reducer, initState);
@@ -32,12 +26,9 @@ function PresentationProvider({ children }) {
          dispatch(actions.fetchApi());
          const data = await presentationServices.getOwnedPresentations();
 
-         console.log("data: ", data);
-
          if (data) {
             const { presentations, count } = data;
 
-            console.log("{ presentations, count }: ", { presentations, count });
             dispatch(actions.setPresentations({ presentations, count }));
          } else {
             const message = "Error API";
@@ -56,18 +47,13 @@ function PresentationProvider({ children }) {
             presentationId
          );
 
-         console.log("resultPresentation: ", resultPresentation);
-
          if (resultPresentation) {
             dispatch(actions.fetchApi());
             const data = await presentationServices.getOwnedPresentations();
 
-            console.log("data: ", data);
-
             if (data) {
                const { presentations, count } = data;
 
-               console.log("{ presentations, count }: ", { presentations, count });
                dispatch(actions.setPresentations({ presentations, count }));
             } else {
                const message = "Error API";

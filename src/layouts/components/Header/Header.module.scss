@@ -1,14 +1,19 @@
 .wrapper {
    height: var(--default-layout-header-height);
    max-width: 100%;
+   width: 100%;
    display: flex;
    align-items: center;
-   // overflow: hidden;
+   justify-content: space-between;
+
    position: relative;
    z-index: 5;
+   align-self: stretch;
 
    .container {
       max-width: 100%;
+      width: 100%;
+
       background-color: aliceblue;
    }
 

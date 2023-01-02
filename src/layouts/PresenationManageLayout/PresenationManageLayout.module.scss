@@ -1,0 +1,38 @@
+.wrapper {
+   position: relative;
+   z-index: 1;
+   background-color: var(--white-color);
+   overflow-x: hidden;
+   padding: 0 80px;
+   .container {
+      padding-top: 20px;
+      min-height: 100vh;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .content {
+         width: 100%;
+         display: flex;
+         justify-content: center;
+      }
+   }
+}
+
+.wrapper.isMobile {
+   padding: 20px;
+
+   .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      .content {
+         width: 100%;
+         display: flex;
+         justify-content: center;
+      }
+   }
+}

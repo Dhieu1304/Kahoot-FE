@@ -3,14 +3,14 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
-import Input from "../../../../components/Input";
-import Modal from "../../../../components/Modal";
+import Input from "../../../components/Input";
+import Modal from "../../../components/Modal";
+import { AuthContext } from "../../../providers/auth";
+import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../services/groupService";
 
-import { AuthContext } from "../../../../providers/auth";
-import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../services/groupService";
-import presentationServices from "../../../../services/presentationServices";
+import presentationServices from "../../../services/presentationServices";
 
-function CreatePresentationModal({ show, setShow }) {
+function CreatePresentationModal({ show, setShow, data, setData, handleSubmitCreateModal }) {
    const {
       register,
       handleSubmit,
@@ -37,9 +37,8 @@ function CreatePresentationModal({ show, setShow }) {
       const loadData = async () => {
          const userId = authContext.user.id;
          const groupOwnedData = await getGroupsByOwnUserId(userId);
-         // console.log("groupOwnedData: ", groupOwnedData);
+
          const groupJoinedData = await getGroupsByJoinedUserId(userId);
-         // console.log("groupJoinedData: ", groupJoinedData);
 
          const groups = [
             {
@@ -58,19 +57,11 @@ function CreatePresentationModal({ show, setShow }) {
       loadData();
    }, [authContext.user.id]);
 
-   const navigate = useNavigate();
-
-   const handleSubmitCreateModal = async ({ name, groups, type }) => {
-      console.log("handleSubmitCreateModal: ", { name, groups, type });
-
-      const presentation = await presentationServices.createPresentation(name);
-
-      console.log("presentation: ", presentation);
-      // TẠM THỜI
-      if (presentation) navigate(`/presentation/${presentation?.id}/edit`);
-
+   const handleSubmitModal = async (submitData) => {
+      await handleSubmitCreateModal(submitData);
       reset();
       setShow(false);
+      setData(null);
    };
 
    return (
@@ -78,8 +69,10 @@ function CreatePresentationModal({ show, setShow }) {
          title={"Create Presentation"}
          show={show}
          setShow={setShow}
+         data={data}
+         setData={setData}
          haveSubmitBtn
-         onSubmitModal={handleSubmit(handleSubmitCreateModal)}
+         onSubmitModal={handleSubmit(handleSubmitModal)}
          submitBtnTitle={"Create"}
       >
          <Input
@@ -95,7 +88,7 @@ function CreatePresentationModal({ show, setShow }) {
          <div>
             <div>
                <input
-                  checked={watch("type") + "PRIVATE"}
+                  checked={watch("type") === "PRIVATE"}
                   type="radio"
                   value={"PRIVATE"}
                   {...register("type")}
@@ -104,7 +97,7 @@ function CreatePresentationModal({ show, setShow }) {
             </div>
             <div>
                <input
-                  checked={watch("type") + "PUBLIC"}
+                  checked={watch("type") === "PUBLIC"}
                   type="radio"
                   value={"PUBLIC"}
                   {...register("type")}
@@ -114,7 +107,7 @@ function CreatePresentationModal({ show, setShow }) {
          </div>
 
          <div>
-            <span>Slide type</span>
+            <span>Groups</span>
 
             <Controller
                control={control}

@@ -2,14 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 
-import Input from "../../../../components/Input";
-import Modal from "../../../../components/Modal";
-import { AuthContext } from "../../../../providers/auth";
-import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../services/groupService";
+import Input from "../../../components/Input";
+import Modal from "../../../components/Modal";
+import { AuthContext } from "../../../providers/auth";
+import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../services/groupService";
 
-import presentationServices from "../../../../services/presentationServices";
-
-function RenamePresentationModal({ show, setShow }) {
+function RenamePresentationModal({ show, setShow, data, setData, handleSubmitRenameModal }) {
    const {
       register,
       handleSubmit,
@@ -36,9 +34,8 @@ function RenamePresentationModal({ show, setShow }) {
       const loadData = async () => {
          const userId = authContext.user.id;
          const groupOwnedData = await getGroupsByOwnUserId(userId);
-         // console.log("groupOwnedData: ", groupOwnedData);
+
          const groupJoinedData = await getGroupsByJoinedUserId(userId);
-         // console.log("groupJoinedData: ", groupJoinedData);
 
          const groups = [
             {
@@ -57,15 +54,11 @@ function RenamePresentationModal({ show, setShow }) {
       loadData();
    }, [authContext.user.id]);
 
-   const handleSubmitRenameModal = async ({ name, groups, type }) => {
-      // call service to rename
-
-      //
-
-      console.log("handleSubmitRenameModal: ", { name, groups, type });
-
+   const handleSubmitModal = async (submitData) => {
+      await handleSubmitRenameModal(submitData);
       reset();
       setShow(false);
+      setData(null);
    };
 
    return (
@@ -73,8 +66,10 @@ function RenamePresentationModal({ show, setShow }) {
          title={"Rename Presentation"}
          show={show}
          setShow={setShow}
+         data={data}
+         setData={setData}
          haveSubmitBtn
-         onSubmitModal={handleSubmit(handleSubmitRenameModal)}
+         onSubmitModal={handleSubmit(handleSubmitModal)}
          submitBtnTitle={"Rename"}
       >
          <Input
@@ -90,7 +85,7 @@ function RenamePresentationModal({ show, setShow }) {
          <div>
             <div>
                <input
-                  checked={watch("type") + "PRIVATE"}
+                  checked={watch("type") === "PRIVATE"}
                   type="radio"
                   value={"PRIVATE"}
                   {...register("type")}
@@ -99,7 +94,7 @@ function RenamePresentationModal({ show, setShow }) {
             </div>
             <div>
                <input
-                  checked={watch("type") + "PUBLIC"}
+                  checked={watch("type") === "PUBLIC"}
                   type="radio"
                   value={"PUBLIC"}
                   {...register("type")}
@@ -109,7 +104,7 @@ function RenamePresentationModal({ show, setShow }) {
          </div>
 
          <div>
-            <span>Slide type</span>
+            <span>Groups</span>
 
             <Controller
                control={control}

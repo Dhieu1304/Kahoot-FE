@@ -1,15 +1,14 @@
 import { useForm } from "react-hook-form";
-import Input from "../../../../components/Input";
-import Modal from "../../../../components/Modal";
 
-import Button from "../../../../components/Button";
-import { toast } from "react-toastify";
+import Input from "../../../components/Input";
+import Modal from "../../../components/Modal";
+import Button from "../../../components/Button";
 
-function InviteToPresentationModal({ show, setShow, groupId }) {
+function InviteToPresentationModal({ show, setShow, data, setData, handleInviteByEmail }) {
    const {
       register,
       handleSubmit,
-      resetField,
+      reset,
       formState: { errors }
    } = useForm({
       mode: "onChange",
@@ -20,17 +19,15 @@ function InviteToPresentationModal({ show, setShow, groupId }) {
       criteriaMode: "all"
    });
 
-   const handleInviteByEmail = async ({ email }) => {
-      const result = await inviteToGroupByEmail(groupId, email);
-      if (result) {
-         toast("Invited");
-         resetField("email");
-      } else {
-         toast("Invite Fail");
-      }
+   const handleSubmitModal = async (submitData) => {
+      await handleInviteByEmail(submitData);
+      reset();
+      setShow(false);
+      setData(null);
    };
+
    return (
-      <Modal title={"Invite"} show={show} setShow={setShow}>
+      <Modal title={"Invite"} show={show} setShow={setShow} data={data} setData={setData}>
          <Input
             placeholder="Email"
             label={"Email"}
@@ -48,7 +45,7 @@ function InviteToPresentationModal({ show, setShow, groupId }) {
                   basicBlue
                   rounded
                   big
-                  onClick={handleSubmit(handleInviteByEmail)}
+                  onClick={handleSubmit(handleSubmitModal)}
                />
             }
          />

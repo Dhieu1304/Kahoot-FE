@@ -4,14 +4,20 @@ import classNames from "classnames/bind";
 
 import styles from "./DefaultLayout.module.scss";
 import Header from "../components/Header";
+import { useMediaQuery } from "react-responsive";
 
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
+   const isMobile = useMediaQuery({ maxWidth: 767 });
    return (
-      <div className={cx("wrapper")}>
+      <div
+         className={cx("wrapper", {
+            isMobile
+         })}
+      >
          <Header />
-         <Container className={cx("container")}>{children}</Container>
+         <div className={cx("container")}>{children}</div>
       </div>
    );
 }
