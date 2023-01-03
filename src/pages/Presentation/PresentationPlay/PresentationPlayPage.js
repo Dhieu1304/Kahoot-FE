@@ -23,7 +23,7 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import classNames from "classnames/bind";
 import styles from "./PresentationPlayPage.module.scss";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
@@ -31,12 +31,13 @@ import { usePresentationPlayStore } from "./store";
 import Chat from "./components/Chat";
 import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
 import QuestionModal from "./components/QuestionModal";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
 function PresentationPlayPage() {
    const [slide, setSlide] = useState();
-
+   const [countSlide, setCountSlide] = useState(1);
    const [result, setResult] = useState([]);
    const [chatMessageList, setChatMessageList] = useState([
       {
@@ -123,11 +124,12 @@ function PresentationPlayPage() {
       }
    ]);
    const [countOnl, setCountOnl] = useState(0);
+
    const socket = useContext(SocketContext);
-   const presentatioPlayStore = usePresentationPlayStore();
+   const presentationPlayStore = usePresentationPlayStore();
 
    const { showChatBox, setShowChatBox, showQuestionModal, setShowQuestionModal } =
-      presentatioPlayStore;
+      presentationPlayStore;
 
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
@@ -153,17 +155,20 @@ function PresentationPlayPage() {
 
       socket.on(PRESENTATION_EVENT.SLIDE_DETAIL, (data) => {
          console.log(">>>>>>>>>>SLIDE_DETAIL: ", data);
+         setCountSlide(data?.count_slide || 1);
       });
-
       socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
          setCountOnl(countOnl);
       });
       socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
-         console.log(">>>>>>>>> SLIDE DATA: ", data);
          setSlide(data);
          if (data.slide_type_id === 1) {
             setResult(data.body);
          }
+      });
+      socket.on(PRESENTATION_EVENT.STOP_PRESENT, (data) => {
+         toast.info(data);
+         // Todo: Đá nó ra 1 trang nào đó
       });
 
       return () => {
@@ -171,17 +176,43 @@ function PresentationPlayPage() {
          for (let i = 0; i < arrSocketEvent.length; i++) {
             socket.off(arrSocketEvent[i]);
          }
-         socket.emit(PRESENTATION_EVENT.STOP_PRESENT, {
-            presentation_id: presentationId,
-            user_id: 1
-         });
+         socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
          socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
+         socket.off(PRESENTATION_EVENT.STOP_PRESENT);
       };
    }, []);
 
    const handleFullscreen = useFullScreenHandle();
+
+   const handleChangeSlideSocket = useCallback((presentation_id, ordinal_slide_number) => {
+      socket.emit(PRESENTATION_EVENT.PRESENT_OTHER_SLIDE, {
+         presentation_id,
+         ordinal_slide_number
+      });
+   }, []);
+
+   const handleChangeSlide = (type) => {
+      switch (type) {
+         case "next":
+            if (slide?.ordinal_slide_number < countSlide) {
+               handleChangeSlideSocket(slide.presentation_id, slide.ordinal_slide_number + 1);
+            } else {
+               toast.info("This is the last slide");
+            }
+            break;
+         case "prev":
+            if (slide?.ordinal_slide_number > 1) {
+               handleChangeSlideSocket(slide.presentation_id, slide.ordinal_slide_number - 1);
+            } else {
+               toast.info("This is the first slide");
+            }
+            break;
+         default:
+            break;
+      }
+   };
 
    const renderContentBySlideTypeId = () => {
       if (!slide) return;
@@ -274,8 +305,8 @@ function PresentationPlayPage() {
                   className={cx("container")}
                   style={{
                      backgroundColor:
-                        presentatioPlayStore.state.presentation?.presentationTheme.backgroundColor,
-                     color: presentatioPlayStore.state.presentation?.presentationTheme.textColor
+                        presentationPlayStore.state.presentation?.presentationTheme.backgroundColor,
+                     color: presentationPlayStore.state.presentation?.presentationTheme.textColor
                   }}
                >
                   <div className={cx("board")}>
@@ -286,7 +317,7 @@ function PresentationPlayPage() {
                         </span>
                         and use the code
                         <span className={cx("infor-label")}>
-                           {presentatioPlayStore.state.presentation?.code}
+                           {presentationPlayStore.state.presentation?.code}
                         </span>
                      </h1>
 
@@ -321,11 +352,7 @@ function PresentationPlayPage() {
                                  className={cx("icon")}
                                  size={"1x"}
                                  icon={faArrowLeft}
-                                 onClick={() => {
-                                    // let prevSlideId = parseInt(slideId) - 1;
-                                    // if (prevSlideId < 1) prevSlideId = 1;
-                                    // navigate(`/presentation/${presentationId}/play/${prevSlideId}`);
-                                 }}
+                                 onClick={() => handleChangeSlide("prev")}
                               />
                            </div>
                            <div className={cx("item")}>
@@ -333,12 +360,7 @@ function PresentationPlayPage() {
                                  className={cx("icon")}
                                  size={"1x"}
                                  icon={faArrowRight}
-                                 onClick={() => {
-                                    // let nextSlideId = parseInt(slideId) + 1;
-                                    // if (nextSlideId > presentatioPlayStore.state.slides?.length)
-                                    //    nextSlideId = presentatioPlayStore.state.slides?.length;
-                                    // navigate(`/presentation/${presentationId}/play/${nextSlideId}`);
-                                 }}
+                                 onClick={() => handleChangeSlide("next")}
                               />
                            </div>
                            <div className={cx("item")}>
@@ -371,7 +393,7 @@ function PresentationPlayPage() {
    //          <span className={cx("infor-label")}>{process.env.REACT_APP_BE_URL + "game"}</span>
    //          and use the code
    //          <span className={cx("infor-label")}>
-   //             {presentatioPlayStore.state.presentation?.code}
+   //             {presentationPlayStore.state.presentation?.code}
    //          </span>
    //       </h1>
 
@@ -413,8 +435,8 @@ function PresentationPlayPage() {
    //          big
    //          onClick={() => {
    //             let nextId = parseInt(id) + 1;
-   //             if (nextId >= presentatioPlayStore.state.slides?.length)
-   //                nextId = presentatioPlayStore.state.slides?.length - 1;
+   //             if (nextId >= presentationPlayStore.state.slides?.length)
+   //                nextId = presentationPlayStore.state.slides?.length - 1;
    //             navigate(`/presentation/1/${nextId}`);
    //          }}
    //       />
