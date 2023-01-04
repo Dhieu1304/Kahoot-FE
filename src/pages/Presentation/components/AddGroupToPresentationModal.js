@@ -7,7 +7,14 @@ import Modal from "../../../components/Modal";
 import { AuthContext } from "../../../providers/auth";
 import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../services/groupService";
 
-function AddGroupToPresentationModal({ show, setShow, data, setData, handleSubmitRenameModal }) {
+function AddGroupToPresentationModal({
+   show,
+   setShow,
+   data,
+   setData,
+   handleSubmitAddGroupModal,
+   existedGroupIds
+}) {
    const {
       register,
       handleSubmit,
@@ -19,7 +26,7 @@ function AddGroupToPresentationModal({ show, setShow, data, setData, handleSubmi
    } = useForm({
       mode: "onChange",
       defaultValues: {
-         groups: []
+         group: []
       },
       criteriaMode: "all"
    });
@@ -33,16 +40,26 @@ function AddGroupToPresentationModal({ show, setShow, data, setData, handleSubmi
          const userId = authContext.user.id;
          const groupOwnedData = await getGroupsByOwnUserId(userId);
 
+         console.log("loadData groups");
+
+         const newGroupOwnedData = groupOwnedData?.filter(
+            (group) => !existedGroupIds.includes(group.id)
+         );
+
          const groupJoinedData = await getGroupsByJoinedUserId(userId);
+
+         const newGroupJoinedData = groupJoinedData?.filter(
+            (group) => !existedGroupIds.includes(group.id)
+         );
 
          const groups = [
             {
                label: "Owned",
-               options: groupOwnedData
+               options: newGroupOwnedData
             },
             {
                label: "Joined",
-               options: groupJoinedData
+               options: newGroupJoinedData
             }
          ];
 
@@ -50,10 +67,10 @@ function AddGroupToPresentationModal({ show, setShow, data, setData, handleSubmi
       };
 
       loadData();
-   }, [authContext.user.id]);
+   }, [authContext.user.id, existedGroupIds]);
 
    const handleSubmitModal = async (submitData) => {
-      await handleSubmitRenameModal(submitData);
+      await handleSubmitAddGroupModal(submitData);
       reset();
       setShow(false);
       setData(null);
@@ -61,14 +78,14 @@ function AddGroupToPresentationModal({ show, setShow, data, setData, handleSubmi
 
    return (
       <Modal
-         title={"Rename Presentation"}
+         title={"Add Group to Presentation"}
          show={show}
          setShow={setShow}
          data={data}
          setData={setData}
          haveSubmitBtn
          onSubmitModal={handleSubmit(handleSubmitModal)}
-         submitBtnTitle={"Rename"}
+         submitBtnTitle={"Add"}
       >
          <div>
             <span>Groups</span>
@@ -78,7 +95,7 @@ function AddGroupToPresentationModal({ show, setShow, data, setData, handleSubmi
                rules={{}}
                render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => (
                   <Select
-                     isMulti={true}
+                     isMulti={false}
                      defaultValue={watch("groups")}
                      placeholder="Select"
                      onChange={onChange}
@@ -96,7 +113,7 @@ function AddGroupToPresentationModal({ show, setShow, data, setData, handleSubmi
                      theme={"white"}
                   />
                )}
-               name="groups"
+               name="group"
             />
          </div>
       </Modal>

@@ -289,7 +289,23 @@ const getPresentationGroups = async (presentation_id) => {
    }
 };
 
+const addGroup = async (presentation_id, group_id) => {
+   console.log("[SERVICE][PRESENTATION] addGroup: ", { presentation_id, group_id });
+   try {
+      const res = await axiosClient.post(`/presentation-group/add-group`, {
+         presentation_id,
+         group_id
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const deleteGroup = async (presentation_id, group_id) => {
+   console.log("[SERVICE][PRESENTATION] deleteGroup: ", { presentation_id, group_id });
    try {
       const res = await axiosClient.post(`/presentation-group/remove-group`, {
          presentation_id,
@@ -324,5 +340,6 @@ export default {
    addPresentationCoOwner,
    deleteMember,
 
+   addGroup,
    deleteGroup
 };

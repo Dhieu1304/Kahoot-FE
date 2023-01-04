@@ -110,13 +110,13 @@ function PresentationManageProvider({ children }) {
       }
    };
 
-   const addGroups = async (groups) => {
-      // const presentationId = state.presentation?.id;
-      // const result = await presentationServices.addGroups(presentationId, groups);
-      // console.log("result: ", result);
-      // if (result) {
-      //    return await loadPresentationDetail(presentationId);
-      // }
+   const addGroup = async (groupId) => {
+      const presentationId = state.presentation?.id;
+      const result = await presentationServices.addGroup(presentationId, groupId);
+
+      if (result) {
+         return await loadPresentationGroups(presentationId);
+      }
    };
 
    const deleteGroup = async (groupId) => {
@@ -133,7 +133,7 @@ function PresentationManageProvider({ children }) {
       setInit,
       deleteMember,
       addMember,
-      addGroups,
+      addGroup,
       deleteGroup
    };
 

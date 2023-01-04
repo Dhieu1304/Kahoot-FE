@@ -102,9 +102,10 @@ function PresentationManageGroup() {
       loadData();
    }, []);
 
-   const handleAddGroup = async ({ groups }) => {
-      console.log("handleAddGroup: ", { groups });
-      const result = await presentationManageStore.method.addGroups(groups);
+   const handleAddGroup = async ({ group }) => {
+      const groupId = group?.id;
+      console.log("handleAddGroup: ", { groupId });
+      const result = await presentationManageStore.method.addGroup(groupId);
    };
 
    const handleDeleteGroup = async () => {
@@ -161,8 +162,7 @@ function PresentationManageGroup() {
                            className={cx("btn")}
                            leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
                            onClick={() => {
-                              addGroup.setData(presentationId);
-                              addGroup.setShow(true);
+                              addGroupModal.setShow(true);
                            }}
                         />
                      </div>
@@ -272,14 +272,17 @@ function PresentationManageGroup() {
             </div>
             {addGroupModal.show && (
                <AddGroupToPresentationModal
-                  show={inviteModal.show}
-                  setShow={inviteModal.setShow}
-                  data={inviteModal.data}
-                  setData={inviteModal.setData}
-                  handleInviteByEmail={handleAddGroup}
+                  show={addGroupModal.show}
+                  setShow={addGroupModal.setShow}
+                  data={addGroupModal.data}
+                  setData={addGroupModal.setData}
+                  handleSubmitAddGroupModal={handleAddGroup}
+                  existedGroupIds={presentationManageStore.state.groups?.map(
+                     (group, index) => group.groupId
+                  )}
                />
             )}
-            {deleteGroupModal && (
+            {deleteGroupModal.show && (
                <DeleteModal
                   title={"Delete group"}
                   show={deleteGroupModal.show}
