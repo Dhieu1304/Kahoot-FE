@@ -37,6 +37,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../../providers/auth";
 import Tabs from "../../../components/Tabs";
 import DeleteModal from "../components/DeleteModal";
+import AddGroupToPresentationModal from "../components/AddGroupToPresentationModal";
 const cx = classNames.bind(styles);
 
 const tabItems = [
@@ -60,8 +61,14 @@ function PresentationManageGroup() {
    console.log("presentationManageStore: ", presentationManageStore);
    const authContext = useContext(AuthContext);
 
-   const { renameModal, deletePresentationModal, deleteMemberModal, inviteModal } =
-      presentationManageStore;
+   const {
+      renameModal,
+      deletePresentationModal,
+      deleteMemberModal,
+      inviteModal,
+      addGroupModal,
+      deleteGroupModal
+   } = presentationManageStore;
 
    const { isSelectAll, selectedRowIds, handleSelectedAll, handleSelected, setRowIds } =
       useTableSelect([]);
@@ -95,15 +102,15 @@ function PresentationManageGroup() {
       loadData();
    }, []);
 
-   const handleInviteByEmail = async ({ email }) => {
-      console.log("handleInviteByEmail: ", { email });
-      const result = await presentationManageStore.method.addMember(email);
+   const handleAddGroup = async ({ groups }) => {
+      console.log("handleAddGroup: ", { groups });
+      const result = await presentationManageStore.method.addGroups(groups);
    };
 
-   const handleDeleteMember = async () => {
-      const email = deleteMemberModal?.data;
-      console.log("handleDeleteCoOwner: ", { email });
-      const result = await presentationManageStore.method.deleteMember(email);
+   const handleDeleteGroup = async () => {
+      const groupId = deleteGroupModal?.data;
+      console.log("handleDeleteGroup: ", { groupId });
+      const result = await presentationManageStore.method.deleteGroup(groupId);
    };
 
    return (
@@ -147,15 +154,15 @@ function PresentationManageGroup() {
                            }}
                         />
                         <Button
-                           title="Invite"
+                           title="Add group"
                            basicBlue
                            big
                            rounded
                            className={cx("btn")}
                            leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
                            onClick={() => {
-                              inviteModal.setData(presentationId);
-                              inviteModal.setShow(true);
+                              addGroup.setData(presentationId);
+                              addGroup.setShow(true);
                            }}
                         />
                      </div>
@@ -222,8 +229,8 @@ function PresentationManageGroup() {
                                           size="1x"
                                           color="red"
                                           onClick={() => {
-                                             deleteMemberModal.setData(group?.user?.email);
-                                             deleteMemberModal.setShow(true);
+                                             deleteGroupModal.setData(group?.groupId);
+                                             deleteGroupModal.setShow(true);
                                           }}
                                        />
                                     )}
@@ -263,24 +270,26 @@ function PresentationManageGroup() {
                   </ListGroup>
                )}
             </div>
-            {inviteModal.show && (
-               <InviteToPresentationModal
+            {addGroupModal.show && (
+               <AddGroupToPresentationModal
                   show={inviteModal.show}
                   setShow={inviteModal.setShow}
                   data={inviteModal.data}
                   setData={inviteModal.setData}
-                  handleInviteByEmail={handleInviteByEmail}
+                  handleInviteByEmail={handleAddGroup}
                />
             )}
-            {deleteMemberModal && (
+            {deleteGroupModal && (
                <DeleteModal
-                  show={deleteMemberModal.show}
-                  setShow={deleteMemberModal.setShow}
-                  data={deleteMemberModal.data}
-                  setData={deleteMemberModal.setData}
-                  handleSubmitForm={handleDeleteMember}
+                  title={"Delete group"}
+                  show={deleteGroupModal.show}
+                  setShow={deleteGroupModal.setShow}
+                  data={deleteGroupModal.data}
+                  setData={deleteGroupModal.setData}
+                  handleSubmitForm={handleDeleteGroup}
                />
             )}
+            l
          </div>
       )
    );

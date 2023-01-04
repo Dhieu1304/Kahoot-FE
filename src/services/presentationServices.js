@@ -289,6 +289,20 @@ const getPresentationGroups = async (presentation_id) => {
    }
 };
 
+const deleteGroup = async (presentation_id, group_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation-group/remove-group`, {
+         presentation_id,
+         group_id
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -308,5 +322,7 @@ export default {
    getListSlideTypeConfig,
 
    addPresentationCoOwner,
-   deleteMember
+   deleteMember,
+
+   deleteGroup
 };

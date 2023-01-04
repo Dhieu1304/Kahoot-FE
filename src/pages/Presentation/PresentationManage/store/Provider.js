@@ -95,7 +95,7 @@ function PresentationManageProvider({ children }) {
       const result = await presentationServices.deleteMember(presentationId, email);
 
       if (result) {
-         return await loadPresentationDetail(presentationId);
+         return await loadPresentationUsers(presentationId);
       }
    };
 
@@ -106,7 +106,25 @@ function PresentationManageProvider({ children }) {
       console.log("result: ", result);
 
       if (result) {
-         return await loadPresentationDetail(presentationId);
+         return await loadPresentationUsers(presentationId);
+      }
+   };
+
+   const addGroups = async (groups) => {
+      // const presentationId = state.presentation?.id;
+      // const result = await presentationServices.addGroups(presentationId, groups);
+      // console.log("result: ", result);
+      // if (result) {
+      //    return await loadPresentationDetail(presentationId);
+      // }
+   };
+
+   const deleteGroup = async (groupId) => {
+      const presentationId = state.presentation?.id;
+      const result = await presentationServices.deleteGroup(presentationId, groupId);
+
+      if (result) {
+         return await loadPresentationGroups(presentationId);
       }
    };
 
@@ -114,7 +132,9 @@ function PresentationManageProvider({ children }) {
       initPresentationDetail,
       setInit,
       deleteMember,
-      addMember
+      addMember,
+      addGroups,
+      deleteGroup
    };
 
    return <Context.Provider value={{ state, method, ...rest }}>{children}</Context.Provider>;

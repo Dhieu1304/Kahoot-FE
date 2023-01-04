@@ -1,6 +1,6 @@
 import Modal from "../../../components/Modal";
 
-function DeleteModal({ show, setShow, data, setData, handleSubmitForm }) {
+function DeleteModal({ title, show, setShow, data, setData, handleSubmitForm }) {
    const handleSubmitModal = async (submitData) => {
       await handleSubmitForm(submitData);
       setShow(false);
@@ -9,7 +9,7 @@ function DeleteModal({ show, setShow, data, setData, handleSubmitForm }) {
 
    return (
       <Modal
-         title={"Delete Presentation"}
+         title={title || "Delete"}
          haveSubmitBtn
          submitBtnTitle={"Delete"}
          onSubmitModal={handleSubmitModal}
