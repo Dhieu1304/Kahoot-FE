@@ -13,12 +13,12 @@ import CustomDropdownMenu from "../../../../components/CustomDropdownMenu";
 import CustomDropdownMenuItem from "../../../../components/CustomDropdownMenu/CustomDropdownMenuItem";
 import { usePresentationStore } from "../store";
 
-function ActionMenu({ id }) {
+function ActionMenu({ data }) {
    const navigate = useNavigate();
 
    const presentationStore = usePresentationStore();
 
-   const { renameModal, inviteModal, deleteModal } = presentationStore;
+   const { renameModal, inviteModal, deleteModal, changePresentationTypeModal } = presentationStore;
 
    return (
       <CustomDropdownMenu>
@@ -26,7 +26,7 @@ function ActionMenu({ id }) {
             label={"Present"}
             leftIcon={<FontAwesomeIcon icon={faPlay} size={"1x"} />}
             onClick={() => {
-               navigate(`/presentation/${id}/play`);
+               navigate(`/presentation/${data?.id}/play`);
             }}
          />
          <CustomDropdownMenuItem
@@ -37,15 +37,15 @@ function ActionMenu({ id }) {
             label={"Invite collaborator"}
             leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
             onClick={() => {
-               console.log("id: ", id);
-               inviteModal.setData(id);
+               console.log("id: ", data?.id);
+               inviteModal.setData(data?.id);
                inviteModal.setShow(true);
             }}
          />
          <CustomDropdownMenuItem
             label={"Manage user"}
             leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
-            onClick={() => navigate(`/presentation/${id}/user`)}
+            onClick={() => navigate(`/presentation/${data?.id}/user`)}
          />
          <CustomDropdownMenuItem
             label={"Share"}
@@ -56,7 +56,16 @@ function ActionMenu({ id }) {
             leftIcon={<FontAwesomeIcon icon={faPen} size={"1x"} />}
             onClick={() => {
                renameModal.setShow(true);
-               renameModal.setData(id);
+               renameModal.setData(data?.id);
+            }}
+         />
+
+         <CustomDropdownMenuItem
+            label={data?.presentationTypeId === 1 ? "Make Private" : "Make Public"}
+            leftIcon={<FontAwesomeIcon icon={faPen} size={"1x"} />}
+            onClick={() => {
+               changePresentationTypeModal.setShow(true);
+               changePresentationTypeModal.setData(data);
             }}
          />
 
@@ -66,7 +75,7 @@ function ActionMenu({ id }) {
                leftIcon={<FontAwesomeIcon icon={faTrash} size={"1x"} />}
                onClick={() => {
                   deleteModal.setShow(true);
-                  deleteModal.setData(id);
+                  deleteModal.setData(data?.id);
                }}
             />
          )}

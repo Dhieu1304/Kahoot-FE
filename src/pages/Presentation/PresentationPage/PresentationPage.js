@@ -31,6 +31,7 @@ import classNames from "classnames/bind";
 import styles from "./PresentationPage.module.scss";
 import DeleteModal from "../components/DeleteModal";
 import presentationServices from "../../../services/presentationServices";
+import ChangePresentationTypeModal from "../components/ChangePresentationTypeModal";
 const cx = classNames.bind(styles);
 
 function PresentationPage() {
@@ -42,7 +43,8 @@ function PresentationPage() {
       useTableSelect([]);
 
    // show/hide modal state
-   const { createModal, renameModal, deleteModal, inviteModal } = presentationStore;
+   const { createModal, renameModal, deleteModal, inviteModal, changePresentationTypeModal } =
+      presentationStore;
 
    // responsive
    const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -89,14 +91,9 @@ function PresentationPage() {
    };
 
    const handleSubmitRenameModal = async ({ name, groups, type }) => {
-      console.log("handleSubmitRenameModal: ", { name, groups, type });
+      console.log("handleSubmitRenameModal: ", { name });
       const presentationId = renameModal.data;
-      const presentations = await presentationStore.method.renamePresentation(
-         presentationId,
-         name,
-         groups,
-         type
-      );
+      const presentations = await presentationStore.method.renamePresentation(presentationId, name);
    };
 
    const handleInviteByEmail = async ({ email }) => {
@@ -110,6 +107,22 @@ function PresentationPage() {
       console.log("presentationStore deleteModal.data: ", deleteModal?.data);
 
       if (result) navigate("/presentation");
+   };
+
+   const handleChangePresentationType = async () => {
+      const { id, presentationTypeId } = changePresentationTypeModal?.data;
+
+      const newPresentationTypeId = presentationTypeId === 1 ? 2 : 1;
+
+      console.log(
+         "presentationStore ChangePresentationTypeModal.data: ",
+         changePresentationTypeModal?.data
+      );
+
+      const result = await presentationStore.method.changePresentationType(
+         id,
+         newPresentationTypeId
+      );
    };
 
    return (
@@ -251,7 +264,7 @@ function PresentationPage() {
                                  </TableTd>
 
                                  <TableTd>
-                                    <ActionMenu id={presentation.id} />
+                                    <ActionMenu data={presentation} />
                                  </TableTd>
                               </TableTr>
                            );
@@ -338,6 +351,16 @@ function PresentationPage() {
                   data={deleteModal.data}
                   setData={deleteModal.setData}
                   handleSubmitForm={handleDeletePresentation}
+               />
+            )}
+
+            {changePresentationTypeModal.show && (
+               <ChangePresentationTypeModal
+                  show={changePresentationTypeModal.show}
+                  setShow={changePresentationTypeModal.setShow}
+                  data={changePresentationTypeModal.data}
+                  setData={changePresentationTypeModal.setData}
+                  handleSubmitForm={handleChangePresentationType}
                />
             )}
          </div>

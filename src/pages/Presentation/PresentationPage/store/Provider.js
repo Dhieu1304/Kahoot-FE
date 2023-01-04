@@ -11,12 +11,14 @@ function PresentationProvider({ children }) {
    const renameModal = useModal();
    const deleteModal = useModal();
    const inviteModal = useModal();
+   const changePresentationTypeModal = useModal();
 
    const rest = {
       createModal,
       renameModal,
       deleteModal,
-      inviteModal
+      inviteModal,
+      changePresentationTypeModal
    };
 
    const [state, dispatch] = useReducer(reducer, initState);
@@ -77,6 +79,17 @@ function PresentationProvider({ children }) {
       }
    };
 
+   const changePresentationType = async (presentationId, type) => {
+      const resultPresentation = await presentationServices.savePresentation(
+         { type },
+         presentationId
+      );
+
+      if (resultPresentation) {
+         return await loadPresentations(state.listType);
+      }
+   };
+
    const addPresentationCoOwner = async (presentationId, email) => {
       dispatch(actions.fetchApi());
       const result = await presentationServices.addPresentationCoOwner(presentationId, email);
@@ -93,7 +106,8 @@ function PresentationProvider({ children }) {
       setInit,
       deletePresentation,
       renamePresentation,
-      addPresentationCoOwner
+      addPresentationCoOwner,
+      changePresentationType
    };
 
    return <Context.Provider value={{ state, method, ...rest }}>{children}</Context.Provider>;

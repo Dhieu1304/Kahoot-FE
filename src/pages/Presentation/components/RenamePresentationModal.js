@@ -19,9 +19,7 @@ function RenamePresentationModal({ show, setShow, data, setData, handleSubmitRen
    } = useForm({
       mode: "onChange",
       defaultValues: {
-         name: "",
-         groups: [],
-         type: "PUBLIC"
+         name: ""
       },
       criteriaMode: "all"
    });
@@ -82,56 +80,6 @@ function RenamePresentationModal({ show, setShow, data, setData, handleSubmitRen
             })}
             error={errors.name}
          />
-         <div>
-            <div>
-               <input
-                  checked={watch("type") === "PRIVATE"}
-                  type="radio"
-                  value={"PRIVATE"}
-                  {...register("type")}
-               />
-               <span>Private</span>
-            </div>
-            <div>
-               <input
-                  checked={watch("type") === "PUBLIC"}
-                  type="radio"
-                  value={"PUBLIC"}
-                  {...register("type")}
-               />
-               <span>Public</span>
-            </div>
-         </div>
-
-         <div>
-            <span>Groups</span>
-
-            <Controller
-               control={control}
-               rules={{}}
-               render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => (
-                  <Select
-                     isMulti={true}
-                     defaultValue={watch("groups")}
-                     placeholder="Select"
-                     onChange={onChange}
-                     value={value}
-                     onBlur={onBlur}
-                     options={groupList}
-                     isSearchable={false}
-                     formatGroupLabel={({ label }) => {
-                        return <div>{label}</div>;
-                     }}
-                     formatOptionLabel={({ name }) => {
-                        return <div>{name}</div>;
-                     }}
-                     getOptionValue={(option) => option.id}
-                     theme={"white"}
-                  />
-               )}
-               name="groups"
-            />
-         </div>
       </Modal>
    );
 }
