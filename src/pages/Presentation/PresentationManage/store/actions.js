@@ -4,7 +4,9 @@ import {
    FETCHING_API_SUCCESS,
    FETCHING_API_FAILED,
    SET_INIT,
-   SET_USERS
+   SET_USERS,
+   SET_GROUPS,
+   SET_REPORT
 } from "./contants";
 
 export const setPresentation = (payload) => ({
@@ -14,6 +16,16 @@ export const setPresentation = (payload) => ({
 
 export const setUsers = (payload) => ({
    type: SET_USERS,
+   payload
+});
+
+export const setGroups = (payload) => ({
+   type: SET_GROUPS,
+   payload
+});
+
+export const setReport = (payload) => ({
+   type: SET_REPORT,
    payload
 });
 
@@ -40,6 +52,8 @@ export const setInit = (payload) => ({
 export default {
    setPresentation,
    setUsers,
+   setGroups,
+   setReport,
    fetchApi,
    fetchApiSuccess,
    fetchApiFailed,

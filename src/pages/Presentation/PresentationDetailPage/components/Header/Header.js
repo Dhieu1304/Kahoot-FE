@@ -146,7 +146,7 @@ function Header() {
                />
             </div>
             <div className={cx("right")}>
-               {presentationDetailStore.state.isSaving ? (
+               {!presentationDetailStore.state.isLoading ? (
                   <div className={cx("save-box")}>
                      <FontAwesomeIcon
                         size="1x"

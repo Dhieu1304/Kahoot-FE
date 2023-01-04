@@ -57,8 +57,7 @@ function SideBar({
                         key={index}
                         to={`${preLink}/${item?.id.toString()}/user`}
                         label={item.name}
-
-                        // matchLink={`${preLink}/${item?.id.toString()}`}
+                        matchLink={`${preLink}/${item?.id.toString()}`}
 
                         // onClick={() => handleUpdateSideBarMenuBottomItems(item)}
                      />

@@ -1,9 +1,18 @@
-import { faAdd, faEdit, faPlayCircle, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+   faAdd,
+   faEdit,
+   faPaperPlane,
+   faPen,
+   faPlayCircle,
+   faSliders,
+   faTrash,
+   faX
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
 
@@ -45,7 +54,7 @@ const tabItems = [
    }
 ];
 
-function PresentationManage() {
+function PresentationManageGroup() {
    const presentationManageStore = usePresentationManageStore();
 
    console.log("presentationManageStore: ", presentationManageStore);
@@ -127,12 +136,12 @@ function PresentationManage() {
                         )}
 
                         <Button
-                           title="Edit"
+                           title="Slides"
                            basicTeal
                            big
                            rounded
                            className={cx("btn")}
-                           leftIcon={<FontAwesomeIcon icon={faEdit} size="1x" />}
+                           leftIcon={<FontAwesomeIcon icon={faPen} size="1x" />}
                            onClick={() => {
                               navigate(`/presentation/${presentationId}/edit`);
                            }}
@@ -169,112 +178,88 @@ function PresentationManage() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           {authContext.user?.id ===
-                              presentationManageStore.state.presentation?.owner?.id && (
-                              <TableTh>
-                                 <input
-                                    type={"checkbox"}
-                                    checked={isSelectAll}
-                                    onChange={handleSelectedAll}
-                                    className={cx("checkbox")}
-                                 />
-                              </TableTh>
-                           )}
-
+                           <TableTh>
+                              <input
+                                 type={"checkbox"}
+                                 checked={isSelectAll}
+                                 onChange={handleSelectedAll}
+                                 className={cx("checkbox")}
+                              />
+                           </TableTh>
                            <TableTh>Id</TableTh>
                            <TableTh>Name</TableTh>
-                           <TableTh>Role</TableTh>
-                           {authContext.user?.id ===
-                              presentationManageStore.state.presentation?.owner?.id && (
-                              <TableTh></TableTh>
-                           )}
+
+                           <TableTh></TableTh>
                         </TableTr>
                      </TableTHead>
                      <TableTBody>
-                        {presentationManageStore.state.presentation?.presentationMembers?.map(
-                           (member, index) => {
-                              const isChecked = selectedRowIds?.includes(member.id);
-                              return (
-                                 <TableTr key={index}>
-                                    {authContext.user?.id ===
-                                       presentationManageStore.state.presentation?.owner?.id && (
-                                       <TableTd>
-                                          {authContext.user?.id !== member?.userId && (
-                                             <input
-                                                type={"checkbox"}
-                                                checked={isChecked}
-                                                onChange={() =>
-                                                   handleSelected(member?.userId, isChecked)
-                                                }
-                                                className={cx("checkbox")}
-                                             />
-                                          )}
-                                       </TableTd>
+                        {presentationManageStore.state.groups?.map((group, index) => {
+                           const isChecked = selectedRowIds?.includes(group?.groupId);
+                           return (
+                              <TableTr key={index}>
+                                 <TableTd>
+                                    {authContext.user?.id !== group?.userId && (
+                                       <input
+                                          type={"checkbox"}
+                                          checked={isChecked}
+                                          onChange={() => handleSelected(group?.userId, isChecked)}
+                                          className={cx("checkbox")}
+                                       />
                                     )}
-                                    <TableTd>{member?.user?.id}</TableTd>
-                                    <TableTd>
-                                       <div className={cx("presentation-infor-cell")}>
-                                          {member?.user?.fullName}
-                                       </div>
-                                    </TableTd>
-                                    <TableTd>{member?.role?.name}</TableTd>
+                                 </TableTd>
 
-                                    {authContext.user?.id ===
-                                       presentationManageStore.state.presentation?.owner?.id && (
-                                       <TableTd>
-                                          {authContext.user?.id !== member?.userId && (
-                                             <FontAwesomeIcon
-                                                icon={faTrash}
-                                                className={cx("icon")}
-                                                size="1x"
-                                                color="red"
-                                                onClick={() => {
-                                                   deleteMemberModal.setData(member?.user?.email);
-                                                   deleteMemberModal.setShow(true);
-                                                }}
-                                             />
-                                          )}
-                                       </TableTd>
+                                 <TableTd>{group?.groupId}</TableTd>
+                                 <TableTd>
+                                    <div className={cx("presentation-infor-cell")}>
+                                       {group?.group?.name}
+                                    </div>
+                                 </TableTd>
+                                 <TableTd>
+                                    {authContext.user?.id !== group?.userId && (
+                                       <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className={cx("icon")}
+                                          size="1x"
+                                          color="red"
+                                          onClick={() => {
+                                             deleteMemberModal.setData(group?.user?.email);
+                                             deleteMemberModal.setShow(true);
+                                          }}
+                                       />
                                     )}
-                                 </TableTr>
-                              );
-                           }
-                        )}
+                                 </TableTd>
+                              </TableTr>
+                           );
+                        })}
                      </TableTBody>
                   </Table>
                ) : (
                   <ListGroup className={cx("list")}>
-                     {presentationManageStore.state.presentation?.presentationMembers?.map(
-                        (member, index) => {
-                           return (
-                              <ListGroup.Item className={cx("item")} key={index}>
-                                 <div className={cx("top")}>
-                                    <div className={cx("infor")}>{member?.user?.fullName}</div>
+                     {presentationManageStore.state.groups?.map((group, index) => {
+                        return (
+                           <ListGroup.Item className={cx("item")} key={index}>
+                              <div className={cx("top")}>
+                                 <div className={cx("infor")}>{group?.group?.name}</div>
 
-                                    <div className={cx("action")}>
-                                       {authContext.user?.id ===
-                                          presentationManageStore.state.presentation?.owner?.id &&
-                                          authContext.user?.id !== member?.userId && (
-                                             <FontAwesomeIcon
-                                                icon={faTrash}
-                                                className={cx("icon")}
-                                                size="1x"
-                                                color="red"
-                                                onClick={() => {
-                                                   deleteMemberModal.setData(member?.userId);
-                                                   deleteMemberModal.setShow(true);
-                                                }}
-                                             />
-                                          )}
-                                    </div>
+                                 <div className={cx("action")}>
+                                    <FontAwesomeIcon
+                                       icon={faTrash}
+                                       className={cx("icon")}
+                                       size="1x"
+                                       color="red"
+                                       onClick={() => {
+                                          deleteMemberModal.setData(group?.groupId);
+                                          deleteMemberModal.setShow(true);
+                                       }}
+                                    />
                                  </div>
-                                 <div className={cx("bottom")}>
-                                    <span className={cx("role")}>{member?.role?.name}</span>
-                                 </div>
-                              </ListGroup.Item>
-                           );
-                        }
-                     )}
+                              </div>
+                              <div className={cx("bottom")}>
+                                 <span className={cx("role")}></span>
+                              </div>
+                           </ListGroup.Item>
+                        );
+                     })}
                   </ListGroup>
                )}
             </div>
@@ -301,4 +286,4 @@ function PresentationManage() {
    );
 }
 
-export default PresentationManage;
+export default PresentationManageGroup;

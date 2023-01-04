@@ -4,12 +4,16 @@ import {
    FETCHING_API_SUCCESS,
    FETCHING_API_FAILED,
    SET_INIT,
-   SET_USERS
+   SET_USERS,
+   SET_GROUPS,
+   SET_REPORT
 } from "./contants";
 
 const initState = {
    presentation: {},
    users: [],
+   groups: [],
+   report: {},
 
    isInit: false,
    isLoading: false,
@@ -37,6 +41,23 @@ function reducer(state, action) {
             users: action.payload
          };
 
+      case SET_GROUPS:
+         return {
+            ...state,
+            isLoading: false,
+            isFetchApiError: false,
+            fetchApiError: "",
+            groups: action.payload
+         };
+
+      case SET_REPORT:
+         return {
+            ...state,
+            isLoading: false,
+            isFetchApiError: false,
+            fetchApiError: "",
+            report: action.payload
+         };
       case FETCHING_API:
          return {
             ...state,

@@ -34,9 +34,11 @@ import PresentationProvider from "./pages/Presentation/PresentationPage/store";
 import PresentationPlayWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayWrapper";
 import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
 import PresentationClientDetailProvider from "./pages/PresentationClient/PresentationClientDetailPage/store/Provider";
-import PresentationManage from "./pages/Presentation/PresentationManage";
 import PresenationManageLayout from "./layouts/PresenationManageLayout";
 import PresentationManageProvider from "./pages/Presentation/PresentationManage/store/Provider";
+import PresentationManageUser from "./pages/Presentation/PresentationManage/PresentationManageUser";
+import PresentationManageReport from "./pages/Presentation/PresentationManage/PresentationManageReport";
+import PresentationManageGroup from "./pages/Presentation/PresentationManage/PresentationManageGroup";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -148,7 +150,7 @@ function App() {
                               element={
                                  <PresenationManageLayout>
                                     <PresentationManageProvider>
-                                       <PresentationManage />
+                                       <PresentationManageUser />
                                     </PresentationManageProvider>
                                  </PresenationManageLayout>
                               }
@@ -158,7 +160,7 @@ function App() {
                               element={
                                  <PresenationManageLayout>
                                     <PresentationManageProvider>
-                                       <PresentationManage />
+                                       <PresentationManageGroup />
                                     </PresentationManageProvider>
                                  </PresenationManageLayout>
                               }
@@ -168,7 +170,7 @@ function App() {
                               element={
                                  <PresenationManageLayout>
                                     <PresentationManageProvider>
-                                       <PresentationManage />
+                                       <PresentationManageReport />
                                     </PresentationManageProvider>
                                  </PresenationManageLayout>
                               }

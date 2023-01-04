@@ -251,6 +251,44 @@ const deleteMember = async (presentation_id, email) => {
    }
 };
 
+const getPresentationUsers = async (presentation_id) => {
+   console.log("[SERVICE][PRESENTATION] getPresentationUsers: ", { presentation_id });
+
+   try {
+      const res = await axiosClient.get(`/presentation-member/list`, {
+         params: { presentation_id }
+      });
+
+      console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+
+   // return slide;
+};
+
+const getPresentationGroups = async (presentation_id) => {
+   console.log("[SERVICE][PRESENTATION] getPresentationGroups: ", { presentation_id });
+
+   try {
+      const res = await axiosClient.get(`/presentation-group/list`, {
+         params: { presentation_id }
+      });
+
+      console.log("res: ", res);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -262,6 +300,9 @@ export default {
    updateSlides,
    savePresentation,
    deletePresentationById,
+
+   getPresentationUsers,
+   getPresentationGroups,
 
    getListPresentationThemeConfig,
    getListSlideTypeConfig,

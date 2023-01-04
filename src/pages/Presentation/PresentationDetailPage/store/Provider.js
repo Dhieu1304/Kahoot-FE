@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react";
 import Context from "./Context";
+import delay from "delay";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
@@ -57,6 +58,8 @@ function PresentationDetailProvider({ children }) {
 
       loadPresentationDetail: async (id) => {
          dispatch(actions.fetchApi());
+         await delay(1000);
+
          const presentation = await presentationServices.getPresentationById(id);
 
          if (presentation) {
@@ -91,6 +94,8 @@ function PresentationDetailProvider({ children }) {
 
       saveSlides: async (slide, index) => {
          dispatch(actions.fetchApi());
+
+         await delay(1000);
 
          const oldSlides = [...state.slides];
          const newSlides = oldSlides.map((cur) => cur);

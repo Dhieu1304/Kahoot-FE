@@ -11,11 +11,16 @@ function PresentationManageProvider({ children }) {
    const deleteMemberModal = useModal();
    const inviteModal = useModal();
 
+   const addGroupModal = useModal();
+   const deleteGroupModal = useModal();
+
    const rest = {
       renameModal,
       deletePresentationModal,
       deleteMemberModal,
-      inviteModal
+      inviteModal,
+      addGroupModal,
+      deleteGroupModal
    };
 
    const [state, dispatch] = useReducer(reducer, initState);
@@ -38,8 +43,47 @@ function PresentationManageProvider({ children }) {
       return presentation;
    };
 
+   const loadPresentationUsers = async (id) => {
+      dispatch(actions.fetchApi());
+      const users = await presentationServices.getPresentationUsers(id);
+
+      if (users) {
+         dispatch(actions.setUsers(users));
+      } else {
+         const message = "Error API";
+         dispatch(actions.fetchApiFailed(message));
+         return users;
+      }
+
+      // presentation true
+      dispatch(actions.fetchApi());
+
+      return users;
+   };
+
+   const loadPresentationGroups = async (id) => {
+      dispatch(actions.fetchApi());
+      const groups = await presentationServices.getPresentationGroups(id);
+
+      if (groups) {
+         dispatch(actions.setGroups(groups));
+      } else {
+         const message = "Error API";
+         dispatch(actions.fetchApiFailed(message));
+         return groups;
+      }
+
+      // groups true
+      dispatch(actions.fetchApi());
+
+      return groups;
+   };
+
    const initPresentationDetail = async (id) => {
-      return await loadPresentationDetail(id);
+      const users = await loadPresentationUsers(id);
+      const groups = await loadPresentationGroups(id);
+      const presentation = await loadPresentationDetail(id);
+      return { presentation, users, groups };
    };
 
    const setInit = () => {
