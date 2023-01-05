@@ -1,0 +1,28 @@
+.wrapper {
+   width: 100vw;
+   height: 100vh;
+   background-color: rgba(0, 0, 0, 0.6);
+
+   position: absolute;
+   top: 0;
+   left: 0;
+   z-index: 10000;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   .container {
+      width: 80%;
+      height: 80%;
+      background-color: aqua;
+      position: relative;
+
+      .icon-x {
+         position: absolute;
+         top: 2rem;
+         right: 2rem;
+         cursor: pointer;
+      }
+   }
+}

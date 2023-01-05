@@ -66,12 +66,16 @@
             display: flex;
             align-items: center;
             padding: 1rem 0.5rem;
+            margin-bottom: 1rem;
 
             .message {
+               position: relative;
                border-radius: 2rem;
                background-color: azure;
                color: red;
                padding: 0.2rem 0.5rem;
+
+               cursor: pointer;
                .text {
                   font-size: 1.2rem;
                }
@@ -85,6 +89,17 @@
                margin-left: 0.5rem;
                .text {
                   font-size: 1.2rem;
+               }
+               .message-user-name {
+                  position: absolute;
+                  font-size: 1.2rem;
+                  color: rgba(0, 0, 0, 0.6);
+                  top: -20px;
+                  left: 0;
+
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  overflow: hidden;
                }
             }
          }

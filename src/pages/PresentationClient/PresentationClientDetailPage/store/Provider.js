@@ -8,12 +8,15 @@ import { useState } from "react";
 function PresentationClientDetailProvider({ children }) {
    const [showChatBox, setShowChatBox] = useState(false);
    const [showQuestionModal, setShowQuestionModal] = useState(false);
+   const [showSendQuestionModal, setShowSendQuestionModal] = useState(false);
 
    const rest = {
       showChatBox,
       setShowChatBox,
       showQuestionModal,
-      setShowQuestionModal
+      setShowQuestionModal,
+      showSendQuestionModal,
+      setShowSendQuestionModal
    };
 
    const [state, dispatch] = useReducer(reducer, initState);

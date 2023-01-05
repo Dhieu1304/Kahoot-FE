@@ -28,10 +28,11 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 import { usePresentationPlayStore } from "./store";
-import Chat from "./components/Chat";
+
 import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
 import QuestionModal from "./components/QuestionModal";
 import { toast } from "react-toastify";
+import Chat from "./components/Chat";
 
 const cx = classNames.bind(styles);
 

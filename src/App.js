@@ -1,6 +1,7 @@
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { v4 as uuidv4 } from "uuid";
 import "./App.css";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import LoginPage from "./pages/Auth/LoginPage";
@@ -40,12 +41,20 @@ import PresentationManageUser from "./pages/Presentation/PresentationManage/Pres
 import PresentationManageReport from "./pages/Presentation/PresentationManage/PresentationManageReport";
 import PresentationManageGroup from "./pages/Presentation/PresentationManage/PresentationManageGroup";
 
+import * as localStorageApp from "./utils/localStorage";
+
 function App() {
    const authContext = useContext(AuthContext);
 
    useEffect(() => {
       const createCurrentAccount = async () => {
          const currentUser = await getUserInfo();
+         console.log("currentUser: ", currentUser);
+         if (!currentUser) {
+            const uuid = uuidv4();
+            localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.UUID, uuid);
+         }
+
          authContext.setUser(currentUser);
          authContext.login();
       };

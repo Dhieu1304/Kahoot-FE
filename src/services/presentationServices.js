@@ -2,6 +2,7 @@ import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
 import axiosClient from "../config/axiosClient";
 import mockApi from "../mockApi";
+import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
 
 const getOwnedPresentations = async () => {
    // console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
@@ -147,7 +148,7 @@ const savePresentation = async (presentationSaveData, presentationId) => {
 };
 
 const updateSlides = async (presentation_id, slides) => {
-   console.log("[SERVICE] updateSlides");
+   // console.log("[SERVICE] updateSlides");
 
    const data = slides.map((slide, index) => {
       const ordinal_slide_number = index + 1;
@@ -217,10 +218,10 @@ const getListSlideTypeConfig = async () => {
 };
 
 const addPresentationCoOwner = async (presentation_id, email) => {
-   console.log("[SERVICE][PRESENTATION] addPresentationCoOwner: ", {
-      presentation_id,
-      email
-   });
+   // console.log("[SERVICE][PRESENTATION] addPresentationCoOwner: ", {
+   //    presentation_id,
+   //    email
+   // });
 
    try {
       const res = await axiosClient.post(`/presentation-member/add-co-owner`, {
@@ -252,7 +253,7 @@ const deleteMember = async (presentation_id, email) => {
 };
 
 const getPresentationUsers = async (presentation_id) => {
-   console.log("[SERVICE][PRESENTATION] getPresentationUsers: ", { presentation_id });
+   // console.log("[SERVICE][PRESENTATION] getPresentationUsers: ", { presentation_id });
 
    try {
       const res = await axiosClient.get(`/presentation-member/list`, {
@@ -272,7 +273,7 @@ const getPresentationUsers = async (presentation_id) => {
 };
 
 const getPresentationGroups = async (presentation_id) => {
-   console.log("[SERVICE][PRESENTATION] getPresentationGroups: ", { presentation_id });
+   // console.log("[SERVICE][PRESENTATION] getPresentationGroups: ", { presentation_id });
 
    try {
       const res = await axiosClient.get(`/presentation-group/list`, {
@@ -290,7 +291,7 @@ const getPresentationGroups = async (presentation_id) => {
 };
 
 const addGroup = async (presentation_id, group_id) => {
-   console.log("[SERVICE][PRESENTATION] addGroup: ", { presentation_id, group_id });
+   // console.log("[SERVICE][PRESENTATION] addGroup: ", { presentation_id, group_id });
    try {
       const res = await axiosClient.post(`/presentation-group/add-group`, {
          presentation_id,
@@ -305,7 +306,7 @@ const addGroup = async (presentation_id, group_id) => {
 };
 
 const deleteGroup = async (presentation_id, group_id) => {
-   console.log("[SERVICE][PRESENTATION] deleteGroup: ", { presentation_id, group_id });
+   // console.log("[SERVICE][PRESENTATION] deleteGroup: ", { presentation_id, group_id });
    try {
       const res = await axiosClient.post(`/presentation-group/remove-group`, {
          presentation_id,
@@ -313,6 +314,52 @@ const deleteGroup = async (presentation_id, group_id) => {
       });
       console.log("res: ", res);
       return camelcaseKeys(res, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getChatByPresentationCode = async (code, page, limit) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+
+   console.log("[SERVICE][PRESENTATION] getChatByPresentationCode: ", { code, page, limit });
+   try {
+      const res = await axiosClient.get(`/chat/list-message`, {
+         params: {
+            code,
+            page,
+            limit,
+            uid
+         }
+      });
+
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const sendMessage = async (code, message) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+
+   console.log("[SERVICE][PRESENTATION] sendMessage: ", {
+      code,
+      uid,
+      message
+   });
+
+   try {
+      const res = await axiosClient.post(`/chat/new-message`, {
+         code,
+         uid,
+         message
+      });
+
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
       return false;
@@ -341,5 +388,7 @@ export default {
    deleteMember,
 
    addGroup,
-   deleteGroup
+   deleteGroup,
+   getChatByPresentationCode,
+   sendMessage
 };

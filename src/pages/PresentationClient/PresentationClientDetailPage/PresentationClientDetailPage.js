@@ -10,13 +10,22 @@ import { useParams } from "react-router-dom";
 import { usePresentationClientDetailStore } from "./store";
 import Chat from "./components/Chat/Chat";
 import SendQuestionModal from "./components/SendQuestionModal";
+import presentationServices from "../../../services/presentationServices";
+import QuestionModal from "./components/QuestionModal/QuestionModal";
+import { AuthContext } from "../../../providers/auth";
 const cx = classNames.bind(styles);
 
 function PresentationClientDetailPage() {
    const presentationClientDetailStore = usePresentationClientDetailStore();
 
-   const { showChatBox, setShowChatBox, showQuestionModal, setShowQuestionModal } =
-      presentationClientDetailStore;
+   const {
+      showChatBox,
+      setShowChatBox,
+      showQuestionModal,
+      setShowQuestionModal,
+      showSendQuestionModal,
+      setShowSendQuestionModal
+   } = presentationClientDetailStore;
 
    const [chatMessageList, setChatMessageList] = useState([
       {
@@ -61,6 +70,48 @@ function PresentationClientDetailPage() {
       }
    ]);
 
+   const [questionList, setQuestionList] = useState([
+      {
+         userId: 1,
+         content: "Hello World 1"
+      },
+      {
+         userId: 2,
+         content: "Hello World 2"
+      },
+      {
+         userId: 3,
+         content: "Hello World 3"
+      },
+      {
+         userId: 4,
+         content: "Hello World 4"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 5,
+         content: "Hello World 5"
+      },
+      {
+         userId: 1,
+         content: "Hello World 1"
+      }
+   ]);
    const defaultMessage = "Please waiting host change slide";
    const [optionIndex, setOptionIndex] = useState(-1);
    const [options, setOptions] = useState([]);
@@ -69,6 +120,8 @@ function PresentationClientDetailPage() {
 
    const socket = useContext(SocketContext);
    const code = useParams().code;
+
+   const authContext = useContext(AuthContext);
 
    useEffect(() => {
       socket.emit(PRESENTATION_EVENT.JOIN, { code });
@@ -98,6 +151,39 @@ function PresentationClientDetailPage() {
       };
    }, []);
 
+   /////////////
+
+   useEffect(() => {
+      //load data
+      const loadData = async () => {
+         const chatMessageListTemp = await presentationServices.getChatByPresentationCode(code);
+
+         const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
+            const {
+               id,
+               userId,
+               message,
+               uid,
+               user: { avatar, fullName }
+            } = chatMessage;
+            return { id, userId, message, uid, avatar, fullName };
+         });
+
+         setChatMessageList((prev) => [...newChatMessageListTemp]);
+      };
+      loadData();
+   }, []);
+
+   const handleScroll = (e) => {
+      let element = e.target;
+      if (element.scrollTop === 0) {
+         //fetch messages
+         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
+      }
+   };
+
+   /////////////
+
    const handleSubmit = useCallback((name) => {
       socket.emit(PRESENTATION_EVENT.SUBMIT_ANSWER, { code, name });
       setMessage(defaultMessage);
@@ -107,6 +193,22 @@ function PresentationClientDetailPage() {
    const handleSubmitAnswer = () => {
       const name = options[optionIndex]?.name;
       handleSubmit(name);
+   };
+
+   const handleSendMessage = async (message) => {
+      console.log("handleSendMessage: ", message);
+
+      const result = presentationServices.sendMessage(code, message);
+
+      setChatMessageList((prev) => {
+         const newChatMessageList = [...prev];
+
+         const userId = authContext.user?.id;
+         const newChatMessage = { userId, message };
+         newChatMessageList.push(newChatMessage);
+
+         return [...newChatMessageList];
+      });
    };
 
    return (
@@ -150,7 +252,13 @@ function PresentationClientDetailPage() {
                      icon={faMessage}
                      onClick={() => setShowChatBox((prev) => !prev)}
                   />
-                  {showChatBox && <Chat chatMessageList={chatMessageList} />}
+                  {showChatBox && (
+                     <Chat
+                        chatMessageList={chatMessageList}
+                        handleScroll={handleScroll}
+                        handleSendMessage={handleSendMessage}
+                     />
+                  )}
                </div>
                <div className={cx("item")}>
                   <FontAwesomeIcon
@@ -162,7 +270,10 @@ function PresentationClientDetailPage() {
                </div>
             </div>
          </div>
-         <SendQuestionModal show={showQuestionModal} setShow={setShowQuestionModal} />
+         {showSendQuestionModal && (
+            <SendQuestionModal show={showSendQuestionModal} setShow={setShowSendQuestionModal} />
+         )}
+         {showQuestionModal && <QuestionModal questionList={questionList} />}
       </div>
    );
 }

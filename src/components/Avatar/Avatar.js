@@ -14,7 +14,7 @@ function Avatar({ title, src = images.noAvatar, placeholder, className, rounded,
    return (
       <div className={cx("wrapper")} onClick={onClick}>
          <div className={classes} style={size && { width: size, height: size }}>
-            <img className={cx("img")} src={src} placeholder={placeholder} />
+            <img className={cx("img")} src={src || images.noAvatar} placeholder={placeholder} />
          </div>
       </div>
    );
