@@ -158,7 +158,7 @@ function PresentationClientDetailPage() {
    const handleSendMessage = async (message) => {
       console.log("handleSendMessage: ", message);
 
-      const result = presentationServices.sendMessage(code, message);
+      const result = presentationServices.sendMessageByPresentationCode(code, message);
 
       setChatMessageList((prev) => {
          const newChatMessageList = [...prev];

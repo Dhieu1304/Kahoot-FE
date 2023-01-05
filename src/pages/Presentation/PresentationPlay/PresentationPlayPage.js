@@ -34,6 +34,7 @@ import QuestionModal from "./components/QuestionModal";
 import { toast } from "react-toastify";
 import Chat from "./components/Chat";
 import presentationServices from "../../../services/presentationServices";
+import { AuthContext } from "../../../providers/auth";
 
 const cx = classNames.bind(styles);
 
@@ -86,6 +87,7 @@ function PresentationPlayPage() {
    ]);
    const [countOnl, setCountOnl] = useState(0);
 
+   const authContext = useContext(AuthContext);
    const socket = useContext(SocketContext);
    const presentationPlayStore = usePresentationPlayStore();
 
@@ -150,6 +152,7 @@ function PresentationPlayPage() {
    useEffect(() => {
       //load data
       const loadData = async () => {
+         // Chat
          const chatMessageListTemp = await presentationServices.getChatByPresentationId(
             presentationId
          );
@@ -166,6 +169,24 @@ function PresentationPlayPage() {
          });
 
          setChatMessageList((prev) => [...newChatMessageListTemp]);
+
+         // question
+         const questionListTemp = await presentationServices.getChatByPresentationId(
+            presentationId
+         );
+
+         const newQuestionListTemp = questionListTemp?.map((question) => {
+            const {
+               id,
+               userId,
+               message,
+               uid,
+               user: { avatar, fullName }
+            } = question;
+            return { id, userId, message, uid, avatar, fullName };
+         });
+
+         setQuestionList((prev) => [...newQuestionListTemp]);
       };
       loadData();
    }, []);
@@ -214,7 +235,7 @@ function PresentationPlayPage() {
    const handleSendMessage = async (message) => {
       console.log("handleSendMessage: ", message);
 
-      const result = presentationServices.sendMessage(code, message);
+      const result = presentationServices.sendMessageByPresentationId(presentationId, message);
 
       setChatMessageList((prev) => {
          const newChatMessageList = [...prev];

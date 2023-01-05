@@ -368,7 +368,7 @@ const getChatByPresentationId = async (presentation_id, page, limit) => {
    }
 };
 
-const sendMessage = async (code, message) => {
+const sendMessageByPresentationCode = async (code, message) => {
    const uid = getItem(LOCAL_STORAGE.UUID);
 
    console.log("[SERVICE][PRESENTATION] sendMessage: ", {
@@ -382,6 +382,77 @@ const sendMessage = async (code, message) => {
          code,
          uid,
          message
+      });
+
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const sendMessageByPresentationId = async (presentation_id, message) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+
+   console.log("[SERVICE][PRESENTATION] sendMessage: ", {
+      presentation_id,
+      uid,
+      message
+   });
+
+   try {
+      const res = await axiosClient.post(`/chat/new-message`, {
+         presentation_id,
+         uid,
+         message
+      });
+
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getQuestionsByPresentationId = async (presentation_id) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+
+   console.log("[SERVICE][PRESENTATION] getQuestionsByPresentationId: ", {
+      presentation_id,
+      uid
+   });
+   try {
+      const res = await axiosClient.get(`/question/list-question`, {
+         params: {
+            presentation_id,
+            uid
+         }
+      });
+
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const addQuestionByPresentationCode = async (code, question) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+
+   console.log("[SERVICE][PRESENTATION] addQuestionByPresentationCode: ", {
+      code,
+      question,
+      uid
+   });
+
+   try {
+      const res = await axiosClient.post(`/question/new-question`, {
+         code,
+         question,
+         uid
       });
 
       console.log("res: ", res);
@@ -417,5 +488,9 @@ export default {
    deleteGroup,
    getChatByPresentationCode,
    getChatByPresentationId,
-   sendMessage
+   sendMessageByPresentationCode,
+   sendMessageByPresentationId,
+
+   getQuestionsByPresentationId,
+   addQuestionByPresentationCode
 };
