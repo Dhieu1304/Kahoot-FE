@@ -22,7 +22,7 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 import classNames from "classnames/bind";
 import styles from "./PresentationPlayPage.module.scss";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useOutlet, useOutletContext, useParams } from "react-router-dom";
 import { useCallback, useContext, useEffect, useState } from "react";
 
 import { SocketContext } from "../../../providers/socket";
@@ -39,6 +39,9 @@ import { AuthContext } from "../../../providers/auth";
 const cx = classNames.bind(styles);
 
 function PresentationPlayPage() {
+   const xxx = useOutletContext();
+   console.log("xxx: ", xxx);
+
    const [slide, setSlide] = useState();
    const [countSlide, setCountSlide] = useState(1);
    const [result, setResult] = useState([]);

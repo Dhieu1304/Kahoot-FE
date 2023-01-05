@@ -22,12 +22,19 @@ import { useContext } from "react";
 import presentationServices from "../../../services/presentationServices";
 
 function PresentationDetailPage() {
+   console.log("value");
+
    const presentationDetailStore = usePresentationDetailStore();
 
    const socket = useContext(SocketContext);
 
-   const { createSlideModal, changeThemeModal, deleteSlideModal, presentModal } =
-      presentationDetailStore;
+   const {
+      createSlideModal,
+      changeThemeModal,
+      deleteSlideModal,
+      presentModal,
+      showSlideListWhenNotDesktop
+   } = presentationDetailStore;
 
    const isNotDesktop = useMediaQuery({ maxWidth: 992 });
    const params = useParams();

@@ -47,7 +47,7 @@ function Chat({ chatMessageList, handleScroll, handleSendMessage }) {
    }, [isSendNewMessage]);
 
    const handleSendMessageChat = async ({ message }) => {
-      console.log("message: ", message);
+      // console.log("message: ", message);
       setIsSendNewMessage((prev) => !prev);
 
       // In parent component

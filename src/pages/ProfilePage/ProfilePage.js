@@ -74,10 +74,10 @@ function ProfilePage() {
                   src={currentAvatar}
                   size={300}
                   onClick={() => {
-                     console.log(
-                        "avatarInputRef.current in Avatar Click: ",
-                        avatarInputRef.current
-                     );
+                     // console.log(
+                     //    "avatarInputRef.current in Avatar Click: ",
+                     //    avatarInputRef.current
+                     // );
                      avatarInputRef.current.click();
                   }}
                />

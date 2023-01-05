@@ -25,7 +25,7 @@ function SendQuestionModal({ show, setShow, handleSendQuestionForm }) {
    });
 
    const handleSendQuestionModal = async ({ content }) => {
-      console.log("SendQuestionModal: ", { content });
+      // console.log("SendQuestionModal: ", { content });
 
       handleSendQuestionForm && (await handleSendQuestionForm(content));
 
