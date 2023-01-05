@@ -27,48 +27,7 @@ function PresentationClientDetailPage() {
       setShowSendQuestionModal
    } = presentationClientDetailStore;
 
-   const [chatMessageList, setChatMessageList] = useState([
-      {
-         userId: 1,
-         content: "Hello World 1"
-      },
-      {
-         userId: 2,
-         content: "Hello World 2"
-      },
-      {
-         userId: 3,
-         content: "Hello World 3"
-      },
-      {
-         userId: 4,
-         content: "Hello World 4"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 1,
-         content: "Hello World 1"
-      }
-   ]);
+   const [chatMessageList, setChatMessageList] = useState([]);
 
    const [questionList, setQuestionList] = useState([
       {
@@ -174,14 +133,6 @@ function PresentationClientDetailPage() {
       loadData();
    }, []);
 
-   const handleScroll = (e) => {
-      let element = e.target;
-      if (element.scrollTop === 0) {
-         //fetch messages
-         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
-      }
-   };
-
    /////////////
 
    const handleSubmit = useCallback((name) => {
@@ -193,6 +144,15 @@ function PresentationClientDetailPage() {
    const handleSubmitAnswer = () => {
       const name = options[optionIndex]?.name;
       handleSubmit(name);
+   };
+
+   ////////////////////////
+   const handleScroll = (e) => {
+      let element = e.target;
+      if (element.scrollTop === 0) {
+         //fetch messages
+         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
+      }
    };
 
    const handleSendMessage = async (message) => {

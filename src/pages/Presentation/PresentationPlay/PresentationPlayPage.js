@@ -33,6 +33,7 @@ import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlide
 import QuestionModal from "./components/QuestionModal";
 import { toast } from "react-toastify";
 import Chat from "./components/Chat";
+import presentationServices from "../../../services/presentationServices";
 
 const cx = classNames.bind(styles);
 
@@ -40,48 +41,7 @@ function PresentationPlayPage() {
    const [slide, setSlide] = useState();
    const [countSlide, setCountSlide] = useState(1);
    const [result, setResult] = useState([]);
-   const [chatMessageList, setChatMessageList] = useState([
-      {
-         userId: 1,
-         content: "Hello World 1"
-      },
-      {
-         userId: 2,
-         content: "Hello World 2"
-      },
-      {
-         userId: 3,
-         content: "Hello World 3"
-      },
-      {
-         userId: 4,
-         content: "Hello World 4"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 1,
-         content: "Hello World 1"
-      }
-   ]);
+   const [chatMessageList, setChatMessageList] = useState([]);
    const [questionList, setQuestionList] = useState([
       {
          userId: 1,
@@ -185,6 +145,33 @@ function PresentationPlayPage() {
       };
    }, []);
 
+   /////////////
+
+   useEffect(() => {
+      //load data
+      const loadData = async () => {
+         const chatMessageListTemp = await presentationServices.getChatByPresentationId(
+            presentationId
+         );
+
+         const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
+            const {
+               id,
+               userId,
+               message,
+               uid,
+               user: { avatar, fullName }
+            } = chatMessage;
+            return { id, userId, message, uid, avatar, fullName };
+         });
+
+         setChatMessageList((prev) => [...newChatMessageListTemp]);
+      };
+      loadData();
+   }, []);
+
+   /////////////
+
    const handleFullscreen = useFullScreenHandle();
 
    const handleChangeSlideSocket = useCallback((presentation_id, ordinal_slide_number) => {
@@ -213,6 +200,31 @@ function PresentationPlayPage() {
          default:
             break;
       }
+   };
+
+   ////////////////////////
+   const handleScroll = (e) => {
+      let element = e.target;
+      if (element.scrollTop === 0) {
+         //fetch messages
+         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
+      }
+   };
+
+   const handleSendMessage = async (message) => {
+      console.log("handleSendMessage: ", message);
+
+      const result = presentationServices.sendMessage(code, message);
+
+      setChatMessageList((prev) => {
+         const newChatMessageList = [...prev];
+
+         const userId = authContext.user?.id;
+         const newChatMessage = { userId, message };
+         newChatMessageList.push(newChatMessage);
+
+         return [...newChatMessageList];
+      });
    };
 
    const renderContentBySlideTypeId = () => {
@@ -336,7 +348,13 @@ function PresentationPlayPage() {
                                  }}
                               />
 
-                              {showChatBox && <Chat chatMessageList={chatMessageList} />}
+                              {showChatBox && (
+                                 <Chat
+                                    chatMessageList={chatMessageList}
+                                    handleScroll={handleScroll}
+                                    handleSendMessage={handleSendMessage}
+                                 />
+                              )}
                            </div>
                            <div className={cx("item")}>
                               <FontAwesomeIcon

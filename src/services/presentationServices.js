@@ -342,6 +342,32 @@ const getChatByPresentationCode = async (code, page, limit) => {
    }
 };
 
+const getChatByPresentationId = async (presentation_id, page, limit) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+
+   console.log("[SERVICE][PRESENTATION] getChatByPresentationId: ", {
+      presentation_id,
+      page,
+      limit
+   });
+   try {
+      const res = await axiosClient.get(`/chat/list-message`, {
+         params: {
+            presentation_id,
+            page,
+            limit,
+            uid
+         }
+      });
+
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const sendMessage = async (code, message) => {
    const uid = getItem(LOCAL_STORAGE.UUID);
 
@@ -390,5 +416,6 @@ export default {
    addGroup,
    deleteGroup,
    getChatByPresentationCode,
+   getChatByPresentationId,
    sendMessage
 };

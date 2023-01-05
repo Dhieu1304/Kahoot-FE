@@ -7,19 +7,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Avatar from "../../../../../components/Avatar/Avatar";
 import Button from "../../../../../components/Button";
 import { AuthContext } from "../../../../../providers/auth";
+import { getItem, LOCAL_STORAGE } from "../../../../../utils/localStorage";
 import { usePresentationClientDetailStore, usePresentationPlayStore } from "../../store";
 
 import styles from "./Chat.module.scss";
 const cx = classNames.bind(styles);
 
-function Chat({ show, setShow, chatMessageList, handleScroll }) {
+function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage }) {
    const {
       watch,
       control,
@@ -32,24 +33,29 @@ function Chat({ show, setShow, chatMessageList, handleScroll }) {
          message: ""
       }
    });
-
-   const bottomRef = useRef(null);
-
-   const authContext = useContext(AuthContext);
    const presentationPlayStore = usePresentationPlayStore();
 
    const { setShowChatBox } = presentationPlayStore;
 
+   const bottomRef = useRef(null);
+   const [isSendNewMessage, setIsSendNewMessage] = useState(false);
+
+   const authContext = useContext(AuthContext);
+
    useEffect(() => {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-      // bottomRef.current?.scrollTop == bottomRef.scrollHeight;
-      // objDiv.scrollTop = objDiv.scrollHeight;
-   }, []);
+   }, [isSendNewMessage]);
 
-   const handleSendMessage = async ({ message }) => {
+   const handleSendMessageChat = async ({ message }) => {
       console.log("message: ", message);
+      setIsSendNewMessage((prev) => !prev);
+
+      // In parent component
+      handleSendMessage && (await handleSendMessage(message));
       reset();
    };
+
+   const currentUID = getItem(LOCAL_STORAGE.UUID);
 
    return (
       <div className={cx("container")}>
@@ -67,10 +73,10 @@ function Chat({ show, setShow, chatMessageList, handleScroll }) {
          <div className={cx("list-container")} onScroll={handleScroll}>
             <div className={cx("list")}>
                {chatMessageList.map((chatMessage, index) =>
-                  authContext.user.id === chatMessage.userId ? (
+                  authContext.user.id === chatMessage.userId || currentUID === chatMessage.uid ? (
                      <div key={index} className={cx("item", { right: true })}>
                         <div className={cx("message")}>
-                           <span className={cx("text")}>{chatMessage.content}</span>
+                           <span className={cx("text")}>{chatMessage?.message}</span>
                         </div>
                         <Avatar
                            title={"Avatar"}
@@ -82,11 +88,17 @@ function Chat({ show, setShow, chatMessageList, handleScroll }) {
                      </div>
                   ) : (
                      <div key={index} className={cx("item", { left: true })}>
-                        <Avatar title={"Avatar"} placeholder={"Avatar"} size={25} rounded />
+                        <Avatar
+                           title={"Avatar"}
+                           placeholder={"Avatar"}
+                           size={25}
+                           rounded
+                           src={chatMessage?.avatar}
+                        />
                         <div className={cx("message")}>
-                           <span className={cx("text")}>{chatMessage.content}</span>
+                           <span className={cx("text")}>{chatMessage?.message}</span>
                            <div className={cx("message-user-name")}>
-                              <span>Sang</span>
+                              <span>{chatMessage?.fullName}</span>
                            </div>
                         </div>
                      </div>
@@ -117,7 +129,7 @@ function Chat({ show, setShow, chatMessageList, handleScroll }) {
                            size="1x"
                            icon={faPlay}
                            className={cx("send-icon")}
-                           onClick={handleSubmit(handleSendMessage)}
+                           onClick={handleSubmit(handleSendMessageChat)}
                         />
                      )}
                   </>

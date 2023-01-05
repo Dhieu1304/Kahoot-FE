@@ -33,14 +33,14 @@ function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage 
          message: ""
       }
    });
+   const presentationClientDetailStore = usePresentationClientDetailStore();
+
+   const { setShowChatBox } = presentationClientDetailStore;
 
    const bottomRef = useRef(null);
    const [isSendNewMessage, setIsSendNewMessage] = useState(false);
 
    const authContext = useContext(AuthContext);
-   const presentationClientDetailStore = usePresentationClientDetailStore();
-
-   const { setShowChatBox } = presentationClientDetailStore;
 
    useEffect(() => {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
