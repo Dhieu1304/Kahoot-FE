@@ -41,8 +41,6 @@ import PresentationManageUser from "./pages/Presentation/PresentationManage/Pres
 import PresentationManageReport from "./pages/Presentation/PresentationManage/PresentationManageReport";
 import PresentationManageGroup from "./pages/Presentation/PresentationManage/PresentationManageGroup";
 
-import PresentationPresentWrapper from "./pages/Presentation/PresentationPresentWrapper";
-
 import * as localStorageApp from "./utils/localStorage";
 
 function App() {
@@ -154,7 +152,7 @@ function App() {
                            }
                         />
 
-                        <Route path=":id" element={<PresentationPresentWrapper />}>
+                        <Route path=":id">
                            <Route path="" element={<h2>No outlet</h2>} />
                            <Route
                               path="user"

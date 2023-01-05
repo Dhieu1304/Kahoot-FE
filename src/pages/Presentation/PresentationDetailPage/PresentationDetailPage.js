@@ -20,9 +20,10 @@ const cx = classNames.bind(styles);
 import { usePresentationDetailStore } from "./store";
 import { useContext } from "react";
 import presentationServices from "../../../services/presentationServices";
+import { PresentationContext } from "../../../providers/presentation";
 
 function PresentationDetailPage() {
-   console.log("value");
+   const presentContext = useContext(PresentationContext);
 
    const presentationDetailStore = usePresentationDetailStore();
 
@@ -151,7 +152,11 @@ function PresentationDetailPage() {
       const result = await presentationServices.presentSlideShow(presentationId);
       if (result) {
          console.log("handleContinuePresent: ", result);
-         // navigate(`/presentation/${presentationId}/play`);
+         presentContext.setCountSlide(result.count_slide);
+         presentContext.setOrdinalSlideNumber(result.ordinal_slide_number);
+         presentContext.setJoinHost(result.join_host);
+         //presentContext.setSlide(result.slide);
+         navigate(`/presentation/${presentationId}/play`);
       }
    };
 

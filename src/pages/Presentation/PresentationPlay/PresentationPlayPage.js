@@ -35,15 +35,15 @@ import { toast } from "react-toastify";
 import Chat from "./components/Chat";
 import presentationServices from "../../../services/presentationServices";
 import { AuthContext } from "../../../providers/auth";
+import { PresentationContext } from "../../../providers/presentation";
 
 const cx = classNames.bind(styles);
 
 function PresentationPlayPage() {
-   const xxx = useOutletContext();
-   console.log("xxx: ", xxx);
-
+   const presentContext = useContext(PresentationContext);
+   console.log("presentContext: ", presentContext);
    const [slide, setSlide] = useState();
-   const [countSlide, setCountSlide] = useState(1);
+   const [countSlide, setCountSlide] = useState(presentContext.countSlide || 1);
    const [result, setResult] = useState([]);
    const [chatMessageList, setChatMessageList] = useState([]);
    const [questionList, setQuestionList] = useState([]);
@@ -78,10 +78,10 @@ function PresentationPlayPage() {
       });
       // DEBUG
 
-      socket.on(PRESENTATION_EVENT.SLIDE_DETAIL, (data) => {
-         console.log(">>>>>>>>>>SLIDE_DETAIL: ", data);
-         setCountSlide(data?.count_slide || 1);
-      });
+      // socket.on(PRESENTATION_EVENT.SLIDE_DETAIL, (data) => {
+      //    console.log(">>>>>>>>>>SLIDE_DETAIL: ", data);
+      //    setCountSlide(data?.count_slide || 1);
+      // });
       socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
          setCountOnl(countOnl);
       });
@@ -104,7 +104,7 @@ function PresentationPlayPage() {
          socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
-         socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
+         // socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
          socket.off(PRESENTATION_EVENT.STOP_PRESENT);
       };
    }, []);
@@ -118,6 +118,18 @@ function PresentationPlayPage() {
          const chatMessageListTemp = await presentationServices.getChatByPresentationId(
             presentationId
          );
+
+         const slideRes = await presentationServices.getSlideAndDataPresentation(
+            presentationId,
+            presentContext.ordinalSlideNumber
+         );
+         console.log("slideRes: ", slideRes);
+         if (slideRes) {
+            setSlide(slideRes);
+            if (slideRes.slide_type_id === 1) {
+               setResult(slideRes.body);
+            }
+         }
 
          const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
             const {
