@@ -486,6 +486,26 @@ const addQuestionByPresentationCode = async (code, question) => {
    }
 };
 
+const presentSlideShow = async (presentation_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation/present`, { presentation_id });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const deleteOldSession = async (presentation_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation/delete-session`, { presentation_id });
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -517,5 +537,9 @@ export default {
    getQuestionsByPresentationId,
    getQuestionsByPresentationCode,
 
-   addQuestionByPresentationCode
+   addQuestionByPresentationCode,
+
+   // present
+   presentSlideShow,
+   deleteOldSession
 };

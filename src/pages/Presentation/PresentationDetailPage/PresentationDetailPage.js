@@ -19,6 +19,7 @@ const cx = classNames.bind(styles);
 
 import { usePresentationDetailStore } from "./store";
 import { useContext } from "react";
+import presentationServices from "../../../services/presentationServices";
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
@@ -140,16 +141,24 @@ function PresentationDetailPage() {
 
    const handleContinuePresent = async () => {
       const presentationId = presentationDetailStore.state.presentation?.id;
-      const slideId = 1;
-      handlePresent(presentationId, slideId);
-      navigate(`/presentation/${presentationId}/play`);
+      const result = await presentationServices.presentSlideShow(presentationId);
+      if (result) {
+         console.log("handleContinuePresent: ", result);
+         // navigate(`/presentation/${presentationId}/play`);
+      }
    };
 
    const handleResetPresent = async () => {
       const presentationId = presentationDetailStore.state.presentation?.id;
-      const slideId = 1;
-      handlePresent(presentationId, slideId);
-      navigate(`/presentation/${presentationId}/play`);
+      const deleteSession = await presentationServices.deleteOldSession(presentationId);
+      console.log(deleteSession);
+      if (deleteSession) {
+         const result = await presentationServices.presentSlideShow(presentationId);
+         if (result) {
+            console.log("handleContinuePresent: ", result);
+            // navigate(`/presentation/${presentationId}/play`);
+         }
+      }
    };
 
    const handlePresentModal = async () => {};
