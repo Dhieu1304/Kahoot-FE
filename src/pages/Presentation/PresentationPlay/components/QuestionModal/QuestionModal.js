@@ -55,33 +55,20 @@ function QuestionModal({ show, setShow, questionList }) {
                   onClick={() => {
                      if (questionIndex > 0) setQuestionIndex((index) => index - 1);
                   }}
+                  className={cx("change-question-icon", {
+                     disable: questionIndex <= 0
+                  })}
                />
                {questionList && questionList.length > 0 ? (
-                  <>
+                  <div className={cx("question-current")}>
                      <div className={cx("page-number")}>
                         {questionIndex + 1} / {questionList.length}
                      </div>
                      <p className={cx("asker")}>{questionList[questionIndex]?.user?.fullName}</p>
                      <p className={cx("content")}>{questionList[questionIndex]?.question}</p>
-                  </>
+                  </div>
                ) : (
                   <span className={cx("no-question")}>No question</span>
-               )}
-
-               {answeredIndexList.includes(questionIndex) ? (
-                  <div>
-                     <Button title={"Answered"} big basicTeal rounded />
-                  </div>
-               ) : (
-                  <div>
-                     <Button
-                        title={"Press to mark as answered"}
-                        big
-                        basicBlu
-                        rounded
-                        onClick={handleAnswer}
-                     />
-                  </div>
                )}
 
                <FontAwesomeIcon
@@ -91,7 +78,33 @@ function QuestionModal({ show, setShow, questionList }) {
                      if (questionIndex < questionList.length - 1)
                         setQuestionIndex((index) => index + 1);
                   }}
+                  className={cx("change-question-icon", {
+                     disable: questionIndex >= questionList.length - 1
+                  })}
                />
+
+               {answeredIndexList.includes(questionIndex) ? (
+                  <div>
+                     <Button
+                        title={"Answered"}
+                        big
+                        basicTeal
+                        rounded
+                        className={cx("marked-btn")}
+                     />
+                  </div>
+               ) : (
+                  <div>
+                     <Button
+                        title={"Press to mark as answered"}
+                        big
+                        basicBlu
+                        rounded
+                        onClick={handleAnswer}
+                        className={cx("mark-btn")}
+                     />
+                  </div>
+               )}
             </div>
          </div>
       </div>

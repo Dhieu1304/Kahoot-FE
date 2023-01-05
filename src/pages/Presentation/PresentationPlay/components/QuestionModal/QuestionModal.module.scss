@@ -15,14 +15,61 @@
    .container {
       width: 80%;
       height: 80%;
-      background-color: aqua;
+      background-color: white;
+      border: 1px solid rgba(0, 0, 0, 0.4);
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .question {
+         width: 60%;
+
+         .question-current {
+            padding: 4rem;
+
+            .page-number {
+            }
+
+            .asker {
+               font-size: 2rem;
+               color: rgba(0, 0, 0, 0.4);
+            }
+
+            .content {
+               font-size: 6rem;
+            }
+         }
+
+         .change-question-icon {
+            font-size: 2rem;
+            cursor: pointer;
+
+            &.disable {
+               color: rgba(0, 0, 0, 0.2);
+               cursor: default;
+            }
+         }
+      }
 
       .icon-x {
          position: absolute;
          top: 2rem;
          right: 2rem;
          cursor: pointer;
+         &:hover {
+            color: red;
+         }
+      }
+
+      .marked-btn {
+         margin: 2rem 0;
+         border-radius: 2rem;
+      }
+      .mark-btn {
+         margin: 2rem 0;
+         border: 1px solid rgba(0, 0, 0, 0.4);
+         border-radius: 2rem;
       }
    }
 }
