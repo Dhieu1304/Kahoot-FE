@@ -5,6 +5,7 @@ import {
    faPaperPlane,
    faPlay,
    faRightToBracket,
+   faThumbsUp,
    faX
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +15,7 @@ import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Avatar from "../../../../../components/Avatar/Avatar";
 import Button from "../../../../../components/Button";
+import Modal from "../../../../../components/Modal";
 import { AuthContext } from "../../../../../providers/auth";
 import { usePresentationClientDetailStore } from "../../store";
 
@@ -29,72 +31,24 @@ function QuestionModal({ show, setShow, questionList }) {
    const [questionIndex, setQuestionIndex] = useState(0);
    const [answeredIndexList, setAnsweredIndexList] = useState([]);
 
-   const handleAnswer = () => {
-      setAnsweredIndexList((prev) => {
-         const newAnsweredIndexList = [...prev];
-         newAnsweredIndexList.push(questionIndex);
-         return newAnsweredIndexList;
-      });
-   };
-
+   console.log("questionList: ", {
+      show,
+      setShow,
+      questionList
+   });
    return (
-      <div className={cx("wrapper")}>
+      <Modal title={"Question"} show={show} setShow={setShow}>
          <div className={cx("container")}>
-            <FontAwesomeIcon
-               size="1x"
-               icon={faX}
-               className={cx("icon-x")}
-               onClick={() => {
-                  setShowQuestionModal(false);
-               }}
-            />
-
-            <div className={cx("question")}>
-               <FontAwesomeIcon
-                  size="1x"
-                  icon={faArrowUp}
-                  onClick={() => {
-                     if (questionIndex > 0) setQuestionIndex((index) => index - 1);
-                  }}
-               />
-               {questionList && questionList.length > 0 ? (
-                  <>
-                     <div className={cx("page-number")}>
-                        {questionIndex + 1} / {questionList.length}
-                     </div>
-                     <p className={cx("content")}>{questionList[questionIndex].content}</p>
-                  </>
-               ) : (
-                  <span className={cx("no-question")}>No question</span>
-               )}
-
-               {answeredIndexList.includes(questionIndex) ? (
-                  <div>
-                     <Button title={"Answered"} big basicTeal rounded />
+            <div className={cx("list")}>
+               {questionList.map((question, index) => (
+                  <div key={index} className={cx("item")}>
+                     <span>{question?.content}</span>
+                     <FontAwesomeIcon size="1x" icon={faThumbsUp} color="blue" />
                   </div>
-               ) : (
-                  <div>
-                     <Button
-                        title={"Press to mark as answered"}
-                        big
-                        basicBlu
-                        rounded
-                        onClick={handleAnswer}
-                     />
-                  </div>
-               )}
-
-               <FontAwesomeIcon
-                  size="1x"
-                  icon={faArrowDown}
-                  onClick={() => {
-                     if (questionIndex < questionList.length - 1)
-                        setQuestionIndex((index) => index + 1);
-                  }}
-               />
+               ))}
             </div>
          </div>
-      </div>
+      </Modal>
    );
 }
 

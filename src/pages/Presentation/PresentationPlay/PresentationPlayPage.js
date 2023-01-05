@@ -43,48 +43,7 @@ function PresentationPlayPage() {
    const [countSlide, setCountSlide] = useState(1);
    const [result, setResult] = useState([]);
    const [chatMessageList, setChatMessageList] = useState([]);
-   const [questionList, setQuestionList] = useState([
-      {
-         userId: 1,
-         content: "Hello World 1"
-      },
-      {
-         userId: 2,
-         content: "Hello World 2"
-      },
-      {
-         userId: 3,
-         content: "Hello World 3"
-      },
-      {
-         userId: 4,
-         content: "Hello World 4"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 1,
-         content: "Hello World 1"
-      }
-   ]);
+   const [questionList, setQuestionList] = useState([]);
    const [countOnl, setCountOnl] = useState(0);
 
    const authContext = useContext(AuthContext);

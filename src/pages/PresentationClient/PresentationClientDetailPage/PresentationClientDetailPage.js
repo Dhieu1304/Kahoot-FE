@@ -1,4 +1,4 @@
-import { faCircle, faComment, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faComment, faMessage, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -228,12 +228,26 @@ function PresentationClientDetailPage() {
                      onClick={() => setShowQuestionModal((prev) => !prev)}
                   />
                </div>
+               <div className={cx("item")}>
+                  <FontAwesomeIcon
+                     className={cx("icon")}
+                     size={"1x"}
+                     icon={faQuestion}
+                     onClick={() => setShowSendQuestionModal((prev) => !prev)}
+                  />
+               </div>
             </div>
          </div>
          {showSendQuestionModal && (
             <SendQuestionModal show={showSendQuestionModal} setShow={setShowSendQuestionModal} />
          )}
-         {showQuestionModal && <QuestionModal questionList={questionList} />}
+         {showQuestionModal && (
+            <QuestionModal
+               show={showQuestionModal}
+               setShow={setShowQuestionModal}
+               questionList={questionList}
+            />
+         )}
       </div>
    );
 }
