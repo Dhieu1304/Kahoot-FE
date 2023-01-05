@@ -118,12 +118,12 @@ function PresentationClientDetailPage() {
       let element = e.target;
       if (element.scrollTop === 0) {
          //fetch messages
-         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
+         // console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
       }
    };
 
    const handleSendMessage = async (message) => {
-      console.log("handleSendMessage: ", message);
+      // console.log("handleSendMessage: ", message);
 
       const result = presentationServices.sendMessageByPresentationCode(code, message);
 

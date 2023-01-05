@@ -17,11 +17,11 @@ import styles from "./QuestionModal.module.scss";
 const cx = classNames.bind(styles);
 
 function QuestionModal({ show, setShow, questionList }) {
-   console.log("questionList: ", {
-      show,
-      setShow,
-      questionList
-   });
+   // console.log("questionList: ", {
+   //    show,
+   //    setShow,
+   //    questionList
+   // });
 
    const [isLiked, setIsLike] = useState(false);
 
