@@ -20,7 +20,7 @@ import { usePresentationClientDetailStore } from "../../store";
 import styles from "./Chat.module.scss";
 const cx = classNames.bind(styles);
 
-function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage }) {
+function Chat({ chatMessageList, handleScroll, handleSendMessage }) {
    const {
       watch,
       control,
@@ -60,7 +60,7 @@ function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage 
    return (
       <div className={cx("container")}>
          <div className={cx("header")}>
-            <span className={cx("name")}>TÊN CỦA PRESENTATION</span>
+            <span className={cx("name")}>Chat box</span>
             <FontAwesomeIcon
                size="1x"
                icon={faX}

@@ -2,11 +2,14 @@
    position: absolute;
 
    bottom: 3rem;
-   right: 0;
+   right: 50%;
    //    left: 50%;
    z-index: 2000;
 
-   background-color: rgb(0, 255, 255, 0.5);
+   background-color: rgba(36, 37, 38);
+   border: 0.5px rgba(255, 255, 255, 0.6);
+   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
    width: 300px;
    height: 400px;
    border-radius: 1rem;
@@ -27,10 +30,17 @@
 
       .name {
          cursor: pointer;
+         color: white;
+         font-weight: 700;
       }
 
       .icon {
          cursor: pointer;
+         color: white;
+
+         &:hover {
+            color: rgba(0, 132, 255);
+         }
       }
    }
 
@@ -65,19 +75,25 @@
             width: 100%;
             display: flex;
             align-items: center;
-            padding: 1rem 0.5rem;
+            padding: 0;
             margin-bottom: 1rem;
 
             .message {
                position: relative;
                border-radius: 2rem;
-               background-color: azure;
-               color: red;
-               padding: 0.2rem 0.5rem;
+               background-color: rgba(0, 132, 255);
+               color: white;
+               padding: 0.4rem 0.8rem;
+
+               max-width: 60%;
+               // inline-size: 150px;
+               overflow-wrap: break-word;
+               text-align: left;
 
                cursor: pointer;
                .text {
                   font-size: 1.2rem;
+                  line-height: 1.2rem;
                }
             }
          }
@@ -105,6 +121,7 @@
          }
          .item.right {
             justify-content: flex-end;
+            margin-bottom: 0.8rem;
 
             .message {
                margin-right: 0.5rem;
@@ -130,14 +147,17 @@
          border: 1px solid rgb(0, 0, 0, 0.2);
          border-radius: 5rem;
          align-self: stretch;
-         padding: 1rem;
+         padding: 0.5rem 1rem;
          background-color: white;
 
          display: flex;
          justify-content: center;
          align-items: center;
+         overflow: hidden;
 
          .chat-input-field {
+            // margin-top: 1rem;
+            transform: translateY(25%);
             flex: 1;
             border: none;
             outline: none;
@@ -148,6 +168,7 @@
          }
       }
       .send-icon {
+         color: rgba(51, 51, 51);
          padding: 1rem;
          cursor: pointer;
       }

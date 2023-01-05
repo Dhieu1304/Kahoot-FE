@@ -10,7 +10,7 @@ import { AuthContext } from "../../../../providers/auth";
 import { getGroupsByJoinedUserId, getGroupsByOwnUserId } from "../../../../services/groupService";
 import presentationServices from "../../../../services/presentationServices";
 
-function SendQuestionModal({ show, setShow }) {
+function SendQuestionModal({ show, setShow, handleSendQuestionForm }) {
    const {
       register,
       handleSubmit,
@@ -26,6 +26,8 @@ function SendQuestionModal({ show, setShow }) {
 
    const handleSendQuestionModal = async ({ content }) => {
       console.log("SendQuestionModal: ", { content });
+
+      handleSendQuestionForm && (await handleSendQuestionForm(content));
 
       reset();
       setShow(false);
@@ -47,6 +49,7 @@ function SendQuestionModal({ show, setShow }) {
             {...register("content", {
                required: "Required"
             })}
+            multiple
             error={errors.content}
          />
       </Modal>

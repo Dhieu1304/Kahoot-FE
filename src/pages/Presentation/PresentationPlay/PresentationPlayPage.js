@@ -130,22 +130,13 @@ function PresentationPlayPage() {
          setChatMessageList((prev) => [...newChatMessageListTemp]);
 
          // question
-         const questionListTemp = await presentationServices.getChatByPresentationId(
+         const questionListTemp = await presentationServices.getQuestionsByPresentationId(
             presentationId
          );
 
-         const newQuestionListTemp = questionListTemp?.map((question) => {
-            const {
-               id,
-               userId,
-               message,
-               uid,
-               user: { avatar, fullName }
-            } = question;
-            return { id, userId, message, uid, avatar, fullName };
-         });
+         // console.log("questionListTemp: ", questionListTemp);
 
-         setQuestionList((prev) => [...newQuestionListTemp]);
+         setQuestionList((prev) => [...questionListTemp]);
       };
       loadData();
    }, []);

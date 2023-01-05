@@ -61,7 +61,8 @@ function QuestionModal({ show, setShow, questionList }) {
                      <div className={cx("page-number")}>
                         {questionIndex + 1} / {questionList.length}
                      </div>
-                     <p className={cx("content")}>{questionList[questionIndex].content}</p>
+                     <p className={cx("asker")}>{questionList[questionIndex]?.user?.fullName}</p>
+                     <p className={cx("content")}>{questionList[questionIndex]?.question}</p>
                   </>
                ) : (
                   <span className={cx("no-question")}>No question</span>

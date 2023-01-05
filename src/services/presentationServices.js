@@ -439,6 +439,29 @@ const getQuestionsByPresentationId = async (presentation_id) => {
    }
 };
 
+const getQuestionsByPresentationCode = async (code) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+
+   console.log("[SERVICE][PRESENTATION] getQuestionsByPresentationCode: ", {
+      code,
+      uid
+   });
+   try {
+      const res = await axiosClient.get(`/question/list-question`, {
+         params: {
+            code,
+            uid
+         }
+      });
+
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const addQuestionByPresentationCode = async (code, question) => {
    const uid = getItem(LOCAL_STORAGE.UUID);
 
@@ -492,5 +515,7 @@ export default {
    sendMessageByPresentationId,
 
    getQuestionsByPresentationId,
+   getQuestionsByPresentationCode,
+
    addQuestionByPresentationCode
 };

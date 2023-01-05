@@ -6,7 +6,7 @@ import Button from "../../../components/Button";
 import styles from "./PresentationClientDetailPage.module.scss";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT } from "../../../providers/socket/socket.constant";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { usePresentationClientDetailStore } from "./store";
 import Chat from "./components/Chat/Chat";
 import SendQuestionModal from "./components/SendQuestionModal";
@@ -29,48 +29,7 @@ function PresentationClientDetailPage() {
 
    const [chatMessageList, setChatMessageList] = useState([]);
 
-   const [questionList, setQuestionList] = useState([
-      {
-         userId: 1,
-         content: "Hello World 1"
-      },
-      {
-         userId: 2,
-         content: "Hello World 2"
-      },
-      {
-         userId: 3,
-         content: "Hello World 3"
-      },
-      {
-         userId: 4,
-         content: "Hello World 4"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 5,
-         content: "Hello World 5"
-      },
-      {
-         userId: 1,
-         content: "Hello World 1"
-      }
-   ]);
+   const [questionList, setQuestionList] = useState([]);
    const defaultMessage = "Please waiting host change slide";
    const [optionIndex, setOptionIndex] = useState(-1);
    const [options, setOptions] = useState([]);
@@ -129,6 +88,14 @@ function PresentationClientDetailPage() {
          });
 
          setChatMessageList((prev) => [...newChatMessageListTemp]);
+
+         // question:
+
+         const questionListTemp = await presentationServices.getQuestionsByPresentationCode(code);
+
+         // console.log("questionListTemp: ", questionListTemp);
+
+         setQuestionList((prev) => [...questionListTemp]);
       };
       loadData();
    }, []);
@@ -169,6 +136,12 @@ function PresentationClientDetailPage() {
 
          return [...newChatMessageList];
       });
+   };
+
+   const handleSendQuestion = async (content) => {
+      console.log("content: ", content);
+
+      const result = presentationServices.addQuestionByPresentationCode(code, content);
    };
 
    return (
@@ -239,7 +212,11 @@ function PresentationClientDetailPage() {
             </div>
          </div>
          {showSendQuestionModal && (
-            <SendQuestionModal show={showSendQuestionModal} setShow={setShowSendQuestionModal} />
+            <SendQuestionModal
+               show={showSendQuestionModal}
+               setShow={setShowSendQuestionModal}
+               handleSendQuestionForm={handleSendQuestion}
+            />
          )}
          {showQuestionModal && (
             <QuestionModal
