@@ -218,6 +218,7 @@ function App() {
                            }
                         ></Route>
                      </Route>
+                     <Route path={"*"} element={<DefaultAuthPage />} />
                   </Routes>
                ) : (
                   <Routes>
