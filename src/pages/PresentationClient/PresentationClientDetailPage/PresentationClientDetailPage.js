@@ -5,7 +5,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import styles from "./PresentationClientDetailPage.module.scss";
 import { SocketContext } from "../../../providers/socket";
-import { PRESENTATION_EVENT } from "../../../providers/socket/socket.constant";
+import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePresentationClientDetailStore } from "./store";
 import Chat from "./components/Chat/Chat";
@@ -30,11 +30,10 @@ function PresentationClientDetailPage() {
    const [chatMessageList, setChatMessageList] = useState([]);
 
    const [questionList, setQuestionList] = useState([]);
-   const defaultMessage = "Please waiting host change slide";
    const [optionIndex, setOptionIndex] = useState(-1);
    const [options, setOptions] = useState([]);
    const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
-   const [message, setMessage] = useState(defaultMessage);
+   const [message, setMessage] = useState("Please wait the host present slide");
 
    const socket = useContext(SocketContext);
    const code = useParams().code;
@@ -42,9 +41,25 @@ function PresentationClientDetailPage() {
    const authContext = useContext(AuthContext);
 
    useEffect(() => {
+      // DEBUG
+      socket.on(SOCKET_EVENT.ERROR, (message) => {
+         console.error(message);
+      });
+      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
+         console.info(message);
+      });
+      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
+         console.log(message);
+      });
+      // DEBUG
+
       socket.emit(PRESENTATION_EVENT.JOIN, { code });
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
-         switch (data.slide_type_id) {
+         if (!data) {
+            setMessage("Invalid slide");
+            return;
+         }
+         switch (data?.slide_type_id) {
             case 1: // multi choice
                setOptions(data.body);
                setIsSubmitSuccess(false);
@@ -69,13 +84,41 @@ function PresentationClientDetailPage() {
       };
    }, []);
 
-   /////////////
-
    useEffect(() => {
-      //load data
+      console.log("Load data useEffect");
       const loadData = async () => {
-         const chatMessageListTemp = await presentationServices.getChatByPresentationCode(code);
+         const clientJoin = await presentationServices.clientJoinPresentationByCode(code);
+         console.log("clientJoin: ", clientJoin);
+         if (!clientJoin.status) {
+            setMessage(clientJoin.message);
+            setIsSubmitSuccess(true);
+            return;
+         }
+         socket.emit(PRESENTATION_EVENT.JOIN_CLIENT, { data: clientJoin.data.join_client });
+         if (!clientJoin.data.slide) {
+            setMessage("Please wait the host present slide");
+            setIsSubmitSuccess(true);
+            return;
+         }
+         switch (clientJoin?.data.slide.slide_type_id) {
+            case 1: // multi choice
+               setOptions(clientJoin.data.slide.body);
+               setIsSubmitSuccess(false);
+               break;
+            case 2: // Heading
+               setMessage("Slide with Heading");
+               setIsSubmitSuccess(true);
+               break;
+            case 3: // Paragraph
+               setMessage("Slide with Paragraph");
+               setIsSubmitSuccess(true);
+               break;
+            default:
+               setMessage(clientJoin.data.slide || "");
+               setIsSubmitSuccess(true);
+         }
 
+         const chatMessageListTemp = await presentationServices.getChatByPresentationCode(code);
          const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
             const {
                id,
@@ -104,7 +147,7 @@ function PresentationClientDetailPage() {
 
    const handleSubmit = useCallback((name) => {
       socket.emit(PRESENTATION_EVENT.SUBMIT_ANSWER, { code, name });
-      setMessage(defaultMessage);
+      setMessage("Please wait the host change slide");
       setIsSubmitSuccess(true);
    }, []);
 

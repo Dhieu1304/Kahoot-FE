@@ -6,7 +6,6 @@ import reportWebVitals from "./reportWebVitals";
 import GlobalStyles from "./components/GlobalStyles/GlobalStyles";
 import { AuthProvider } from "./providers/auth";
 import { SocketContext, socket } from "./providers/socket";
-import { PresentationProvider } from "./providers/presentation";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,9 +13,7 @@ root.render(
    <GlobalStyles>
       <AuthProvider>
          <SocketContext.Provider value={socket}>
-            <PresentationProvider>
-               <App />
-            </PresentationProvider>
+            <App />
          </SocketContext.Provider>
       </AuthProvider>
    </GlobalStyles>

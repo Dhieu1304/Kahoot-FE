@@ -42,12 +42,11 @@ const getUserInfo = async () => {
       const userInfo = await axiosClient.get("/user/info");
       console.log(">>> userInfo", userInfo);
       if (userInfo.status) {
-         toast.success(userInfo?.message);
-
+         // toast.success(userInfo?.message);
          return camelcaseKeys(userInfo.data, { deep: true });
          // return userInfo.data;
       } else {
-         toast.error(userInfo?.message);
+         // toast.error(userInfo?.message);
          return false;
       }
    } catch (e) {

@@ -1,6 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
 import axiosClient from "../config/axiosClient";
-import mockApi from "../mockApi";
 import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
 
 const getOwnedPresentations = async () => {
@@ -55,14 +54,6 @@ const getAllSlidesByPresentationId = async (id) => {
       console.error(e.message);
       return false;
    }
-};
-
-const getSlideById = async (id) => {
-   return await mockApi.mockSlide;
-};
-
-const getResultBySlideId = async (slideId) => {
-   return await mockApi.mockResult;
 };
 
 const savePresentation = async (presentationSaveData, presentationId) => {
@@ -346,6 +337,19 @@ const presentSlideShow = async (presentation_id) => {
    }
 };
 
+const presentOtherSlide = async (presentation_id, ordinal_slide_number) => {
+   try {
+      const res = await axiosClient.post(`/presentation/present-other-slide`, {
+         presentation_id,
+         ordinal_slide_number
+      });
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const deleteOldSession = async (presentation_id) => {
    try {
       const res = await axiosClient.post(`/presentation/delete-session`, { presentation_id });
@@ -371,13 +375,30 @@ const getSlideAndDataPresentation = async (presentation_id, ordinal_slide_number
    }
 };
 
+/*const getSlidePresentationByCode = async (code) => {
+   try {
+      const res = await axiosClient.get(`/slide/get-slide`, { params: { code } });
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};*/
+
+const clientJoinPresentationByCode = async (code) => {
+   try {
+      return await axiosClient.post(`/presentation/client-join`, { code });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
    getAllSlidesByPresentationId,
    getPresentationById,
-   getSlideById,
-   getResultBySlideId,
    createPresentation,
    updateSlides,
    savePresentation,
@@ -406,6 +427,9 @@ export default {
 
    // present
    presentSlideShow,
+   presentOtherSlide,
    deleteOldSession,
-   getSlideAndDataPresentation
+   getSlideAndDataPresentation,
+   // getSlidePresentationByCode,
+   clientJoinPresentationByCode
 };
