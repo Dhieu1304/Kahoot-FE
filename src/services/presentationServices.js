@@ -394,6 +394,14 @@ const clientJoinPresentationByCode = async (code) => {
    }
 };
 
+const submitAnswer = async (code, name, uid) => {
+   try {
+      return await axiosClient.post(`/slide/submit-answer`, { code, name, uid });
+   } catch (e) {
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -431,5 +439,8 @@ export default {
    deleteOldSession,
    getSlideAndDataPresentation,
    // getSlidePresentationByCode,
-   clientJoinPresentationByCode
+   clientJoinPresentationByCode,
+
+   //submit answer
+   submitAnswer
 };

@@ -73,6 +73,7 @@ function PresentationPlayPage() {
       // DEBUG
 
       socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
+         console.log("COUNT_ONL:  ", countOnl);
          setCountOnl(countOnl);
       });
       socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {

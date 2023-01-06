@@ -42,6 +42,7 @@ import PresentationManageReport from "./pages/Presentation/PresentationManage/Pr
 import PresentationManageGroup from "./pages/Presentation/PresentationManage/PresentationManageGroup";
 
 import * as localStorageApp from "./utils/localStorage";
+import { getItem, LOCAL_STORAGE } from "./utils/localStorage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -49,12 +50,13 @@ function App() {
    useEffect(() => {
       const createCurrentAccount = async () => {
          const currentUser = await getUserInfo();
-         console.log("currentUser: ", currentUser);
          if (!currentUser) {
-            const uuid = uuidv4();
-            localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.UUID, uuid);
+            const currentUID = getItem(LOCAL_STORAGE.UUID);
+            if (!currentUID) {
+               const uuid = uuidv4();
+               localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.UUID, uuid);
+            }
          }
-
          authContext.setUser(currentUser);
          authContext.login();
       };

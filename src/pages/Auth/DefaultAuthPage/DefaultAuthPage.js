@@ -8,7 +8,7 @@ function DefaultAuthPage() {
 
    useEffect(() => {
       if (authContext.isLogin) {
-         navigate("/");
+         navigate("/home");
       } else {
          navigate("/auth/login");
       }

@@ -13,6 +13,8 @@ import SendQuestionModal from "./components/SendQuestionModal";
 import presentationServices from "../../../services/presentationServices";
 import QuestionModal from "./components/QuestionModal/QuestionModal";
 import { AuthContext } from "../../../providers/auth";
+import { getItem, LOCAL_STORAGE } from "../../../utils/localStorage";
+import { toast } from "react-toastify";
 const cx = classNames.bind(styles);
 
 function PresentationClientDetailPage() {
@@ -41,19 +43,6 @@ function PresentationClientDetailPage() {
    const authContext = useContext(AuthContext);
 
    useEffect(() => {
-      // DEBUG
-      socket.on(SOCKET_EVENT.ERROR, (message) => {
-         console.error(message);
-      });
-      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
-         console.info(message);
-      });
-      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-         console.log(message);
-      });
-      // DEBUG
-
-      socket.emit(PRESENTATION_EVENT.JOIN, { code });
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
          if (!data) {
             setMessage("Invalid slide");
@@ -61,8 +50,20 @@ function PresentationClientDetailPage() {
          }
          switch (data?.slide_type_id) {
             case 1: // multi choice
-               setOptions(data.body);
+               console.log("data socket: ", data);
                setIsSubmitSuccess(false);
+               setOptions(data?.body);
+               if (data?.submitBy) {
+                  const currentUID = getItem(LOCAL_STORAGE.UUID);
+                  console.log("currentUID: ", currentUID);
+                  if (
+                     data?.submitBy.includes(currentUID) ||
+                     data?.submitBy.includes(authContext?.user?.id)
+                  ) {
+                     setMessage("You are submit answer, please the host change other slide");
+                     setIsSubmitSuccess(true);
+                  }
+               }
                break;
             case 2: // Heading
                setMessage("Slide with Heading");
@@ -80,12 +81,10 @@ function PresentationClientDetailPage() {
 
       return () => {
          socket.off(PRESENTATION_EVENT.SLIDE);
-         socket.emit(PRESENTATION_EVENT.LEAVE);
       };
    }, []);
 
    useEffect(() => {
-      console.log("Load data useEffect");
       const loadData = async () => {
          const clientJoin = await presentationServices.clientJoinPresentationByCode(code);
          console.log("clientJoin: ", clientJoin);
@@ -102,8 +101,19 @@ function PresentationClientDetailPage() {
          }
          switch (clientJoin?.data.slide.slide_type_id) {
             case 1: // multi choice
-               setOptions(clientJoin.data.slide.body);
                setIsSubmitSuccess(false);
+               setOptions(clientJoin.data?.slide?.body);
+               if (clientJoin.data?.slide?.submitBy) {
+                  const currentUID = getItem(LOCAL_STORAGE.UUID);
+                  console.log("currentUID: ", currentUID);
+                  if (
+                     clientJoin.data?.slide?.submitBy.includes(currentUID) ||
+                     clientJoin.data?.slide?.submitBy.includes(authContext?.user?.id)
+                  ) {
+                     setMessage("You are submit answer, please the host change other slide");
+                     setIsSubmitSuccess(true);
+                  }
+               }
                break;
             case 2: // Heading
                setMessage("Slide with Heading");
@@ -129,31 +139,26 @@ function PresentationClientDetailPage() {
             } = chatMessage;
             return { id, userId, message, uid, avatar, fullName };
          });
-
          setChatMessageList((prev) => [...newChatMessageListTemp]);
 
          // question:
-
          const questionListTemp = await presentationServices.getQuestionsByPresentationCode(code);
-
          // console.log("questionListTemp: ", questionListTemp);
-
          setQuestionList((prev) => [...questionListTemp]);
       };
       loadData();
    }, []);
 
-   /////////////
-
-   const handleSubmit = useCallback((name) => {
-      socket.emit(PRESENTATION_EVENT.SUBMIT_ANSWER, { code, name });
-      setMessage("Please wait the host change slide");
-      setIsSubmitSuccess(true);
-   }, []);
-
-   const handleSubmitAnswer = () => {
+   const handleSubmitAnswer = async () => {
       const name = options[optionIndex]?.name;
-      handleSubmit(name);
+      const currentUID = getItem(LOCAL_STORAGE.UUID);
+      const submitAns = await presentationServices.submitAnswer(code, name, currentUID);
+      if (submitAns.status) {
+         setMessage("Please wait the host change slide");
+         setIsSubmitSuccess(true);
+      } else {
+         toast.error(submitAns.message);
+      }
    };
 
    ////////////////////////

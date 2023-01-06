@@ -33,7 +33,7 @@ function LoginPage() {
             const user = await getUserInfo();
             if (user) {
                authContext.setUser(user);
-               navigate("/");
+               navigate("/home");
             }
          }
       } catch (e) {
