@@ -250,12 +250,7 @@ const getChatByPresentationId = async (presentation_id, page, limit) => {
    const uid = getItem(LOCAL_STORAGE.UUID);
    try {
       const res = await axiosClient.get(`/chat/list-message`, {
-         params: {
-            presentation_id,
-            page,
-            limit,
-            uid
-         }
+         params: { presentation_id, uid }
       });
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
@@ -272,6 +267,10 @@ const sendMessageByPresentationCode = async (code, message) => {
          uid,
          message
       });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -334,6 +333,10 @@ const addQuestionByPresentationCode = async (code, question) => {
          question,
          uid
       });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -449,7 +452,6 @@ export default {
 
    getQuestionsByPresentationId,
    getQuestionsByPresentationCode,
-
    addQuestionByPresentationCode,
 
    // present

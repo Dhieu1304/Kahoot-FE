@@ -46,34 +46,17 @@ function PresentationPlayPage() {
    const authContext = useContext(AuthContext);
    const socket = useContext(SocketContext);
    const presentationPlayStore = usePresentationPlayStore();
-
    const { showChatBox, setShowChatBox, showQuestionModal, setShowQuestionModal } =
       presentationPlayStore;
-
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
-
    const navigate = useNavigate();
 
    useEffect(() => {
       socket.emit(PRESENTATION_EVENT.PRESENT, {
          presentation_id: presentationId
       });
-
-      // DEBUG
-      socket.on(SOCKET_EVENT.ERROR, (message) => {
-         console.error(message);
-      });
-      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
-         console.info(message);
-      });
-      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-         console.log(message);
-      });
-      // DEBUG
-
       socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
-         console.log("COUNT_ONL:  ", countOnl);
          setCountOnl(countOnl);
       });
       socket.on(PRESENTATION_EVENT.SLIDE_DATA, (data) => {
@@ -85,7 +68,23 @@ function PresentationPlayPage() {
       socket.on(PRESENTATION_EVENT.STOP_PRESENT, (data) => {
          toast.info(data);
          navigate("/presentation");
-         // Todo: Đá nó ra 1 trang nào đó
+      });
+      socket.on(PRESENTATION_EVENT.QUESTION, (data) => {
+         console.log(">>>>>>>>> QUESTION:", data);
+         setQuestionList(data);
+      });
+      socket.on(PRESENTATION_EVENT.NEW_MESSAGE, (data) => {
+         if (data) {
+            const newChat = {
+               id: data.id,
+               userId: data.user_id,
+               message: data.message,
+               uid: data.uid,
+               avatar: data.avatar,
+               fullName: data.full_name
+            };
+            setChatMessageList((prev) => [...prev, newChat]);
+         }
       });
 
       return () => {
@@ -97,20 +96,19 @@ function PresentationPlayPage() {
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
          socket.off(PRESENTATION_EVENT.STOP_PRESENT);
+         socket.off(PRESENTATION_EVENT.QUESTION);
+         socket.off(PRESENTATION_EVENT.NEW_MESSAGE);
       };
    }, []);
 
-   /////////////
-
    useEffect(() => {
-      //load data
       const loadData = async () => {
+         // get slide & data
          const result = await presentationServices.presentSlideShow(presentationId);
          if (!result) {
             navigate("/presentation");
             return;
          }
-         console.log(result);
          socket.emit(PRESENTATION_EVENT.JOIN_HOST, { data: result.join_host });
          setCountSlide(result.count_slide || 1);
          const slideRes = await presentationServices.getSlideAndDataPresentation(
@@ -124,11 +122,10 @@ function PresentationPlayPage() {
             }
          }
 
-         // Chat
+         // get chat
          const chatMessageListTemp = await presentationServices.getChatByPresentationId(
             presentationId
          );
-
          const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
             const {
                id,
@@ -145,7 +142,6 @@ function PresentationPlayPage() {
          const questionListTemp = await presentationServices.getQuestionsByPresentationId(
             presentationId
          );
-
          setQuestionList((prev) => [...questionListTemp]);
       };
       loadData();
@@ -189,19 +185,7 @@ function PresentationPlayPage() {
    };
 
    const handleSendMessage = async (message) => {
-      console.log("handleSendMessage: ", message);
-
-      const result = presentationServices.sendMessageByPresentationId(presentationId, message);
-
-      setChatMessageList((prev) => {
-         const newChatMessageList = [...prev];
-
-         const userId = authContext.user?.id;
-         const newChatMessage = { userId, message };
-         newChatMessageList.push(newChatMessage);
-
-         return [...newChatMessageList];
-      });
+      await presentationServices.sendMessageByPresentationId(presentationId, message);
    };
 
    const renderContentBySlideTypeId = () => {

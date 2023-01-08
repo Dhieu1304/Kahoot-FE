@@ -27,6 +27,9 @@ function PresentationClientDetailPage() {
       showSendQuestionModal,
       setShowSendQuestionModal
    } = presentationClientDetailStore;
+   const socket = useContext(SocketContext);
+   const authContext = useContext(AuthContext);
+   const code = useParams().code;
 
    const [chatMessageList, setChatMessageList] = useState([]);
    const [questionList, setQuestionList] = useState([]);
@@ -34,10 +37,6 @@ function PresentationClientDetailPage() {
    const [options, setOptions] = useState([]);
    const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
    const [message, setMessage] = useState("Please wait the host present slide");
-
-   const socket = useContext(SocketContext);
-   const authContext = useContext(AuthContext);
-   const code = useParams().code;
 
    useEffect(() => {
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
@@ -74,16 +73,34 @@ function PresentationClientDetailPage() {
                setIsSubmitSuccess(true);
          }
       });
+      socket.on(PRESENTATION_EVENT.QUESTION, (data) => {
+         console.log(">>>>>>>>> QUESTION:", data);
+         setQuestionList(data);
+      });
+      socket.on(PRESENTATION_EVENT.NEW_MESSAGE, (data) => {
+         if (data) {
+            const newChat = {
+               id: data.id,
+               userId: data.user_id,
+               message: data.message,
+               uid: data.uid,
+               avatar: data.avatar,
+               fullName: data.full_name
+            };
+            setChatMessageList((prev) => [...prev, newChat]);
+         }
+      });
 
       return () => {
          socket.off(PRESENTATION_EVENT.SLIDE);
+         socket.off(PRESENTATION_EVENT.QUESTION);
+         socket.off(PRESENTATION_EVENT.NEW_MESSAGE);
       };
    }, []);
 
    useEffect(() => {
       const loadData = async () => {
          const clientJoin = await presentationServices.clientJoinPresentationByCode(code);
-         console.log("clientJoin: ", clientJoin);
          if (!clientJoin.status) {
             setMessage(clientJoin.message);
             setIsSubmitSuccess(true);
@@ -93,37 +110,35 @@ function PresentationClientDetailPage() {
          if (!clientJoin.data.slide) {
             setMessage("Please wait the host present slide");
             setIsSubmitSuccess(true);
-            return;
-         }
-         switch (clientJoin?.data.slide.slide_type_id) {
-            case 1: // multi choice
-               setIsSubmitSuccess(false);
-               setOptions(clientJoin.data?.slide?.body);
-               if (clientJoin.data?.slide?.submitBy) {
-                  const currentUID = getItem(LOCAL_STORAGE.UUID);
-                  console.log("currentUID: ", currentUID);
-                  if (
-                     clientJoin.data?.slide?.submitBy.includes(currentUID) ||
-                     clientJoin.data?.slide?.submitBy.includes(authContext?.user?.id)
-                  ) {
-                     setMessage("You are submit answer, please the host change other slide");
-                     setIsSubmitSuccess(true);
+         } else {
+            switch (clientJoin?.data.slide.slide_type_id) {
+               case 1: // multi choice
+                  setIsSubmitSuccess(false);
+                  setOptions(clientJoin.data?.slide?.body);
+                  if (clientJoin.data?.slide?.submitBy) {
+                     const currentUID = getItem(LOCAL_STORAGE.UUID);
+                     if (
+                        clientJoin.data?.slide?.submitBy.includes(currentUID) ||
+                        clientJoin.data?.slide?.submitBy.includes(authContext?.user?.id)
+                     ) {
+                        setMessage("You are submit answer, please the host change other slide");
+                        setIsSubmitSuccess(true);
+                     }
                   }
-               }
-               break;
-            case 2: // Heading
-               setMessage("Slide with Heading");
-               setIsSubmitSuccess(true);
-               break;
-            case 3: // Paragraph
-               setMessage("Slide with Paragraph");
-               setIsSubmitSuccess(true);
-               break;
-            default:
-               setMessage(clientJoin.data.slide || "");
-               setIsSubmitSuccess(true);
+                  break;
+               case 2: // Heading
+                  setMessage("Slide with Heading");
+                  setIsSubmitSuccess(true);
+                  break;
+               case 3: // Paragraph
+                  setMessage("Slide with Paragraph");
+                  setIsSubmitSuccess(true);
+                  break;
+               default:
+                  setMessage(clientJoin.data.slide || "");
+                  setIsSubmitSuccess(true);
+            }
          }
-
          const chatMessageListTemp = await presentationServices.getChatByPresentationCode(code);
          const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
             const {
@@ -139,7 +154,6 @@ function PresentationClientDetailPage() {
 
          // question:
          const questionListTemp = await presentationServices.getQuestionsByPresentationCode(code);
-         // console.log("questionListTemp: ", questionListTemp);
          setQuestionList((prev) => [...questionListTemp]);
       };
       loadData();
@@ -162,30 +176,16 @@ function PresentationClientDetailPage() {
       let element = e.target;
       if (element.scrollTop === 0) {
          //fetch messages
-         // console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
+         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
       }
    };
 
    const handleSendMessage = async (message) => {
-      // console.log("handleSendMessage: ", message);
-
-      const result = presentationServices.sendMessageByPresentationCode(code, message);
-
-      setChatMessageList((prev) => {
-         const newChatMessageList = [...prev];
-
-         const userId = authContext.user?.id;
-         const newChatMessage = { userId, message };
-         newChatMessageList.push(newChatMessage);
-
-         return [...newChatMessageList];
-      });
+      await presentationServices.sendMessageByPresentationCode(code, message);
    };
 
    const handleSendQuestion = async (content) => {
-      console.log("content: ", content);
-
-      const result = presentationServices.addQuestionByPresentationCode(code, content);
+      await presentationServices.addQuestionByPresentationCode(code, content);
    };
 
    return (
