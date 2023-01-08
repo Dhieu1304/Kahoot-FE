@@ -96,14 +96,12 @@ function PresentationManageReport() {
    }, []);
 
    const handleInviteByEmail = async ({ email }) => {
-      console.log("handleInviteByEmail: ", { email });
-      const result = await presentationManageStore.method.addMember(email);
+      await presentationManageStore.method.addMember(email);
    };
 
    const handleDeleteMember = async () => {
       const email = deleteMemberModal?.data;
-      console.log("handleDeleteCoOwner: ", { email });
-      const result = await presentationManageStore.method.deleteMember(email);
+      await presentationManageStore.method.deleteMember(email);
    };
 
    return (

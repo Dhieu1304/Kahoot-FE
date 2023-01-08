@@ -1,6 +1,7 @@
 import camelcaseKeys from "camelcase-keys";
 import axiosClient from "../config/axiosClient";
 import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
+import { toast } from "react-toastify";
 
 const getOwnedPresentations = async () => {
    return await getPresentations("OWNER");
@@ -143,9 +144,16 @@ const addPresentationCoOwner = async (presentation_id, email) => {
          presentation_id,
          email
       });
-      return camelcaseKeys(res, { deep: true });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
+      toast.success(res.message);
+      return true;
    } catch (e) {
       console.error(e.message);
+      toast.error("Error, please try again later");
+      return false;
    }
 };
 
@@ -155,9 +163,15 @@ const deleteMember = async (presentation_id, email) => {
          presentation_id,
          email
       });
-      return camelcaseKeys(res, { deep: true });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
+      toast.success(res.message);
+      return true;
    } catch (e) {
       console.error(e.message);
+      toast.error("Error, please try again later");
       return false;
    }
 };
@@ -330,9 +344,14 @@ const addQuestionByPresentationCode = async (code, question) => {
 const presentSlideShow = async (presentation_id) => {
    try {
       const res = await axiosClient.post(`/presentation/present`, { presentation_id });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
       return res.data;
    } catch (e) {
       console.error(e.message);
+      toast.error(e.message);
       return false;
    }
 };

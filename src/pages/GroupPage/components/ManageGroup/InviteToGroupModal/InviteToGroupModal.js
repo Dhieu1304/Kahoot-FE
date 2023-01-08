@@ -3,13 +3,8 @@ import { useForm } from "react-hook-form";
 import Input from "../../../../../components/Input";
 import Modal from "../../../../../components/Modal";
 import classNames from "classnames/bind";
-
 import { AuthContext } from "../../../../../providers/auth";
-import {
-   createGroup,
-   getInviteLink,
-   inviteToGroupByEmail
-} from "../../../../../services/groupService";
+import { getInviteLink, inviteToGroupByEmail } from "../../../../../services/groupService";
 import styles from "./InviteToGroupModal.module.scss";
 import Button from "../../../../../components/Button/Button";
 import { toast } from "react-toastify";
@@ -46,10 +41,10 @@ function InviteToGroupModal({ show, setShow, groupId }) {
       const email = watch("email");
       const result = await inviteToGroupByEmail(groupId, email);
       if (result) {
-         toast("Invited");
+         toast.success("Invited");
          resetField("email");
       } else {
-         toast("Invite Fail");
+         toast.error("Invite Fail");
       }
    };
    const handleCopyInviteLink = () => {
