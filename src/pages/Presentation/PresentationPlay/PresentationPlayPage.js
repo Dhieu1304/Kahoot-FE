@@ -303,7 +303,7 @@ function PresentationPlayPage() {
                      <h1 className={cx("infor")}>
                         Go to
                         <span className={cx("infor-label")}>
-                           {process.env.REACT_APP_BE_URL + "game"}
+                           {process.env.REACT_APP_FE_URL + "/presentation-client"}
                         </span>
                         and use the code
                         <span className={cx("infor-label")}>

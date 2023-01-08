@@ -1,9 +1,8 @@
 import classNames from "classnames/bind";
-import { useCallback } from "react";
 import { useEffect } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
 import Header from "./components/Header";
@@ -11,20 +10,12 @@ import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
 import SlideList from "./components/SlideList";
 import styles from "./PresentationDetailPage.module.scss";
-
-import { SocketContext } from "../../../providers/socket";
-import { PRESENTATION_EVENT } from "../../../providers/socket/socket.constant";
-
 const cx = classNames.bind(styles);
-
 import { usePresentationDetailStore } from "./store";
-import { useContext } from "react";
 import presentationServices from "../../../services/presentationServices";
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();
-
-   const socket = useContext(SocketContext);
 
    const {
       createSlideModal,
@@ -140,38 +131,22 @@ function PresentationDetailPage() {
          );
    };
 
-   const handlePresent = useCallback((presentation_id, ordinal_slide_number) => {
-      socket.emit(PRESENTATION_EVENT.PRESENT, { presentation_id, ordinal_slide_number });
-   }, []);
-
    const handleContinuePresent = async () => {
       const presentationId = presentationDetailStore.state.presentation?.id;
-      //const result = await presentationServices.presentSlideShow(presentationId);
-      //if (result) {
-      //   console.log("handleContinuePresent: ", result);
-      //   presentContext.setCountSlide(result.count_slide);
-      //   presentContext.setOrdinalSlideNumber(result.ordinal_slide_number);
-      //   presentContext.setJoinHost(result.join_host);
-      //   //presentContext.setSlide(result.slide);
-      //   navigate(`/presentation/${presentationId}/play`);
-      //}
       navigate(`/presentation/${presentationId}/play`);
    };
 
    const handleResetPresent = async () => {
       const presentationId = presentationDetailStore.state.presentation?.id;
       const deleteSession = await presentationServices.deleteOldSession(presentationId);
-      console.log(deleteSession);
       if (deleteSession) {
          const result = await presentationServices.presentSlideShow(presentationId);
          if (result) {
-            console.log("handleContinuePresent: ", result);
-            // navigate(`/presentation/${presentationId}/play`);
+            navigate(`/presentation/${presentationId}/play`);
          }
       }
    };
 
-   const handlePresentModal = async () => {};
    return (
       <div
          className={cx("wrapper", {
