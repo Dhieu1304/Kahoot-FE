@@ -1,12 +1,12 @@
 import { faCircle, faComment, faMessage, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import styles from "./PresentationClientDetailPage.module.scss";
 import { SocketContext } from "../../../providers/socket";
-import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
-import { useNavigate, useParams } from "react-router-dom";
+import { PRESENTATION_EVENT } from "../../../providers/socket/socket.constant";
+import { useParams } from "react-router-dom";
 import { usePresentationClientDetailStore } from "./store";
 import Chat from "./components/Chat/Chat";
 import SendQuestionModal from "./components/SendQuestionModal";
@@ -19,7 +19,6 @@ const cx = classNames.bind(styles);
 
 function PresentationClientDetailPage() {
    const presentationClientDetailStore = usePresentationClientDetailStore();
-
    const {
       showChatBox,
       setShowChatBox,
@@ -30,7 +29,6 @@ function PresentationClientDetailPage() {
    } = presentationClientDetailStore;
 
    const [chatMessageList, setChatMessageList] = useState([]);
-
    const [questionList, setQuestionList] = useState([]);
    const [optionIndex, setOptionIndex] = useState(-1);
    const [options, setOptions] = useState([]);
@@ -38,9 +36,8 @@ function PresentationClientDetailPage() {
    const [message, setMessage] = useState("Please wait the host present slide");
 
    const socket = useContext(SocketContext);
-   const code = useParams().code;
-
    const authContext = useContext(AuthContext);
+   const code = useParams().code;
 
    useEffect(() => {
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
@@ -50,12 +47,11 @@ function PresentationClientDetailPage() {
          }
          switch (data?.slide_type_id) {
             case 1: // multi choice
-               console.log("data socket: ", data);
                setIsSubmitSuccess(false);
                setOptions(data?.body);
+               setOptionIndex(-1);
                if (data?.submitBy) {
                   const currentUID = getItem(LOCAL_STORAGE.UUID);
-                  console.log("currentUID: ", currentUID);
                   if (
                      data?.submitBy.includes(currentUID) ||
                      data?.submitBy.includes(authContext?.user?.id)

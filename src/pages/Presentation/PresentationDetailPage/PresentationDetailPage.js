@@ -10,9 +10,9 @@ import SlideArea from "./components/SlideArea";
 import SlideConfig from "./components/SlideConfig";
 import SlideList from "./components/SlideList";
 import styles from "./PresentationDetailPage.module.scss";
-const cx = classNames.bind(styles);
 import { usePresentationDetailStore } from "./store";
 import presentationServices from "../../../services/presentationServices";
+const cx = classNames.bind(styles);
 
 function PresentationDetailPage() {
    const presentationDetailStore = usePresentationDetailStore();

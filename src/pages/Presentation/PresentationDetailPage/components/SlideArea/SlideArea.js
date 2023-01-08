@@ -16,7 +16,6 @@ import classNames from "classnames/bind";
 import { usePresentationDetailStore } from "../../store";
 import styles from "./SlideArea.module.scss";
 import { useEffect, useState } from "react";
-import presentationServices from "../../../../../services/presentationServices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useFormContext } from "react-hook-form";
