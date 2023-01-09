@@ -433,16 +433,10 @@ const markAnswer = async (presentation_id, question_id) => {
 };
 
 const getPresentationsByGroupId = async (group_id) => {
-   console.log("[SERVICE]: getPresentationsByGroup_id : ", { group_id });
    try {
       const res = await axiosClient.get(`/presentation-group/list-in-group`, {
-         params: {
-            group_id
-         }
+         params: { group_id }
       });
-
-      console.log("res: ", group_id);
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -459,13 +453,10 @@ export default {
    updateSlides,
    savePresentation,
    deletePresentationById,
-
    getPresentationUsers,
    getPresentationGroups,
-
    getListPresentationThemeConfig,
    getListSlideTypeConfig,
-
    addPresentationCoOwner,
    deleteMember,
 

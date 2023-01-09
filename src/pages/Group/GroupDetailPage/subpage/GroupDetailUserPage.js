@@ -68,10 +68,10 @@ function GroupDetailUserPage() {
       const result = await groupService.deleteUserFromGroup(groupId, userId);
 
       if (result) {
-         toast("Delete success");
+         toast.success("Delete success");
          await loadData();
       } else {
-         toast("Delete Fail");
+         toast.error("Delete Fail");
       }
    };
 
