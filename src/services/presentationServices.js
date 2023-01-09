@@ -297,12 +297,9 @@ const getQuestionsByPresentationId = async (presentation_id) => {
    const uid = getItem(LOCAL_STORAGE.UUID);
    try {
       const res = await axiosClient.get(`/question/list-question`, {
-         params: {
-            presentation_id,
-            uid
-         }
+         params: { presentation_id, uid }
       });
-      return camelcaseKeys(res.data, { deep: true });
+      return res.data;
    } catch (e) {
       console.error(e.message);
       return false;
@@ -318,7 +315,7 @@ const getQuestionsByPresentationCode = async (code) => {
             uid
          }
       });
-      return camelcaseKeys(res.data, { deep: true });
+      return res.data;
    } catch (e) {
       console.error(e.message);
       return false;
@@ -444,6 +441,36 @@ const getPresentationsByGroupId = async (group_id) => {
    }
 };
 
+const upVoteQuestion = async (code, question_id) => {
+   try {
+      const uid = getItem(LOCAL_STORAGE.UUID);
+      const res = await axiosClient.post(`/question/up-vote-question`, {
+         code,
+         question_id,
+         uid
+      });
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const downVoteQuestion = async (code, question_id) => {
+   try {
+      const uid = getItem(LOCAL_STORAGE.UUID);
+      const res = await axiosClient.post(`/question/down-vote-question`, {
+         code,
+         question_id,
+         uid
+      });
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -482,5 +509,7 @@ export default {
    //submit answer
    submitAnswer,
    getPresentationsByGroupId,
-   markAnswer
+   markAnswer,
+   upVoteQuestion,
+   downVoteQuestion
 };

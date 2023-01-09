@@ -31,14 +31,11 @@ function QuestionModal({ show, setShow, questionList, handleMarkQuestion, update
    const [answeredIndexList, setAnsweredIndexList] = useState([]);
 
    const params = useParams();
-   console.log("params: ", params);
 
    const handleAnswer = async (questionId) => {
       const presentationId = params.id;
       const result = await presentationServices.markAnswer(presentationId, questionId);
    };
-
-   console.log("questionList: ", questionList);
 
    return (
       <div className={cx("wrapper")}>

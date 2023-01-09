@@ -70,7 +70,6 @@ function PresentationPlayPage() {
          navigate("/presentation");
       });
       socket.on(PRESENTATION_EVENT.QUESTION, (data) => {
-         console.log(">>>>>>>>> QUESTION:", data);
          setQuestionList(data);
       });
       socket.on(PRESENTATION_EVENT.NEW_MESSAGE, (data) => {
