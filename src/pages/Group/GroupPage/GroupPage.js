@@ -7,8 +7,9 @@ import classNames from "classnames/bind";
 import styles from "./GroupPage.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../../../components/Button";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useMediaQuery } from "react-responsive";
+import GroupItem from "./components/GroupItem";
 const cx = classNames.bind(styles);
 
 function GroupPage() {
@@ -83,18 +84,14 @@ function GroupPage() {
                   </div>
                </div>
             </div>
-            {/* <TopBar showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
-         <div className={cx("group-list")}>
-            {groupListContext?.state?.groups &&
-               groupListContext?.state?.groups.map((group, index) => (
-                  <GroupItem
-                     key={index}
-                     data={group}
-                     onClick={() => handleUpdateRecentGroupsList(group)}
-                  />
-               ))}
-         </div> */}
-            Group
+
+            <div className={cx("group-list")}>
+               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
+               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
+               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
+               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
+               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
+            </div>
          </div>
       </div>
    );
