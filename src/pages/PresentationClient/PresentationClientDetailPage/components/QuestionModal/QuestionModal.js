@@ -11,7 +11,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Modal from "../../../../../components/Modal";
+import { useAuthStore } from "../../../../../providers/auth";
+import presentationServices from "../../../../../services/presentationServices";
+import { getItem, LOCAL_STORAGE } from "../../../../../utils/localStorage";
 
 import styles from "./QuestionModal.module.scss";
 const cx = classNames.bind(styles);
@@ -23,10 +27,23 @@ function QuestionModal({ show, setShow, questionList }) {
    //    questionList
    // });
 
-   const [isLiked, setIsLike] = useState(false);
+   const authStore = useAuthStore();
+   const userId = authStore.user?.id;
+   const uid = getItem(LOCAL_STORAGE.UUID);
 
-   const handleLike = async () => {
-      setIsLike((prev) => !prev);
+   const [isLiked, setIsLike] = useState(false);
+   const params = useParams();
+
+   const handleUpVote = async (questionId) => {
+      const presentationId = params.id;
+      // const result = presentationServices.handleUpVote(userId, uid, presentationId, questionId);
+      // setIsLike((prev) => !prev);
+   };
+
+   const handleDownVote = async (questionId) => {
+      const presentationId = params.id;
+      // const result = presentationServices.handleDownVote(userId, uid, presentationId, questionId);
+      // setIsLike((prev) => !prev);
    };
 
    return (
@@ -41,19 +58,19 @@ function QuestionModal({ show, setShow, questionList }) {
                         <span className={cx("user-fullname")}>{question?.user?.fullName}</span>
                      </div>
 
-                     {isLiked ? (
+                     {question?.vote_by?.includes(userId) || question?.vote_by?.includes(uid) ? (
                         <FontAwesomeIcon
                            size="1x"
                            icon={faThumbsUp}
                            className={cx("liked-icon")}
-                           onClick={handleLike}
+                           onClick={() => handleDownVote(question?.id)}
                         />
                      ) : (
                         <FontAwesomeIcon
                            size="1x"
                            icon={faThumbsUp}
-                           className={cx("like-icon")}
-                           onClick={handleLike}
+                           // className={cx("like-icon")}
+                           onClick={() => handleUpVote(question?.id)}
                         />
                      )}
                   </div>
