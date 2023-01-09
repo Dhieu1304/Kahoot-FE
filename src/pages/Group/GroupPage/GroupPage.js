@@ -15,6 +15,7 @@ import CreateGroupModal from "./components/CreateGroupModal";
 const cx = classNames.bind(styles);
 import classNames from "classnames/bind";
 import styles from "./GroupPage.module.scss";
+import JointGroupByLinkModal from "./components/JointGroupByLinkModal";
 
 function GroupPage() {
    const authStore = useAuthStore();
@@ -24,6 +25,7 @@ function GroupPage() {
    const isMobile = useMediaQuery({ maxWidth: 767 });
 
    const createGroupModal = useModal();
+   const jointGroupByLinkModal = useModal();
 
    const location = useLocation();
 
@@ -64,6 +66,7 @@ function GroupPage() {
                         leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
                         onClick={() => {
                            // return setShowJointGroupByLinkModalModal(true);
+                           jointGroupByLinkModal.setShow(true);
                         }}
                      />
                      <Button
@@ -92,6 +95,13 @@ function GroupPage() {
                   show={createGroupModal.show}
                   setShow={createGroupModal.setShow}
                ></CreateGroupModal>
+            )}
+
+            {jointGroupByLinkModal.show && (
+               <JointGroupByLinkModal
+                  show={jointGroupByLinkModal.show}
+                  setShow={jointGroupByLinkModal.setShow}
+               ></JointGroupByLinkModal>
             )}
          </Context.Provider>
       </div>
