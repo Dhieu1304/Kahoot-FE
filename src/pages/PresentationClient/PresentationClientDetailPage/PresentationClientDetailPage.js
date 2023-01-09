@@ -74,7 +74,6 @@ function PresentationClientDetailPage() {
          }
       });
       socket.on(PRESENTATION_EVENT.QUESTION, (data) => {
-         console.log(">>>>>>>>> QUESTION:", data);
          setQuestionList(data);
       });
       socket.on(PRESENTATION_EVENT.NEW_MESSAGE, (data) => {
@@ -150,7 +149,7 @@ function PresentationClientDetailPage() {
             } = chatMessage;
             return { id, userId, message, uid, avatar, fullName };
          });
-         setChatMessageList((prev) => [...newChatMessageListTemp]);
+         setChatMessageList((prev) => [...newChatMessageListTemp.reverse()]);
 
          // question:
          const questionListTemp = await presentationServices.getQuestionsByPresentationCode(code);
@@ -171,12 +170,36 @@ function PresentationClientDetailPage() {
       }
    };
 
-   ////////////////////////
-   const handleScroll = (e) => {
+   const handleScroll = async (e) => {
       let element = e.target;
       if (element.scrollTop === 0) {
-         //fetch messages
-         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
+         const chatMessageListTemp = await presentationServices.getChatByPresentationId(
+            null,
+            Math.ceil((chatMessageList.length + 1) / 20),
+            20,
+            code
+         );
+         if (chatMessageListTemp && chatMessageListTemp.length > 0) {
+            const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
+               const {
+                  id,
+                  userId,
+                  message,
+                  uid,
+                  user: { avatar, fullName }
+               } = chatMessage;
+               return { id, userId, message, uid, avatar, fullName };
+            });
+            const resultList = [...chatMessageList];
+            for (let i = 0; i < newChatMessageListTemp.length; i++) {
+               if (newChatMessageListTemp[i].id < resultList[0].id) {
+                  const firstArr = newChatMessageListTemp.slice(i).reverse();
+                  resultList.unshift(...firstArr);
+                  break;
+               }
+            }
+            setChatMessageList(resultList);
+         }
       }
    };
 

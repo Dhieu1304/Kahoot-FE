@@ -246,11 +246,11 @@ const getChatByPresentationCode = async (code, page, limit) => {
    }
 };
 
-const getChatByPresentationId = async (presentation_id, page, limit) => {
+const getChatByPresentationId = async (presentation_id, page = 1, limit = 20, code = null) => {
    const uid = getItem(LOCAL_STORAGE.UUID);
    try {
       const res = await axiosClient.get(`/chat/list-message`, {
-         params: { presentation_id, uid }
+         params: { presentation_id, uid, page, limit, code }
       });
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {

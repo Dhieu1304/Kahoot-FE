@@ -176,11 +176,35 @@ function PresentationPlayPage() {
       }
    };
 
-   const handleScroll = (e) => {
+   const handleScroll = async (e) => {
       let element = e.target;
       if (element.scrollTop === 0) {
-         //fetch messages
-         console.log("LOADDDDDDDDDDDDD NEW MESSAGE");
+         const chatMessageListTemp = await presentationServices.getChatByPresentationId(
+            presentationId,
+            Math.ceil((chatMessageList.length + 1) / 20),
+            20
+         );
+         if (chatMessageListTemp && chatMessageListTemp.length > 0) {
+            const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
+               const {
+                  id,
+                  userId,
+                  message,
+                  uid,
+                  user: { avatar, fullName }
+               } = chatMessage;
+               return { id, userId, message, uid, avatar, fullName };
+            });
+            const resultList = [...chatMessageList];
+            for (let i = 0; i < newChatMessageListTemp.length; i++) {
+               if (newChatMessageListTemp[i].id < resultList[0].id) {
+                  const firstArr = newChatMessageListTemp.slice(i).reverse();
+                  resultList.unshift(...firstArr);
+                  break;
+               }
+            }
+            setChatMessageList(resultList);
+         }
       }
    };
 
