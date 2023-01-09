@@ -21,7 +21,7 @@ import presentationServices from "../../../../../services/presentationServices";
 import { useParams } from "react-router-dom";
 const cx = classNames.bind(styles);
 
-function QuestionModal({ show, setShow, questionList, handleMarkQuestion }) {
+function QuestionModal({ show, setShow, questionList, handleMarkQuestion, updateQuestion }) {
    const authContext = useContext(AuthContext);
    const presentatioPlayStore = usePresentationPlayStore();
 
@@ -35,7 +35,7 @@ function QuestionModal({ show, setShow, questionList, handleMarkQuestion }) {
 
    const handleAnswer = async (questionId) => {
       const presentationId = params.id;
-      await presentationServices.markAnswer(presentationId, questionId);
+      const result = await presentationServices.markAnswer(presentationId, questionId);
    };
 
    console.log("questionList: ", questionList);
@@ -72,8 +72,9 @@ function QuestionModal({ show, setShow, questionList, handleMarkQuestion }) {
                         <p className={cx("asker")}>{questionList[questionIndex]?.user?.fullName}</p>
                         <p className={cx("content")}>{questionList[questionIndex]?.question}</p>
                      </div>
+                     <div>Votes: {questionList[questionIndex]?.vote || "0"}</div>
 
-                     {answeredIndexList.includes(questionIndex) ? (
+                     {questionList[questionIndex]?.is_answer ? (
                         <div>
                            <Button
                               title={"Answered"}
