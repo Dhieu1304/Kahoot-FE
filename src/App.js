@@ -43,6 +43,10 @@ import * as localStorageApp from "./utils/localStorage";
 import { getItem, LOCAL_STORAGE } from "./utils/localStorage";
 import GroupLayout from "./layouts/GroupLayout";
 import GroupPage from "./pages/Group/GroupPage";
+import GroupDetailPage, {
+   GroupDetailPresentationPage,
+   GroupDetailUserPage
+} from "./pages/Group/GroupDetailPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -97,6 +101,18 @@ function App() {
                         <Route path="" element={<Navigate to={"owned"} replace />} />
                         <Route path={"owned"} element={<GroupPage />} />
                         <Route path={"joined"} element={<GroupPage />} />
+                        <Route
+                           path={":groupId"}
+                           element={
+                              <GroupDetailPage>
+                                 <Outlet />
+                              </GroupDetailPage>
+                           }
+                        >
+                           <Route path="" element={<Navigate to={"user"} replace />} />
+                           <Route path={"user"} element={<GroupDetailUserPage />} />
+                           <Route path={"presentation"} element={<GroupDetailPresentationPage />} />
+                        </Route>
                      </Route>
 
                      <Route path={"group/join-by-email"} element={<LinkPage />}></Route>

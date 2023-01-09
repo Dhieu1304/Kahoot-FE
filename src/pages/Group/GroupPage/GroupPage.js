@@ -3,14 +3,18 @@ import { useLocation } from "react-router-dom";
 import { AuthContext, useAuthStore } from "../../../providers/auth";
 import groupService from "../../../services/groupService";
 
-import classNames from "classnames/bind";
-import styles from "./GroupPage.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../../../components/Button";
 import { faAdd, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useMediaQuery } from "react-responsive";
 import GroupItem from "./components/GroupItem";
+import { useModal } from "../../../components/Modal";
+import Context from "./Context";
+import CreateGroupModal from "./components/CreateGroupModal";
+
 const cx = classNames.bind(styles);
+import classNames from "classnames/bind";
+import styles from "./GroupPage.module.scss";
 
 function GroupPage() {
    const authStore = useAuthStore();
@@ -19,14 +23,7 @@ function GroupPage() {
 
    const isMobile = useMediaQuery({ maxWidth: 767 });
 
-   // const {
-   //    recentGroupsList,
-   //    updateRecentGroupsList,
-   //    setCurrentSideBarMenuItem,
-   //    showSideBar,
-   //    setShowSideBar
-   // } = useOutletContext();
-   // const [groups, setGroups] = useState([]);
+   const createGroupModal = useModal();
 
    const location = useLocation();
 
@@ -78,7 +75,7 @@ function GroupPage() {
                         className={cx("btn")}
                         leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
                         onClick={() => {
-                           // return setShowCreateGroupModal(true);
+                           createGroupModal.setShow(true);
                         }}
                      />
                   </div>
@@ -87,12 +84,16 @@ function GroupPage() {
 
             <div className={cx("group-list")}>
                {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
-               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
-               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
-               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
-               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
             </div>
          </div>
+         <Context.Provider value={{ createGroupModal }}>
+            {createGroupModal.show && (
+               <CreateGroupModal
+                  show={createGroupModal.show}
+                  setShow={createGroupModal.setShow}
+               ></CreateGroupModal>
+            )}
+         </Context.Provider>
       </div>
    );
 }

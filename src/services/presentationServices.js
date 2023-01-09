@@ -424,6 +424,24 @@ const submitAnswer = async (code, name, uid) => {
    }
 };
 
+const getPresentationsByGroupId = async (group_id) => {
+   console.log("[SERVICE]: getPresentationsByGroup_id : ", { group_id });
+   try {
+      const res = await axiosClient.get(`/presentation-group/list-in-group`, {
+         params: {
+            group_id
+         }
+      });
+
+      console.log("res: ", group_id);
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -463,5 +481,7 @@ export default {
    clientJoinPresentationByCode,
 
    //submit answer
-   submitAnswer
+   submitAnswer,
+
+   getPresentationsByGroupId
 };
