@@ -37,6 +37,7 @@ function PresentationClientDetailPage() {
    const [options, setOptions] = useState([]);
    const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
    const [message, setMessage] = useState("Please wait the host present slide");
+   const [isNewMessage, setIsNewMessage] = useState(false);
 
    useEffect(() => {
       socket.on(PRESENTATION_EVENT.SLIDE, (data) => {
@@ -87,6 +88,14 @@ function PresentationClientDetailPage() {
                fullName: data.full_name
             };
             setChatMessageList((prev) => [...prev, newChat]);
+
+            const uid = getItem(LOCAL_STORAGE.UUID);
+            if (
+               [newChat.userId, newChat.uid].includes(authContext.user?.id) ||
+               [newChat.userId, newChat.uid].includes(uid)
+            )
+               setIsNewMessage(false);
+            else setIsNewMessage(true);
          }
       });
 
@@ -250,13 +259,20 @@ function PresentationClientDetailPage() {
                      className={cx("icon")}
                      size={"1x"}
                      icon={faMessage}
-                     onClick={() => setShowChatBox((prev) => !prev)}
+                     onClick={() => {
+                        setShowChatBox((prev) => !prev);
+                        setIsNewMessage(false);
+                     }}
                   />
+
+                  {isNewMessage && <div className={cx("notify")}></div>}
                   {showChatBox && (
                      <Chat
                         chatMessageList={chatMessageList}
                         handleScroll={handleScroll}
                         handleSendMessage={handleSendMessage}
+                        isNewMessage={isNewMessage}
+                        setIsNewMessage={setIsNewMessage}
                      />
                   )}
                </div>

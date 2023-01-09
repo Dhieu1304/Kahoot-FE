@@ -42,6 +42,7 @@ function PresentationPlayPage() {
    const [chatMessageList, setChatMessageList] = useState([]);
    const [questionList, setQuestionList] = useState([]);
    const [countOnl, setCountOnl] = useState(0);
+   const [isNewMessage, setIsNewMessage] = useState(false);
 
    const authContext = useContext(AuthContext);
    const socket = useContext(SocketContext);
@@ -83,6 +84,9 @@ function PresentationPlayPage() {
                fullName: data.full_name
             };
             setChatMessageList((prev) => [...prev, newChat]);
+
+            if (newChat.userId === authContext.user?.id) setIsNewMessage(false);
+            else setIsNewMessage(true);
          }
       });
 
@@ -329,8 +333,11 @@ function PresentationPlayPage() {
                                  icon={faMessage}
                                  onClick={() => {
                                     setShowChatBox((prev) => !prev);
+                                    setIsNewMessage(false);
                                  }}
                               />
+
+                              {isNewMessage && <div className={cx("notify")}></div>}
 
                               {showChatBox && (
                                  <Chat

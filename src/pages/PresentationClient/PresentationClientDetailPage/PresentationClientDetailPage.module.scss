@@ -88,3 +88,11 @@
       font-weight: var(--font-weight-big);
    }
 }
+
+.notify {
+   transform: translateY(-10px);
+   width: 5px;
+   height: 5px;
+   background-color: aqua;
+   border-radius: 50%;
+}
