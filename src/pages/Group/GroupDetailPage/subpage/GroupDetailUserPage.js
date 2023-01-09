@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import userService from "../../../../services/userService";
 import groupService from "../../../../services/groupService";
 import Table, {
@@ -31,8 +31,10 @@ function GroupDetailUserPage() {
    const inviteToGroupModal = useModal();
    const editUserpModal = useModal();
    const deleteUserpModal = useModal();
+   const deleteGroupModal = useModal();
 
    const params = useParams();
+   const navigate = useNavigate();
    const { groupId } = params;
    const isNotMobile = useMediaQuery({ minWidth: 768 });
    const authStore = useAuthStore();
@@ -75,12 +77,37 @@ function GroupDetailUserPage() {
       }
    };
 
+   const handleSubmitDeleteGroupModalForm = async () => {
+      const result = await groupService.deleteGroup(groupId);
+
+      if (result) {
+         toast.success("Delete success");
+         navigate("/group/owned");
+      } else {
+         toast.error("Delete Fail");
+      }
+   };
+
    return (
       <>
          <div className={cx("header")}>
             <div className={cx("nav")}>
                <h1 className={cx("title")}>sang</h1>
                <div className={cx("btn-group")}>
+                  {isOwnedUser && (
+                     <Button
+                        title={"Delete"}
+                        basic
+                        basicRed
+                        rounded
+                        big
+                        className={cx("btn")}
+                        leftIcon={<FontAwesomeIcon icon={faTrash} size="1x" />}
+                        onClick={() => {
+                           deleteGroupModal.setShow(true);
+                        }}
+                     />
+                  )}
                   <Button
                      title={"Invite"}
                      basic
@@ -225,6 +252,16 @@ function GroupDetailUserPage() {
                   data={deleteUserpModal.data}
                   setData={deleteUserpModal.setData}
                   handleSubmitModalForm={handleSubmitDeleteUserModalForm}
+               ></DeleteModal>
+            )}
+
+            {deleteGroupModal && (
+               <DeleteModal
+                  show={deleteGroupModal.show}
+                  setShow={deleteGroupModal.setShow}
+                  data={deleteGroupModal.data}
+                  setData={deleteGroupModal.setData}
+                  handleSubmitModalForm={handleSubmitDeleteGroupModalForm}
                ></DeleteModal>
             )}
          </>
