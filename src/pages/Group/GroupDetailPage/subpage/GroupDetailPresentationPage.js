@@ -129,8 +129,8 @@ function GroupDetailPresentationPage() {
                               <TableTd>
                                  <div className={cx("presentation-infor-cell")}>LINK</div>
                               </TableTd>
-                              <TableTd>
-                                 {/* {isOwnedUser && (
+                              {/* <TableTd>
+                                 {isOwnedUser && (
                                     <div className={cx("action")}>
                                        <FontAwesomeIcon
                                           icon={faEdit}
@@ -159,9 +159,9 @@ function GroupDetailPresentationPage() {
                                              // });
                                           }}
                                        />
-                                    </div> */}
+                                    </div>
                                  )}
-                              </TableTd>
+                              </TableTd> */}
                            </TableTr>
                         );
                      })}
