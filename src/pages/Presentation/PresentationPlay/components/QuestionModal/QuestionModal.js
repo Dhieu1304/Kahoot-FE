@@ -17,6 +17,7 @@ import Button from "../../../../../components/Button";
 import { AuthContext } from "../../../../../providers/auth";
 import { usePresentationPlayStore } from "../../store";
 import styles from "./QuestionModal.module.scss";
+import presentationServices from "../../../../../services/presentationServices";
 const cx = classNames.bind(styles);
 
 function QuestionModal({ show, setShow, questionList }) {
@@ -28,7 +29,8 @@ function QuestionModal({ show, setShow, questionList }) {
    const [questionIndex, setQuestionIndex] = useState(0);
    const [answeredIndexList, setAnsweredIndexList] = useState([]);
 
-   const handleAnswer = () => {
+   const handleAnswer = async () => {
+      // await presentationServices.markAnswer()
       setAnsweredIndexList((prev) => {
          const newAnsweredIndexList = [...prev];
          newAnsweredIndexList.push(questionIndex);

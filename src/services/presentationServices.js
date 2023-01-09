@@ -424,6 +424,14 @@ const submitAnswer = async (code, name, uid) => {
    }
 };
 
+const markAnswer = async (presentation_id, question_id) => {
+   try {
+      return await axiosClient.post(`/question/mark-answer`, { presentation_id, question_id });
+   } catch (e) {
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -463,5 +471,6 @@ export default {
    clientJoinPresentationByCode,
 
    //submit answer
-   submitAnswer
+   submitAnswer,
+   markAnswer
 };

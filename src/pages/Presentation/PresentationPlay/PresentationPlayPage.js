@@ -136,7 +136,7 @@ function PresentationPlayPage() {
             } = chatMessage;
             return { id, userId, message, uid, avatar, fullName };
          });
-         setChatMessageList((prev) => [...newChatMessageListTemp]);
+         setChatMessageList((prev) => [...newChatMessageListTemp.reverse()]);
 
          // question
          const questionListTemp = await presentationServices.getQuestionsByPresentationId(
