@@ -5,7 +5,9 @@ import camelcaseKeys from "camelcase-keys";
 
 const login = async (data) => {
    try {
+      console.log({ data });
       const user = await axiosClient.post("/auth/login", data);
+      console.log({ user });
       if (user.status) {
          setItem(LOCAL_STORAGE.ACCESS_TOKEN, user?.data?.accessToken);
          setItem(LOCAL_STORAGE.REFRESH_TOKEN, user?.data?.refreshToken);
