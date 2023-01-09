@@ -42,6 +42,7 @@ const inviteToGroupByEmail = async (groupId, email) => {
             email
          }
       });
+
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -56,6 +57,7 @@ const getInviteLink = async (groupId) => {
             groupId
          }
       });
+
       return camelcaseKeys(res.data.link, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -114,6 +116,33 @@ const changeRole = async (groupId, userId, roleId) => {
    }
 };
 
+const deleteUserFromGroup = async (groupId, userId) => {
+   console.log("[SERVICE] deleteUserFromGroup: ", { groupId, userId });
+   try {
+      const res = await axiosClient.post("/group-user/delete-member-group", {
+         userId,
+         groupId: parseInt(groupId)
+      });
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+export default {
+   getGroupsByOwnUserId,
+   getGroupsByJoinedUserId,
+   createGroup,
+   inviteToGroupByEmail,
+   getInviteLink,
+   checkOwnedUser,
+   joinGroupByLink,
+   changeRole,
+   joinGroupByEmailToken,
+   deleteUserFromGroup
+};
+
 export {
    getGroupsByOwnUserId,
    getGroupsByJoinedUserId,
@@ -123,5 +152,6 @@ export {
    checkOwnedUser,
    joinGroupByLink,
    changeRole,
-   joinGroupByEmailToken
+   joinGroupByEmailToken,
+   deleteUserFromGroup
 };
