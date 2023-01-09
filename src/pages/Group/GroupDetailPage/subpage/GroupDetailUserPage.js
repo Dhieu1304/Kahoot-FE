@@ -24,6 +24,7 @@ import InviteToGroupModal from "../components/InviteToGroupModal";
 import EditUserModal from "../components/EditUserModal/EditUserModal";
 import { toast } from "react-toastify";
 import DeleteModal from "../components/DeleteModal";
+import { ListGroup } from "react-bootstrap";
 
 function GroupDetailUserPage() {
    const [users, setUsers] = useState([]);
@@ -37,6 +38,7 @@ function GroupDetailUserPage() {
    const navigate = useNavigate();
    const { groupId } = params;
    const isNotMobile = useMediaQuery({ minWidth: 768 });
+   const isDesktop = useMediaQuery({ minWidth: 992 });
    const authStore = useAuthStore();
 
    const loadData = async () => {
@@ -130,8 +132,13 @@ function GroupDetailUserPage() {
                      <TableTr>
                         <TableTh>Id</TableTh>
                         <TableTh>Email</TableTh>
-                        <TableTh>Name</TableTh>
-                        <TableTh>Role</TableTh>
+
+                        {isDesktop && (
+                           <>
+                              <TableTh>Name</TableTh>
+                              <TableTh>Role</TableTh>
+                           </>
+                        )}
 
                         <TableTh>Action</TableTh>
                      </TableTr>
@@ -144,16 +151,22 @@ function GroupDetailUserPage() {
                               <TableTd>
                                  <div className={cx("presentation-infor-cell")}>{user?.email}</div>
                               </TableTd>
-                              <TableTd>
-                                 <div className={cx("presentation-infor-cell")}>
-                                    {user?.fullName}
-                                 </div>
-                              </TableTd>
-                              <TableTd>
-                                 <div className={cx("presentation-infor-cell")}>
-                                    {user?.groupUsers[0].groupUserRole.name}
-                                 </div>
-                              </TableTd>
+
+                              {isDesktop && (
+                                 <>
+                                    <TableTd>
+                                       <div className={cx("presentation-infor-cell")}>
+                                          {user?.fullName}
+                                       </div>
+                                    </TableTd>
+                                    <TableTd>
+                                       <div className={cx("presentation-infor-cell")}>
+                                          {user?.groupUsers[0].groupUserRole.name}
+                                       </div>
+                                    </TableTd>
+                                 </>
+                              )}
+
                               <TableTd>
                                  {isOwnedUser && (
                                     <div className={cx("action")}>
@@ -200,23 +213,48 @@ function GroupDetailUserPage() {
                      return (
                         <ListGroup.Item className={cx("item")} key={index}>
                            <div className={cx("top")}>
-                              <div className={cx("infor")}>{user?.group?.name}</div>
+                              <div className={cx("infor")}>{user?.email}</div>
 
                               <div className={cx("action")}>
-                                 <FontAwesomeIcon
-                                    icon={faTrash}
-                                    className={cx("icon")}
-                                    size="1x"
-                                    color="red"
-                                    onClick={() => {
-                                       // deleteMemberModal.setData(user?.groupId);
-                                       // deleteMemberModal.setShow(true);
-                                    }}
-                                 />
+                                 {isOwnedUser && (
+                                    <div className={cx("action")}>
+                                       <FontAwesomeIcon
+                                          icon={faEdit}
+                                          className={cx("icon")}
+                                          size="1x"
+                                          color="green"
+                                          onClick={() => {
+                                             // deleteGroupModal.setData(user?.groupId);
+                                             // deleteGroupModal.setShow(true);
+                                             editUserpModal.setShow(true);
+                                             editUserpModal.setData({
+                                                userId: user?.id,
+                                                name: user?.fullName,
+                                                roleId: user?.roleId
+                                             });
+                                          }}
+                                       />
+                                       <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className={cx("icon")}
+                                          size="1x"
+                                          color="red"
+                                          onClick={() => {
+                                             deleteUserpModal.setShow(true);
+                                             deleteUserpModal.setData({
+                                                userId: user?.id,
+                                                name: user?.fullName
+                                             });
+                                          }}
+                                       />
+                                    </div>
+                                 )}
                               </div>
                            </div>
                            <div className={cx("bottom")}>
-                              <span className={cx("role")}></span>
+                              <span className={cx("role")}>
+                                 {user?.groupUsers[0].groupUserRole.name}{" "}
+                              </span>
                            </div>
                         </ListGroup.Item>
                      );
