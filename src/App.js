@@ -5,13 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 import "./App.css";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import LoginPage from "./pages/Auth/LoginPage";
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, Outlet } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 import HomePage from "./pages/HomePage";
-import GroupPage from "./pages/GroupPage";
-import ManageGroupList from "./pages/GroupPage/components/ManageGroupList";
-import ManageGroup from "./pages/GroupPage/components/ManageGroup/ManageGroup";
+
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./providers/auth/provider";
 import { getUserInfo } from "./services/authService";
@@ -43,6 +41,8 @@ import PresentationManageGroup from "./pages/Presentation/PresentationManage/Pre
 
 import * as localStorageApp from "./utils/localStorage";
 import { getItem, LOCAL_STORAGE } from "./utils/localStorage";
+import GroupLayout from "./layouts/GroupLayout";
+import GroupPage from "./pages/Group/GroupPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -89,38 +89,16 @@ function App() {
                      <Route
                         path={"/group"}
                         element={
-                           <DefaultLayout>
-                              <GroupPage />
-                           </DefaultLayout>
+                           <GroupLayout>
+                              <Outlet />
+                           </GroupLayout>
                         }
                      >
-                        <Route
-                           path={"owned"}
-                           element={
-                              <GroupListProvider>
-                                 <ManageGroupList />
-                              </GroupListProvider>
-                           }
-                        ></Route>
-                        <Route
-                           path={"joined"}
-                           element={
-                              <GroupListProvider>
-                                 <ManageGroupList />
-                              </GroupListProvider>
-                           }
-                        ></Route>
-                        <Route path={"list"}>
-                           <Route
-                              path={":id"}
-                              element={
-                                 <GroupItemProvider>
-                                    <ManageGroup />
-                                 </GroupItemProvider>
-                              }
-                           ></Route>
-                        </Route>
+                        <Route path="" element={<Navigate to={"owned"} replace />} />
+                        <Route path={"owned"} element={<GroupPage />} />
+                        <Route path={"joined"} element={<GroupPage />} />
                      </Route>
+
                      <Route path={"group/join-by-email"} element={<LinkPage />}></Route>
                      <Route
                         path={"/profile"}

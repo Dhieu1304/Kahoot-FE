@@ -114,6 +114,18 @@ const changeRole = async (groupId, userId, roleId) => {
    }
 };
 
+export default {
+   getGroupsByOwnUserId,
+   getGroupsByJoinedUserId,
+   createGroup,
+   inviteToGroupByEmail,
+   getInviteLink,
+   checkOwnedUser,
+   joinGroupByLink,
+   changeRole,
+   joinGroupByEmailToken
+};
+
 export {
    getGroupsByOwnUserId,
    getGroupsByJoinedUserId,
