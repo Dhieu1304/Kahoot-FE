@@ -18,9 +18,10 @@ import { AuthContext } from "../../../../../providers/auth";
 import { usePresentationPlayStore } from "../../store";
 import styles from "./QuestionModal.module.scss";
 import presentationServices from "../../../../../services/presentationServices";
+import { useParams } from "react-router-dom";
 const cx = classNames.bind(styles);
 
-function QuestionModal({ show, setShow, questionList }) {
+function QuestionModal({ show, setShow, questionList, handleMarkQuestion }) {
    const authContext = useContext(AuthContext);
    const presentatioPlayStore = usePresentationPlayStore();
 
@@ -29,14 +30,15 @@ function QuestionModal({ show, setShow, questionList }) {
    const [questionIndex, setQuestionIndex] = useState(0);
    const [answeredIndexList, setAnsweredIndexList] = useState([]);
 
-   const handleAnswer = async () => {
-      // await presentationServices.markAnswer()
-      setAnsweredIndexList((prev) => {
-         const newAnsweredIndexList = [...prev];
-         newAnsweredIndexList.push(questionIndex);
-         return newAnsweredIndexList;
-      });
+   const params = useParams();
+   console.log("params: ", params);
+
+   const handleAnswer = async (questionId) => {
+      const presentationId = params.id;
+      await presentationServices.markAnswer(presentationId, questionId);
    };
+
+   console.log("questionList: ", questionList);
 
    return (
       <div className={cx("wrapper")}>
@@ -62,13 +64,38 @@ function QuestionModal({ show, setShow, questionList }) {
                   })}
                />
                {questionList && questionList.length > 0 ? (
-                  <div className={cx("question-current")}>
-                     <div className={cx("page-number")}>
-                        {questionIndex + 1} / {questionList.length}
+                  <>
+                     <div className={cx("question-current")}>
+                        <div className={cx("page-number")}>
+                           {questionIndex + 1} / {questionList.length}
+                        </div>
+                        <p className={cx("asker")}>{questionList[questionIndex]?.user?.fullName}</p>
+                        <p className={cx("content")}>{questionList[questionIndex]?.question}</p>
                      </div>
-                     <p className={cx("asker")}>{questionList[questionIndex]?.user?.fullName}</p>
-                     <p className={cx("content")}>{questionList[questionIndex]?.question}</p>
-                  </div>
+
+                     {answeredIndexList.includes(questionIndex) ? (
+                        <div>
+                           <Button
+                              title={"Answered"}
+                              big
+                              basicTeal
+                              rounded
+                              className={cx("marked-btn")}
+                           />
+                        </div>
+                     ) : (
+                        <div>
+                           <Button
+                              title={"Press to mark as answered"}
+                              big
+                              basicBlu
+                              rounded
+                              onClick={() => handleAnswer(questionList[questionIndex].id)}
+                              className={cx("mark-btn")}
+                           />
+                        </div>
+                     )}
+                  </>
                ) : (
                   <span className={cx("no-question")}>No question</span>
                )}
@@ -84,29 +111,6 @@ function QuestionModal({ show, setShow, questionList }) {
                      disable: questionIndex >= questionList.length - 1
                   })}
                />
-
-               {answeredIndexList.includes(questionIndex) ? (
-                  <div>
-                     <Button
-                        title={"Answered"}
-                        big
-                        basicTeal
-                        rounded
-                        className={cx("marked-btn")}
-                     />
-                  </div>
-               ) : (
-                  <div>
-                     <Button
-                        title={"Press to mark as answered"}
-                        big
-                        basicBlu
-                        rounded
-                        onClick={handleAnswer}
-                        className={cx("mark-btn")}
-                     />
-                  </div>
-               )}
             </div>
          </div>
       </div>
