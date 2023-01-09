@@ -117,11 +117,10 @@ const changeRole = async (groupId, userId, roleId) => {
 };
 
 const deleteUserFromGroup = async (groupId, userId) => {
-   console.log("[SERVICE] deleteUserFromGroup: ", { groupId, userId });
    try {
       const res = await axiosClient.post("/group-user/delete-member-group", {
          userId,
-         groupId: parseInt(groupId)
+         groupId
       });
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
