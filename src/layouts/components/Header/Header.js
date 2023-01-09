@@ -50,7 +50,7 @@ function Header() {
                         ))}
 
                         <div className={cx("header-navbar-off-canvas-right")}>
-                           <div className={cx("btn-group")}>
+                           {/*<div className={cx("btn-group")}>
                               <Button
                                  title={"Share"}
                                  outline
@@ -67,7 +67,7 @@ function Header() {
                                  big
                                  className={cx("header-btn")}
                               />
-                           </div>
+                           </div>*/}
                         </div>
                      </Nav>
                   ) : (

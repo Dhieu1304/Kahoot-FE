@@ -1,20 +1,16 @@
 import { faAdd, faEdit, faPlayCircle, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import dateFormat from "date-and-time";
-
 import Button from "../../../components/Button";
 import CreatePresentationModal from "../components/CreatePresentationModal";
 import { usePresentationStore } from "./store";
 import ActionMenu from "./components/ActionMenu";
-
 import RenamePresentationModal from "../components/RenamePresentationModal";
 import InviteToPresentationModal from "../components/InviteToPresentationModal";
-import Modal from "../../../components/Modal";
 
 import Table, {
    TableTHead,
@@ -225,7 +221,7 @@ function PresentationPage() {
                                           />
                                        </Link>
                                        <Link
-                                          to={`/presentation/${presentation.id}/user`}
+                                          to={`/presentation/${presentation.id}/edit`}
                                           onClick={() => {
                                              handleUpdateRecentSideBarMenuBottomItems(presentation);
                                           }}

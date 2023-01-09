@@ -57,7 +57,7 @@ function JointGroupByLinkModal({ show, setShow }) {
             showLabel
             type={"txt"}
             {...register("link")}
-            rightBtn={<Button title={"Joint"} basicBlue rounded big onClick={handleJoinByLink} />}
+            rightBtn={<Button title={"Join"} basicBlue rounded big onClick={handleJoinByLink} />}
          />
       </Modal>
    );

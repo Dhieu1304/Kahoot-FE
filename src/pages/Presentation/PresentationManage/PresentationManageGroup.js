@@ -32,7 +32,6 @@ import { usePresenationManageLayoutStore } from "../../../layouts/PresenationMan
 
 import classNames from "classnames/bind";
 import styles from "./PresentationManage.module.scss";
-import InviteToPresentationModal from "../components/InviteToPresentationModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/auth";
 import Tabs from "../../../components/Tabs";

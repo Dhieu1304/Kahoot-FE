@@ -93,7 +93,6 @@ function PresentationManageProvider({ children }) {
    const deleteMember = async (email) => {
       const presentationId = state.presentation?.id;
       const result = await presentationServices.deleteMember(presentationId, email);
-
       if (result) {
          return await loadPresentationUsers(presentationId);
       }
@@ -102,9 +101,6 @@ function PresentationManageProvider({ children }) {
    const addMember = async (email) => {
       const presentationId = state.presentation?.id;
       const result = await presentationServices.addPresentationCoOwner(presentationId, email);
-
-      console.log("result: ", result);
-
       if (result) {
          return await loadPresentationUsers(presentationId);
       }

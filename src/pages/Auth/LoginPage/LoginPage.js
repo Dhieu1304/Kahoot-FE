@@ -3,19 +3,16 @@ import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-
 import AuthInput from "../../../components/AuthInput";
 import AuthForm from "../../../components/AuthForm/AuthForm";
-import { AuthContext } from "../../../providers/auth/provider";
+import { AuthContext } from "../../../providers/auth";
 import { getUserInfo, login } from "../../../services/authService";
-
 import "./LoginPage.css";
 
 function LoginPage() {
    const {
       register,
       handleSubmit,
-      watch,
       formState: { errors }
    } = useForm({
       mode: "onChange",
@@ -34,8 +31,10 @@ function LoginPage() {
          if (userLogin) {
             authContext.login();
             const user = await getUserInfo();
-            if (user) authContext.setUser(user);
-            navigate("/");
+            if (user) {
+               authContext.setUser(user);
+               navigate("/home");
+            }
          }
       } catch (e) {
          console.error(e.message);

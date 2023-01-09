@@ -19,16 +19,13 @@ import {
    Tooltip
 } from "recharts";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
-
 import classNames from "classnames/bind";
 import styles from "./PresentationPlayPage.module.scss";
-import { useLocation, useNavigate, useOutlet, useOutletContext, useParams } from "react-router-dom";
-import { useCallback, useContext, useEffect, useState } from "react";
-
+import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../../providers/socket";
 import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
 import { usePresentationPlayStore } from "./store";
-
 import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
 import QuestionModal from "./components/QuestionModal";
 import { toast } from "react-toastify";
@@ -39,9 +36,6 @@ import { AuthContext } from "../../../providers/auth";
 const cx = classNames.bind(styles);
 
 function PresentationPlayPage() {
-   const xxx = useOutletContext();
-   console.log("xxx: ", xxx);
-
    const [slide, setSlide] = useState();
    const [countSlide, setCountSlide] = useState(1);
    const [result, setResult] = useState([]);
@@ -52,35 +46,15 @@ function PresentationPlayPage() {
    const authContext = useContext(AuthContext);
    const socket = useContext(SocketContext);
    const presentationPlayStore = usePresentationPlayStore();
-
    const { showChatBox, setShowChatBox, showQuestionModal, setShowQuestionModal } =
       presentationPlayStore;
-
    const location = useLocation();
    const presentationId = location.pathname.split("/presentation/")[1].split("/")[0];
-
    const navigate = useNavigate();
 
    useEffect(() => {
       socket.emit(PRESENTATION_EVENT.PRESENT, {
          presentation_id: presentationId
-      });
-
-      // DEBUG
-      socket.on(SOCKET_EVENT.ERROR, (message) => {
-         console.error(message);
-      });
-      socket.on(SOCKET_EVENT.NOTIFICATION, (message) => {
-         console.info(message);
-      });
-      socket.on(SOCKET_EVENT.SUCCESS, (message) => {
-         console.log(message);
-      });
-      // DEBUG
-
-      socket.on(PRESENTATION_EVENT.SLIDE_DETAIL, (data) => {
-         console.log(">>>>>>>>>>SLIDE_DETAIL: ", data);
-         setCountSlide(data?.count_slide || 1);
       });
       socket.on(PRESENTATION_EVENT.COUNT_ONL, (countOnl) => {
          setCountOnl(countOnl);
@@ -93,7 +67,24 @@ function PresentationPlayPage() {
       });
       socket.on(PRESENTATION_EVENT.STOP_PRESENT, (data) => {
          toast.info(data);
-         // Todo: Đá nó ra 1 trang nào đó
+         navigate("/presentation");
+      });
+      socket.on(PRESENTATION_EVENT.QUESTION, (data) => {
+         console.log(">>>>>>>>> QUESTION:", data);
+         setQuestionList(data);
+      });
+      socket.on(PRESENTATION_EVENT.NEW_MESSAGE, (data) => {
+         if (data) {
+            const newChat = {
+               id: data.id,
+               userId: data.user_id,
+               message: data.message,
+               uid: data.uid,
+               avatar: data.avatar,
+               fullName: data.full_name
+            };
+            setChatMessageList((prev) => [...prev, newChat]);
+         }
       });
 
       return () => {
@@ -104,21 +95,37 @@ function PresentationPlayPage() {
          socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
-         socket.off(PRESENTATION_EVENT.SLIDE_DETAIL);
          socket.off(PRESENTATION_EVENT.STOP_PRESENT);
+         socket.off(PRESENTATION_EVENT.QUESTION);
+         socket.off(PRESENTATION_EVENT.NEW_MESSAGE);
       };
    }, []);
 
-   /////////////
-
    useEffect(() => {
-      //load data
       const loadData = async () => {
-         // Chat
+         // get slide & data
+         const result = await presentationServices.presentSlideShow(presentationId);
+         if (!result) {
+            navigate("/presentation");
+            return;
+         }
+         socket.emit(PRESENTATION_EVENT.JOIN_HOST, { data: result.join_host });
+         setCountSlide(result.count_slide || 1);
+         const slideRes = await presentationServices.getSlideAndDataPresentation(
+            presentationId,
+            result.ordinal_slide_number
+         );
+         if (slideRes) {
+            setSlide(slideRes);
+            if (slideRes.slide_type_id === 1) {
+               setResult(slideRes.body);
+            }
+         }
+
+         // get chat
          const chatMessageListTemp = await presentationServices.getChatByPresentationId(
             presentationId
          );
-
          const newChatMessageListTemp = chatMessageListTemp?.map((chatMessage) => {
             const {
                id,
@@ -129,44 +136,37 @@ function PresentationPlayPage() {
             } = chatMessage;
             return { id, userId, message, uid, avatar, fullName };
          });
-
          setChatMessageList((prev) => [...newChatMessageListTemp]);
 
          // question
          const questionListTemp = await presentationServices.getQuestionsByPresentationId(
             presentationId
          );
-
-         // console.log("questionListTemp: ", questionListTemp);
-
          setQuestionList((prev) => [...questionListTemp]);
       };
       loadData();
    }, []);
 
-   /////////////
-
    const handleFullscreen = useFullScreenHandle();
 
-   const handleChangeSlideSocket = useCallback((presentation_id, ordinal_slide_number) => {
-      socket.emit(PRESENTATION_EVENT.PRESENT_OTHER_SLIDE, {
-         presentation_id,
-         ordinal_slide_number
-      });
-   }, []);
-
-   const handleChangeSlide = (type) => {
+   const handleChangeSlide = async (type) => {
       switch (type) {
          case "next":
             if (slide?.ordinal_slide_number < countSlide) {
-               handleChangeSlideSocket(slide.presentation_id, slide.ordinal_slide_number + 1);
+               await presentationServices.presentOtherSlide(
+                  slide.presentation_id,
+                  slide.ordinal_slide_number + 1
+               );
             } else {
                toast.info("This is the last slide");
             }
             break;
          case "prev":
             if (slide?.ordinal_slide_number > 1) {
-               handleChangeSlideSocket(slide.presentation_id, slide.ordinal_slide_number - 1);
+               await presentationServices.presentOtherSlide(
+                  slide.presentation_id,
+                  slide.ordinal_slide_number - 1
+               );
             } else {
                toast.info("This is the first slide");
             }
@@ -176,7 +176,6 @@ function PresentationPlayPage() {
       }
    };
 
-   ////////////////////////
    const handleScroll = (e) => {
       let element = e.target;
       if (element.scrollTop === 0) {
@@ -186,19 +185,7 @@ function PresentationPlayPage() {
    };
 
    const handleSendMessage = async (message) => {
-      console.log("handleSendMessage: ", message);
-
-      const result = presentationServices.sendMessageByPresentationId(presentationId, message);
-
-      setChatMessageList((prev) => {
-         const newChatMessageList = [...prev];
-
-         const userId = authContext.user?.id;
-         const newChatMessage = { userId, message };
-         newChatMessageList.push(newChatMessage);
-
-         return [...newChatMessageList];
-      });
+      await presentationServices.sendMessageByPresentationId(presentationId, message);
    };
 
    const renderContentBySlideTypeId = () => {
@@ -300,7 +287,7 @@ function PresentationPlayPage() {
                      <h1 className={cx("infor")}>
                         Go to
                         <span className={cx("infor-label")}>
-                           {process.env.REACT_APP_BE_URL + "game"}
+                           {process.env.REACT_APP_FE_URL + "/presentation-client"}
                         </span>
                         and use the code
                         <span className={cx("infor-label")}>
@@ -378,64 +365,64 @@ function PresentationPlayPage() {
       </div>
    );
 
-   // return (
-   // <div className={cx("wrapper")}>
-   //    <div className={cx("container")}>
-   //       <h1 className={cx("infor")}>
-   //          Go to
-   //          <span className={cx("infor-label")}>{process.env.REACT_APP_BE_URL + "game"}</span>
-   //          and use the code
-   //          <span className={cx("infor-label")}>
-   //             {presentationPlayStore.state.presentation?.code}
-   //          </span>
-   //       </h1>
+   /*return (
+   <div className={cx("wrapper")}>
+      <div className={cx("container")}>
+         <h1 className={cx("infor")}>
+            Go to
+            <span className={cx("infor-label")}>{process.env.REACT_APP_BE_URL + "game"}</span>
+            and use the code
+            <span className={cx("infor-label")}>
+               {presentationPlayStore.state.presentation?.code}
+            </span>
+         </h1>
 
-   //       <div className={cx("chart-area")}>
-   //          <ResponsiveContainer>
-   //             <BarChart width={600} height={250} data={result}>
-   //                <XAxis dataKey="name" />
-   //                <YAxis dataKey="value" domain={[0, "dataMax + 1"]} />
-   //                <Bar dataKey="value" fill="#8884d8">
-   //                   <LabelList dataKey="value" position="top" />
-   //                </Bar>
-   //             </BarChart>
-   //          </ResponsiveContainer>
-   //       </div>
-   //       <div className={cx("count-votes")}>
-   //          <span className={cx("count-votes-number")}>{countOnl}</span>
-   //          <FontAwesomeIcon icon={faUser} size={"1x"} className={cx("count-votes-icon")} />
-   //       </div>
-   //    </div>
+         <div className={cx("chart-area")}>
+            <ResponsiveContainer>
+               <BarChart width={600} height={250} data={result}>
+                  <XAxis dataKey="name" />
+                  <YAxis dataKey="value" domain={[0, "dataMax + 1"]} />
+                  <Bar dataKey="value" fill="#8884d8">
+                     <LabelList dataKey="value" position="top" />
+                  </Bar>
+               </BarChart>
+            </ResponsiveContainer>
+         </div>
+         <div className={cx("count-votes")}>
+            <span className={cx("count-votes-number")}>{countOnl}</span>
+            <FontAwesomeIcon icon={faUser} size={"1x"} className={cx("count-votes-icon")} />
+         </div>
+      </div>
 
-   //    <div className={cx("btn-group")}>
-   //       <Button
-   //          className={cx("btn")}
-   //          title={"<-"}
-   //          basicBlue
-   //          rounded
-   //          big
-   //          onClick={() => {
-   //             let prevId = parseInt(id) - 1;
-   //             if (prevId < 0) prevId = 0;
-   //             navigate(`/presentation/1/${prevId}`);
-   //          }}
-   //       />
-   //       <Button
-   //          className={cx("btn")}
-   //          title={"->"}
-   //          basicBlue
-   //          rounded
-   //          big
-   //          onClick={() => {
-   //             let nextId = parseInt(id) + 1;
-   //             if (nextId >= presentationPlayStore.state.slides?.length)
-   //                nextId = presentationPlayStore.state.slides?.length - 1;
-   //             navigate(`/presentation/1/${nextId}`);
-   //          }}
-   //       />
-   //    </div>
-   // </div>
-   // );
+      <div className={cx("btn-group")}>
+         <Button
+            className={cx("btn")}
+            title={"<-"}
+            basicBlue
+            rounded
+            big
+            onClick={() => {
+               let prevId = parseInt(id) - 1;
+               if (prevId < 0) prevId = 0;
+               navigate(`/presentation/1/${prevId}`);
+            }}
+         />
+         <Button
+            className={cx("btn")}
+            title={"->"}
+            basicBlue
+            rounded
+            big
+            onClick={() => {
+               let nextId = parseInt(id) + 1;
+               if (nextId >= presentationPlayStore.state.slides?.length)
+                  nextId = presentationPlayStore.state.slides?.length - 1;
+               navigate(`/presentation/1/${nextId}`);
+            }}
+         />
+      </div>
+   </div>
+   );*/
 }
 
 export default PresentationPlayPage;

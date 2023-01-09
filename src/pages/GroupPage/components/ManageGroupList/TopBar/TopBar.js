@@ -30,7 +30,7 @@ function TopBar({ showSideBar, setShowSideBar }) {
             <div className={cx("btn-wrapper")}>
                <div>
                   <Button
-                     title={"Joint"}
+                     title={"Join"}
                      basic
                      basicTeal
                      rounded

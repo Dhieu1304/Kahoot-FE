@@ -34,7 +34,7 @@ function ActionMenu({ data }) {
             leftIcon={<FontAwesomeIcon icon={faSquarePollVertical} size={"1x"} />}
          />
          <CustomDropdownMenuItem
-            label={"Invite collaborator"}
+            label={"Add collaborator"}
             leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
             onClick={() => {
                console.log("id: ", data?.id);

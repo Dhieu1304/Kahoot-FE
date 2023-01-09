@@ -41,9 +41,8 @@ import PresentationManageUser from "./pages/Presentation/PresentationManage/Pres
 import PresentationManageReport from "./pages/Presentation/PresentationManage/PresentationManageReport";
 import PresentationManageGroup from "./pages/Presentation/PresentationManage/PresentationManageGroup";
 
-import PresentationPresentWrapper from "./pages/Presentation/PresentationPresentWrapper";
-
 import * as localStorageApp from "./utils/localStorage";
+import { getItem, LOCAL_STORAGE } from "./utils/localStorage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -51,12 +50,13 @@ function App() {
    useEffect(() => {
       const createCurrentAccount = async () => {
          const currentUser = await getUserInfo();
-         console.log("currentUser: ", currentUser);
          if (!currentUser) {
-            const uuid = uuidv4();
-            localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.UUID, uuid);
+            const currentUID = getItem(LOCAL_STORAGE.UUID);
+            if (!currentUID) {
+               const uuid = uuidv4();
+               localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.UUID, uuid);
+            }
          }
-
          authContext.setUser(currentUser);
          authContext.login();
       };
@@ -154,7 +154,7 @@ function App() {
                            }
                         />
 
-                        <Route path=":id" element={<PresentationPresentWrapper />}>
+                        <Route path=":id">
                            <Route path="" element={<h2>No outlet</h2>} />
                            <Route
                               path="user"
@@ -220,6 +220,7 @@ function App() {
                            }
                         ></Route>
                      </Route>
+                     <Route path={"*"} element={<DefaultAuthPage />} />
                   </Routes>
                ) : (
                   <Routes>

@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-
 import Input from "../../../components/Input";
 import Modal from "../../../components/Modal";
 import Button from "../../../components/Button";
@@ -27,7 +26,7 @@ function InviteToPresentationModal({ show, setShow, data, setData, handleInviteB
    };
 
    return (
-      <Modal title={"Invite"} show={show} setShow={setShow} data={data} setData={setData}>
+      <Modal title={"Add collaborator"} show={show} setShow={setShow} data={data} setData={setData}>
          <Input
             placeholder="Email"
             label={"Email"}
@@ -42,7 +41,7 @@ function InviteToPresentationModal({ show, setShow, data, setData, handleInviteB
             error={errors.email}
             rightBtn={
                <Button
-                  title={"Invite"}
+                  title={"Add"}
                   basicBlue
                   rounded
                   big
