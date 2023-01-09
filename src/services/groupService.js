@@ -129,6 +129,18 @@ const deleteUserFromGroup = async (groupId, userId) => {
    }
 };
 
+const deleteGroup = async (groupId) => {
+   try {
+      const res = await axiosClient.post(`/group/delete-group/${groupId}`, {
+         groupId
+      });
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getGroupsByOwnUserId,
    getGroupsByJoinedUserId,
@@ -139,7 +151,8 @@ export default {
    joinGroupByLink,
    changeRole,
    joinGroupByEmailToken,
-   deleteUserFromGroup
+   deleteUserFromGroup,
+   deleteGroup
 };
 
 export {
@@ -152,5 +165,6 @@ export {
    joinGroupByLink,
    changeRole,
    joinGroupByEmailToken,
-   deleteUserFromGroup
+   deleteUserFromGroup,
+   deleteGroup
 };
