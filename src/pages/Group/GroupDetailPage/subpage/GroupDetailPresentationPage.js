@@ -101,7 +101,7 @@ function GroupDetailPresentationPage() {
                               </TableTd>
                               <TableTd>
                                  <Link
-                                    to={`presentation-client/${presentation?.presentation?.code}`}
+                                    to={`/presentation-client/${presentation?.presentation?.code}`}
                                     className={cx("presentation-infor-cell")}
                                  >
                                     <FontAwesomeIcon size="1x" icon={faPlay} />
