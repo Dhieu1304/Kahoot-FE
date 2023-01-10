@@ -26,7 +26,7 @@ function GroupDetailPresentationPage() {
    const [presentations, setPresentations] = useState([]);
    const [isOwnedUser, setIsOwnedUser] = useState(false);
    const [isPresenting, setIsPresenting] = useState(false);
-   const [currentPresentations, setCurrentPresentations] = useState();
+   const [currentPresentations, setCurrentPresentations] = useState([]);
    const groupDetailPageStore = useGroupDetailPageStore();
 
    const socket = useContext(SocketContext);
@@ -92,6 +92,9 @@ function GroupDetailPresentationPage() {
             }
             setCurrentPresentations(currentPresent);
             setIsPresenting(true);
+         } else {
+            setCurrentPresentations([]);
+            setIsPresenting(false);
          }
       });
 
@@ -106,19 +109,24 @@ function GroupDetailPresentationPage() {
             <div className={cx("nav")}>
                <h1 className={cx("title")}>{groupDetailPageStore.group?.name}</h1>
                <div className={cx("btn-group")}>
-                  {isPresenting && currentPresentations?.length > 0 && (
-                     <button
-                        className={cx("current-presentation")}
-                        onClick={() =>
-                           navigate(`/presentation-client/${currentPresentations[0].code}`)
-                        }
-                     >
-                        <span>
-                           {currentPresentations[0].user?.fullName} đang trình chiếu{" "}
-                           {currentPresentations[0].name}{" "}
-                        </span>
-                     </button>
-                  )}
+                  {isPresenting &&
+                     currentPresentations?.length > 0 &&
+                     currentPresentations.map((currentPresentation, index) => {
+                        return (
+                           <button
+                              key={index}
+                              className={cx("current-presentation")}
+                              onClick={() =>
+                                 navigate(`/presentation-client/${currentPresentation.code}`)
+                              }
+                           >
+                              <span>
+                                 {currentPresentation.user?.fullName} đang trình chiếu{" "}
+                                 {currentPresentation.name}{" "}
+                              </span>
+                           </button>
+                        );
+                     })}
                </div>
             </div>
          </div>
