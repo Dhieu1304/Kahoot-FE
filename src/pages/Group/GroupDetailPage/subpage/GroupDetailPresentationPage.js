@@ -24,14 +24,7 @@ function GroupDetailPresentationPage() {
    const [presentations, setPresentations] = useState([]);
    const [isOwnedUser, setIsOwnedUser] = useState(false);
    const [isPresenting, setIsPresenting] = useState(false);
-   const [currentPresentation, setCurrentPresentation] = useState([
-      {
-         name: "Presentation Name",
-         user: {
-            fullName: "Sang"
-         }
-      }
-   ]);
+   const [currentPresentations, setCurrentPresentations] = useState();
 
    const socket = useContext(SocketContext);
    const params = useParams();
@@ -69,10 +62,12 @@ function GroupDetailPresentationPage() {
                }
             });
          }
-         setCurrentPresentation(currentPresent);
+         setCurrentPresentations(currentPresent);
          setIsPresenting(true);
       }
    };
+
+   console.log("currentPresentation: ", currentPresentations);
 
    useEffect(() => {
       if (groupId && authStore.user.id) {
@@ -96,7 +91,7 @@ function GroupDetailPresentationPage() {
                   }
                });
             }
-            setCurrentPresentation(currentPresent);
+            setCurrentPresentations(currentPresent);
             setIsPresenting(true);
          }
       });
@@ -112,8 +107,12 @@ function GroupDetailPresentationPage() {
             <div className={cx("nav")}>
                <h1 className={cx("title")}>sang</h1>
                <div className={cx("btn-group")}>
-                  {isPresenting && (
-                     <div className={cx("current-presentation")}>{currentPresentation?.name}</div>
+                  {isPresenting && currentPresentations?.length > 0 && (
+                     <div className={cx("current-presentation")}>
+                        <span>{currentPresentations[0].user?.email}</span>
+                        <span> đang trình chiếu </span>
+                        <span>{currentPresentations[0].name} </span>
+                     </div>
                   )}
                </div>
             </div>
