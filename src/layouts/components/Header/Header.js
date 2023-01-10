@@ -119,7 +119,7 @@ function Header() {
                            <Avatar
                               title={"Avatar"}
                               placeholder={"Avatar"}
-                              size={25}
+                              size={40}
                               rounded
                               src={authContext?.user?.avatar}
                            />

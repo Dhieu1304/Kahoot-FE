@@ -43,6 +43,7 @@ function PresentationPlayPage() {
    const [questionList, setQuestionList] = useState([]);
    const [countOnl, setCountOnl] = useState(0);
    const [isNewMessage, setIsNewMessage] = useState(false);
+   const [isFullScreen, setIsFullScreen] = useState(false);
 
    const authContext = useContext(AuthContext);
    const socket = useContext(SocketContext);
@@ -370,12 +371,27 @@ function PresentationPlayPage() {
                               />
                            </div>
                            <div className={cx("item")}>
-                              <FontAwesomeIcon
-                                 className={cx("icon")}
-                                 size={"1x"}
-                                 icon={faExpand}
-                                 onClick={handleFullscreen.enter}
-                              />
+                              {isFullScreen ? (
+                                 <FontAwesomeIcon
+                                    className={cx("icon")}
+                                    size={"1x"}
+                                    icon={faExpand}
+                                    onClick={async () => {
+                                       setIsFullScreen(false);
+                                       await handleFullscreen.exit();
+                                    }}
+                                 />
+                              ) : (
+                                 <FontAwesomeIcon
+                                    className={cx("icon")}
+                                    size={"1x"}
+                                    icon={faExpand}
+                                    onClick={async () => {
+                                       setIsFullScreen(true);
+                                       await handleFullscreen.enter();
+                                    }}
+                                 />
+                              )}
                            </div>
                            <div className={cx("item")}>
                               <span className={cx("count-votes-number")}>{countOnl}</span>

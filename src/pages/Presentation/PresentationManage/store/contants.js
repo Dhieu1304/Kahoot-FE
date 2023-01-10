@@ -1,7 +1,7 @@
 export const SET_PRESENTATION = "SET_PRESENTATION";
 export const SET_USERS = "SET_USERS";
 export const SET_GROUPS = "SET_GROUPS";
-export const SET_REPORT = "SET_REPORT";
+export const SET_REPORTS = "SET_REPORTS";
 export const FETCHING_API = "FETCHING_API";
 export const FETCHING_API_SUCCESS = "FETCHING_API_SUCCESS";
 export const FETCHING_API_FAILED = "FETCHING_API_FAILED";

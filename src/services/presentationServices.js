@@ -471,6 +471,19 @@ const downVoteQuestion = async (code, question_id) => {
    }
 };
 
+const getPresentationReport = async (presentation_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation/presentation-data`, {
+         presentation_id
+      });
+
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getOwnedPresentations,
    getCoOwnedPresentations,
@@ -511,5 +524,8 @@ export default {
    getPresentationsByGroupId,
    markAnswer,
    upVoteQuestion,
-   downVoteQuestion
+   downVoteQuestion,
+
+   // report
+   getPresentationReport
 };

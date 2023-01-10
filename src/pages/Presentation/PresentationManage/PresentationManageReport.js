@@ -9,6 +9,7 @@ import {
    faX
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import formatDate from "date-and-time";
 
 import { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
@@ -95,15 +96,6 @@ function PresentationManageReport() {
       loadData();
    }, []);
 
-   const handleInviteByEmail = async ({ email }) => {
-      await presentationManageStore.method.addMember(email);
-   };
-
-   const handleDeleteMember = async () => {
-      const email = deleteMemberModal?.data;
-      await presentationManageStore.method.deleteMember(email);
-   };
-
    return (
       presentationManageStore.state.isInit && (
          <div
@@ -176,77 +168,31 @@ function PresentationManageReport() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           {authContext.user?.id ===
-                              presentationManageStore.state.presentation?.owner?.id && (
-                              <TableTh>
-                                 <input
-                                    type={"checkbox"}
-                                    checked={isSelectAll}
-                                    onChange={handleSelectedAll}
-                                    className={cx("checkbox")}
-                                 />
-                              </TableTh>
-                           )}
-
                            <TableTh>Id</TableTh>
-                           <TableTh>Name</TableTh>
-                           <TableTh>Role</TableTh>
-                           {authContext.user?.id ===
-                              presentationManageStore.state.presentation?.owner?.id && (
-                              <TableTh></TableTh>
-                           )}
+                           <TableTh>Slide</TableTh>
+                           <TableTh>Option</TableTh>
+                           <TableTh>User name</TableTh>
+                           <TableTh>Created At</TableTh>
                         </TableTr>
                      </TableTHead>
                      <TableTBody>
-                        {presentationManageStore.state.presentation?.presentationMembers?.map(
-                           (member, index) => {
-                              const isChecked = selectedRowIds?.includes(member.id);
-                              return (
-                                 <TableTr key={index}>
-                                    {authContext.user?.id ===
-                                       presentationManageStore.state.presentation?.owner?.id && (
-                                       <TableTd>
-                                          {authContext.user?.id !== member?.userId && (
-                                             <input
-                                                type={"checkbox"}
-                                                checked={isChecked}
-                                                onChange={() =>
-                                                   handleSelected(member?.userId, isChecked)
-                                                }
-                                                className={cx("checkbox")}
-                                             />
-                                          )}
-                                       </TableTd>
+                        {presentationManageStore.state.reports?.map((report, index) => {
+                           const date = new Date(report?.createAt);
+                           return (
+                              <TableTr key={index}>
+                                 <TableTd>{report?.id}</TableTd>
+                                 <TableTd>{report?.ordinalSlideNumber}</TableTd>
+                                 <TableTd>{report?.name}</TableTd>
+                                 <TableTd>{report?.user?.fullName}</TableTd>
+                                 <TableTd>
+                                    {formatDate.format(
+                                       new Date(report?.createdAt),
+                                       "DD/MM/YYYY - HH:mm:ss"
                                     )}
-                                    <TableTd>{member?.user?.id}</TableTd>
-                                    <TableTd>
-                                       <div className={cx("presentation-infor-cell")}>
-                                          {member?.user?.fullName}
-                                       </div>
-                                    </TableTd>
-                                    <TableTd>{member?.role?.name}</TableTd>
-
-                                    {authContext.user?.id ===
-                                       presentationManageStore.state.presentation?.owner?.id && (
-                                       <TableTd>
-                                          {authContext.user?.id !== member?.userId && (
-                                             <FontAwesomeIcon
-                                                icon={faTrash}
-                                                className={cx("icon")}
-                                                size="1x"
-                                                color="red"
-                                                onClick={() => {
-                                                   deleteMemberModal.setData(member?.user?.email);
-                                                   deleteMemberModal.setShow(true);
-                                                }}
-                                             />
-                                          )}
-                                       </TableTd>
-                                    )}
-                                 </TableTr>
-                              );
-                           }
-                        )}
+                                 </TableTd>
+                              </TableTr>
+                           );
+                        })}
                      </TableTBody>
                   </Table>
                ) : (
@@ -285,24 +231,6 @@ function PresentationManageReport() {
                   </ListGroup>
                )}
             </div>
-            {inviteModal.show && (
-               <InviteToPresentationModal
-                  show={inviteModal.show}
-                  setShow={inviteModal.setShow}
-                  data={inviteModal.data}
-                  setData={inviteModal.setData}
-                  handleInviteByEmail={handleInviteByEmail}
-               />
-            )}
-            {deleteMemberModal && (
-               <DeleteModal
-                  show={deleteMemberModal.show}
-                  setShow={deleteMemberModal.setShow}
-                  data={deleteMemberModal.data}
-                  setData={deleteMemberModal.setData}
-                  handleSubmitForm={handleDeleteMember}
-               />
-            )}
          </div>
       )
    );
