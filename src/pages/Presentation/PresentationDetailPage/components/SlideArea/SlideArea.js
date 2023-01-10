@@ -35,7 +35,7 @@ function SlideArea() {
 
       const resultWithCount = currentBody?.map((cur) => ({
          ...cur,
-         count: 200
+         count: 10
       }));
 
       setResult(resultWithCount);

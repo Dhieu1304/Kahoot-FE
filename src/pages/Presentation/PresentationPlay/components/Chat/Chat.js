@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRef } from "react";
 import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ import { usePresentationClientDetailStore, usePresentationPlayStore } from "../.
 import styles from "./Chat.module.scss";
 const cx = classNames.bind(styles);
 
-function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage }) {
+function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage, theme }) {
    const {
       watch,
       control,
@@ -42,6 +42,20 @@ function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage 
 
    const authContext = useContext(AuthContext);
 
+   const themeType = useMemo(() => {
+      console.log("theme: ", theme);
+      switch (theme) {
+         //
+         case 1:
+            return "light";
+         case 2:
+            return "dark";
+
+         default:
+            return "dark";
+      }
+   }, [theme]);
+
    useEffect(() => {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
    }, [isSendNewMessage]);
@@ -58,7 +72,11 @@ function Chat({ show, setShow, chatMessageList, handleScroll, handleSendMessage 
    const currentUID = getItem(LOCAL_STORAGE.UUID);
 
    return (
-      <div className={cx("container")}>
+      <div
+         className={cx("container", {
+            [themeType]: true
+         })}
+      >
          <div className={cx("header")}>
             <span className={cx("name")}>Chat box</span>
             <FontAwesomeIcon

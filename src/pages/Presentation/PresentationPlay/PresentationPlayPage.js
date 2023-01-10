@@ -280,7 +280,12 @@ function PresentationPlayPage() {
       <div>
          <FullScreen handle={handleFullscreen}>
             <div className={cx("wrapper")}>
-               <div className={cx("header-icon-group")}>
+               <div
+                  className={cx("header-icon-group")}
+                  style={{
+                     color: presentationPlayStore.state.presentation?.presentationTheme.textColor
+                  }}
+               >
                   <FontAwesomeIcon
                      icon={faArrowLeft}
                      size="1x"
@@ -297,6 +302,11 @@ function PresentationPlayPage() {
                         navigate(`/presentation/${presentationId}/edit`);
                      }}
                   />
+                  <span className={cx("slide-number")}>{slide?.ordinal_slide_number}</span>
+                  <span className={cx("slide-number")}>/</span>
+                  <span className={cx("slide-number")}>
+                     {presentationPlayStore.state?.slides?.length}
+                  </span>
                </div>
 
                <div
@@ -341,6 +351,9 @@ function PresentationPlayPage() {
                                     chatMessageList={chatMessageList}
                                     handleScroll={handleScroll}
                                     handleSendMessage={handleSendMessage}
+                                    theme={
+                                       presentationPlayStore.state.presentation?.presentationThemeId
+                                    }
                                  />
                               )}
                            </div>
@@ -406,65 +419,6 @@ function PresentationPlayPage() {
          </FullScreen>
       </div>
    );
-
-   /*return (
-   <div className={cx("wrapper")}>
-      <div className={cx("container")}>
-         <h1 className={cx("infor")}>
-            Go to
-            <span className={cx("infor-label")}>{process.env.REACT_APP_BE_URL + "game"}</span>
-            and use the code
-            <span className={cx("infor-label")}>
-               {presentationPlayStore.state.presentation?.code}
-            </span>
-         </h1>
-
-         <div className={cx("chart-area")}>
-            <ResponsiveContainer>
-               <BarChart width={600} height={250} data={result}>
-                  <XAxis dataKey="name" />
-                  <YAxis dataKey="value" domain={[0, "dataMax + 1"]} />
-                  <Bar dataKey="value" fill="#8884d8">
-                     <LabelList dataKey="value" position="top" />
-                  </Bar>
-               </BarChart>
-            </ResponsiveContainer>
-         </div>
-         <div className={cx("count-votes")}>
-            <span className={cx("count-votes-number")}>{countOnl}</span>
-            <FontAwesomeIcon icon={faUser} size={"1x"} className={cx("count-votes-icon")} />
-         </div>
-      </div>
-
-      <div className={cx("btn-group")}>
-         <Button
-            className={cx("btn")}
-            title={"<-"}
-            basicBlue
-            rounded
-            big
-            onClick={() => {
-               let prevId = parseInt(id) - 1;
-               if (prevId < 0) prevId = 0;
-               navigate(`/presentation/1/${prevId}`);
-            }}
-         />
-         <Button
-            className={cx("btn")}
-            title={"->"}
-            basicBlue
-            rounded
-            big
-            onClick={() => {
-               let nextId = parseInt(id) + 1;
-               if (nextId >= presentationPlayStore.state.slides?.length)
-                  nextId = presentationPlayStore.state.slides?.length - 1;
-               navigate(`/presentation/1/${nextId}`);
-            }}
-         />
-      </div>
-   </div>
-   );*/
 }
 
 export default PresentationPlayPage;
