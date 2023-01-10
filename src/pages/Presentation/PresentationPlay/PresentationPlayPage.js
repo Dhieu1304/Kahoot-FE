@@ -105,20 +105,24 @@ function PresentationPlayPage() {
       const loadData = async () => {
          // get slide & data
          const result = await presentationServices.presentSlideShow(presentationId);
+         console.log("result: ", result);
          if (!result) {
             navigate("/presentation");
             return;
          }
          socket.emit(PRESENTATION_EVENT.JOIN_HOST, { data: result.join_host });
          setCountSlide(result.count_slide || 1);
+         /*
          const slideRes = await presentationServices.getSlideAndDataPresentation(
             presentationId,
             result.ordinal_slide_number
          );
-         if (slideRes) {
-            setSlide(slideRes);
-            if (slideRes.slide_type_id === 1) {
-               setResult(slideRes.body);
+         console.log("result: ", slideRes);
+         */
+         if (result.slide) {
+            setSlide(result.slide);
+            if (result.slide.slide_type_id === 1) {
+               setResult(result.slide.body);
             }
          }
 
