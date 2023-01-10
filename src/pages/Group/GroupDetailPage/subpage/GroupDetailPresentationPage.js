@@ -73,6 +73,15 @@ function GroupDetailPresentationPage() {
          loadData();
       }
    }, [groupId, authStore.user.id]);
+
+   useEffect(() => {
+      if (isPresenting) {
+         console.log("clear");
+         const timer = setTimeout(() => setIsPresenting(false), 10000);
+         return () => clearTimeout(timer);
+      }
+   }, [isPresenting]);
+
    useEffect(() => {
       socket.emit(PRESENTATION_EVENT.JOIN_PRESENT_GROUP, { groupId });
       socket.on(PRESENTATION_EVENT.PRESENT_GROUP, (presentGroup) => {
