@@ -32,7 +32,9 @@ function ForgetPassword() {
       <AuthForm
          title="Forget password"
          btnTitle="Send"
-         redirectMessage={""}
+         redirectMessage="You have an account?"
+         redirectTitle="Login"
+         redirectLink="/auth/login"
          onAuthSubmit={handleSubmit(onSubmit)}
       >
          <AuthInput
