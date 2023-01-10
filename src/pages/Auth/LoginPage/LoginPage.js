@@ -47,7 +47,7 @@ function LoginPage() {
       <AuthForm
          title="Sign in"
          btnTitle="Login"
-         redirectMessage={"You don't have an account?"}
+         redirectMessage={"You don't have an account? "}
          redirectTitle="Register"
          redirectLink="/auth/register"
          onAuthSubmit={handleSubmit(onSubmit)}

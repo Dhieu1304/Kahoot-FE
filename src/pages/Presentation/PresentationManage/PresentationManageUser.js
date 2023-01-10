@@ -147,7 +147,7 @@ function PresentationManageUser() {
                            }}
                         />
                         <Button
-                           title="Invite"
+                           title="Add collaborator"
                            basicBlue
                            big
                            rounded

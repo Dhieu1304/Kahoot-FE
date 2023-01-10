@@ -24,7 +24,7 @@ import styles from "./PresentationPlayPage.module.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../../providers/socket";
-import { PRESENTATION_EVENT, SOCKET_EVENT } from "../../../providers/socket/socket.constant";
+import { PRESENTATION_EVENT } from "../../../providers/socket/socket.constant";
 import { usePresentationPlayStore } from "./store";
 import { HEADING, MULTIPLE_CHOICE, PARAGRAPH } from "../../../config/configSlideTypes";
 import QuestionModal from "./components/QuestionModal";
@@ -91,10 +91,6 @@ function PresentationPlayPage() {
       });
 
       return () => {
-         const arrSocketEvent = Object.values(SOCKET_EVENT);
-         for (let i = 0; i < arrSocketEvent.length; i++) {
-            socket.off(arrSocketEvent[i]);
-         }
          socket.emit(PRESENTATION_EVENT.STOP_PRESENT, { presentation_id: presentationId });
          socket.off(PRESENTATION_EVENT.COUNT_ONL);
          socket.off(PRESENTATION_EVENT.SLIDE_DATA);
