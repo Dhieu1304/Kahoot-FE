@@ -137,6 +137,14 @@ function Header() {
                            <Dropdown.Item
                               className={cx("menu-item")}
                               onClick={() => {
+                                 navigate("/change-password");
+                              }}
+                           >
+                              Change password
+                           </Dropdown.Item>
+                           <Dropdown.Item
+                              className={cx("menu-item")}
+                              onClick={() => {
                                  authContext.logout();
                                  localStorageApp.removeItem(
                                     localStorageApp.LOCAL_STORAGE.ACCESS_TOKEN

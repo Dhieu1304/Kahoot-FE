@@ -48,6 +48,7 @@ import GroupDetailPage, {
    GroupDetailUserPage
 } from "./pages/Group/GroupDetailPage";
 import ForgetPassword from "./pages/Auth/ForgetPassword";
+import ChangePasswordPage from "./pages/ChangePasswordPage/ChangePasswordPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -125,7 +126,14 @@ function App() {
                            </DefaultLayout>
                         }
                      ></Route>
-
+                     <Route
+                        path={"/change-password"}
+                        element={
+                           <DefaultLayout>
+                              <ChangePasswordPage />
+                           </DefaultLayout>
+                        }
+                     ></Route>
                      <Route path={"/presentation"}>
                         <Route path="" element={<Navigate to={"owned"} replace />} />
                         <Route
