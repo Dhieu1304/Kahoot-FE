@@ -6,7 +6,7 @@ import {
    SET_INIT,
    SET_USERS,
    SET_GROUPS,
-   SET_REPORT
+   SET_REPORTS
 } from "./contants";
 
 export const setPresentation = (payload) => ({
@@ -24,8 +24,8 @@ export const setGroups = (payload) => ({
    payload
 });
 
-export const setReport = (payload) => ({
-   type: SET_REPORT,
+export const setReports = (payload) => ({
+   type: SET_REPORTS,
    payload
 });
 
@@ -53,7 +53,7 @@ export default {
    setPresentation,
    setUsers,
    setGroups,
-   setReport,
+   setReports,
    fetchApi,
    fetchApiSuccess,
    fetchApiFailed,

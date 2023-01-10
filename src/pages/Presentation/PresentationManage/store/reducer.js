@@ -6,14 +6,14 @@ import {
    SET_INIT,
    SET_USERS,
    SET_GROUPS,
-   SET_REPORT
+   SET_REPORTS
 } from "./contants";
 
 const initState = {
    presentation: {},
    users: [],
    groups: [],
-   report: {},
+   reports: [],
 
    isInit: false,
    isLoading: false,
@@ -50,13 +50,13 @@ function reducer(state, action) {
             groups: action.payload
          };
 
-      case SET_REPORT:
+      case SET_REPORTS:
          return {
             ...state,
             isLoading: false,
             isFetchApiError: false,
             fetchApiError: "",
-            report: action.payload
+            reports: action.payload
          };
       case FETCHING_API:
          return {

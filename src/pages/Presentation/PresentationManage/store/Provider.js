@@ -79,11 +79,31 @@ function PresentationManageProvider({ children }) {
       return groups;
    };
 
+   const loadPresentationReports = async (id) => {
+      dispatch(actions.fetchApi());
+      const reports = await presentationServices.getPresentationReport(id);
+
+      if (reports) {
+         dispatch(actions.setReports(reports));
+      } else {
+         const message = "Error API";
+         dispatch(actions.fetchApiFailed(message));
+         return reports;
+      }
+
+      // groups true
+      dispatch(actions.fetchApi());
+
+      return reports;
+   };
+
    const initPresentationDetail = async (id) => {
       const users = await loadPresentationUsers(id);
       const groups = await loadPresentationGroups(id);
+      const reports = await loadPresentationReports(id);
+      console.log("reports: ", reports);
       const presentation = await loadPresentationDetail(id);
-      return { presentation, users, groups };
+      return { presentation, users, groups, reports };
    };
 
    const setInit = () => {
