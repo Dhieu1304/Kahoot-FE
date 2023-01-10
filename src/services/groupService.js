@@ -141,6 +141,16 @@ const deleteGroup = async (groupId) => {
    }
 };
 
+const getPresentingGroup = async (groupId) => {
+   try {
+      const res = await axiosClient.get(`/group/presenting/${groupId}`);
+      return res.status ? res.data : false;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 export default {
    getGroupsByOwnUserId,
    getGroupsByJoinedUserId,
@@ -152,7 +162,8 @@ export default {
    changeRole,
    joinGroupByEmailToken,
    deleteUserFromGroup,
-   deleteGroup
+   deleteGroup,
+   getPresentingGroup
 };
 
 export {
@@ -166,5 +177,6 @@ export {
    changeRole,
    joinGroupByEmailToken,
    deleteUserFromGroup,
-   deleteGroup
+   deleteGroup,
+   getPresentingGroup
 };

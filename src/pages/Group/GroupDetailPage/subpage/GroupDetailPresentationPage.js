@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Link, useParams } from "react-router-dom";
-import userService from "../../../../services/userService";
-import groupService from "../../../../services/groupService";
+import groupService, { getPresentingGroup } from "../../../../services/groupService";
 import Table, {
    TableTHead,
    TableTBody,
@@ -11,28 +10,30 @@ import Table, {
    TableTr
 } from "../../../../components/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faEdit, faPlay, faTrash } from "@fortawesome/free-solid-svg-icons";
-
+import { faPlay, faTrash } from "@fortawesome/free-solid-svg-icons";
 import styles from "../GroupDetailPage.module.scss";
 const cx = classNames.bind(styles);
 import classNames from "classnames/bind";
-
 import { useAuthStore } from "../../../../providers/auth";
-
 import presentationServices from "../../../../services/presentationServices";
-import { useGroupLayoutStore } from "../../../../layouts/GroupLayout/hooks";
+import { useGroupLayoutStore } from "../../../../layouts/GroupLayout";
+import { PRESENTATION_EVENT } from "../../../../providers/socket/socket.constant";
+import { SocketContext } from "../../../../providers/socket";
 
 function GroupDetailPresentationPage() {
    const [presentations, setPresentations] = useState([]);
    const [isOwnedUser, setIsOwnedUser] = useState(false);
-   const [isPresenting, setIsPresenting] = useState(true);
-   const [currentPrentation, setCurrentPrentation] = useState({
-      name: "Presentation XXX",
-      user: {
-         fullName: "Sang"
+   const [isPresenting, setIsPresenting] = useState(false);
+   const [currentPresentation, setCurrentPresentation] = useState([
+      {
+         name: "Presentation Name",
+         user: {
+            fullName: "Sang"
+         }
       }
-   });
+   ]);
 
+   const socket = useContext(SocketContext);
    const params = useParams();
    const { groupId } = params;
    const isNotMobile = useMediaQuery({ minWidth: 768 });
@@ -50,8 +51,27 @@ function GroupDetailPresentationPage() {
       setPresentations(presentationsData);
 
       const result = await groupService.checkOwnedUser(groupId, authStore.user.id);
-
       setIsOwnedUser(result);
+
+      const presentGroup = await groupService.getPresentingGroup(groupId);
+      console.log("presentGroup: ", presentGroup);
+      if (presentGroup && presentGroup.length > 0) {
+         const currentPresent = [];
+         for (let i = 0; i < presentGroup.length; i++) {
+            currentPresent.push({
+               presentation_id: presentGroup[i]?.presentation?.id,
+               name: presentGroup[i]?.presentation?.name,
+               code: presentGroup[i]?.presentation?.code,
+               user: {
+                  user_id: presentGroup[i]?.user?.id,
+                  email: presentGroup[i]?.user?.email,
+                  fullName: presentGroup[i]?.user?.full_name
+               }
+            });
+         }
+         setCurrentPresentation(currentPresent);
+         setIsPresenting(true);
+      }
    };
 
    useEffect(() => {
@@ -59,6 +79,32 @@ function GroupDetailPresentationPage() {
          loadData();
       }
    }, [groupId, authStore.user.id]);
+   useEffect(() => {
+      socket.emit(PRESENTATION_EVENT.JOIN_PRESENT_GROUP, { groupId });
+      socket.on(PRESENTATION_EVENT.PRESENT_GROUP, (presentGroup) => {
+         if (presentGroup && presentGroup.length > 0) {
+            const currentPresent = [];
+            for (let i = 0; i < presentGroup.length; i++) {
+               currentPresent.push({
+                  presentation_id: presentGroup[i]?.presentation?.id,
+                  name: presentGroup[i]?.presentation?.name,
+                  code: presentGroup[i]?.presentation?.code,
+                  user: {
+                     user_id: presentGroup[i]?.user?.id,
+                     email: presentGroup[i]?.user?.email,
+                     fullName: presentGroup[i]?.user?.full_name
+                  }
+               });
+            }
+            setCurrentPresentation(currentPresent);
+            setIsPresenting(true);
+         }
+      });
+
+      return () => {
+         socket.off(PRESENTATION_EVENT.PRESENT_GROUP);
+      };
+   }, []);
 
    return (
       <>
@@ -67,7 +113,7 @@ function GroupDetailPresentationPage() {
                <h1 className={cx("title")}>sang</h1>
                <div className={cx("btn-group")}>
                   {isPresenting && (
-                     <div className={cx("current-presentation")}>{currentPrentation?.name}</div>
+                     <div className={cx("current-presentation")}>{currentPresentation?.name}</div>
                   )}
                </div>
             </div>
