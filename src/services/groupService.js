@@ -91,13 +91,10 @@ const getInviteLink = async (groupId) => {
 };
 
 const checkOwnedUser = async (groupId, userId) => {
-   console.log("checkOwnedUser");
    try {
       const res = await axiosClient.get(`/group/checkOwnedUser`, {
          params: { group_id: groupId, user_id: userId }
       });
-      console.log("res: ", res);
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
