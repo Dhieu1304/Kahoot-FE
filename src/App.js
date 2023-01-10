@@ -47,6 +47,7 @@ import GroupDetailPage, {
    GroupDetailPresentationPage,
    GroupDetailUserPage
 } from "./pages/Group/GroupDetailPage";
+import ForgetPassword from "./pages/Auth/ForgetPassword";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -250,6 +251,14 @@ function App() {
                         element={
                            <AuthLayout>
                               <LoginPage />
+                           </AuthLayout>
+                        }
+                     />
+                     <Route
+                        path={"/auth/forget-password"}
+                        element={
+                           <AuthLayout>
+                              <ForgetPassword />
                            </AuthLayout>
                         }
                      />

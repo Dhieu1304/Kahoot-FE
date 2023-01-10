@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import AuthInput from "../../../components/AuthInput";
 import AuthForm from "../../../components/AuthForm/AuthForm";
@@ -79,6 +79,10 @@ function LoginPage() {
             })}
             error={errors.password}
          />
+
+         <div className="d-flex justify-content-end">
+            <Link to={"/auth/forget-password"}>Forget password?</Link>
+         </div>
       </AuthForm>
    );
 }

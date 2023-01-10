@@ -39,6 +39,26 @@ const registerUser = async (data) => {
    }
 };
 
+const forgetPassword = async (email) => {
+   console.log("email: ", email);
+   try {
+      const res = await axiosClient.post("/auth/forgot-password", {
+         email
+      });
+
+      if (res.status) {
+         toast.success(res?.message);
+         return res;
+      } else {
+         toast.error(res?.message);
+         return false;
+      }
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const getUserInfo = async () => {
    try {
       const userInfo = await axiosClient.get("/user/info");
@@ -69,4 +89,5 @@ const googleSignInBE = async (idToken) => {
    }
 };
 
-export { login, registerUser, getUserInfo, googleSignInBE };
+export default { login, registerUser, getUserInfo, googleSignInBE, forgetPassword };
+export { login, registerUser, getUserInfo, googleSignInBE, forgetPassword };
