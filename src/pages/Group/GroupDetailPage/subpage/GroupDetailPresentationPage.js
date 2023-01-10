@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import { Link, useParams } from "react-router-dom";
-import groupService, { getPresentingGroup } from "../../../../services/groupService";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import groupService from "../../../../services/groupService";
 import Table, {
    TableTHead,
    TableTBody,
@@ -34,7 +34,7 @@ function GroupDetailPresentationPage() {
    const { groupId } = params;
    const isNotMobile = useMediaQuery({ minWidth: 768 });
    const authStore = useAuthStore();
-
+   const navigate = useNavigate();
    const recentSideBarMenuBottomItems = useGroupLayoutStore();
 
    const groupName = useMemo(() => {
@@ -46,10 +46,9 @@ function GroupDetailPresentationPage() {
       setPresentations(presentationsData);
 
       const result = await groupService.checkOwnedUser(groupId, authStore.user.id);
-      setIsOwnedUser(result);
+      if (result) setIsOwnedUser(true);
 
       const presentGroup = await groupService.getPresentingGroup(groupId);
-      console.log("presentGroup: ", presentGroup);
       if (presentGroup && presentGroup.length > 0) {
          const currentPresent = [];
          for (let i = 0; i < presentGroup.length; i++) {
@@ -68,8 +67,6 @@ function GroupDetailPresentationPage() {
          setIsPresenting(true);
       }
    };
-
-   console.log("currentPresentation: ", currentPresentations);
 
    useEffect(() => {
       if (groupId && authStore.user.id) {
@@ -110,11 +107,17 @@ function GroupDetailPresentationPage() {
                <h1 className={cx("title")}>{groupDetailPageStore.group?.name}</h1>
                <div className={cx("btn-group")}>
                   {isPresenting && currentPresentations?.length > 0 && (
-                     <div className={cx("current-presentation")}>
-                        <span>{currentPresentations[0].user?.email}</span>
-                        <span> đang trình chiếu </span>
-                        <span>{currentPresentations[0].name} </span>
-                     </div>
+                     <button
+                        className={cx("current-presentation")}
+                        onClick={() =>
+                           navigate(`/presentation-client/${currentPresentations[0].code}`)
+                        }
+                     >
+                        <span>
+                           {currentPresentations[0].user?.fullName} đang trình chiếu{" "}
+                           {currentPresentations[0].name}{" "}
+                        </span>
+                     </button>
                   )}
                </div>
             </div>
