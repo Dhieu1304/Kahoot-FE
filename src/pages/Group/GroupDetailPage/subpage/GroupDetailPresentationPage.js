@@ -77,7 +77,7 @@ function GroupDetailPresentationPage() {
    useEffect(() => {
       if (isPresenting) {
          console.log("clear");
-         const timer = setTimeout(() => setIsPresenting(false), 10000);
+         const timer = setTimeout(() => setIsPresenting(false), 30000);
          return () => clearTimeout(timer);
       }
    }, [isPresenting]);
