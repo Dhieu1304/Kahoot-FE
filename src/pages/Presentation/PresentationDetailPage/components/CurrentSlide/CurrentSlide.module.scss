@@ -1,0 +1,40 @@
+.container {
+   padding-top: 20px;
+
+   height: 100%;
+   min-width: 400px;
+
+   overflow-y: hidden;
+   overflow-x: hidden;
+   margin: 0 1rem;
+   flex: 1;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+
+   .slide-area-wrapper {
+      flex: 8;
+      padding: 0 1rem;
+   }
+
+   .slide-config-wrapper {
+      flex: 4;
+      padding: 0 1rem;
+   }
+}
+
+.container.isNotDesktop {
+   height: calc(100% + 100px);
+   .slide-current {
+      flex-direction: column;
+      padding: 0 2rem;
+      overflow-y: scroll;
+      .slide-area-wrapper {
+         flex: 0;
+      }
+
+      .slide-config-wrapper {
+         flex: 0;
+      }
+   }
+}

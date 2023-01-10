@@ -1,6 +1,16 @@
 import axiosClient from "../config/axiosClient";
 import camelcaseKeys from "camelcase-keys";
 
+const getGroupById = async (id) => {
+   try {
+      const res = await axiosClient.get(`/group/${id}`);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const getGroupsByOwnUserId = async (userId) => {
    try {
       const res = await axiosClient.get(`/group/user_owned/${userId}`);
@@ -34,6 +44,21 @@ const createGroup = async (name, user_id) => {
    }
 };
 
+const renameGroup = async (id, name) => {
+   console.log("req: ", { id, name });
+   try {
+      const res = await axiosClient.put(`/group/rename`, {
+         id,
+         name
+      });
+      console.log("res: ", res);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const inviteToGroupByEmail = async (groupId, email) => {
    try {
       const res = await axiosClient.get(`/group/invite-mail`, {
@@ -42,6 +67,7 @@ const inviteToGroupByEmail = async (groupId, email) => {
             email
          }
       });
+
       return camelcaseKeys(res.status, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -56,6 +82,7 @@ const getInviteLink = async (groupId) => {
             groupId
          }
       });
+
       return camelcaseKeys(res.data.link, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -114,7 +141,44 @@ const changeRole = async (groupId, userId, roleId) => {
    }
 };
 
-export {
+const deleteUserFromGroup = async (groupId, userId) => {
+   try {
+      const res = await axiosClient.post("/group-user/delete-member-group", {
+         userId,
+         groupId
+      });
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const deleteGroup = async (groupId) => {
+   try {
+      const res = await axiosClient.post(`/group/delete-group/${groupId}`, {
+         groupId
+      });
+      return camelcaseKeys(res.status, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getPresentingGroup = async (groupId) => {
+   try {
+      const res = await axiosClient.get(`/group/presenting/${groupId}`);
+      return res.status ? res.data : false;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+export default {
+   getGroupById,
+   renameGroup,
    getGroupsByOwnUserId,
    getGroupsByJoinedUserId,
    createGroup,
@@ -123,5 +187,25 @@ export {
    checkOwnedUser,
    joinGroupByLink,
    changeRole,
-   joinGroupByEmailToken
+   joinGroupByEmailToken,
+   deleteUserFromGroup,
+   deleteGroup,
+   getPresentingGroup
+};
+
+export {
+   getGroupById,
+   renameGroup,
+   getGroupsByOwnUserId,
+   getGroupsByJoinedUserId,
+   createGroup,
+   inviteToGroupByEmail,
+   getInviteLink,
+   checkOwnedUser,
+   joinGroupByLink,
+   changeRole,
+   joinGroupByEmailToken,
+   deleteUserFromGroup,
+   deleteGroup,
+   getPresentingGroup
 };

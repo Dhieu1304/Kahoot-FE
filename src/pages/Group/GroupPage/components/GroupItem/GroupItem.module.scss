@@ -1,0 +1,58 @@
+.container {
+   background-color: white;
+   border-radius: 5px;
+   box-shadow: rgb(0 0 0 / 15%) 0px 2px 4px 0px;
+   padding: 16px;
+   margin: 10px;
+   width: 200px;
+   height: 120px;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+
+   cursor: pointer;
+   box-shadow: rgb(0 0 0 / 28%) 0px 4px 8px 0px;
+
+   &:hover {
+      box-shadow: rgb(0 0 0 / 50%) 0px 8px 8px 0px;
+      .top {
+         .setting {
+            display: block;
+         }
+      }
+   }
+}
+
+.top {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+
+   position: relative;
+
+   .user-list {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      .user-item {
+         position: absolute;
+      }
+   }
+   .setting {
+      display: none;
+   }
+}
+.bottom {
+   display: flex;
+   justify-content: flex-start;
+
+   .group-name {
+      color: var(--text-color);
+   }
+}
+
+.container.isMobile {
+   width: 100%;
+}

@@ -1,16 +1,15 @@
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { v4 as uuidv4 } from "uuid";
 import "./App.css";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import LoginPage from "./pages/Auth/LoginPage";
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, Outlet } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout";
 import DefaultLayout from "./layouts/DefaultLayout/DefaultLayout";
 import HomePage from "./pages/HomePage";
-import GroupPage from "./pages/GroupPage";
-import ManageGroupList from "./pages/GroupPage/components/ManageGroupList";
-import ManageGroup from "./pages/GroupPage/components/ManageGroup/ManageGroup";
+
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./providers/auth/provider";
 import { getUserInfo } from "./services/authService";
@@ -20,13 +19,36 @@ import DefaultPage from "./pages/DefaultPage/DefaultPage";
 import { GroupListProvider } from "./providers/groupList";
 import { GroupItemProvider } from "./providers/groupItem";
 import LinkPage from "./pages/LinkPage";
+
 import PresentationPage from "./pages/Presentation/PresentationPage";
-import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage";
-import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store";
-import PresentationPlay from "./pages/Presentation/PresentationPlay";
+
+import PresentationDetailPageWrapper from "./pages/Presentation/PresentationDetailPage/PresentationDetailPageWrapper";
+import PresentationDetailProvider from "./pages/Presentation/PresentationDetailPage/store/Provider";
+import PresentationDetailPage from "./pages/Presentation/PresentationDetailPage/PresentationDetailPage";
+
 import PresentationClientPage from "./pages/PresentationClient/PresentationClientPage";
 import PresentationClientDetailPage from "./pages/PresentationClient/PresentationClientDetailPage/PresentationClientDetailPage";
 import PresentationProvider from "./pages/Presentation/PresentationPage/store";
+
+import PresentationPlayWrapper from "./pages/Presentation/PresentationPlay/PresentationPlayWrapper";
+import PresentationPlayProvider from "./pages/Presentation/PresentationPlay/store/Provider";
+import PresentationClientDetailProvider from "./pages/PresentationClient/PresentationClientDetailPage/store/Provider";
+import PresenationManageLayout from "./layouts/PresenationManageLayout";
+import PresentationManageProvider from "./pages/Presentation/PresentationManage/store/Provider";
+import PresentationManageUser from "./pages/Presentation/PresentationManage/PresentationManageUser";
+import PresentationManageReport from "./pages/Presentation/PresentationManage/PresentationManageReport";
+import PresentationManageGroup from "./pages/Presentation/PresentationManage/PresentationManageGroup";
+
+import * as localStorageApp from "./utils/localStorage";
+import { getItem, LOCAL_STORAGE } from "./utils/localStorage";
+import GroupLayout from "./layouts/GroupLayout";
+import GroupPage from "./pages/Group/GroupPage";
+import GroupDetailPage, {
+   GroupDetailPresentationPage,
+   GroupDetailUserPage
+} from "./pages/Group/GroupDetailPage";
+import ForgetPassword from "./pages/Auth/ForgetPassword";
+import ChangePasswordPage from "./pages/ChangePasswordPage/ChangePasswordPage";
 
 function App() {
    const authContext = useContext(AuthContext);
@@ -34,6 +56,13 @@ function App() {
    useEffect(() => {
       const createCurrentAccount = async () => {
          const currentUser = await getUserInfo();
+         if (!currentUser) {
+            const currentUID = getItem(LOCAL_STORAGE.UUID);
+            if (!currentUID) {
+               const uuid = uuidv4();
+               localStorageApp.setItem(localStorageApp.LOCAL_STORAGE.UUID, uuid);
+            }
+         }
          authContext.setUser(currentUser);
          authContext.login();
       };
@@ -66,38 +95,28 @@ function App() {
                      <Route
                         path={"/group"}
                         element={
-                           <DefaultLayout>
-                              <GroupPage />
-                           </DefaultLayout>
+                           <GroupLayout>
+                              <Outlet />
+                           </GroupLayout>
                         }
                      >
+                        <Route path="" element={<Navigate to={"owned"} replace />} />
+                        <Route path={"owned"} element={<GroupPage />} />
+                        <Route path={"joined"} element={<GroupPage />} />
                         <Route
-                           path={"owned"}
+                           path={":groupId"}
                            element={
-                              <GroupListProvider>
-                                 <ManageGroupList />
-                              </GroupListProvider>
+                              <GroupDetailPage>
+                                 <Outlet />
+                              </GroupDetailPage>
                            }
-                        ></Route>
-                        <Route
-                           path={"joined"}
-                           element={
-                              <GroupListProvider>
-                                 <ManageGroupList />
-                              </GroupListProvider>
-                           }
-                        ></Route>
-                        <Route path={"list"}>
-                           <Route
-                              path={":id"}
-                              element={
-                                 <GroupItemProvider>
-                                    <ManageGroup />
-                                 </GroupItemProvider>
-                              }
-                           ></Route>
+                        >
+                           <Route path="" element={<Navigate to={"user"} replace />} />
+                           <Route path={"user"} element={<GroupDetailUserPage />} />
+                           <Route path={"presentation"} element={<GroupDetailPresentationPage />} />
                         </Route>
                      </Route>
+
                      <Route path={"group/join-by-email"} element={<LinkPage />}></Route>
                      <Route
                         path={"/profile"}
@@ -107,45 +126,104 @@ function App() {
                            </DefaultLayout>
                         }
                      ></Route>
-
+                     <Route
+                        path={"/change-password"}
+                        element={
+                           <DefaultLayout>
+                              <ChangePasswordPage />
+                           </DefaultLayout>
+                        }
+                     ></Route>
                      <Route path={"/presentation"}>
-                        {/* Presentation list */}
+                        <Route path="" element={<Navigate to={"owned"} replace />} />
                         <Route
-                           path=""
+                           path="owned"
                            element={
-                              <DefaultLayout>
+                              <PresenationManageLayout>
                                  <PresentationProvider>
                                     <PresentationPage />
                                  </PresentationProvider>
-                              </DefaultLayout>
+                              </PresenationManageLayout>
                            }
                         />
+                        <Route
+                           path="joined"
+                           element={
+                              <PresenationManageLayout>
+                                 <PresentationProvider>
+                                    <PresentationPage />
+                                 </PresentationProvider>
+                              </PresenationManageLayout>
+                           }
+                        />
+
                         <Route path=":id">
-                           <Route path=":id">
-                              <Route
-                                 path="edit"
-                                 element={
-                                    <PresentationDetailProvider>
-                                       <PresentationDetailPage />
-                                    </PresentationDetailProvider>
-                                 }
-                              />
-                              {/* show */}
-                              <Route
-                                 path=""
-                                 element={
-                                    <PresentationDetailProvider>
-                                       <PresentationPlay />
-                                    </PresentationDetailProvider>
-                                 }
-                              />
+                           <Route path="" element={<h2>No outlet</h2>} />
+                           <Route
+                              path="user"
+                              element={
+                                 <PresenationManageLayout>
+                                    <PresentationManageProvider>
+                                       <PresentationManageUser />
+                                    </PresentationManageProvider>
+                                 </PresenationManageLayout>
+                              }
+                           />
+                           <Route
+                              path="group"
+                              element={
+                                 <PresenationManageLayout>
+                                    <PresentationManageProvider>
+                                       <PresentationManageGroup />
+                                    </PresentationManageProvider>
+                                 </PresenationManageLayout>
+                              }
+                           />
+                           <Route
+                              path="report"
+                              element={
+                                 <PresenationManageLayout>
+                                    <PresentationManageProvider>
+                                       <PresentationManageReport />
+                                    </PresentationManageProvider>
+                                 </PresenationManageLayout>
+                              }
+                           />
+                           <Route
+                              path="edit"
+                              element={
+                                 <PresentationDetailProvider>
+                                    <PresentationDetailPageWrapper />
+                                 </PresentationDetailProvider>
+                              }
+                           >
+                              <Route path=":slideId" element={<PresentationDetailPage />} />
+                           </Route>
+
+                           <Route
+                              path="play"
+                              element={
+                                 <PresentationPlayProvider>
+                                    <PresentationPlayWrapper />
+                                 </PresentationPlayProvider>
+                              }
+                           >
+                              {/* <Route path=":slideId" element={<PresentationPlayPage />} /> */}
                            </Route>
                         </Route>
                      </Route>
                      <Route path={"/presentation-client"}>
                         <Route path={""} element={<PresentationClientPage />} />
-                        <Route path={":code"} element={<PresentationClientDetailPage />}></Route>
+                        <Route
+                           path={":code"}
+                           element={
+                              <PresentationClientDetailProvider>
+                                 <PresentationClientDetailPage />
+                              </PresentationClientDetailProvider>
+                           }
+                        ></Route>
                      </Route>
+                     <Route path={"*"} element={<DefaultAuthPage />} />
                   </Routes>
                ) : (
                   <Routes>
@@ -159,7 +237,14 @@ function App() {
                      />
                      <Route path={"/presentation-client"}>
                         <Route path={""} element={<PresentationClientPage />} />
-                        <Route path={":code"} element={<PresentationClientDetailPage />}></Route>
+                        <Route
+                           path={":code"}
+                           element={
+                              <PresentationClientDetailProvider>
+                                 <PresentationClientDetailPage />
+                              </PresentationClientDetailProvider>
+                           }
+                        ></Route>
                      </Route>
                      <Route
                         path={"/auth/register"}
@@ -174,6 +259,14 @@ function App() {
                         element={
                            <AuthLayout>
                               <LoginPage />
+                           </AuthLayout>
+                        }
+                     />
+                     <Route
+                        path={"/auth/forget-password"}
+                        element={
+                           <AuthLayout>
+                              <ForgetPassword />
                            </AuthLayout>
                         }
                      />

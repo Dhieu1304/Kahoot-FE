@@ -1,0 +1,35 @@
+.tabs {
+   align-self: stretch;
+   margin-right: auto;
+
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+
+   // flex-wrap: wrap;
+
+   color: var(--text-color);
+
+   .tab-item {
+      border: 1px solid var(--border-color);
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      padding: 4px 16px;
+
+      .tab-item-label {
+         color: var(--text-color);
+         font-size: 1.6rem;
+         vertical-align: middle;
+      }
+
+      &:hover,
+      &.active {
+         .tab-item-label {
+            color: var(--black-color);
+            font-weight: var(--font-weight-big);
+         }
+      }
+   }
+}

@@ -7,10 +7,24 @@ import styles from "./Modal.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Modal({ title, show, setShow, children, haveSubmitBtn, onSubmitModal, submitBtnTitle }) {
+function Modal({
+   title,
+   show,
+   setShow,
+   data,
+   setData,
+   children,
+   haveSubmitBtn,
+   onSubmitModal,
+   submitBtnTitle,
+   hideCancel
+}) {
    //    const [show, setShow] = useState(false);
 
-   const handleClose = () => setShow(false);
+   const handleClose = () => {
+      setShow(false);
+      setData && setData(null);
+   };
 
    return (
       <div>
@@ -21,7 +35,9 @@ function Modal({ title, show, setShow, children, haveSubmitBtn, onSubmitModal, s
                </BootstrapModal.Header>
                <BootstrapModal.Body className={cx("body")}>{children}</BootstrapModal.Body>
                <BootstrapModal.Footer className={cx("footer")}>
-                  <Button cancel onClick={handleClose} title="Cancel" big rounded />
+                  {!hideCancel && (
+                     <Button cancel onClick={handleClose} title="Cancel" big rounded />
+                  )}
                   {haveSubmitBtn && (
                      <Button
                         submitModal

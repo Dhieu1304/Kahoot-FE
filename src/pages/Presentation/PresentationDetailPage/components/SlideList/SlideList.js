@@ -1,5 +1,5 @@
 import { usePresentationDetailStore } from "../../store";
-import SlideItem from "../SlideItem";
+import SlideItem from "./SlideItem";
 
 import classNames from "classnames/bind";
 import styles from "./SlideList.module.scss";
@@ -17,7 +17,7 @@ const SlideList = ({}) => {
                   <SlideItem
                      key={index}
                      index={index}
-                     presentationId={presentationDetailStore.state.presentation.id}
+                     presentationId={presentationDetailStore.state.presentation?.id}
                      slide={slide}
                   />
                ))}

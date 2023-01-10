@@ -27,7 +27,6 @@ function PresentationClientPage() {
    const navigate = useNavigate();
 
    const handleSubmitCode = async ({ code }) => {
-      console.log("code: ", code);
       navigate(`/presentation-client/${code}`);
       // navigate(`/presentation-client/sang`);
    };

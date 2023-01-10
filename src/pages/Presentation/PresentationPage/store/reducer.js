@@ -1,14 +1,16 @@
 import {
    SET_PRESENTATIONS,
+   SET_LIST_TYPE,
    FETCHING_API,
    FETCHING_API_SUCCESS,
-   FETCHING_API_FAILED
+   FETCHING_API_FAILED,
+   SET_INIT
 } from "./contants";
 
 const initState = {
    presentations: [],
-   count: 0,
-
+   listType: "OWNER",
+   isInit: false,
    isLoading: false,
    isFetchApiError: false,
    fetchApiError: ""
@@ -22,8 +24,7 @@ function reducer(state, action) {
             isLoading: false,
             isFetchApiError: false,
             fetchApiError: "",
-            presentations: action.payload.presentations,
-            count: action.payload.count
+            presentations: action.payload
          };
 
       case FETCHING_API:
@@ -46,6 +47,18 @@ function reducer(state, action) {
             isLoading: false,
             isFetchApiError: true,
             fetchApiError: action.payload
+         };
+
+      case SET_INIT:
+         return {
+            ...state,
+            isInit: true
+         };
+
+      case SET_LIST_TYPE:
+         return {
+            ...state,
+            listType: action.payload
          };
 
       default:

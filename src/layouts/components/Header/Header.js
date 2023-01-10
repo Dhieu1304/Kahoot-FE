@@ -2,12 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Dropdown, Container, Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import classNames from "classnames/bind";
 import { useContext } from "react";
 
-import images from "../../../assets/images";
 import HeaderItem from "./components/HeaderItem";
-import styles from "./Header.module.scss";
+import images from "../../../assets/images";
 import Button from "../../../components/Button/Button";
 import Avatar from "../../../components/Avatar/Avatar";
 import CustomToggleDropdownBtn from "../../../components/CustomToggleDropdownBtn";
@@ -16,6 +14,8 @@ import { privateHeaderItemsData, publicHeaderItemsData } from "./config";
 import * as localStorageApp from "../../../utils/localStorage";
 import { AuthContext } from "../../../providers/auth";
 
+import classNames from "classnames/bind";
+import styles from "./Header.module.scss";
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -25,8 +25,7 @@ function Header() {
 
    return (
       <header className={cx("wrapper")}>
-         {/* <Container className={cx("container")}> */}
-         <Container>
+         <div className={cx("container")}>
             <Navbar bg="light" expand="lg">
                <Navbar.Brand as={Link} to={"/"}>
                   <div className={cx("logo-wrapper")}>
@@ -51,7 +50,7 @@ function Header() {
                         ))}
 
                         <div className={cx("header-navbar-off-canvas-right")}>
-                           <div className={cx("btn-group")}>
+                           {/*<div className={cx("btn-group")}>
                               <Button
                                  title={"Share"}
                                  outline
@@ -68,7 +67,7 @@ function Header() {
                                  big
                                  className={cx("header-btn")}
                               />
-                           </div>
+                           </div>*/}
                         </div>
                      </Nav>
                   ) : (
@@ -120,7 +119,7 @@ function Header() {
                            <Avatar
                               title={"Avatar"}
                               placeholder={"Avatar"}
-                              size={25}
+                              size={40}
                               rounded
                               src={authContext?.user?.avatar}
                            />
@@ -134,6 +133,14 @@ function Header() {
                               }}
                            >
                               Profile
+                           </Dropdown.Item>
+                           <Dropdown.Item
+                              className={cx("menu-item")}
+                              onClick={() => {
+                                 navigate("/change-password");
+                              }}
+                           >
+                              Change password
                            </Dropdown.Item>
                            <Dropdown.Item
                               className={cx("menu-item")}
@@ -158,7 +165,7 @@ function Header() {
                   </div>
                )}
             </Navbar>
-         </Container>
+         </div>
       </header>
    );
 }

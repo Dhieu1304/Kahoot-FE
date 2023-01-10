@@ -1,17 +1,65 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import Context from "./Context";
+import delay from "delay";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import presentationServices from "../../../../services/presentationServices";
-import mockApi from "../../../../mockApi";
-import { async } from "q";
+import { useModal } from "../../../../components/Modal";
 
 function PresentationDetailProvider({ children }) {
+   const createSlideModal = useModal();
+   const changeThemeModal = useModal();
+   const deleteSlideModal = useModal();
+   const presentModal = useModal();
+
+   const [showSlideListWhenNotDesktop, setShowSlideListWhenNotDesktop] = useState(false);
+
+   const rest = {
+      createSlideModal,
+      changeThemeModal,
+      deleteSlideModal,
+      presentModal,
+      showSlideListWhenNotDesktop,
+      setShowSlideListWhenNotDesktop
+   };
+
    const [state, dispatch] = useReducer(reducer, initState);
 
    const method = {
+      loadConfig: async (id) => {
+         dispatch(actions.fetchApi());
+         const presentationThemes = await presentationServices.getListPresentationThemeConfig();
+
+         if (presentationThemes) {
+            dispatch(actions.setPresentationThemesConfig(presentationThemes));
+         } else {
+            const message = "Error API";
+            dispatch(actions.fetchApiFailed(message));
+            return presentation;
+         }
+
+         // presentation true
+         dispatch(actions.fetchApi());
+
+         const slideTypesConfig = await presentationServices.getListSlideTypeConfig();
+
+         if (slideTypesConfig) {
+            dispatch(actions.setSlideTypesConfig(slideTypesConfig));
+         } else {
+            const message = "Error API";
+            dispatch(actions.fetchApiFailed(message));
+         }
+
+         // dispatch(actions.setCheckLoadNewData());
+         // dispatch(actions.setInit(true));
+
+         return { presentationThemes, slideTypesConfig };
+      },
+
       loadPresentationDetail: async (id) => {
          dispatch(actions.fetchApi());
+         await delay(1000);
+
          const presentation = await presentationServices.getPresentationById(id);
 
          if (presentation) {
@@ -27,184 +75,150 @@ function PresentationDetailProvider({ children }) {
 
          const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-         // console.log("slides: ", slides);
-
          if (slides) {
-            if (slides.length === 0) {
-               const slide = {
-                  presentation_id: id,
-                  ordinal_slide_number: 1,
-                  slide_type_id: 1,
-                  title: "Slide 1",
-                  body: [
-                     {
-                        id: 1,
-                        name: "option 1"
-                     },
-                     {
-                        id: 2,
-                        name: "option 1"
-                     }
-                  ]
-               };
-               slides.push(slide);
-            }
-
             dispatch(actions.setSlides(slides));
          } else {
             const message = "Error API";
             dispatch(actions.fetchApiFailed(message));
          }
 
-         return presentation;
+         dispatch(actions.setCheckLoadNewData());
+         // dispatch(actions.setInit(true));
+
+         return { presentation, slides };
       },
 
-      loadPresentationDetailReturnSlides: async (id) => {
-         dispatch(actions.fetchApi());
-         const presentation = await presentationServices.getPresentationById(id);
+      setInit: () => {
+         dispatch(actions.setInit(true));
+      },
 
-         if (presentation) {
-            dispatch(actions.setPresentation(presentation));
-         } else {
-            const message = "Error API";
-            dispatch(actions.fetchApiFailed(message));
-            return presentation;
-         }
-
-         // presentation true
+      saveSlides: async (slide, index) => {
          dispatch(actions.fetchApi());
 
-         const slides = await presentationServices.getAllSlidesByPresentationId(id);
+         await delay(1000);
 
-         // console.log("slides: ", slides);
+         const oldSlides = [...state.slides];
+         const newSlides = oldSlides.map((cur) => cur);
 
-         if (slides) {
-            if (slides.length === 0) {
-               const slide = {
-                  presentation_id: id,
-                  ordinal_slide_number: 1,
-                  slide_type_id: 1,
-                  title: "Slide 1",
-                  body: [
-                     {
-                        id: 1,
-                        name: "option 1"
-                     },
-                     {
-                        id: 2,
-                        name: "option 1"
-                     }
-                  ]
-               };
-               slides.push(slide);
-            }
+         newSlides.splice(index, 1, slide);
 
-            dispatch(actions.setSlides(slides));
-         } else {
-            const message = "Error API";
-            dispatch(actions.fetchApiFailed(message));
-         }
+         // const resultPresentation = await presentationServices.savePresentation(state.presentation);
 
-         return slides;
-      },
-
-      setCurrentSlide: async (index) => {
-         //
-         // dispatch(actions.fetchApi());
-
-         dispatch(actions.setCurrentSlideIndex(index));
-
-         const slide = state.slides[index];
-         dispatch(actions.setCurrentSlide(slide));
-
-         //
-
-         //    const slide = await presentationServices.getSlideById(id);
-
-         //    if (presentation) {
-         //       dispatch(actions.setCurrentSlide(slide));
-         //    } else {
-         //       const message = "Error API";
-         //       dispatch(actions.fetchApiFailed(message));
-         //    }
-         //    return slide;
-      },
-      changeSlides: (newSlide) => {
-         const newSlides = [...state.slides];
-         // newSlides[state.currentSlideIndex] === newSlide;
-
-         newSlides.splice(state.currentSlideIndex, 1, newSlide);
-
-         dispatch(actions.setSlides(newSlides));
-      },
-
-      changePresentation: (presentation) => {
-         dispatch(actions.setPresentation(presentation));
-      },
-
-      save: async () => {
-         dispatch(actions.fetchApi());
-
-         const resultPresentation = await presentationServices.savePresentation(state.presentation);
          const resultSlide = await presentationServices.updateSlides(
             state.presentation.id,
-            state.slides
+            newSlides
          );
 
-         if (resultPresentation && resultSlide) {
-            const presentation = await presentationServices.getPresentationById(
-               state.presentation?.id
-            );
+         const id = state.presentation.id;
+
+         if (resultSlide) {
+            dispatch(actions.fetchApi());
+
+            const slides = await presentationServices.getAllSlidesByPresentationId(id);
+
+            if (slides) {
+               dispatch(actions.setSlides(slides));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+         }
+
+         dispatch(actions.setCheckLoadNewData());
+      },
+
+      deleteSlide: async (index) => {
+         dispatch(actions.fetchApi());
+
+         const oldSlides = [...state.slides];
+         const newSlides = oldSlides.map((cur) => cur);
+
+         newSlides.splice(index, 1);
+
+         // const resultPresentation = await presentationServices.savePresentation(state.presentation);
+
+         const resultSlide = await presentationServices.updateSlides(
+            state.presentation.id,
+            newSlides
+         );
+
+         const id = state.presentation.id;
+
+         if (resultSlide) {
+            dispatch(actions.fetchApi());
+
+            const slides = await presentationServices.getAllSlidesByPresentationId(id);
+
+            if (slides) {
+               dispatch(actions.setSlides(slides));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+         }
+
+         dispatch(actions.setCheckLoadNewData());
+      },
+
+      savePresentation: async (presentationSaveData) => {
+         dispatch(actions.fetchApi());
+
+         const id = state.presentation.id;
+
+         const resultPresentation = await presentationServices.savePresentation(
+            presentationSaveData,
+            id
+         );
+
+         if (resultPresentation) {
+            dispatch(actions.fetchApi());
+
+            const presentation = await presentationServices.getPresentationById(id);
 
             if (presentation) {
                dispatch(actions.setPresentation(presentation));
             } else {
                const message = "Error API";
                dispatch(actions.fetchApiFailed(message));
-               return presentation;
             }
-         } else {
-            const message = "Error API";
-            dispatch(actions.fetchApiFailed(message));
-            return false;
          }
+
+         dispatch(actions.setCheckLoadNewData());
       },
 
-      deleteSlide: () => {
-         const newSlides = [...state.slides];
+      createNewSlide: async (slide, index) => {
+         dispatch(actions.fetchApi());
 
-         newSlides.splice(state.currentSlideIndex, 1);
+         const oldSlides = [...state.slides];
+         const newSlides = oldSlides.map((cur) => cur);
 
-         dispatch(actions.setSlides(newSlides));
-      },
+         newSlides.splice(index, 0, slide);
 
-      deletePresentation: async () => {
-         // const newSlides = [...state.slides];
-         // newSlides.splice(state.currentSlideIndex, 1);
-         // dispatch(actions.setSlides(newSlides));
-         const result = await presentationServices.deletePresentationById(state.presentation.id);
-      },
+         const resultSlide = await presentationServices.updateSlides(
+            state.presentation.id,
+            newSlides
+         );
 
-      addSlide: () => {
-         const maxSlideId = -1;
+         const id = state.presentation.id;
 
-         const newSlide = {
-            title: "New Slide",
-            body: [],
-            ordinalSlideNumber: state.currentSlideIndex,
-            presentationId: state.presentation.id,
-            slideTypeId: 1
-         };
+         if (resultSlide) {
+            dispatch(actions.fetchApi());
 
-         const newSlides = [...state.slides];
+            const slides = await presentationServices.getAllSlidesByPresentationId(id);
 
-         newSlides.splice(state.slides.length, 0, newSlide);
+            if (slides) {
+               dispatch(actions.setSlides(slides));
+            } else {
+               const message = "Error API";
+               dispatch(actions.fetchApiFailed(message));
+            }
+         }
 
-         dispatch(actions.setSlides(newSlides));
+         dispatch(actions.setCheckLoadNewData());
       }
    };
 
-   return <Context.Provider value={{ state, method }}> {children} </Context.Provider>;
+   return <Context.Provider value={{ state, method, ...rest }}> {children} </Context.Provider>;
 }
 
 export default PresentationDetailProvider;

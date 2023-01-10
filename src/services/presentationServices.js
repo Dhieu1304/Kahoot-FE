@@ -1,122 +1,71 @@
 import camelcaseKeys from "camelcase-keys";
-import snakecaseKeys from "snakecase-keys";
 import axiosClient from "../config/axiosClient";
-import mockApi from "../mockApi";
+import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
+import { toast } from "react-toastify";
 
 const getOwnedPresentations = async () => {
-   console.log("[SERVICE][PRESENTATION] getOwnedPresentations");
+   return await getPresentations("OWNER");
+};
 
+const getCoOwnedPresentations = async () => {
+   return await getPresentations("CO_OWNER");
+};
+
+const getPresentations = async (type) => {
    try {
-      const res = await axiosClient.get(`/presentation/list`);
-      // console.log("res: ", res);
-
-      const { rows: presentations, count } = res.data;
-
-      return camelcaseKeys({ presentations, count }, { deep: true });
+      const res = await axiosClient.get(`/presentation/list`, {
+         params: {
+            type
+         }
+      });
+      return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
-
       return false;
    }
 };
 
-const createPresentation = async (name, type = "PUBLIC") => {
-   console.log("[SERVICE][PRESENTATION] createPresentation: ", {
-      name,
-      type
-   });
-
+const createPresentation = async (name, group, type = "PUBLIC") => {
    try {
       const res = await axiosClient.post(`/presentation/create`, {
          name,
          type
       });
-      // console.log("res: ", res);
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
-
-      // return false;
    }
 };
 
 const getPresentationById = async (id) => {
-   // console.log("[SERVICE][PRESENTATION] getPresentationById: ", { id });
-   // const presentation = await mockApi.mockPresentation;
-
-   // return presentation;
-
    try {
       const res = await axiosClient.get(`/presentation/${id}`);
-
-      // console.log("res: ", res);
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
-
       return false;
    }
-
-   //    console.log("presentation", presentation);
 };
 
 const getAllSlidesByPresentationId = async (id) => {
-   // console.log("[SERVICE][PRESENTATION] getAllSlidesByPresentationId: ", { id });
-   // const slide = await mockApi.mockSlide;
-
-   //    console.log("presentation", presentation);
-
    try {
       const res = await axiosClient.get(`/presentation/${id}/all-slide`);
-
-      // console.log("res: ", res);
-      // console.log("res.data: ", res.data);
-      // console.log(
-      //    "camelcaseKeys(res.data, { deep: true }): ",
-      //    camelcaseKeys(res.data, { deep: true })
-      // );
-
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
-
       return false;
    }
-
-   // return slide;
 };
 
-const getSlideById = async (id) => {
-   // console.log("[SERVICE][PRESENTATION] getSlideById: ", { id });
-   const slide = await mockApi.mockSlide;
-
-   //    console.log("presentation", presentation);
-
-   return slide;
-};
-
-const getResultBySlideId = async (slideId) => {
-   // console.log("[SERVICE][PRESENTATION] getResultBySlideId: ", { slideId });
-   const slide = await mockApi.mockResult;
-
-   //    console.log("presentation", presentation);
-
-   return slide;
-};
-
-const savePresentation = async (presentation) => {
-   const { id: presentationId, name, presentationTheme, presentationType } = presentation;
-   const type = presentationType.name || "PUBLIC";
-   const themeId = presentationTheme.id;
+const savePresentation = async (presentationSaveData, presentationId) => {
+   const {
+      name,
+      themeId: presentation_theme_id,
+      type: presentation_type_id
+   } = presentationSaveData;
+   const data = { presentationId, name, presentation_theme_id, presentation_type_id };
    try {
-      const res = await axiosClient.put(`/presentation/edit`, {
-         presentationId,
-         name,
-         type,
-         themeId
-      });
+      const res = await axiosClient.put(`/presentation/edit`, data);
       return res.status;
    } catch (e) {
       console.error(e.message);
@@ -126,15 +75,22 @@ const savePresentation = async (presentation) => {
 
 const updateSlides = async (presentation_id, slides) => {
    const data = slides.map((slide, index) => {
-      const ordinal_slide_number = index;
-      const { slideTypeId: slide_type_id, title, body } = slide;
+      const ordinal_slide_number = index + 1;
+      const { slideTypeId: slide_type_id, title, body, description } = slide;
 
       return {
          ordinal_slide_number,
          slide_type_id,
-         title,
-         body
+         title: title || " ",
+         body: Array.isArray(body) ? body : [],
+         description: description || " "
       };
+   });
+
+   console.log("data slide update: ", data);
+   console.log("data slide update co pre: ", {
+      presentation_id,
+      data
    });
 
    try {
@@ -155,6 +111,372 @@ const deletePresentationById = async (presentation_id) => {
          presentation_id
       });
       console.log("res: ", res);
+      return camelcaseKeys(res, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getListPresentationThemeConfig = async () => {
+   try {
+      const res = await axiosClient.get(`/presentation/theme`);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getListSlideTypeConfig = async () => {
+   try {
+      const res = await axiosClient.get(`/slide/type`);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const addPresentationCoOwner = async (presentation_id, email) => {
+   try {
+      const res = await axiosClient.post(`/presentation-member/add-co-owner`, {
+         presentation_id,
+         email
+      });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
+      toast.success(res.message);
+      return true;
+   } catch (e) {
+      console.error(e.message);
+      toast.error("Error, please try again later");
+      return false;
+   }
+};
+
+const deleteMember = async (presentation_id, email) => {
+   try {
+      const res = await axiosClient.post(`/presentation-member/remove-co-owner`, {
+         presentation_id,
+         email
+      });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
+      toast.success(res.message);
+      return true;
+   } catch (e) {
+      console.error(e.message);
+      toast.error("Error, please try again later");
+      return false;
+   }
+};
+
+const getPresentationUsers = async (presentation_id) => {
+   try {
+      const res = await axiosClient.get(`/presentation-member/list`, {
+         params: { presentation_id }
+      });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+
+   // return slide;
+};
+
+const getPresentationGroups = async (presentation_id) => {
+   try {
+      const res = await axiosClient.get(`/presentation-group/list`, {
+         params: { presentation_id }
+      });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const addGroup = async (presentation_id, group_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation-group/add-group`, {
+         presentation_id,
+         group_id
+      });
+      return camelcaseKeys(res, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const deleteGroup = async (presentation_id, group_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation-group/remove-group`, {
+         presentation_id,
+         group_id
+      });
+      return camelcaseKeys(res, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getChatByPresentationCode = async (code, page, limit) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+   try {
+      const res = await axiosClient.get(`/chat/list-message`, {
+         params: {
+            code,
+            page,
+            limit,
+            uid
+         }
+      });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getChatByPresentationId = async (presentation_id, page = 1, limit = 20, code = null) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+   try {
+      const res = await axiosClient.get(`/chat/list-message`, {
+         params: { presentation_id, uid, page, limit, code }
+      });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const sendMessageByPresentationCode = async (code, message) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+   try {
+      const res = await axiosClient.post(`/chat/new-message`, {
+         code,
+         uid,
+         message
+      });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const sendMessageByPresentationId = async (presentation_id, message) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+   try {
+      const res = await axiosClient.post(`/chat/new-message`, {
+         presentation_id,
+         uid,
+         message
+      });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getQuestionsByPresentationId = async (presentation_id) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+   try {
+      const res = await axiosClient.get(`/question/list-question`, {
+         params: { presentation_id, uid }
+      });
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getQuestionsByPresentationCode = async (code) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+   try {
+      const res = await axiosClient.get(`/question/list-question`, {
+         params: {
+            code,
+            uid
+         }
+      });
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const addQuestionByPresentationCode = async (code, question) => {
+   const uid = getItem(LOCAL_STORAGE.UUID);
+   try {
+      const res = await axiosClient.post(`/question/new-question`, {
+         code,
+         question,
+         uid
+      });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const presentSlideShow = async (presentation_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation/present`, { presentation_id });
+      if (!res.status) {
+         toast.error(res.message);
+         return false;
+      }
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      toast.error(e.message);
+      return false;
+   }
+};
+
+const presentOtherSlide = async (presentation_id, ordinal_slide_number) => {
+   try {
+      const res = await axiosClient.post(`/presentation/present-other-slide`, {
+         presentation_id,
+         ordinal_slide_number
+      });
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const deleteOldSession = async (presentation_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation/delete-session`, { presentation_id });
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getSlideAndDataPresentation = async (presentation_id, ordinal_slide_number) => {
+   try {
+      const res = await axiosClient.get(`/slide/get-slide-data`, {
+         params: {
+            presentation_id,
+            ordinal_slide_number
+         }
+      });
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+/*const getSlidePresentationByCode = async (code) => {
+   try {
+      const res = await axiosClient.get(`/slide/get-slide`, { params: { code } });
+      return res.data;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};*/
+
+const clientJoinPresentationByCode = async (code) => {
+   try {
+      return await axiosClient.post(`/presentation/client-join`, { code });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const submitAnswer = async (code, name, uid) => {
+   try {
+      return await axiosClient.post(`/slide/submit-answer`, { code, name, uid });
+   } catch (e) {
+      return false;
+   }
+};
+
+const markAnswer = async (presentation_id, question_id) => {
+   try {
+      return await axiosClient.post(`/question/mark-answer`, { presentation_id, question_id });
+   } catch (e) {
+      return false;
+   }
+};
+
+const getPresentationsByGroupId = async (group_id) => {
+   try {
+      const res = await axiosClient.get(`/presentation-group/list-in-group`, {
+         params: { group_id }
+      });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const upVoteQuestion = async (code, question_id) => {
+   try {
+      const uid = getItem(LOCAL_STORAGE.UUID);
+      const res = await axiosClient.post(`/question/up-vote-question`, {
+         code,
+         question_id,
+         uid
+      });
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const downVoteQuestion = async (code, question_id) => {
+   try {
+      const uid = getItem(LOCAL_STORAGE.UUID);
+      const res = await axiosClient.post(`/question/down-vote-question`, {
+         code,
+         question_id,
+         uid
+      });
+      return res.status;
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const getPresentationReport = async (presentation_id) => {
+   try {
+      const res = await axiosClient.post(`/presentation/presentation-data`, {
+         presentation_id
+      });
+
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -164,12 +486,46 @@ const deletePresentationById = async (presentation_id) => {
 
 export default {
    getOwnedPresentations,
+   getCoOwnedPresentations,
    getAllSlidesByPresentationId,
    getPresentationById,
-   getSlideById,
-   getResultBySlideId,
    createPresentation,
    updateSlides,
    savePresentation,
-   deletePresentationById
+   deletePresentationById,
+   getPresentationUsers,
+   getPresentationGroups,
+   getListPresentationThemeConfig,
+   getListSlideTypeConfig,
+   addPresentationCoOwner,
+   deleteMember,
+
+   addGroup,
+   deleteGroup,
+   getChatByPresentationCode,
+   getChatByPresentationId,
+   sendMessageByPresentationCode,
+   sendMessageByPresentationId,
+
+   getQuestionsByPresentationId,
+   getQuestionsByPresentationCode,
+   addQuestionByPresentationCode,
+
+   // present
+   presentSlideShow,
+   presentOtherSlide,
+   deleteOldSession,
+   getSlideAndDataPresentation,
+   // getSlidePresentationByCode,
+   clientJoinPresentationByCode,
+
+   //submit answer
+   submitAnswer,
+   getPresentationsByGroupId,
+   markAnswer,
+   upVoteQuestion,
+   downVoteQuestion,
+
+   // report
+   getPresentationReport
 };
