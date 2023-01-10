@@ -1,0 +1,33 @@
+.wrapper {
+   width: 100%;
+   height: 60vh;
+   .container {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(55deg, rgba(25, 108, 255, 0.2) 65%, white 35%);
+      display: flex;
+      align-items: center;
+
+      .left {
+         width: 60%;
+         padding: 2rem;
+
+         .title {
+            color: #101834;
+            font-weight: 800;
+            font-size: 4rem;
+            text-align: justify;
+            margin: 0;
+            padding: 0;
+         }
+         .description {
+            color: rgba(16, 24, 52, 0.75);
+            font-weight: 500;
+            font-size: 2.5rem;
+            text-align: justify;
+            margin: 0;
+            padding: 0;
+         }
+      }
+   }
+}
