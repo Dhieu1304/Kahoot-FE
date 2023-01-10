@@ -25,14 +25,19 @@ import EditUserModal from "../components/EditUserModal/EditUserModal";
 import { toast } from "react-toastify";
 import DeleteModal from "../components/DeleteModal";
 import { ListGroup } from "react-bootstrap";
+import { useGroupDetailPageStore } from "../hooks";
+import RenameGroupModal from "../../conponents/RenameGroupModal";
 
 function GroupDetailUserPage() {
    const [users, setUsers] = useState([]);
    const [isOwnedUser, setIsOwnedUser] = useState(false);
+   const groupDetailPageStore = useGroupDetailPageStore();
+
    const inviteToGroupModal = useModal();
    const editUserpModal = useModal();
    const deleteUserpModal = useModal();
    const deleteGroupModal = useModal();
+   const renameGroupModal = useModal();
 
    const params = useParams();
    const navigate = useNavigate();
@@ -45,6 +50,7 @@ function GroupDetailUserPage() {
       const usersData = await userService.getUsersByGroupId(groupId);
       setUsers(usersData);
 
+      console.log("groupId, authStore.user.id: ", groupId, authStore.user.id);
       const result = await groupService.checkOwnedUser(groupId, authStore.user.id);
       console.log("result: ", result);
       setIsOwnedUser(result);
@@ -90,11 +96,18 @@ function GroupDetailUserPage() {
       }
    };
 
+   const handleRenameGroupModal = async (name) => {
+      const group = await groupService.renameGroup(groupId, name);
+      if (group) {
+         groupDetailPageStore.setGroup(group);
+      }
+   };
+
    return (
       <>
          <div className={cx("header")}>
             <div className={cx("nav")}>
-               <h1 className={cx("title")}>sang</h1>
+               <h1 className={cx("title")}>{groupDetailPageStore.group?.name}</h1>
                <div className={cx("btn-group")}>
                   {isOwnedUser && (
                      <Button
@@ -110,6 +123,18 @@ function GroupDetailUserPage() {
                         }}
                      />
                   )}
+                  <Button
+                     title={"Rename"}
+                     basic
+                     basicBlue
+                     rounded
+                     big
+                     className={cx("btn")}
+                     leftIcon={<FontAwesomeIcon icon={faEdit} size="1x" />}
+                     onClick={() => {
+                        renameGroupModal.setShow(true);
+                     }}
+                  />
                   <Button
                      title={"Invite"}
                      basic
@@ -252,7 +277,7 @@ function GroupDetailUserPage() {
                               </div>
                            </div>
                            <div className={cx("bottom")}>
-                              <span className={cx("role")}>
+                              <span className={cx("description")}>
                                  {user?.groupUsers[0].groupUserRole.name}{" "}
                               </span>
                            </div>
@@ -301,6 +326,16 @@ function GroupDetailUserPage() {
                   setData={deleteGroupModal.setData}
                   handleSubmitModalForm={handleSubmitDeleteGroupModalForm}
                ></DeleteModal>
+            )}
+
+            {renameGroupModal && (
+               <RenameGroupModal
+                  show={renameGroupModal.show}
+                  setShow={renameGroupModal.setShow}
+                  data={renameGroupModal.data}
+                  setData={renameGroupModal.setData}
+                  handleSubmitModalForm={handleRenameGroupModal}
+               ></RenameGroupModal>
             )}
          </>
       </>

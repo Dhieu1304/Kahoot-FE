@@ -41,14 +41,17 @@ function JointGroupByLinkModal({ show, setShow }) {
    };
 
    return (
-      <Modal title={"Create group"} show={show} setShow={setShow} haveSubmitBtn={false}>
+      <Modal title={"Join by link"} show={show} setShow={setShow} haveSubmitBtn={false}>
          <Input
             placeholder="Link"
             label={"Link"}
             showLabel
             type={"txt"}
-            {...register("link")}
+            {...register("link", {
+               required: "is required"
+            })}
             rightBtn={<Button title={"Join"} basicBlue rounded big onClick={handleJoinByLink} />}
+            error={errors.link}
          />
       </Modal>
    );

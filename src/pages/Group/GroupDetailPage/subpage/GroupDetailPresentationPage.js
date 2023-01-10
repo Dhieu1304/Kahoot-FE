@@ -19,12 +19,15 @@ import presentationServices from "../../../../services/presentationServices";
 import { useGroupLayoutStore } from "../../../../layouts/GroupLayout";
 import { PRESENTATION_EVENT } from "../../../../providers/socket/socket.constant";
 import { SocketContext } from "../../../../providers/socket";
+import { useGroupDetailPageStore } from "../hooks";
+import { ListGroup } from "react-bootstrap";
 
 function GroupDetailPresentationPage() {
    const [presentations, setPresentations] = useState([]);
    const [isOwnedUser, setIsOwnedUser] = useState(false);
    const [isPresenting, setIsPresenting] = useState(false);
    const [currentPresentations, setCurrentPresentations] = useState();
+   const groupDetailPageStore = useGroupDetailPageStore();
 
    const socket = useContext(SocketContext);
    const params = useParams();
@@ -33,7 +36,6 @@ function GroupDetailPresentationPage() {
    const authStore = useAuthStore();
 
    const recentSideBarMenuBottomItems = useGroupLayoutStore();
-   console.log("recentSideBarMenuBottomItems: ", recentSideBarMenuBottomItems);
 
    const groupName = useMemo(() => {
       recentSideBarMenuBottomItems;
@@ -105,7 +107,7 @@ function GroupDetailPresentationPage() {
       <>
          <div className={cx("header")}>
             <div className={cx("nav")}>
-               <h1 className={cx("title")}>sang</h1>
+               <h1 className={cx("title")}>{groupDetailPageStore.group?.name}</h1>
                <div className={cx("btn-group")}>
                   {isPresenting && currentPresentations?.length > 0 && (
                      <div className={cx("current-presentation")}>
@@ -125,8 +127,7 @@ function GroupDetailPresentationPage() {
                         <TableTh>Id</TableTh>
                         <TableTh>Name</TableTh>
                         <TableTh>Code</TableTh>
-                        <TableTh>Link</TableTh>
-                        <TableTh>Action</TableTh>
+                        <TableTh textAlign={"center"}>Link</TableTh>
                      </TableTr>
                   </TableTHead>
                   <TableTBody>
@@ -144,7 +145,7 @@ function GroupDetailPresentationPage() {
                                     {presentation?.presentation?.code}
                                  </div>
                               </TableTd>
-                              <TableTd>
+                              <TableTd textAlign={"center"}>
                                  <Link
                                     to={`/presentation-client/${presentation?.presentation?.code}`}
                                     className={cx("presentation-infor-cell")}
@@ -152,39 +153,6 @@ function GroupDetailPresentationPage() {
                                     <FontAwesomeIcon size="1x" icon={faPlay} />
                                  </Link>
                               </TableTd>
-                              {/* <TableTd>
-                                 {isOwnedUser && (
-                                    <div className={cx("action")}>
-                                       <FontAwesomeIcon
-                                          icon={faEdit}
-                                          className={cx("icon")}
-                                          size="1x"
-                                          color="green"
-                                          onClick={() => {
-                                             // editUserpModal.setShow(true);
-                                             // editUserpModal.setData({
-                                             //    userId: presentation?.id,
-                                             //    name: presentation?.fullName,
-                                             //    roleId: presentation?.roleId
-                                             // });
-                                          }}
-                                       />
-                                       <FontAwesomeIcon
-                                          icon={faTrash}
-                                          className={cx("icon")}
-                                          size="1x"
-                                          color="red"
-                                          onClick={() => {
-                                             // deleteUserpModal.setShow(true);
-                                             // deleteUserpModal.setData({
-                                             //    userId: presentation?.id,
-                                             //    name: presentation?.fullName
-                                             // });
-                                          }}
-                                       />
-                                    </div>
-                                 )}
-                              </TableTd> */}
                            </TableTr>
                         );
                      })}
@@ -192,11 +160,11 @@ function GroupDetailPresentationPage() {
                </Table>
             ) : (
                <ListGroup className={cx("list")}>
-                  {presentations?.map((user, index) => {
+                  {presentations?.map((presentation, index) => {
                      return (
                         <ListGroup.Item className={cx("item")} key={index}>
                            <div className={cx("top")}>
-                              <div className={cx("infor")}>{user?.group?.name}</div>
+                              <div className={cx("infor")}>{presentation?.presentation?.name}</div>
 
                               <div className={cx("create")}>
                                  <FontAwesomeIcon
@@ -212,7 +180,9 @@ function GroupDetailPresentationPage() {
                               </div>
                            </div>
                            <div className={cx("bottom")}>
-                              <span className={cx("role")}></span>
+                              <span className={cx("description")}>
+                                 {presentation?.presentation?.code}
+                              </span>
                            </div>
                         </ListGroup.Item>
                      );

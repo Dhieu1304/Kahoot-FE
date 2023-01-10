@@ -110,11 +110,6 @@ function PresentationPage() {
 
       const newPresentationTypeId = presentationTypeId === 1 ? 2 : 1;
 
-      console.log(
-         "presentationStore ChangePresentationTypeModal.data: ",
-         changePresentationTypeModal?.data
-      );
-
       const result = await presentationStore.method.changePresentationType(
          id,
          newPresentationTypeId
@@ -133,22 +128,6 @@ function PresentationPage() {
                   <h1 className={cx("title")}>My Presentations</h1>
                   <div className={cx("nav")}>
                      <div className={cx("btn-group")}>
-                        {selectedRowIds.length > 0 &&
-                           isNotMobile &&
-                           presentationStore.state.listType === "OWNER" && (
-                              <Button
-                                 title="Remove"
-                                 basicRed
-                                 big
-                                 rounded
-                                 className={cx("btn")}
-                                 leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
-                                 // onClick={() => {
-
-                                 // }}
-                              />
-                           )}
-
                         <Button
                            title="Create"
                            basicBlue
@@ -168,16 +147,6 @@ function PresentationPage() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           {presentationStore.state.listType === "OWNER" && (
-                              <TableTh>
-                                 <input
-                                    type={"checkbox"}
-                                    checked={isSelectAll}
-                                    onChange={handleSelectedAll}
-                                    className={cx("checkbox")}
-                                 />
-                              </TableTh>
-                           )}
                            <TableTh>id</TableTh>
                            <TableTh>Name</TableTh>
                            <TableTh>Code</TableTh>
@@ -188,28 +157,14 @@ function PresentationPage() {
                                  <TableTh>Created</TableTh>
                               </>
                            )}
-                           <TableTh>Edit</TableTh>
+                           <TableTh textAlign={"center"}>Edit slides</TableTh>
                            <TableTh></TableTh>
                         </TableTr>
                      </TableTHead>
                      <TableTBody>
                         {presentationStore.state.presentations?.map((presentation, index) => {
-                           const isChecked = selectedRowIds?.includes(presentation.id);
                            return (
                               <TableTr key={index}>
-                                 {presentationStore.state.listType === "OWNER" && (
-                                    <TableTd>
-                                       <input
-                                          type={"checkbox"}
-                                          checked={isChecked}
-                                          onChange={() =>
-                                             handleSelected(presentation.id, isChecked)
-                                          }
-                                          className={cx("checkbox")}
-                                       />
-                                    </TableTd>
-                                 )}
-
                                  <TableTd>{presentation?.id}</TableTd>
                                  <TableTd>
                                     <div className={cx("presentation-infor-cell")}>
@@ -249,7 +204,7 @@ function PresentationPage() {
                                        </TableTd>
                                     </>
                                  )}
-                                 <TableTd>
+                                 <TableTd textAlign={"center"}>
                                     <Link to={`/presentation/${presentation.id}/edit`}>
                                        <FontAwesomeIcon
                                           icon={faEdit}

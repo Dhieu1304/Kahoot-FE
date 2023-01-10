@@ -55,7 +55,7 @@ function CreateGroupModal({ show, setShow }) {
             showLabel
             type={"txt"}
             {...register("name", {
-               required: "Name is required"
+               required: "is required"
             })}
             error={errors.name}
          />

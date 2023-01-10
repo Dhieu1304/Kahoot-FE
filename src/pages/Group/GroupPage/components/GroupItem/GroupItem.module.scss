@@ -3,7 +3,7 @@
    border-radius: 5px;
    box-shadow: rgb(0 0 0 / 15%) 0px 2px 4px 0px;
    padding: 16px;
-   margin: 8px;
+   margin: 10px;
    width: 200px;
    height: 120px;
 
@@ -51,4 +51,8 @@
    .group-name {
       color: var(--text-color);
    }
+}
+
+.container.isMobile {
+   width: 100%;
 }

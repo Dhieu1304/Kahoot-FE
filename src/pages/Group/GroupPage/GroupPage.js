@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { AuthContext, useAuthStore } from "../../../providers/auth";
-import groupService from "../../../services/groupService";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "../../../components/Button";
-import { faAdd, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { useMediaQuery } from "react-responsive";
+
+import { useAuthStore } from "../../../providers/auth";
+import groupService from "../../../services/groupService";
+import Button from "../../../components/Button";
 import GroupItem from "./components/GroupItem";
 import { useModal } from "../../../components/Modal";
-import Context from "./Context";
 import CreateGroupModal from "./components/CreateGroupModal";
+import JointGroupByLinkModal from "./components/JointGroupByLinkModal";
+import images from "../../../assets/images";
 
-const cx = classNames.bind(styles);
 import classNames from "classnames/bind";
 import styles from "./GroupPage.module.scss";
-import JointGroupByLinkModal from "./components/JointGroupByLinkModal";
+const cx = classNames.bind(styles);
 
 function GroupPage() {
    const authStore = useAuthStore();
 
    const [groups, setGroups] = useState([]);
+   const [groupManageTitle, setGroupManageTitle] = useState("My Group");
 
    const isMobile = useMediaQuery({ maxWidth: 767 });
 
@@ -36,11 +37,13 @@ function GroupPage() {
             case "/group/owned": {
                const groupsData = await groupService.getGroupsByOwnUserId(authStore.user?.id);
                setGroups(groupsData);
+               setGroupManageTitle("My Owned Group");
                break;
             }
             case "/group/joined": {
                const groupsData = await groupService.getGroupsByJoinedUserId(authStore.user?.id);
                setGroups(groupsData);
+               setGroupManageTitle("My Joined Group");
                break;
             }
             default:
@@ -55,6 +58,7 @@ function GroupPage() {
          <div className={cx("container")}>
             <div className={cx("header")}>
                <div className={cx("nav")}>
+                  <h1 className={cx("title")}>{groupManageTitle}</h1>
                   <div className={cx("btn-group")}>
                      <Button
                         title={"Join"}
@@ -65,7 +69,6 @@ function GroupPage() {
                         className={cx("btn")}
                         leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
                         onClick={() => {
-                           // return setShowJointGroupByLinkModalModal(true);
                            jointGroupByLinkModal.setShow(true);
                         }}
                      />
@@ -85,11 +88,19 @@ function GroupPage() {
                </div>
             </div>
 
-            <div className={cx("group-list")}>
-               {groups && groups.map((group, index) => <GroupItem key={index} data={group} />)}
-            </div>
+            {groups && groups?.length > 0 ? (
+               <div className={cx("group-list")}>
+                  {groups?.map((group, index) => (
+                     <GroupItem key={index} group={group} />
+                  ))}
+               </div>
+            ) : (
+               <div className={cx("no-data")}>
+                  <img className={cx("no-data-img")} src={images.noData} />
+               </div>
+            )}
          </div>
-         <Context.Provider value={{ createGroupModal }}>
+         <>
             {createGroupModal.show && (
                <CreateGroupModal
                   show={createGroupModal.show}
@@ -103,7 +114,7 @@ function GroupPage() {
                   setShow={jointGroupByLinkModal.setShow}
                ></JointGroupByLinkModal>
             )}
-         </Context.Provider>
+         </>
       </div>
    );
 }

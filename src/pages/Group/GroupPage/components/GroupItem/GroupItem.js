@@ -5,29 +5,33 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Avatar from "../../../../../components/Avatar";
 import styles from "./GroupItem.module.scss";
+import { useGroupLayoutStore } from "../../../../../layouts/GroupLayout/hooks";
+import { useMediaQuery } from "react-responsive";
 
 const cx = classNames.bind(styles);
 
-function GroupItem({ data }) {
-   const navigate = useNavigate();
+function GroupItem({ group }) {
+   const { handleUpdateRecentSideBarMenuBottomItems } = useGroupLayoutStore();
+   const isMobile = useMediaQuery({ maxWidth: 767 });
+
    return (
       <Link
-         to={`/group/${data.id.toString()}/user`}
-         className={cx("container")}
-         // onClick={() => {
-         //    navigate(`/group/list/${data.id.toString()}`);
-         // }}
+         to={`/group/${group.id.toString()}/user`}
+         className={cx("container", { isMobile })}
+         onClick={() => {
+            handleUpdateRecentSideBarMenuBottomItems(group);
+         }}
       >
          <div className={cx("top")}>
             <div className={cx("user-list")}>
-               {data.groupUsers.map((groupUser, index) => {
+               {group.groupUsers.map((groupUser, index) => {
                   return (
                      index < 5 && (
                         <div
                            key={index}
                            className={cx("user-item")}
                            style={{
-                              zIndex: data.groupUsers.length + 2 - index,
+                              zIndex: group.groupUsers.length + 2 - index,
                               left: index * 10 + 10
                            }}
                         >
@@ -44,7 +48,7 @@ function GroupItem({ data }) {
          </div>
 
          <div className={cx("bottom")}>
-            <span className={cx("group-name")}>{data.name}</span>
+            <span className={cx("group-name")}>{group.name}</span>
          </div>
       </Link>
    );

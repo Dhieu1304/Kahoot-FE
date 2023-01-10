@@ -128,20 +128,6 @@ function PresentationManageGroup() {
                         preLink={`/presentation/${presentationManageStore.state.presentation?.id}`}
                      />
                      <div className={cx("btn-group")}>
-                        {selectedRowIds.length > 0 && isNotMobile && (
-                           <Button
-                              title="Remove"
-                              basicRed
-                              big
-                              rounded
-                              className={cx("btn")}
-                              leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
-                              // onClick={() => {
-
-                              // }}
-                           />
-                        )}
-
                         <Button
                            title="Slides"
                            basicTeal
@@ -184,14 +170,6 @@ function PresentationManageGroup() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           <TableTh>
-                              <input
-                                 type={"checkbox"}
-                                 checked={isSelectAll}
-                                 onChange={handleSelectedAll}
-                                 className={cx("checkbox")}
-                              />
-                           </TableTh>
                            <TableTh>Id</TableTh>
                            <TableTh>Name</TableTh>
 
@@ -203,17 +181,6 @@ function PresentationManageGroup() {
                            const isChecked = selectedRowIds?.includes(group?.groupId);
                            return (
                               <TableTr key={index}>
-                                 <TableTd>
-                                    {authContext.user?.id !== group?.userId && (
-                                       <input
-                                          type={"checkbox"}
-                                          checked={isChecked}
-                                          onChange={() => handleSelected(group?.userId, isChecked)}
-                                          className={cx("checkbox")}
-                                       />
-                                    )}
-                                 </TableTd>
-
                                  <TableTd>{group?.groupId}</TableTd>
                                  <TableTd>
                                     <div className={cx("presentation-infor-cell")}>

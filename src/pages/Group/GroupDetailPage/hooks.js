@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import Context from "./Context";
 
-const useGroupPageStore = () => {
+const useGroupDetailPageStore = () => {
    return useContext(Context);
 };
 
-export { useGroupPageStore };
+export { useGroupDetailPageStore };

@@ -1,6 +1,16 @@
 import axiosClient from "../config/axiosClient";
 import camelcaseKeys from "camelcase-keys";
 
+const getGroupById = async (id) => {
+   try {
+      const res = await axiosClient.get(`/group/${id}`);
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
 const getGroupsByOwnUserId = async (userId) => {
    try {
       const res = await axiosClient.get(`/group/user_owned/${userId}`);
@@ -27,6 +37,21 @@ const createGroup = async (name, user_id) => {
          name,
          user_id
       });
+      return camelcaseKeys(res.data, { deep: true });
+   } catch (e) {
+      console.error(e.message);
+      return false;
+   }
+};
+
+const renameGroup = async (id, name) => {
+   console.log("req: ", { id, name });
+   try {
+      const res = await axiosClient.put(`/group/rename`, {
+         id,
+         name
+      });
+      console.log("res: ", res);
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -66,10 +91,13 @@ const getInviteLink = async (groupId) => {
 };
 
 const checkOwnedUser = async (groupId, userId) => {
+   console.log("checkOwnedUser");
    try {
       const res = await axiosClient.get(`/group/checkOwnedUser`, {
          params: { group_id: groupId, user_id: userId }
       });
+      console.log("res: ", res);
+
       return camelcaseKeys(res.data, { deep: true });
    } catch (e) {
       console.error(e.message);
@@ -152,6 +180,8 @@ const getPresentingGroup = async (groupId) => {
 };
 
 export default {
+   getGroupById,
+   renameGroup,
    getGroupsByOwnUserId,
    getGroupsByJoinedUserId,
    createGroup,
@@ -167,6 +197,8 @@ export default {
 };
 
 export {
+   getGroupById,
+   renameGroup,
    getGroupsByOwnUserId,
    getGroupsByJoinedUserId,
    createGroup,

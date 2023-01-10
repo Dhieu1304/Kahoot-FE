@@ -3,23 +3,36 @@
    z-index: 1;
    background-color: var(--white-color);
    overflow-x: hidden;
-
-   display: flex;
-   flex-direction: column;
-
-   padding: 0 40px;
-
+   padding: 0 80px;
    .container {
       padding-top: 20px;
-      position: relative;
-      z-index: 4;
+      min-height: 100vh;
 
       display: flex;
-      flex-direction: row;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .content {
+         width: 100%;
+         display: flex;
+         justify-content: center;
+      }
    }
 }
 
 .wrapper.isMobile {
-   padding: 10px;
+   padding: 20px;
+
+   .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+
+      .content {
+         width: 100%;
+         display: flex;
+         justify-content: center;
+      }
+   }
 }

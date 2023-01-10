@@ -136,18 +136,6 @@ function PresentationManageReport() {
                               navigate(`/presentation/${presentationId}/edit`);
                            }}
                         />
-                        <Button
-                           title="Invite"
-                           basicBlue
-                           big
-                           rounded
-                           className={cx("btn")}
-                           leftIcon={<FontAwesomeIcon icon={faAdd} size="1x" />}
-                           onClick={() => {
-                              inviteModal.setData(presentationId);
-                              inviteModal.setShow(true);
-                           }}
-                        />
                      </div>
                   </div>
 

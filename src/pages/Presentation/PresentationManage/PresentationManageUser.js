@@ -121,20 +121,6 @@ function PresentationManageUser() {
                         preLink={`/presentation/${presentationManageStore.state.presentation?.id}`}
                      />
                      <div className={cx("btn-group")}>
-                        {selectedRowIds.length > 0 && isNotMobile && (
-                           <Button
-                              title="Remove"
-                              basicRed
-                              big
-                              rounded
-                              className={cx("btn")}
-                              leftIcon={<FontAwesomeIcon icon={faX} size="1x" />}
-                              // onClick={() => {
-
-                              // }}
-                           />
-                        )}
-
                         <Button
                            title="Slides"
                            basicTeal
@@ -178,18 +164,6 @@ function PresentationManageUser() {
                   <Table>
                      <TableTHead>
                         <TableTr>
-                           {authContext.user?.id ===
-                              presentationManageStore.state.presentation?.owner?.id && (
-                              <TableTh>
-                                 <input
-                                    type={"checkbox"}
-                                    checked={isSelectAll}
-                                    onChange={handleSelectedAll}
-                                    className={cx("checkbox")}
-                                 />
-                              </TableTh>
-                           )}
-
                            <TableTh>Id</TableTh>
                            <TableTh>Name</TableTh>
                            <TableTh>Role</TableTh>
@@ -204,21 +178,6 @@ function PresentationManageUser() {
                            const isChecked = selectedRowIds?.includes(member.id);
                            return (
                               <TableTr key={index}>
-                                 {authContext.user?.id ===
-                                    presentationManageStore.state.presentation?.owner?.id && (
-                                    <TableTd>
-                                       {authContext.user?.id !== member?.userId && (
-                                          <input
-                                             type={"checkbox"}
-                                             checked={isChecked}
-                                             onChange={() =>
-                                                handleSelected(member?.userId, isChecked)
-                                             }
-                                             className={cx("checkbox")}
-                                          />
-                                       )}
-                                    </TableTd>
-                                 )}
                                  <TableTd>{member?.user?.id}</TableTd>
                                  <TableTd>
                                     <div className={cx("presentation-infor-cell")}>

@@ -5,6 +5,7 @@ import {
    faShareNodes,
    faSquarePollVertical,
    faTrash,
+   faUser,
    faUserGroup
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +13,14 @@ import { useNavigate } from "react-router-dom";
 import CustomDropdownMenu from "../../../../components/CustomDropdownMenu";
 import CustomDropdownMenuItem from "../../../../components/CustomDropdownMenu/CustomDropdownMenuItem";
 import { usePresentationStore } from "../store";
+import { usePresenationManageLayoutStore } from "../../../../layouts/PresenationManageLayout";
 
 function ActionMenu({ data }) {
    const navigate = useNavigate();
 
    const presentationStore = usePresentationStore();
+
+   const { handleUpdateRecentSideBarMenuBottomItems } = usePresenationManageLayoutStore();
 
    const { renameModal, inviteModal, deleteModal, changePresentationTypeModal } = presentationStore;
 
@@ -26,12 +30,17 @@ function ActionMenu({ data }) {
             label={"Present"}
             leftIcon={<FontAwesomeIcon icon={faPlay} size={"1x"} />}
             onClick={() => {
+               handleUpdateRecentSideBarMenuBottomItems(data);
                navigate(`/presentation/${data?.id}/play`);
             }}
          />
          <CustomDropdownMenuItem
             label={"View results"}
             leftIcon={<FontAwesomeIcon icon={faSquarePollVertical} size={"1x"} />}
+            onClick={() => {
+               handleUpdateRecentSideBarMenuBottomItems(data);
+               navigate(`/presentation/${data?.id}/report`);
+            }}
          />
          <CustomDropdownMenuItem
             label={"Add collaborator"}
@@ -44,9 +53,18 @@ function ActionMenu({ data }) {
          />
          <CustomDropdownMenuItem
             label={"Manage user"}
-            leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
-            onClick={() => navigate(`/presentation/${data?.id}/user`)}
+            leftIcon={<FontAwesomeIcon icon={faUser} size={"1x"} />}
+            onClick={() => {
+               handleUpdateRecentSideBarMenuBottomItems(data);
+               navigate(`/presentation/${data?.id}/user`);
+            }}
          />
+         <CustomDropdownMenuItem
+            label={"Manage group"}
+            leftIcon={<FontAwesomeIcon icon={faUserGroup} size={"1x"} />}
+            onClick={() => navigate(`/presentation/${data?.id}/group`)}
+         />
+
          <CustomDropdownMenuItem
             label={"Share"}
             leftIcon={<FontAwesomeIcon icon={faShareNodes} size={"1x"} />}
